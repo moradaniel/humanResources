@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="XVista" basedir=".">
+
+	<target name="db-schema-create">
+
+		<echo>Creating schema in ${dest.dir}/schema.sql</echo>
+		<taskdef name="schemaexport"
+            classname="org.hibernate.tool.hbm2ddl.SchemaExportTask" classpath="${compile.classpath}">
+		</taskdef>
+
+		<schemaexport quiet="no" text="yes" drop="no" delimiter=";" 
+             output="${dest.dir}/schema.sql"
+    		 properties="${basedir}/src/main/ant/hibernate.properties">
+			<fileset dir="${src.mappings.dir}" includes="**/*.hbm.xml"/>
+		</schemaexport>
+	</target>
+
+	<target name="db-schema-update">
+		<taskdef name="schemaupdate"
+	  classname="net.sf.hibernate.tool.hbm2ddl
+	     .SchemaUpdateTask"
+	  classpathref="class.path"/>
+
+		<schemaupdate
+	  properties="hibernate.properties"
+	  quiet="no">
+			<fileset dir="src">
+				<include name="**/*.hbm.xml"/>
+			</fileset>
+		</schemaupdate>
+
+
+		</target>
+
+
+
+		<target name="hibernatedoclet">
+
+			<echo message="Generate hibernate mapping files from xdoclet annotations" />
+			<!-- load ant task -->
+			<taskdef name="hibernatedoclet"
+                classname="xdoclet.modules.hibernate.HibernateDocletTask"
+                classpath="${compile.classpath}"
+            	>
+			</taskdef>
+
+			<!-- Generate hibernate files to dao/gen directory (note: generated dir tree follows model classes dir structure) -->
+			<hibernatedoclet destdir="${dest.mappings.dir}" 
+                excludedtags="@version,@author" addedtags="@xdoclet-generated at ${TODAY}"
+                force="true" mergedir="${src.merge.dir}"
+        		>
+				<fileset dir="${src.mappings.dir}">
+					<include name="es/tecnocasa/model/**/*.java"/>
+				</fileset>
+				<hibernate validatexml="true" version="3.0"/>
+			</hibernatedoclet>
+
+		</target>
+
+
+	</project>

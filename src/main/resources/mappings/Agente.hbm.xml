@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+       "-//Hibernate/Hibernate Mapping DTD//EN"
+       "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+  <class name="org.dpi.agente.AgenteImpl"    table="AGENTE">
+
+    <id name="id" column="ID" type="long">  
+          <generator class="sequence">   
+				<param name="sequence">AGENTE_SEQ</param>
+          </generator>  
+        </id> 
+        
+    <property name="apellidoNombre" column="APELLIDONOMBRE" type="string"/> 
+    <property name="cuil" column="CUIL" type="string"/>
+    <property name="condicion" column="CONDICION" type="org.dpi.persistence.CondicionAgenteEnumUserType"/>
+
+    
+<!-- this association is bidirectional
+    	empleo side is marked as inverse="true" so the owner of the relation is Agente -->
+    <set name="empleos" cascade="save-update" lazy="true" inverse="true">
+		<key column="AGENTEID" foreign-key="fk_Empleo_Agente"/>
+		<one-to-many class="org.dpi.empleo.EmpleoImpl"/>
+	</set>
+
+  </class>
+</hibernate-mapping>

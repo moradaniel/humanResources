@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- 
+		The following beans implement declarative transaction management via an AOP
+		interceptor (TransactionProxyFactoryBean)
+		This interceptor creates proxy classes that wrap the 'target' DAOs and
+		handle hibernate sessions and transactions, 
+		thus freeing the DAO code from having to implement hibernate session
+		management and programmatic transaction declarations
+	-->
+
+	<!--
+	 ****************************************************************************
+	 
+	 ****************************************************************************
+	-->
+	<!-- the Service Facade -->
+	<bean id="reparticionService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.reparticion.ReparticionServiceImpl">
+				<constructor-arg><ref local="reparticionDao"/></constructor-arg>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="reparticionDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.reparticion.ReparticionDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<bean id="administradorCreditosService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.configuracionAsignacionCreditos.AdministradorCreditosServiceImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="centroSectorService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.centroSector.CentroSectorServiceImpl">
+				<constructor-arg><ref local="centroSectorDao"/></constructor-arg>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="centroSectorDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.centroSector.CentroSectorDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="agenteService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.agente.AgenteServiceImpl">
+				<constructor-arg><ref local="agenteDao"/></constructor-arg>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="agenteDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.agente.AgenteDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="categoriaService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.categoria.CategoriaServiceImpl">
+				<constructor-arg><ref local="categoriaDao"/></constructor-arg>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="categoriaDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.categoria.CategoriaDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="empleoService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.empleo.EmpleoServiceImpl">
+				<constructor-arg><ref local="empleoDao"/></constructor-arg>
+				<property name="administradorCreditosService">
+					<ref bean="administradorCreditosService" />
+				</property>
+				<property name="categoriaService">
+					<ref bean="categoriaService" />
+				</property>
+				<property name="agenteService">
+					<ref bean="agenteService" />
+				</property>
+				<property name="centroSectorService">
+					<ref bean="centroSectorService" />
+				</property>
+				
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
+				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="empleoDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.empleo.EmpleoDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	
+	<bean id="movimientoCreditosService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl">
+				<constructor-arg><ref local="movimientoCreditosDao"/></constructor-arg>
+				<constructor-arg><ref local="empleoService"/></constructor-arg>
+				<constructor-arg><ref local="agenteService"/></constructor-arg>
+				<constructor-arg><ref local="administradorCreditosService"/></constructor-arg>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="actualizar*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="movimientoCreditosDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.movimientoCreditos.MovimientoCreditosDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="creditsPeriodServiceService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.creditsPeriod.CreditsPeriodServiceServiceImpl">
+				<constructor-arg><ref local="empleoDao"/></constructor-arg>
+				<property name="administradorCreditosService">
+					<ref bean="administradorCreditosService" />
+				</property>
+				<property name="categoriaService">
+					<ref bean="categoriaService" />
+				</property>
+				<property name="agenteService">
+					<ref bean="agenteService" />
+				</property>
+				<property name="centroSectorService">
+					<ref bean="centroSectorService" />
+				</property>
+				
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
+				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<bean id="downloadService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.web.reporting.DownloadService">
+
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="download*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="exporterService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.web.reporting.jasper.ExporterService">
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="export*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+
+	
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="userAccessService" class="org.dpi.security.UserAccessServiceImpl">
+		<property name="dataSource">
+			<ref bean="dpiDataSource"/>
+		</property>
+		<property name="reparticionService">
+			<ref bean="reparticionService"/>
+		</property>
+		<property name="accountService">
+			<ref bean="accountServiceGeneric"/>
+		</property>
+	</bean>
+
+	<bean id="accountSettingsFactory" class="org.dpi.security.UserSettingsFactoryImpl"/>
+	
+</beans>

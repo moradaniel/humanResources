@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+       "-//Hibernate/Hibernate Mapping DTD//EN"
+       "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	
+  <class name="org.dpi.empleo.EmpleoImpl"    table="EMPLEO">
+
+    <id name="id" column="ID" type="long">  
+          <generator class="sequence">   
+				<param name="sequence">EMPLEO_SEQ</param>
+          </generator>  
+        </id> 
+        
+	<property name="fechaInicio" column="FECHAINICIO" type="timestamp"/> 
+	<property name="fechaFin" column="FECHAFIN" type="timestamp"/>
+
+	<property name="estado" column="ESTADO" type="org.dpi.persistence.EstadoEmpleoEnumUserType"/>
+   
+	<many-to-one 
+		name="agente"
+		class="org.dpi.agente.AgenteImpl"
+ 		column="AGENTEID" 
+		foreign-key="fk_Empleo_Agente"
+		not-null="true"/>
+		
+	<many-to-one 
+		name="centroSector"
+		class="org.dpi.centroSector.CentroSectorImpl"
+ 		column="CENTROSECTORID" 
+		foreign-key="fk_Empleo_CentroSector"
+		not-null="true"/>
+
+	<many-to-one 
+		name="categoria"
+		class="org.dpi.categoria.CategoriaImpl"
+ 		column="CATEGORIAID" 
+		foreign-key="fk_Empleo_Categoria"
+		not-null="true"/>
+		
+	<!-- one-to-one name="movimientoCreditos" 
+				class="org.dpi.movimientoCreditos.MovimientoCreditosImpl" 
+				property-ref="empleo"
+				cascade="save-update">
+	</one-to-one --> 
+	
+	    <!-- this association is bidirectional
+    	movimientocreditos side is marked as inverse="true" so the owner of the relation is Empleo-->
+    <set name="movimientosCreditos" cascade="all" lazy="true" inverse="true">
+		<key column="EMPLEOID" foreign-key="fk_MovimientoCreditos_Empleo"/>
+		<one-to-many class="org.dpi.movimientoCreditos.MovimientoCreditosImpl"/>
+	</set>
+		
+  </class>
+</hibernate-mapping>

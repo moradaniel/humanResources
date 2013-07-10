@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+       "-//Hibernate/Hibernate Mapping DTD//EN"
+       "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="org.dpi.categoria.CategoriaImpl"    table="CATEGORIA">
+
+    <id name="id" column="ID" type="long">  
+          <generator class="sequence">   
+				<param name="sequence">CATEGORIA_SEQ</param>
+          </generator>  
+        </id> 
+        
+    <property name="codigo" column="CODIGO" type="string"/> 
+    
+
+  </class>
+</hibernate-mapping>

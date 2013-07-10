@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"	
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd		
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<!-- Maps '/' requests to the 'home' view -->
+	<!-- mvc:view-controller path="/" view-name="home"/ -->
+	
+	<!--  mvc:view-controller path="/home" / -->
+	
+	
+	
+
+	<!-- Maps '/users/login' requests to the 'users/login' view -->
+	<mvc:view-controller path="/login" />
+	<mvc:view-controller path="/users/login" />
+	<mvc:view-controller path="/users/logout" />
+	<mvc:view-controller path="/users/logoutSuccess" />
+
+	<!-- Scans for annotated @Controllers in the classpath -->
+	<context:component-scan base-package="org.springframework.samples.travel, org.dpi" />
+	
+	<!-- Scans the classpath of this application for @Components to deploy as beans -->
+	<!-- context:component-scan base-package="org.dpi" / -->
+
+	<mvc:interceptors>
+	
+		<mvc:interceptor>
+	     <mvc:mapping path="/**" />
+	     <ref bean="accountActionInterceptor"/>
+	   </mvc:interceptor>
+	 
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/> 
+			<ref bean="tilesLocaleInterceptor"/>
+		</mvc:interceptor> 
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/> 
+			<ref bean="reparticionActionInterceptor"/>
+		</mvc:interceptor> 
+		
+	</mvc:interceptors>
+	
+	
+	
+	<bean id="accountActionInterceptor" class="org.dpi.web.AccountActionInterceptor">
+		<property name="settingsFactory"><ref bean="accountSettingsFactory"/></property>
+	</bean>
+	
+	<bean id="tilesLocaleInterceptor" class="org.dpi.web.TilesLocaleInterceptor" />
+	
+	<bean id="reparticionActionInterceptor" class="org.dpi.web.ReparticionActionInterceptor">
+		<constructor-arg><ref bean="reparticionService"/></constructor-arg>
+		<constructor-arg><ref bean="userAccessService"/></constructor-arg>
+	</bean>
+	
+</beans>

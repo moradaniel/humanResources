@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.dpi.movimientoCreditos.MovimientoCreditosImpl"    table="MOVIMIENTOCREDITOS">
+
+		<id name="id" column="ID" type="long">
+			<generator class="sequence">
+				<param name="sequence">MOVIMIENTOCREDITOS_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="cantidadCreditos" column="CANTIDADCREDITOS" type="int"/>
+		<!-- one to one association mapped as a many to one association with uniique true -->
+		<!-- many-to-one
+			name="empleo"
+			class="org.dpi.empleo.EmpleoImpl"
+			column="EMPLEOID"
+			foreign-key="fk_MovimientoCreditos_Empleo"
+			not-null="true"
+			unique="true">
+		</many-to-one -->
+		
+		<!-- muchos movimientocreditos  pueden tener 1 empleo -->
+    	<many-to-one
+			name="empleo"
+			class="org.dpi.empleo.EmpleoImpl"
+			column="EMPLEOID"
+			not-null="false"
+			lazy="proxy"
+			cascade="none"
+			foreign-key="fk_MovimientoCreditos_Empleo"
+		>
+			<meta attribute="use-in-tostring">true</meta>
+			<meta attribute="use-in-equals">true</meta>
+		</many-to-one>
+		
+		<many-to-one 
+			name="creditsPeriod"
+			class="org.dpi.creditsPeriod.CreditsPeriodImpl"
+	 		column="CREDITSPERIODID" 
+			foreign-key="fk_MovimientoCredito_CreditsPeriod"
+			not-null="true"/>
+		
+		<property name="tipoMovimientoCreditos" column="TIPOMOVIMIENTOCREDITOS" 
+			type="org.dpi.persistence.TipoMovimientoCreditosEnumUserType" not-null="true"/>
+			
+		<property name="grantedStatus" column="GRANTED_STATUS" 
+			type="org.dpi.persistence.GrantedStatusEnumUserType" not-null="true"/>
+			
+		
+	    <property name="observaciones" column="OBSERVACIONES" type="string"/>
+	</class>
+	
+</hibernate-mapping>
