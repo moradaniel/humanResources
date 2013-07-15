@@ -361,10 +361,10 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	}
 
 
-	public void save(final MovimientoCreditos movimientoCreditos) 
+	/*public void save(final MovimientoCreditos movimientoCreditos) 
 	{
 		movimientoCreditosDao.save(movimientoCreditos);
-	}
+	}*/
 	
 	public void actualizarCreditosPorAscenso(){
 		//obtener movimientos de tipo Ascenso
@@ -397,4 +397,6 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			AdministradorCreditosService administradorCreditosService) {
 		this.administradorCreditosService = administradorCreditosService;
 	}
+	
+
 }

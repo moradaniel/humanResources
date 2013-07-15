@@ -10,8 +10,8 @@ import org.dpi.empleo.Empleo;
 public interface MovimientoCreditos extends Persistent,Serializable{
 	
 	public enum GrantedStatus{
-		Requested,
-		Granted
+		Solicitado, //Requested
+		Otorgado //Granted
 	}
 
 	Empleo getEmpleo();

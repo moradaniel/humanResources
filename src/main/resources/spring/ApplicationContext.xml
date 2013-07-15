@@ -15,7 +15,7 @@
 		<!-- <property name="order" value="1"/> -->
 		<property name="locations">
 			<list>
-				<value>classpath:/creditos/ApplicationContext.properties</value>
+				<value>classpath:/hr/ApplicationContext.properties</value>
 			</list>
 		</property>
 		<property name="ignoreInvalidKeys" value="false"/>

@@ -4,18 +4,20 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.dpi.categoria.CategoriaService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.empleo.EmpleoService;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MovimientoCreditosController {
@@ -92,7 +94,7 @@ public class MovimientoCreditosController {
 
 	
 	
-	@RequestMapping(value = "/movimientos/{id}/setupFormCambiarEstadoMovimientoCreditos", method = RequestMethod.GET)
+	@RequestMapping(value = "/reparticiones/movimientos/{id}/setupFormCambiarEstadoMovimientoCreditos", method = RequestMethod.GET)
 	public String setupFormCambiarEstadoMovimientoCreditos(@PathVariable Long id, Model model){  
 			      
           
@@ -105,22 +107,39 @@ public class MovimientoCreditosController {
 
 		MovimientoCreditos movimientoCreditos = movimientos.get(0);
           
+		MovimientoCreditosForm movimientoCreditosForm = new MovimientoCreditosForm(movimientoCreditos);
+		
+		
+		model.addAttribute("movimientoCreditosForm", movimientoCreditosForm);
+		model.addAttribute("grantedStatuses", GrantedStatus.values());
 
         
         return "movimientos/cambioEstadoMovimientoForm";
     }
 	
 	
-	@RequestMapping(value="/movimientos/cambiarEstadoMovimiento/{id}", method=RequestMethod.POST)  
-    public String cambiarEstadoMovimiento(@ModelAttribute MovimientoCreditos movimientoCreditos, @PathVariable Integer id, Model model) {  
+	@RequestMapping(value = "/movimientos/cambiarEstadoMovimiento", method = RequestMethod.POST)
+	public String processFormCambiarEstadoMovimiento(HttpServletRequest request,
+													@ModelAttribute("movimientoCreditosForm") MovimientoCreditosForm movimientoCreditosForm,
+													Model model,
+													BindingResult result) throws Exception {
+		
+
+		//retrieve the movimientoCreditos from database
+		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
+		movimientoCreditosQueryFilter.setId(movimientoCreditosForm.getMovimientoCreditosId());
+				
+		List<MovimientoCreditos> movimientos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
+		MovimientoCreditos movimientoCreditos = movimientos.get(0);
+
+		movimientoCreditos = movimientoCreditosForm.copyProperties(movimientoCreditos);
+		
+        //ModelAndView modelAndView = new ModelAndView("home"); 
           
-        ModelAndView modelAndView = new ModelAndView("home");  
+		movimientoCreditosService.saveOrUpdate(movimientoCreditos);  
           
-        //teamService.updateTeam(team);  
-          
-        String message = "Team was successfully edited.";  
-        modelAndView.addObject("message", message);  
-          
+        //String message = "Team was successfully edited.";  
+        //modelAndView.addObject("message", message);  
 
         
 		return "redirect:/reparticiones/reparticion/showMovimientos";

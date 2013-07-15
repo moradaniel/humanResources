@@ -18,7 +18,9 @@ public interface MovimientoCreditosService extends ApplicationContextAware
 	public void delete(MovimientoCreditos movimientoCreditos);
 	
 	public List<MovimientoCreditosAscensoVO> buildMovimientoCreditosVO(List<MovimientoCreditos> movimientoCreditosReparticion, Account account);
-	public void save(final MovimientoCreditos movimientoCreditos);
 	public void saveOrUpdate(final MovimientoCreditos movimientoCreditos);
 	public void actualizarCreditosPorAscenso();
+	
+	//public MovimientoCreditos copyProperties(MovimientoCreditos from, MovimientoCreditos to);
+		
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dpi.empleo.EmpleoQueryFilter;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 
 
 /**
@@ -25,6 +26,7 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 
 	List<TipoMovimientoCreditos> tiposMovimientoCreditos = new ArrayList<TipoMovimientoCreditos>();
 	
+	List<GrantedStatus> grantedStatuses = new ArrayList<GrantedStatus>();
 	
 	public MovimientoCreditosQueryFilter(){
 		
@@ -58,4 +60,18 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 	public void addTipoMovimientoCreditos(TipoMovimientoCreditos tipoMovimientoCreditos) {
 		this.tiposMovimientoCreditos.add(tipoMovimientoCreditos);
 	}
+	
+	public List<GrantedStatus> getGrantedStatuses(){
+		return this.grantedStatuses;
+	}
+
+	public void setGrantedStatuses(
+			List<GrantedStatus> grantedStatuses) {
+		this.grantedStatuses = grantedStatuses;
+	}
+	
+	public void addGrantedStatus(GrantedStatus grantedStatus) {
+		this.grantedStatuses.add(grantedStatus);
+	}
+	
 }

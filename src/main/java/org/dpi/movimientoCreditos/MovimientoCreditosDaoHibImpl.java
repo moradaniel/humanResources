@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.dpi.empleo.EmpleoQueryFilter;
 import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -80,7 +81,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 		return list;
 	}
 	
-	private String buildWhereClause(MovimientoCreditosQueryFilter movimientoQueryFilter) {
+	public static  String buildWhereClause(MovimientoCreditosQueryFilter movimientoQueryFilter) {
 		StringBuffer sb = new StringBuffer();
 		
 		if(!CollectionUtils.isEmpty(movimientoQueryFilter.getTiposMovimientoCreditos())){
@@ -94,7 +95,21 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 			}
 			sb.append(" ) ");				
 				
+		}
+		
+		if(!CollectionUtils.isEmpty(movimientoQueryFilter.getGrantedStatuses())){
+			sb.append(" AND (");
+			for (Iterator iterator = movimientoQueryFilter.getGrantedStatuses().iterator(); iterator.hasNext();) {
+				GrantedStatus grantedStatus = (GrantedStatus) iterator.next();
+				sb.append(" movimiento.grantedStatus = '"+grantedStatus.name()+"' ");
+				if(iterator.hasNext()){
+					sb.append(" OR ");
+				}
 			}
+			sb.append(" ) ");				
+				
+		}
+
 
 		if(movimientoQueryFilter.getId()!=null){
 			sb.append(" AND movimiento.id = ").append(movimientoQueryFilter.getId()).append(" ");

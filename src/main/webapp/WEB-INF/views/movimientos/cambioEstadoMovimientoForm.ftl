@@ -3,41 +3,26 @@
 
 </script>
 
-<h2>Cambio Estado Movimientop</h2>
+<h2>Cambio Estado Movimiento</h2>
 
-<form id="cambioEstadoMovimientoForm" name="ascensoForm" action="${requestContext.contextPath}/empleos/updateAscenso" method="post">
+<form id="cambioEstadoMovimientoForm" name="cambioEstadoMovimientoForm" action="${requestContext.contextPath}/movimientos/cambiarEstadoMovimiento" method="post">
 
-
-	<input type="hidden" name="idEmpleoActual" value="${empleoActual.id?default('')}"/>
+	
+	<@spring.formHiddenInput "movimientoCreditosForm.movimientoCreditosId" />
 
 	<table border="0">
 	
 		<tr>
 			<td><label>Apellido Nombre</label></td>
 			<td>
-				${empleoActual.agente.apellidoNombre}
+				${movimientoCreditosForm.employeeName}
 			</td>
 		</tr>
+
+
 		<tr>
-			<td><label>Categoria Actual</label></td>
-			<td>
-				${empleoActual.categoria.codigo}
-			</td>
-		</tr>
-		<tr>
-			<td><label>Categoria Propuesta</label></td>
-			<td>
-				<select id="codigoCategoriaPropuesta" name="codigoCategoriaPropuesta" >
-					<#-- assign keys = dropDownListMap?keys -->
-					<option value="">- Elija Categoria -</option>
-					<#list categoriasDisponiblesParaAscenso as categoria>
-						<#assign selected="">
-						<#if (categoriaSeleccionada?exists && key.codigo == categoriaSeleccionada)><#assign selected="selected"/></#if>
-						<option value="${categoria.codigo}" ${selected}>${categoria.codigo?default("")}</option>
-					</#list>
-				</select>
-			
-			</td>
+			<td><label>Estado</label></td>
+			<td><@spring.formSingleSelect "movimientoCreditosForm.grantedStatus", grantedStatuses, "" /></td>
 		</tr>
 
 		<tr><td><br></td></tr>
