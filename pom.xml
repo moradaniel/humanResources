@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.samples</groupId>
-	<artifactId>creditos</artifactId>
-	<name>creditos</name>
+	<artifactId>hr</artifactId>
+	<name>human resources</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -496,7 +496,7 @@
 		</repository>
 	</repositories>
 	<build>
-		<finalName>creditos</finalName>
+		<finalName>hr</finalName>
 
 		<resources>
 			<resource>
@@ -538,7 +538,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>creditos</warName>
+					<warName>hr</warName>
 					<!-- resource> <directory>${janux.baseDir}/modules/bus/src/test/resources</directory> 
 						<targetPath>WEB-INF/classes/META-INF/spring</targetPath> <filtering>false</filtering> 
 						<includes> <include>SecurityContext.xml</include> <include>SecurityContextGeneric.xml</include> 

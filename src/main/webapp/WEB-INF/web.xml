@@ -38,7 +38,7 @@
   -->
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>classpath:creditos/log4j.xml</param-value>
+		<param-value>classpath:hr/log4j.xml</param-value>
 	</context-param>
 
 	<!--
