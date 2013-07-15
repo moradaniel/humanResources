@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsPeriod.CreditsPeriodImpl;
 import org.dpi.empleo.EmpleoQueryFilter;
 import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
@@ -133,13 +134,13 @@ public class ReportController {
 
 		Long creditosDisponiblesAlInicioDelPeriodo =this.administradorCreditosService.getCreditosDisponiblesAlInicioDelPeriodo(reparticion.getId());
 
-		Long creditosPorIngresosOAscensos = this.administradorCreditosService.getCreditosPorIngresosOAscensos(reparticion.getId());
+		Long creditosPorIngresosOAscensosSolicitados = this.administradorCreditosService.getCreditosPorIngresosOAscensosSolicitados(new CreditsPeriodImpl(), reparticion.getId());
 
-		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponibles(reparticion.getId());
+		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
 	
 		
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO",creditosDisponiblesAlInicioDelPeriodo);
-		params.put("CANTIDAD_CREDITOS_UTILIZADOS",creditosPorIngresosOAscensos);
+		params.put("CANTIDAD_CREDITOS_UTILIZADOS",creditosPorIngresosOAscensosSolicitados);
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DELS_PERIODO",creditosDisponibles);
 		
 		

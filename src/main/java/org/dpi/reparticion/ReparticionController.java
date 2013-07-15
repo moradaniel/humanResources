@@ -14,6 +14,7 @@ import org.dpi.agente.AgenteQueryFilter;
 import org.dpi.agente.AgenteService;
 import org.dpi.agente.EstadoAgente;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsPeriod.CreditsPeriodImpl;
 import org.dpi.empleo.EmpleoQueryFilter;
 import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.empleo.EmpleoService;
@@ -153,11 +154,30 @@ public class ReparticionController {
 			Long creditosPorBaja = this.administradorCreditosService.getCreditosPorBajasDeReparticion(reparticion.getId());
 			model.addAttribute("creditosPorBaja", creditosPorBaja);
 
-			Long creditosPorIngresosOAscensos = this.administradorCreditosService.getCreditosPorIngresosOAscensos(reparticion.getId());
-			model.addAttribute("creditosPorIngresosOAscensos", creditosPorIngresosOAscensos);
+			Long creditosDisponiblesAlInicioPeriodo = this.administradorCreditosService.getCreditosDisponiblesAlInicioPeriodo(new CreditsPeriodImpl(),reparticion.getId());
+			model.addAttribute("creditosDisponiblesAlInicioPeriodo", creditosDisponiblesAlInicioPeriodo);
 
-			Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponibles(reparticion.getId());
-			model.addAttribute("creditosDisponibles", creditosDisponibles);
+			
+
+			
+			Long creditosPorIngresosOAscensosSolicitados = this.administradorCreditosService.getCreditosPorIngresosOAscensosSolicitados(new CreditsPeriodImpl(), reparticion.getId());
+			
+			model.addAttribute("creditosPorIngresosOAscensosSolicitados", creditosPorIngresosOAscensosSolicitados);
+			
+
+			Long creditosPorIngresosOAscensosOtorgados = this.administradorCreditosService.getCreditosPorIngresosOAscensosOtorgados(new CreditsPeriodImpl(), reparticion.getId());
+			
+			model.addAttribute("creditosPorIngresosOAscensosOtorgados", creditosPorIngresosOAscensosOtorgados);
+
+			
+			
+
+			Long creditosDisponiblesSegunSolicitado = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
+			model.addAttribute("creditosDisponiblesSegunSolicitado", creditosDisponiblesSegunSolicitado);
+			
+			Long creditosDisponiblesSegunOtorgado = this.administradorCreditosService.getCreditosDisponiblesSegunOtorgado(reparticion.getId());
+			model.addAttribute("creditosDisponiblesSegunOtorgado", creditosDisponiblesSegunOtorgado);
+
 		}
 		return "reparticiones/show";
 	}
@@ -227,7 +247,7 @@ public class ReparticionController {
 			model.addAttribute("movimientos", movimientoCreditosVOReparticion);
 			
 			//creditos disponibles
-			long creditosDisponibles = administradorCreditosService.getCreditosDisponibles(reparticion.getId());
+			long creditosDisponibles = administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
 			
 			model.addAttribute("creditosDisponibles", creditosDisponibles);
 		}

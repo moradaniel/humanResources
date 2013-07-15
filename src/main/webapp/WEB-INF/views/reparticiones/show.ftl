@@ -33,16 +33,22 @@
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Por Carga Inicial</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Por Baja</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Por Ingresos o Ascensos</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles al Inicio del Periodo</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Por Ingresos o Ascensos(Solicitados)</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Por Ingresos o Ascensos(Otorgados)</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Solicitado</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Otorgado</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
 					</tr>
 					
 					<tr>
 						<td>${creditosPorCargaInicialDeReparticion}</td>
 						<td>${creditosPorBaja}</td>
-						<td>${creditosPorIngresosOAscensos}</td>
-						<td>${creditosDisponibles}</td>
+						<td>${creditosDisponiblesAlInicioPeriodo}</td>
+						<td>${creditosPorIngresosOAscensosSolicitados}</td>
+						<td>${creditosPorIngresosOAscensosOtorgados}</td>
+						<td>${creditosDisponiblesSegunSolicitado}</td>
+						<td>${creditosDisponiblesSegunOtorgado}</td>
 						<td>						
 						<a href="showEmpleos" class="ajaxLink">Ver Agentes Activos</a>
 						<br/>
