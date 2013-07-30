@@ -107,27 +107,28 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 			ModelAndView modelAndView) throws Exception {
 
 		if(SecurityContextHolder.getContext().getAuthentication()!=null){
-			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			Account account = (Account) accountObj; // better be one of our Account objects!
-			AbstractUserSettings settings = settingsFactory.getSettingsForAccount(account);
+			if(modelAndView!=null){//if null it was an Ajax request
+				Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				Account account = (Account) accountObj; // better be one of our Account objects!
+				AbstractUserSettings settings = settingsFactory.getSettingsForAccount(account);
+	
+				modelAndView.addObject(getAccountKey(), account);
+				modelAndView.addObject(getSettingsKey(), settings);
+				
+				List<String> rolesNames = new ArrayList<String>();
+				for(Role role : account.getRoles()){
+					rolesNames.add(role.getName());
+				}
+				
+				modelAndView.addObject(getRolesKey(), StringUtils.collectionToCommaDelimitedString(rolesNames));
+				
+				if (log.isDebugEnabled())
+				{
+					log.debug("classname: " + account.getClass().getName());
+					log.debug("account: " + account);
+				}
 
-			modelAndView.addObject(getAccountKey(), account);
-			modelAndView.addObject(getSettingsKey(), settings);
-			
-			List<String> rolesNames = new ArrayList<String>();
-			for(Role role : account.getRoles()){
-				rolesNames.add(role.getName());
 			}
-			
-			modelAndView.addObject(getRolesKey(), StringUtils.collectionToCommaDelimitedString(rolesNames));
-			
-			if (log.isDebugEnabled())
-			{
-				log.debug("classname: " + account.getClass().getName());
-				log.debug("account: " + account);
-			}
-
-
 			//return model;
 
 		}

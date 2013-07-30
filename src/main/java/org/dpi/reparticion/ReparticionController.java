@@ -18,7 +18,9 @@ import org.dpi.creditsPeriod.CreditsPeriodImpl;
 import org.dpi.empleo.EmpleoQueryFilter;
 import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.empleo.EmpleoService;
+import org.dpi.movimientoCreditos.CambiosMultiplesEstadoMovimientosForm;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosAscensoVO;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
@@ -246,10 +248,18 @@ public class ReparticionController {
 					
 			model.addAttribute("movimientos", movimientoCreditosVOReparticion);
 			
-			//creditos disponibles
-			long creditosDisponibles = administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
+			CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm =  new CambiosMultiplesEstadoMovimientosForm();
+			for(MovimientoCreditosAscensoVO movimientoCreditosAscensoVO :movimientoCreditosVOReparticion){
+				cambiosMultiplesEstadoMovimientosForm.getMovimientos().add(movimientoCreditosAscensoVO.getMovimientoCreditos());
+			}
 			
-			model.addAttribute("creditosDisponibles", creditosDisponibles);
+			model.addAttribute("grantedStatuses", GrantedStatus.values());
+			model.addAttribute("cambiosMultiplesEstadoMovimientosForm", cambiosMultiplesEstadoMovimientosForm);
+			
+			//creditos disponibles
+			//long creditosDisponibles = administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
+			
+			//model.addAttribute("creditosDisponibles", creditosDisponibles);
 		}
 		return "reparticiones/movimientos";
 	}
