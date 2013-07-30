@@ -4,7 +4,7 @@ package org.dpi.movimientoCreditos;
 public class MovimientoCreditosAscensoVO{
 	
 
-	MovimientoCreditos movimientoCreditos;
+	MovimientoCreditos movimientoCreditos =  new MovimientoCreditosImpl();
 	
 	String categoriaActual;
 
@@ -12,6 +12,10 @@ public class MovimientoCreditosAscensoVO{
 	
 	boolean canAccountBorrarMovimiento = false;
 	boolean canAccountCambiarEstadoMovimiento = false;
+	
+	public MovimientoCreditosAscensoVO(){
+		super();
+	}
 	
 	public MovimientoCreditos getMovimientoCreditos() {
 		return movimientoCreditos;

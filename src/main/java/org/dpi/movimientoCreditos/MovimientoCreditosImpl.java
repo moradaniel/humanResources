@@ -6,6 +6,12 @@ import org.dpi.empleo.Empleo;
 
 public class MovimientoCreditosImpl  extends PersistentAbstract implements MovimientoCreditos{
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	TipoMovimientoCreditos tipoMovimientoCreditos;
 
 	Empleo empleo;
@@ -16,6 +22,10 @@ public class MovimientoCreditosImpl  extends PersistentAbstract implements Movim
 	private CreditsPeriod creditsPeriod;
 	
 	private GrantedStatus grantedStatus;
+	
+	public MovimientoCreditosImpl() {
+		super();
+	}
 	
 	
 	@Override
