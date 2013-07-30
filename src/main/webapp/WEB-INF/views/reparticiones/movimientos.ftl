@@ -1,4 +1,4 @@
-
+<#import "/WEB-INF/views/spring.ftl" as spring />
 <#import "/WEB-INF/views/creditosUtils.ftl" as creditosUtils />
 
 
@@ -17,6 +17,9 @@
 	</div>
 	<!-- end page-heading -->
 	
+	
+	<form id="cambioMultipleEstadoMovimientoForm" name="cambioMultipleEstadoMovimientoForm" action="${requestContext.contextPath}/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento" method="post">
+	<input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" />
 		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 	<tr>
 		<th rowspan="3" class="sized"><img src="${requestContext.contextPath}/resources/images/admin/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
@@ -94,7 +97,14 @@
 					<td>${movimiento.movimientoCreditos.empleo.agente.apellidoNombre}</td>
 					<td>${movimiento.movimientoCreditos.empleo.agente.condicion?default("")}</td>
 					<td>${movimiento.movimientoCreditos.tipoMovimientoCreditos}</td>
-					<td>${movimiento.movimientoCreditos.grantedStatus}</td>
+					<td>
+						<#if movimiento.canAccountCambiarEstadoMovimiento>
+							<@spring.formSingleSelect "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].grantedStatus", grantedStatuses, "" />
+							<@spring.formHiddenInput "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].id" />	
+						<#else>
+							${movimiento.movimientoCreditos.grantedStatus}
+						</#if>	
+					</td>
 					<td>${movimiento.movimientoCreditos.empleo.fechaInicio!""}</td>
 					<td>${movimiento.movimientoCreditos.empleo.fechaFin!""}</td>
 					<td>${movimiento.movimientoCreditos.cantidadCreditos}</td>
@@ -147,6 +157,7 @@
 		<th class="sized bottomright"></th>
 	</tr>
 	</table>
+	</form>
 	<div class="clear">&nbsp;</div
 	 
 	</#if>
@@ -156,5 +167,13 @@
 <script>
 	$(function() {
 		$("input:submit, a, button", ".buttoniseUs").button();
+	});
+</script>
+
+<script>
+	$(function() {
+		$(document).ready(function() { 
+			Utils.blockUIonClick($('#saveButton'));
+		});
 	});
 </script>

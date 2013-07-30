@@ -1,9 +1,11 @@
 <#import "/WEB-INF/layouts/NavAdmin.ftl" as nav />
 <#import "/WEB-INF/views/spring.ftl" as spring />
-
-
+<#--
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"> -->
+<!DOCTYPE html>
+
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Sistema de Creditos</title>
@@ -21,16 +23,23 @@
 	
 	<#-- link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/css/style.css'/ -->
 	
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.6/jquery-1.6.4.min.js'/></script>
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jquery-ui/1.8.18/smoothness/jquery-ui-1.8.18.custom.min.js'/></script>
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/grid.locale-en-4.3.1.js'/></script>
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/jquery.jqGrid.min.4.3.1.js'/></script>
 	
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/blockUI/jquery.blockUI.js'/></script>
+	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery//1.10/jquery-1.10.2.min.js'/></script>
+	
+	<#-- script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.6/jquery-1.6.4.min.js'/></script -->
+	
+	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jquery-ui/1.8.18/smoothness/jquery-ui-1.8.18.custom.min.js'/></script>
+	
+	<#-- >script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/grid.locale-en-4.3.1.js'/></script>
+	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/jquery.jqGrid.min.4.3.1.js'/></script -->
+	
+	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/blockUI/2.64/jquery.blockUI.js'/></script>
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/utils/utils.js'/></script>
 	
 	
+	<#-- script type='text/javascript' src='${requestContext.contextPath}/resources/js/angular/1.0.7/angular.min.js'/></script>
+  	<script type='text/javascript' src='${requestContext.contextPath}/resources/js/angular/controllers.js'/></script -->
 
 
 	<script type="text/javascript">
