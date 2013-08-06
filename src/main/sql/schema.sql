@@ -184,6 +184,7 @@ create table EMPLEO (ID number(19,0) not null,
 	CENTROSECTORID number(19,0) not null, 
 	CATEGORIAID number(19,0) not null,
 	ESTADO  VARCHAR2(255 BYTE) NOT NULL,
+	EMPLEO_ANTERIOR_ID number(19,0),
 	primary key (ID));
 
 CREATE SEQUENCE CREDITOS.EMPLEO_SEQ
@@ -534,6 +535,12 @@ alter table MOVIMIENTOCREDITOS
         add constraint fk_MovimientoCredito_CreditsPeriod 
         foreign key (CREDITSPERIODID) 
         references CREDITSPERIOD;
+        
+        
+alter table EMPLEO 
+        add constraint fk_Empleo_Empleo_Anterior 
+        foreign key (EMPLEO_ANTERIOR_ID) 
+        references Empleo;        
 
       
 
