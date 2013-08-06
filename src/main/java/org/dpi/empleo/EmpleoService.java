@@ -105,6 +105,7 @@ public interface EmpleoService extends ApplicationContextAware
 	public EmpleoDao getEmpleoDao();
 
 
+	//Deprecated
 	public Empleo findPreviousEmpleo(Empleo empleo);
 
 

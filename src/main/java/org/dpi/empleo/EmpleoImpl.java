@@ -24,6 +24,8 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	Date fechaInicio;
 	Date fechaFin;
 	
+	Empleo empleoAnterior;
+	
 	
 	@Override
 	public Agente getAgente() {
@@ -103,6 +105,16 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 		if (this.fechaFin == null)
 			return false;
 		return true;
+	}
+
+	@Override
+	public Empleo getEmpleoAnterior() {
+		return empleoAnterior;
+	}
+
+	@Override
+	public void setEmpleoAnterior(Empleo empleoAnterior) {
+		this.empleoAnterior = empleoAnterior;
 	}
 
 }

@@ -51,6 +51,13 @@
 		<key column="EMPLEOID" foreign-key="fk_MovimientoCreditos_Empleo"/>
 		<one-to-many class="org.dpi.movimientoCreditos.MovimientoCreditosImpl"/>
 	</set>
+	
+	<many-to-one 
+		name="empleoAnterior"
+		class="org.dpi.empleo.EmpleoImpl"
+ 		column="EMPLEO_ANTERIOR_ID" 
+		foreign-key="fk_Empleo_Empleo_Anterior"
+		not-null="false"/>
 		
   </class>
 </hibernate-mapping>

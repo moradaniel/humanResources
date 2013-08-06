@@ -6,10 +6,11 @@ import java.util.List;
 import org.dpi.agente.Agente;
 import org.dpi.agente.AgenteService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.creditsPeriod.Status;
+import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmpleoQueryFilter;
 import org.dpi.empleo.EmpleoService;
+import org.dpi.empleo.EstadoEmpleo;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	{
 		if(movimiento.getTipoMovimientoCreditos().equals(TipoMovimientoCreditos.BajaAgente)){
 			movimiento.getEmpleo().setFechaFin(null);
+			movimiento.getEmpleo().setEstado(EstadoEmpleo.ACTIVO);
+			
 			empleoService.saveOrUpdate(movimiento.getEmpleo());
 			movimientoCreditosDao.delete(movimiento);
 		}
@@ -267,7 +270,8 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			MovimientoCreditosAscensoVO movimientoCreditosVO = new MovimientoCreditosAscensoVO();
 			movimientoCreditosVO.setMovimientoCreditos(movimientoCreditos);
 			if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente){
-				Empleo empleoPrevio = empleoService.findPreviousEmpleo(movimientoCreditos.getEmpleo());
+				//Empleo empleoPrevio = empleoService.findPreviousEmpleo(movimientoCreditos.getEmpleo());
+				Empleo empleoPrevio = movimientoCreditos.getEmpleo().getEmpleoAnterior();
 				movimientoCreditosVO.setCategoriaActual(empleoPrevio.getCategoria().getCodigo());
 				movimientoCreditosVO.setCategoriaPropuesta(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
 			}else{

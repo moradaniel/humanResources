@@ -46,4 +46,8 @@ public interface Empleo extends Persistent,Serializable{
 
 	public boolean isClosed();
 
+	Empleo getEmpleoAnterior();
+
+	void setEmpleoAnterior(Empleo empleoAnterior);
+
 }

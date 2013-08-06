@@ -41,6 +41,7 @@
         AGENTEID number(19,0) not null,
         CENTROSECTORID number(19,0) not null,
         CATEGORIAID number(19,0) not null,
+        EMPLEO_ANTERIOR_ID number(19,0),
         primary key (ID)
     );
 
@@ -80,6 +81,11 @@
         add constraint fk_Empleo_Categoria 
         foreign key (CATEGORIAID) 
         references CATEGORIA;
+
+    alter table EMPLEO 
+        add constraint fk_Empleo_Empleo_Anterior 
+        foreign key (EMPLEO_ANTERIOR_ID) 
+        references CENTROSECTOR;
 
     alter table MOVIMIENTOCREDITOS 
         add constraint fk_MovimientoCreditos_Empleo 

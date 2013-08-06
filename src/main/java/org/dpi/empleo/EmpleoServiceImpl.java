@@ -17,6 +17,7 @@ import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
 import org.slf4j.Logger;
@@ -289,12 +290,12 @@ public class EmpleoServiceImpl implements EmpleoService
 		
 		
 		//ponerle fecha fin la fecha actual
-		empleoActual.setFechaFin(new Date());
+		//empleoActual.setFechaFin(new Date());
 		
 		Agente agente = empleoActual.getAgente();
 		
 		//guardar empleo
-		saveOrUpdate(empleoActual);
+		//saveOrUpdate(empleoActual);
 
 		Categoria categoriaNueva = categoriaService.findByCodigo(codigoCategoriaNueva);
 		Empleo empleoNuevo = new EmpleoImpl();
@@ -308,6 +309,7 @@ public class EmpleoServiceImpl implements EmpleoService
 		MovimientoCreditosImpl movimientoAscenso = new MovimientoCreditosImpl();
 		movimientoAscenso.setTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
 		int cantidadCreditosPorAscenso = this.getAdministradorCreditosService().getCreditosPorAscenso(agente.getCondicion(),empleoActual.getCategoria().getCodigo(),codigoCategoriaNueva);
+		movimientoAscenso.setGrantedStatus(GrantedStatus.Solicitado);
 
 		
 		movimientoAscenso.setCantidadCreditos(cantidadCreditosPorAscenso);
@@ -317,6 +319,8 @@ public class EmpleoServiceImpl implements EmpleoService
 		empleoNuevo.addMovimientoCreditos(movimientoAscenso);
 		
 		movimientoAscenso.setEmpleo(empleoNuevo);
+		empleoNuevo.setEmpleoAnterior(empleoActual);
+		
 		
 		//guardar movimiento y empleo
 		saveOrUpdate(empleoNuevo);
