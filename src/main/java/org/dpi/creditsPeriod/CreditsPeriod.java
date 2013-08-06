@@ -1,8 +1,16 @@
 package org.dpi.creditsPeriod;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public interface CreditsPeriod {
+import org.dpi.domain.Persistent;
+
+public interface CreditsPeriod extends Persistent,Serializable{
+	
+	public enum Status{
+		Active,
+		Closed
+	}
 	
 
 	public String getName();

@@ -1,9 +1,5 @@
 package utils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,16 +13,22 @@ import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorImpl;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmpleoImpl;
 import org.dpi.empleo.EmpleoQueryFilter;
 import org.dpi.empleo.EmpleoService;
 import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionImpl;
 import org.dpi.reparticion.ReparticionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -35,9 +37,12 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 public class ImportarEntidades {
+	
+	private static Logger sLog = LoggerFactory.getLogger(ImportarEntidades.class);
+	
+	CreditsPeriodService creditsPeriodService;
 	
 	ReparticionService reparticionService;
 	
@@ -67,6 +72,10 @@ public class ImportarEntidades {
 
 		final ImportarEntidades importadorEntidades = new ImportarEntidades();
 		importadorEntidades.setDpiJdbcTemplate((NamedParameterJdbcTemplate)context.getBean("dpiJdbcTemplate"));
+		
+		importadorEntidades.setCreditsPeriodService((CreditsPeriodService)context.getBean("creditsPeriodService"));
+		
+		
 		importadorEntidades.setReparticionService((ReparticionService)context.getBean("reparticionService"));
 		importadorEntidades.setCentroSectorService((CentroSectorService)context.getBean("centroSectorService"));
 		importadorEntidades.setAgenteService((AgenteService)context.getBean("agenteService"));
@@ -104,7 +113,7 @@ public class ImportarEntidades {
 
     }
 
-    public void setAdministradorCreditosService(
+	public void setAdministradorCreditosService(
 			AdministradorCreditosService administradorCreditosService) {
 		this.administradorCreditosService=administradorCreditosService;
 		
@@ -164,6 +173,10 @@ public class ImportarEntidades {
 								centroSector.setCodigoSector(codigoSector);
 								centroSector.setNombreCentro(nombreCentro);
 								centroSector.setNombreSector(nombreSector);
+								sLog.info("Created new centroSector: centro: " + codigoCentro+ 
+															" nombreCentro: "+	nombreCentro+
+															" sector: "+	codigoSector+ 
+															" nombreSector"+nombreSector);
 						}
 						
 					}
@@ -172,6 +185,12 @@ public class ImportarEntidades {
 					centroSector.setReparticion(reparticion);
 					centroSectorService.saveOrUpdate(centroSector);
 					reparticionService.saveOrUpdate(reparticion);
+					
+					sLog.info("Created relation between centro: " + centroSector.getCodigoCentro()+ 
+							" nombreCentro: "+	centroSector.getNombreCentro()+
+							" sector: "+	centroSector.getCodigoSector()+ 
+							" nombreSector"+centroSector.getNombreSector()+
+							" and reparticion "+ reparticion.getId()+ ": " +reparticion.getNombre() );
 
 				}
 			}
@@ -188,13 +207,13 @@ public class ImportarEntidades {
 				ReparticionImpl newReparticion = new ReparticionImpl();
 				newReparticion.setNombre(nombreReparticion);
 				reparticionService.saveOrUpdate(newReparticion);
-				
+				sLog.info("Created new reparticion "+ newReparticion.getId()+ ": " +newReparticion.getNombre() );
 			}
 		}
 	}
 	
 	
-	private void importarCentroSectores(Map<String, Object> row) {
+	/*private void importarCentroSectores(Map<String, Object> row) {
 		String codigoCentro = (String)row.get("CENTRO");
 		String codigoSector = (String)row.get("SECTOR");
 		String nombreCentro = (String)row.get("NOMBRECENTRO");
@@ -212,7 +231,7 @@ public class ImportarEntidades {
 				centroSectorService.saveOrUpdate(newCentroSector);
 			}
 		}
-	}
+	}*/
 
 	private void importarAgentes(Map<String, Object> row) {
 		String cuil = (String)row.get("CUIL");
@@ -238,6 +257,7 @@ public class ImportarEntidades {
 				CategoriaImpl newCategoria = new CategoriaImpl();
 				newCategoria.setCodigo(codigoCategoria);
 				categoriaService.saveOrUpdate(newCategoria);
+				sLog.info("Created new categoria "+ newCategoria.getId()+ ": " +newCategoria.getCodigo() );
 			}
 		}
 	}
@@ -245,6 +265,11 @@ public class ImportarEntidades {
 	private void importarEmpleos(Map<String, Object> row) throws RuntimeException{
 		String codigoCentro = (String)row.get("CENTRO");
 		String codigoSector = (String)row.get("SECTOR");
+		
+		CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+		creditsPeriodQueryFilter.setName("2013");
+		List<CreditsPeriod> creditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
+		CreditsPeriod creditsPeriod = creditsPeriods.get(0);
 		
 		if(codigoCentro!=null && codigoSector!=null){
 			
@@ -282,17 +307,21 @@ public class ImportarEntidades {
 						
 						String esBaja = (String)row.get("BAJA");
 						
-						if(!StringUtils.hasText(esBaja)){ //es carga inicial
-							MovimientoCreditosImpl movimientoCargaInicialAgenteExistente = new MovimientoCreditosImpl();
-							movimientoCargaInicialAgenteExistente.setTipoMovimientoCreditos(TipoMovimientoCreditos.CargaInicialAgenteExistente);
+						if(esBaja.equalsIgnoreCase("ALTA")){ //es ingreso nuevo
+							MovimientoCreditosImpl movimientoIngresoAgente = new MovimientoCreditosImpl();
+							movimientoIngresoAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
+							movimientoIngresoAgente.setGrantedStatus(GrantedStatus.Otorgado);
+							movimientoIngresoAgente.setCreditsPeriod(creditsPeriod);
 							
-							int cantidadCreditosPorCargaInicial = this.administradorCreditosService.getCreditosPorCargaInicial(codigoCategoria);
+							empleo.setFechaInicio(creditsPeriod.getStartDate());
 							
-							movimientoCargaInicialAgenteExistente.setCantidadCreditos(cantidadCreditosPorCargaInicial);
-							movimientoCargaInicialAgenteExistente.setEmpleo(empleo);
+							//int cantidadCreditosPorIngreso = this.administradorCreditosService.getCreditosPorIngreso(codigoCategoria);
+							
+							movimientoIngresoAgente.setCantidadCreditos(0); //pase a planta de contratados no consume creditos
+							movimientoIngresoAgente.setEmpleo(empleo);
 							
 							empleo.setEstado(EstadoEmpleo.ACTIVO);
-							empleo.addMovimientoCreditos(movimientoCargaInicialAgenteExistente);
+							empleo.addMovimientoCreditos(movimientoIngresoAgente);
 							
 						}else{//es baja
 							MovimientoCreditosImpl movimientoBajaAgente = new MovimientoCreditosImpl();
@@ -302,18 +331,11 @@ public class ImportarEntidades {
 							
 							movimientoBajaAgente.setCantidadCreditos(cantidadCreditosPorBaja);
 							movimientoBajaAgente.setEmpleo(empleo);
+							movimientoBajaAgente.setGrantedStatus(GrantedStatus.Otorgado);
+							movimientoBajaAgente.setCreditsPeriod(creditsPeriod);
 							
-							DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							//dfm.setTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
-							Date fechaFin = null;
-							
-							try{
-								fechaFin=dfm.parse("2012-03-01 0:0:00");
-							}catch(ParseException ex){
-								throw new RuntimeException(ex);
-							}
-							
-							empleo.setFechaFin(fechaFin);
+						
+							empleo.setFechaFin(creditsPeriod.getStartDate());
 							empleo.setEstado(EstadoEmpleo.BAJA);
 							
 							empleo.addMovimientoCreditos(movimientoBajaAgente);
@@ -397,5 +419,13 @@ public class ImportarEntidades {
 		this.empleoService = empleoService;
 	}
 
+	
+	public CreditsPeriodService getCreditsPeriodService() {
+		return this.creditsPeriodService;
+	}
+
+	public void setCreditsPeriodService(CreditsPeriodService creditsPeriodService) {
+		this.creditsPeriodService = creditsPeriodService;
+	}
 
 }

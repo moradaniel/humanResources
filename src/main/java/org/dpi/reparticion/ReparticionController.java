@@ -64,7 +64,7 @@ public class ReparticionController {
 
 
 	/** 
-	 * key that we use when placing an Reparticion instance in a model: 'hotel'
+	 * key that we use when placing an Reparticion instance in a model: 'reparticion'
 	 * TODO: make private; have clients use session getters/putters
 	 */
 	public static final String KEY_REPARTICION = "reparticion";

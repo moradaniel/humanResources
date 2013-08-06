@@ -1,10 +1,8 @@
 package org.dpi.util;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -12,7 +10,6 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.Hibernate;
 import org.hibernate.LazyInitializationException;
@@ -28,7 +25,6 @@ import org.hibernate.LazyInitializationException;
  *
  */
 public abstract class BaseObject implements Serializable {
-	//protected static Log log = LogFactory.getLog("es.tecnocasa.model");
 	
     public final static ToStringStyle STRING_STYLE = ToStringStyle.DEFAULT_STYLE;
 

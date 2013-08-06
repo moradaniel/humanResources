@@ -293,24 +293,12 @@
 		</property>
 	</bean>
 	
-	<bean id="creditsPeriodServiceService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="creditsPeriodService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.creditsPeriod.CreditsPeriodServiceServiceImpl">
-				<constructor-arg><ref local="empleoDao"/></constructor-arg>
-				<property name="administradorCreditosService">
-					<ref bean="administradorCreditosService" />
-				</property>
-				<property name="categoriaService">
-					<ref bean="categoriaService" />
-				</property>
-				<property name="agenteService">
-					<ref bean="agenteService" />
-				</property>
-				<property name="centroSectorService">
-					<ref bean="centroSectorService" />
-				</property>
-				
+			<bean class="org.dpi.creditsPeriod.CreditsPeriodServiceImpl">
+				<constructor-arg><ref local="creditsPeriodDao"/></constructor-arg>
+		
 			</bean>
 		</property>
 		<property name="transactionAttributes">
@@ -324,6 +312,26 @@
 				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
 				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+		<!-- the Service DAO on which the Facade relies -->
+	<bean id="creditsPeriodDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.creditsPeriod.CreditsPeriodDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
 	</bean>
