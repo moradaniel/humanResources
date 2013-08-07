@@ -19,6 +19,7 @@ import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmpleoImpl;
 import org.dpi.empleo.EmpleoQueryFilter;
+import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.empleo.EmpleoService;
 import org.dpi.empleo.EstadoEmpleo;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
@@ -132,8 +133,9 @@ public class ImportarEntidades {
 		
 		String query = "SELECT	* " +
 					" FROM	CREDITOS.TODO " +
-					" WHERE	(CREDITOS.TODO.ESCALAFON = '6' or CREDITOS.TODO.ESCALAFON = '2')" +
-					"		AND REPARTICION<>'#N/A'" ; //solo escalafon general 02 y 06
+					" WHERE	(CREDITOS.TODO.ESCALAFON = '6' or CREDITOS.TODO.ESCALAFON = '2')" + //solo escalafon general 02 y 06
+					"		AND CREDITOS.TODO.REPARTICION<>'#N/A'" +
+					"		AND CREDITOS.TODO.PARA_IMPORTAR='SI' " ; 
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 
@@ -291,19 +293,23 @@ public class ImportarEntidades {
 					empleoQueryFilter.setCodigoCentro(codigoCentro);
 					empleoQueryFilter.setCodigoSector(codigoSector);
 					empleoQueryFilter.setCodigoCategoria(codigoCategoria);
+					empleoQueryFilter.setEstadoEmpleo(estado.ACTIVO);
 					
 					
 					
 					List<Empleo> empleos = empleoService.find(empleoQueryFilter);
 					
+					Empleo empleo = null;
 					if(CollectionUtils.isEmpty(empleos)){
 						//crear una entrada en empleo
-						//crear un movimiento de creditos de tipo CargaInicialAgenteExistente
-						
-						EmpleoImpl empleo = new EmpleoImpl();
+						empleo = new EmpleoImpl();
 						empleo.setAgente(agente);
 						empleo.setCentroSector(centroSector);
 						empleo.setCategoria(categoria);
+					}else{
+						empleo = empleos.get(0);
+					}
+						
 						
 						String esBaja = (String)row.get("BAJA");
 						
@@ -344,8 +350,7 @@ public class ImportarEntidades {
 						
 						
 						empleoService.saveOrUpdate(empleo);
-						
-					}
+											
 				
 				}			
 			}
