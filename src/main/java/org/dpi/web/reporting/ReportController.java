@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.creditsPeriod.CreditsPeriodImpl;
+import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoQueryFilter.estado;
+import org.dpi.empleo.EstadoEmpleo;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.movimientoCreditos.MovimientoCreditosAscensoVO;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
@@ -52,6 +54,9 @@ public class ReportController {
 	
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
+	
+	@Resource(name = "creditsPeriodService")
+	private CreditsPeriodService creditsPeriodService;
 	
 	/**
 	 * Handles and retrieves the download page
@@ -95,7 +100,8 @@ public class ReportController {
 		//get movimientos de ascenso
 		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
 		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
-		empleoQueryFilter.setEstadoEmpleo(estado.TODOS);
+		//todos los estados
+		empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 		movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);
 		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
@@ -114,7 +120,8 @@ public class ReportController {
 		//get movimientos de Ingreso
 		empleoQueryFilter = new EmpleoQueryFilter();
 		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
-		empleoQueryFilter.setEstadoEmpleo(estado.TODOS);
+		//todos los estados
+		empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 		movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);
 		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
@@ -131,12 +138,17 @@ public class ReportController {
 		params.put("MOVIMIENTOS_INGRESO",  new MovimientosIngresoReportDataSource(getReportDataMovimientosIngreso(movimientoCreditosIngresosReparticion)));
 		
 		
+		//obtener periodo actual
+		CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+		creditsPeriodQueryFilter.setName("2013");//TODO get year from current date
+		
+		List<CreditsPeriod> currentCreditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
+		CreditsPeriod currentCreditsPeriod = currentCreditsPeriods.get(0);
+		Long creditosDisponiblesAlInicioDelPeriodo =this.administradorCreditosService.getCreditosDisponiblesAlInicioDelPeriodo(currentCreditsPeriod,reparticion.getId());
 
-		Long creditosDisponiblesAlInicioDelPeriodo =this.administradorCreditosService.getCreditosDisponiblesAlInicioDelPeriodo(reparticion.getId());
+		Long creditosPorIngresosOAscensosSolicitados = this.administradorCreditosService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod, reparticion.getId());
 
-		Long creditosPorIngresosOAscensosSolicitados = this.administradorCreditosService.getCreditosPorIngresosOAscensosSolicitados(new CreditsPeriodImpl(), reparticion.getId());
-
-		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
+		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod,reparticion.getId());
 	
 		
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO",creditosDisponiblesAlInicioDelPeriodo);

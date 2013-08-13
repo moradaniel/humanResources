@@ -12,8 +12,8 @@ import org.dpi.categoria.CategoriaService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.empleo.EmpleoService;
+import org.dpi.empleo.EstadoEmpleo;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
@@ -21,6 +21,7 @@ import org.janux.bus.security.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -177,7 +178,8 @@ public class MovimientoCreditosController {
 
 			EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
 			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
-			empleoQueryFilter.setEstadoEmpleo(estado.TODOS);
+			//todos los estados
+			empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 
 			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 			movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);

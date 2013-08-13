@@ -19,7 +19,7 @@
 	
 	
 	<form id="cambioMultipleEstadoMovimientoForm" name="cambioMultipleEstadoMovimientoForm" action="${requestContext.contextPath}/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento" method="post">
-	<input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" />
+	<#-- input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" / -->
 		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 	<tr>
 		<th rowspan="3" class="sized"><img src="${requestContext.contextPath}/resources/images/admin/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
@@ -98,12 +98,12 @@
 					<td>${movimiento.movimientoCreditos.empleo.agente.condicion?default("")}</td>
 					<td>${movimiento.movimientoCreditos.tipoMovimientoCreditos}</td>
 					<td>
-						<#if movimiento.canAccountCambiarEstadoMovimiento>
+						<#-- if movimiento.canAccountCambiarEstadoMovimiento>
 							<@spring.formSingleSelect "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].grantedStatus", grantedStatuses, "" />
 							<@spring.formHiddenInput "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].id" />	
-						<#else>
+						<#else -->
 							${movimiento.movimientoCreditos.grantedStatus}
-						</#if>	
+						<#-- /#if -->	
 					</td>
 					<td>${movimiento.movimientoCreditos.empleo.fechaInicio!""}</td>
 					<td>${movimiento.movimientoCreditos.empleo.fechaFin!""}</td>
@@ -124,7 +124,7 @@
 						</#if>
 						
 						<#if movimiento.canAccountCambiarEstadoMovimiento>
-							<a href="${reparticionesUrl}/movimientos/${movimiento.movimientoCreditos.id}/setupFormCambiarEstadoMovimientoCreditos" class="ajaxLink">Cambiar Estado Movimiento</a>
+							<#-- a href="${reparticionesUrl}/movimientos/${movimiento.movimientoCreditos.id}/setupFormCambiarEstadoMovimientoCreditos" class="ajaxLink">Cambiar Estado Movimiento</a -->
 						</#if>
 					</td>
 				</tr>

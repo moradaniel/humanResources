@@ -379,7 +379,7 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			//Obtener el empleo del movimiento de tipo ascenso (EmpleoaActualizar)
 			Empleo empleoaActualizar = movimientoCreditos.getEmpleo();
 			//Obtener el empleo anterior al EmpleoaActualizar (EmpleoAnterior)
-			Empleo empleoAnterior = empleoService.findPreviousEmpleo(empleoaActualizar);
+			Empleo empleoAnterior = empleoaActualizar.getEmpleoAnterior();
 			//Obtener la categoria del EmpleoAnterior
 			//Obtener los creditos por ascenso para la categoria anterior y la categoria actual
 			int nuevaCantidaddeCreditos = administradorCreditosService.getCreditosPorAscenso(empleoAnterior.getAgente().getCondicion(), 

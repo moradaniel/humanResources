@@ -1,7 +1,9 @@
 package org.dpi.empleo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -14,13 +16,13 @@ import java.util.Date;
  */
 public class EmpleoQueryFilter implements Serializable {
 	
-	public enum estado{
+	/*public enum estado{
 		ACTIVO,
 		DE_BAJA,
 		INACTIVO,
 		PENDIENTE,
 		TODOS
-	}
+	}*/
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,8 +38,9 @@ public class EmpleoQueryFilter implements Serializable {
 	
 	private Date fechaComienzo;
 	private Date fechaFin;
+
 	
-	EmpleoQueryFilter.estado estadoEmpleo;
+	List<EstadoEmpleo> estadosEmpleo = new ArrayList<EstadoEmpleo>();
 	
 	
 
@@ -101,11 +104,18 @@ public class EmpleoQueryFilter implements Serializable {
 		this.empleoId = empleoId;
 	}
 	
-	public EmpleoQueryFilter.estado getEstadoEmpleo() {
-		return estadoEmpleo;
+	public List<EstadoEmpleo> getEstadosEmpleo() {
+		return estadosEmpleo;
 	}
-	public void setEstadoEmpleo(EmpleoQueryFilter.estado estadoEmpleo) {
-		this.estadoEmpleo = estadoEmpleo;
+	public void setEstadosEmpleo(List<EstadoEmpleo> estadosEmpleo) {
+		this.estadosEmpleo = estadosEmpleo;
+	}
+	
+	public void addEstadoEmpleo(EstadoEmpleo estadoEmpleo){
+		if(this.estadosEmpleo == null){
+			this.estadosEmpleo = new ArrayList<EstadoEmpleo>();
+		}
+		this.estadosEmpleo.add(estadoEmpleo);
 	}
 	
 	public Long getAgenteId() {

@@ -1,6 +1,7 @@
 package org.dpi.empleo;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -9,6 +10,7 @@ import org.hibernate.Session;
 import org.janux.bus.persistence.DataAccessHibImplAbstract;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Used to create, save, retrieve, update and delete objects from
@@ -112,7 +114,7 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 				sb.append(" AND empleo.id = '").append(idEmpleo).append("'");
 			}
 
-			if(empleoQueryFilter.getEstadoEmpleo()!=null){
+			/*if(empleoQueryFilter.getEstadoEmpleo()!=null){
 				switch(empleoQueryFilter.getEstadoEmpleo()){
 					case ACTIVO: sb.append(" AND empleo.estado = '"+EstadoEmpleo.ACTIVO.name()+"' ");//AND empleo.fechaFin is null");
 					break;
@@ -122,6 +124,19 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 					break;
 	
 				}
+			}*/
+			
+			if(!CollectionUtils.isEmpty(empleoQueryFilter.getEstadosEmpleo())){
+				sb.append(" AND (");
+				for (Iterator iterator = empleoQueryFilter.getEstadosEmpleo().iterator(); iterator.hasNext();) {
+					EstadoEmpleo estadoEmpleo = (EstadoEmpleo) iterator.next();
+					sb.append(" empleo.estado = '"+estadoEmpleo.name()+"' ");
+					if(iterator.hasNext()){
+						sb.append(" OR ");
+					}
+				}
+				sb.append(" ) ");				
+					
 			}
 
 		}
@@ -211,6 +226,27 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 		//if (log.isDebugEnabled()) log.debug("successfully retrieved empleo with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return (list.size() > 0) ? (Empleo)list.get(0) : null;
 
+	}
+	
+	
+	@Override
+	public Empleo findById(Long id) {
+		Chronometer timer = new Chronometer();
+
+		if (log.isDebugEnabled()) log.debug("attempting to find Empleo with id: '" + id + "'");
+
+		List list = getHibernateTemplate().find("from EmpleoImpl where id=?", id);
+
+		Empleo empleo = (list.size() > 0) ? (Empleo)list.get(0) : null;
+
+		if (empleo == null) {
+			log.warn("Unable to find Empleo with id: '" + id + "'");
+			return null;
+		}
+
+		if (log.isDebugEnabled()) log.debug("successfully retrieved empleo with id: '" + id + "' in " + timer.printElapsedTime());
+
+		return empleo;
 	}
 
 	

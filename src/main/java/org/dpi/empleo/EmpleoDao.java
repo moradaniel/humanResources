@@ -10,6 +10,8 @@ import org.janux.bus.persistence.HibernateDataAccessObject;
  */
 public interface EmpleoDao extends HibernateDataAccessObject
 {
+	
+	public Empleo findById(Long id);
 
 	public List<Empleo> findAll();
 	

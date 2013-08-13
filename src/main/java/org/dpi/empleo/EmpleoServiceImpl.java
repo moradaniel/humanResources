@@ -15,7 +15,6 @@ import org.dpi.categoria.CategoriaService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
@@ -24,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.CollectionUtils;
 
 
 
@@ -60,6 +60,9 @@ public class EmpleoServiceImpl implements EmpleoService
 		return empleoDao.find(empleoQueryFilter);
 	}
 
+	public Empleo findById(Long id){
+		return empleoDao.findById(id);
+	}
 	
 	public void save(final Empleo empleo) 
 	{
@@ -347,7 +350,7 @@ public class EmpleoServiceImpl implements EmpleoService
 
 
 	public List<Empleo> findEmpleosInactivos(final EmpleoQueryFilter empleoQueryFilter){
-		empleoQueryFilter.setEstadoEmpleo(estado.INACTIVO);
+		empleoQueryFilter.addEstadoEmpleo(EstadoEmpleo.INACTIVO);
 		
 		return this.empleoDao.findEmpleosInactivos(empleoQueryFilter);
 	}
@@ -377,7 +380,8 @@ public class EmpleoServiceImpl implements EmpleoService
 		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
 		empleoQueryFilter.setCuil(empleo.getAgente().getCuil());
 		empleoQueryFilter.setReparticionId(empleo.getCentroSector().getReparticion().getId().toString());
-		empleoQueryFilter.setEstadoEmpleo(EmpleoQueryFilter.estado.TODOS);
+		
+		empleoQueryFilter.setEstadosEmpleo( CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		empleoQueryFilter.setFechaFin(empleo.getFechaInicio());
 
 		return this.empleoDao.findPreviousEmpleo(empleoQueryFilter);
@@ -445,5 +449,7 @@ public class EmpleoServiceImpl implements EmpleoService
 	public void setCentroSectorService(CentroSectorService centroSectorService) {
 		this.centroSectorService = centroSectorService;
 	}
+	
+
 	
 }
