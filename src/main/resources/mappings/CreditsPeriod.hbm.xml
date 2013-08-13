@@ -23,6 +23,13 @@
 		
 		<property name="status" column="STATUS" 
 			type="org.dpi.persistence.CreditsPeriodStatusEnumUserType" not-null="true"/>
+			
+		<many-to-one 
+			name="previousCreditsPeriod"
+			class="org.dpi.creditsPeriod.CreditsPeriodImpl"
+	 		column="PREVIOUS_CREDITSPERIOD_ID" 
+			foreign-key="fk_CRPERIOD_CRPERIOD_PREVIOUS"
+			not-null="false"/>
 		
 	</class>
 	

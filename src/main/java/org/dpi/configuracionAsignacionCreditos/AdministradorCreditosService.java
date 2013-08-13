@@ -2,7 +2,6 @@ package org.dpi.configuracionAsignacionCreditos;
 
 import org.dpi.agente.CondicionAgente;
 import org.dpi.creditsPeriod.CreditsPeriod;
-import org.dpi.creditsPeriod.CreditsPeriodImpl;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 
 
@@ -20,24 +19,25 @@ public interface AdministradorCreditosService {
 	
 	public int getCreditosPorIngreso(String codigoCategoria);
 	
-	public Long getCreditosPorCargaInicialDeReparticion(final long reparticionId);
+	public Long getCreditosPorCargaInicialDeReparticion(final CreditsPeriod creditsPeriod, final long reparticionId);
 	
-	public Long getCreditosPorBajasDeReparticion(final long reparticionId);
+	public Long getCreditosPorBajasDeReparticion(final CreditsPeriod creditsPeriod, final long reparticionId);
 	
 
-
-	public Long getCreditosDisponiblesAlInicioDelPeriodo(Long id);
+	//public Long getCreditosDisponiblesAlInicioDelPeriodo(Long id);
 
 	public Long getCreditosPorIngresosOAscensosSolicitados(CreditsPeriod creditsPeriod, Long reparticionId);
-	public Long getCreditosPorIngresosOAscensosOtorgados(CreditsPeriodImpl creditsPeriodImpl, Long reparticionId);
+	public Long getCreditosPorIngresosOAscensosOtorgados(CreditsPeriod creditsPeriod, Long reparticionId);
 	
 	
-	public Long getCreditosDisponiblesSegunSolicitado(long reparticionId);
-	public Long getCreditosDisponiblesSegunOtorgado(long reparticionId);
+	public Long getCreditosDisponiblesSegunSolicitado(CreditsPeriod creditsPeriod,long reparticionId);
+	public Long getCreditosDisponiblesSegunOtorgado(CreditsPeriod creditsPeriod,long reparticionId);
 	
-	public 	Long getTotalCreditos(final MovimientoCreditosQueryFilter movimientoCreditosQueryFilter);
+	public Long getTotalCreditos(final MovimientoCreditosQueryFilter movimientoCreditosQueryFilter);
 
-	public Long getCreditosDisponiblesAlInicioPeriodo(CreditsPeriodImpl creditsPeriodImpl, Long id);
+	public Long getCreditosDisponiblesAlInicioPeriodo(CreditsPeriod creditsPeriod, Long id);
+	public Long getCreditosDisponiblesAlInicioDelPeriodo(final CreditsPeriod creditsPeriod,Long reparticionId);
+	
 
 
 }

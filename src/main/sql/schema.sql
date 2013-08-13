@@ -502,13 +502,14 @@ ALTER TABLE CREDITOS.REPARTICION_ACCOUNT ADD (
   ENABLE VALIDATE);
   
   
- create table CREDITSPERIOD (
+	create table CREDITSPERIOD (
         ID number(19,0) not null,
         NAME varchar2(255 char),
         DESCRIPTION varchar2(255 char),
         STARTDATE TIMESTAMP(7),
         ENDDATE TIMESTAMP(7),
         STATUS varchar2(255 char) not null,
+        PREVIOUS_CREDITSPERIOD_ID number(19,0),
         primary key (ID)
     );
     
@@ -543,5 +544,8 @@ alter table EMPLEO
         references Empleo;        
 
       
-
+alter table CREDITSPERIOD 
+        add constraint fk_CRPERIOD_CRPERIOD_PREVIOUS 
+        foreign key (PREVIOUS_CREDITSPERIOD_ID) 
+        references CREDITSPERIOD;
   

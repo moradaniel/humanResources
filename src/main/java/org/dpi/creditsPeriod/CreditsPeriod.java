@@ -33,5 +33,9 @@ public interface CreditsPeriod extends Persistent,Serializable{
 	
 	public void setStatus(Status status);
 	
+	public CreditsPeriod getPreviousCreditsPeriod();
+
+	public void setPreviousCreditsPeriod(CreditsPeriod previousCreditsPeriod);
+	
 
 }

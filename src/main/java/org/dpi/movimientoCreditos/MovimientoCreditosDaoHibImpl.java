@@ -115,6 +115,10 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 			sb.append(" AND movimiento.id = ").append(movimientoQueryFilter.getId()).append(" ");
 		}
 		
+		if(movimientoQueryFilter.getIdCreditsPeriod()!=null){
+			sb.append(" AND creditsPeriod.id = ").append(movimientoQueryFilter.getIdCreditsPeriod()).append(" ");
+		}
+		
 		if(movimientoQueryFilter.getEmpleoQueryFilter()!=null) {
 			EmpleoQueryFilter empleoQueryFilter = movimientoQueryFilter.getEmpleoQueryFilter();
 			
@@ -148,7 +152,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				sb.append(" AND empleo.id = '").append(idEmpleo).append("'");
 			}
 
-			if(empleoQueryFilter.getEstadoEmpleo()!=null){
+			/*if(empleoQueryFilter.getEstadoEmpleo()!=null){
 				switch(empleoQueryFilter.getEstadoEmpleo()){
 					case ACTIVO: sb.append(" AND empleo.estado = '"+EstadoEmpleo.ACTIVO.name()+"' ");// AND empleo.fechaFin is null");
 					break;
@@ -158,6 +162,19 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 					break;
 	
 				}
+			}*/
+			
+			if(!CollectionUtils.isEmpty(empleoQueryFilter.getEstadosEmpleo())){
+				sb.append(" AND (");
+				for (Iterator iterator = empleoQueryFilter.getEstadosEmpleo().iterator(); iterator.hasNext();) {
+					EstadoEmpleo estadoEmpleo = (EstadoEmpleo) iterator.next();
+					sb.append(" empleo.estado = '"+estadoEmpleo.name()+"' ");
+					if(iterator.hasNext()){
+						sb.append(" OR ");
+					}
+				}
+				sb.append(" ) ");				
+					
 			}
 
 		}

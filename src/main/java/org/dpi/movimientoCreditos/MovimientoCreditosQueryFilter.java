@@ -23,6 +23,7 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 	
 	Long id;
 	
+	Long idCreditsPeriod;
 
 	List<TipoMovimientoCreditos> tiposMovimientoCreditos = new ArrayList<TipoMovimientoCreditos>();
 	
@@ -72,6 +73,14 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 	
 	public void addGrantedStatus(GrantedStatus grantedStatus) {
 		this.grantedStatuses.add(grantedStatus);
+	}
+	
+	public Long getIdCreditsPeriod() {
+		return idCreditsPeriod;
+	}
+
+	public void setIdCreditsPeriod(Long idCreditsPeriod) {
+		this.idCreditsPeriod = idCreditsPeriod;
 	}
 	
 }

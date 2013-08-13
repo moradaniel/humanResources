@@ -53,6 +53,7 @@ public class CreditsPeriodDaoHibImpl extends DataAccessHibImplAbstract implement
 				
 				StringBuffer sb = new StringBuffer();
 				sb.append(" FROM CreditsPeriodImpl creditsPeriod ");
+				sb.append(" LEFT OUTER JOIN FETCH creditsPeriod.previousCreditsPeriod previousCreditsPeriod ");
 
 
 				sb.append(where);

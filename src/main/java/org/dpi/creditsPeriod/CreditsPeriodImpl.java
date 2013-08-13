@@ -11,6 +11,9 @@ public class CreditsPeriodImpl extends PersistentAbstract implements CreditsPeri
 	private Date endDate;
 	private Status status;
 	private String description;
+	
+	private CreditsPeriod previousCreditsPeriod;
+
 
 	public String getName() {
 		return name;
@@ -53,6 +56,16 @@ public class CreditsPeriodImpl extends PersistentAbstract implements CreditsPeri
 	public void setStatus(Status status) {
 		this.status = status;
 		
+	}
+	
+	@Override
+	public CreditsPeriod getPreviousCreditsPeriod() {
+		return previousCreditsPeriod;
+	}
+
+	@Override
+	public void setPreviousCreditsPeriod(CreditsPeriod previousCreditsPeriod) {
+		this.previousCreditsPeriod = previousCreditsPeriod;
 	}
 	
 }

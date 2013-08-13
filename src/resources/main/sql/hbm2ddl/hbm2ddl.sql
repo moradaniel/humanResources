@@ -30,6 +30,7 @@
         STARTDATE timestamp,
         ENDDATE timestamp,
         STATUS varchar2(255 char) not null,
+        PREVIOUS_CREDITSPERIOD_ID number(19,0),
         primary key (ID)
     );
 
@@ -58,6 +59,7 @@
 
     create table REPARTICION (
         ID number(19,0) not null,
+        CODE varchar2(255 char),
         NOMBRE varchar2(255 char),
         primary key (ID)
     );
@@ -66,6 +68,11 @@
         add constraint fk_ReparticionCentroSector 
         foreign key (REPARTICIONID) 
         references REPARTICION;
+
+    alter table CREDITSPERIOD 
+        add constraint fk_CREDITSPERIOD_CREDITSPERIOD_PREVIOUS 
+        foreign key (PREVIOUS_CREDITSPERIOD_ID) 
+        references CREDITSPERIOD;
 
     alter table EMPLEO 
         add constraint fk_Empleo_CentroSector 
@@ -85,7 +92,7 @@
     alter table EMPLEO 
         add constraint fk_Empleo_Empleo_Anterior 
         foreign key (EMPLEO_ANTERIOR_ID) 
-        references CENTROSECTOR;
+        references EMPLEO;
 
     alter table MOVIMIENTOCREDITOS 
         add constraint fk_MovimientoCreditos_Empleo 
