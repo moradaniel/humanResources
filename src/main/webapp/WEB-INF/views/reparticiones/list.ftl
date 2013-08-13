@@ -30,7 +30,7 @@
 			<!--  start table-content  -->
 			<div id="table-content">
 			
-				<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Nombre</a>	</th>

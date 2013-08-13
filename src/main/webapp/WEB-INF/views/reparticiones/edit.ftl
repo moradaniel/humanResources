@@ -4,7 +4,7 @@
 
 
 <div id="empleoResults">
-<#if !agentes?has_content>
+<#if !empleosActivos?has_content>
 	<p>No se encontraron Agentes. Por favor cambie el criterio de busqueda.</p>
 <#else>
 
@@ -40,7 +40,7 @@
 			<!--  start table-content  -->
 			<div id="table-content">
 			
-				<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Apellido y Nombre</a>	</th>
@@ -55,28 +55,28 @@
 					</tr>
 									
 
-				<#list agentes as agente>
+				<#list empleosActivos as empleoActivo>
 					<#assign trStyle= "" >
-					<#if (agente_index % 2) == 0>
+					<#if (empleoActivo_index % 2) == 0>
 				    	<#assign trStyle= "alternate-row" >
 				    </#if>	
 				    
 				    	<tr class="${trStyle}">
-							<td>${agente.apellidoNombre}</td>
-							<td>${agente.condicion?default("")}</td>
-							<td>${agente.empleoActivo.categoria.codigo}</td>
-							<td>${agente.empleoActivo.centroSector.codigoCentro}</td>
-							<td>${agente.empleoActivo.centroSector.nombreCentro}</td>
-							<td>${agente.empleoActivo.centroSector.codigoSector}</td>
-							<td>${agente.empleoActivo.centroSector.nombreSector}</td>
+							<td>${empleoActivo.agente.apellidoNombre}</td>
+							<td>${empleoActivo.agente.condicion?default("")}</td>
+							<td>${empleoActivo.categoria.codigo}</td>
+							<td>${empleoActivo.centroSector.codigoCentro}</td>
+							<td>${empleoActivo.centroSector.nombreCentro}</td>
+							<td>${empleoActivo.centroSector.codigoSector}</td>
+							<td>${empleoActivo.centroSector.nombreSector}</td>
 							<#-- td>${empleo.address}</td>
 							<td>${empleo.city}, ${empleo.state}, ${empleo.country}</td>
 							<td>${empleo.zip}</td-->
 							<td>
 								
 								<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-									<#if !agente.hasMovimientosAscensoPendientes() >
-										<a href="${empleosUrl}/${agente.empleoActivo.id}/cambiarCategoria" class="ajaxLink">Cambiar Categoria</a>
+									<#if !empleoActivo.agente.hasMovimientosAscensoPendientes() >
+										<a href="${empleosUrl}/${empleoActivo.id}/cambiarCategoria" class="ajaxLink">Cambiar Categoria</a>
 									</#if>
 								</#if>
 								<#--	&nbsp;&nbsp;&nbsp;
@@ -87,7 +87,7 @@
 				    
 				
 			</#list>
-			<#if !agentes?has_content>
+			<#if !empleosActivos?has_content>
 				<tr>
 					<td colspan="5">No se encontraron agentes</td>
 				</tr>

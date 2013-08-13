@@ -337,27 +337,27 @@ a.icon-5:hover {
     line-height: 20px;
     margin: 0;
 }
-#product-table {
+.product-table {
     margin-bottom: 20px;
 }
-#product-table td a {
+.product-table td a {
     color: #393939;
 }
-#product-table td a:hover {
+.product-table td a:hover {
     text-decoration: underline;
 }
-#product-table th {
+.product-table th {
     height: 30px;
     text-align: left;
 }
-#product-table .minwidth-1 {
+.product-table .minwidth-1 {
     min-width: 110px;
 }
-#product-table td {
+.product-table td {
     border: 1px solid #D2D2D2;
     padding: 2px 2px 2px 2px;
 }
-#product-table tr.alternate-row {
+.product-table tr.alternate-row {
     background: none repeat scroll 0 0 #ECECEC;
 }
 td.options-width {
@@ -405,7 +405,7 @@ th.line-left {
     border-left: 1px solid #373737;
 }
 
-#product-table tr.activity-blue {
+.product-table tr.activity-blue {
     background: none repeat scroll 0 0 #E3ECEB;
 }
 #toggle-all {
