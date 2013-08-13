@@ -11,6 +11,7 @@
           </generator>
         </id> 
         
+    <property name="code" column="CODE" type="string"/>
     <property name="nombre" column="NOMBRE" type="string"/> 
     
     <!-- this association is bidirectional

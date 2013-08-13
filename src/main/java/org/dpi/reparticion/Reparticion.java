@@ -8,6 +8,8 @@ import org.dpi.domain.Persistent;
 
 public interface Reparticion extends Persistent, Serializable{
 	
+	public String getCode();
+	public void setCode(String codigo);
 	public String getNombre();
 	public void setNombre(String nombre);
 	public Set<CentroSector> getCentroSectores();

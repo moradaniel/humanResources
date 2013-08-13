@@ -8,11 +8,25 @@ import org.dpi.domain.PersistentAbstract;
 
 public class ReparticionImpl extends PersistentAbstract implements Reparticion {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String code;
 	private String nombre;
 	
 	private Set<CentroSector> centroSectores = new HashSet<CentroSector>();
 
 	public ReparticionImpl(){
+	}
+	
+	public String getCode(){
+		return this.code;
+	}
+	
+	public void setCode(String codigo){
+		this.code = codigo;
 	}
 	
 	public String getNombre() {

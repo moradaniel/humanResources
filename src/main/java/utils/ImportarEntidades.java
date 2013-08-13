@@ -19,7 +19,6 @@ import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmpleoImpl;
 import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoQueryFilter.estado;
 import org.dpi.empleo.EmpleoService;
 import org.dpi.empleo.EstadoEmpleo;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
@@ -135,7 +134,8 @@ public class ImportarEntidades {
 					" FROM	CREDITOS.TODO " +
 					" WHERE	(CREDITOS.TODO.ESCALAFON = '6' or CREDITOS.TODO.ESCALAFON = '2')" + //solo escalafon general 02 y 06
 					"		AND CREDITOS.TODO.REPARTICION<>'#N/A'" +
-					"		AND CREDITOS.TODO.PARA_IMPORTAR='SI' " ; 
+					//"		AND CREDITOS.TODO.PARA_IMPORTAR='SI' " ;
+					"		AND CREDITOS.TODO.BAJA='BAJA'" ;
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 
@@ -145,7 +145,6 @@ public class ImportarEntidades {
 			importarCategorias(row);
 			importarAgentes(row);
 			importarReparticion(row);
-			//importarCentroSectores(row);
 			importarRelacionEntreReparticionyCentroSector(row);
 			importarEmpleos(row);
 			
@@ -158,6 +157,7 @@ public class ImportarEntidades {
 			Map<String, Object> row) {
 		String nombreReparticion = (String)row.get("REPARTICION");
 		if(nombreReparticion!=null){
+			nombreReparticion = nombreReparticion.trim();
 			Reparticion reparticion = reparticionService.findByNombre(nombreReparticion);
 			if(reparticion!=null){
 				String codigoCentro = (String)row.get("CENTRO");
@@ -203,14 +203,22 @@ public class ImportarEntidades {
 	private void importarReparticion(Map<String, Object> row) {
 		String nombreReparticion = (String)row.get("REPARTICION");
 		if(nombreReparticion!=null){
-			Reparticion reparticion = reparticionService.findByNombre(nombreReparticion);
+			nombreReparticion=nombreReparticion.trim();
+			Reparticion theReparticion = null;
+			theReparticion = reparticionService.findByNombre(nombreReparticion);
 			//si no existe todavia, crearlo
-			if(reparticion==null){
-				ReparticionImpl newReparticion = new ReparticionImpl();
-				newReparticion.setNombre(nombreReparticion);
-				reparticionService.saveOrUpdate(newReparticion);
-				sLog.info("Created new reparticion "+ newReparticion.getId()+ ": " +newReparticion.getNombre() );
+			if(theReparticion==null){
+				theReparticion = new ReparticionImpl();
+				theReparticion.setNombre(nombreReparticion);
 			}
+			String codigoReparticion = (String)row.get("CODIGO_REPARTICION");
+			if(codigoReparticion!=null && theReparticion.getCode()==null){
+				theReparticion.setCode(codigoReparticion);
+			}
+			
+			reparticionService.saveOrUpdate(theReparticion);
+			sLog.info("Created new reparticion "+ theReparticion.getId()+ ": " +theReparticion.getNombre() );
+
 		}
 	}
 	
@@ -293,7 +301,7 @@ public class ImportarEntidades {
 					empleoQueryFilter.setCodigoCentro(codigoCentro);
 					empleoQueryFilter.setCodigoSector(codigoSector);
 					empleoQueryFilter.setCodigoCategoria(codigoCategoria);
-					empleoQueryFilter.setEstadoEmpleo(estado.ACTIVO);
+					empleoQueryFilter.addEstadoEmpleo(EstadoEmpleo.ACTIVO);
 					
 					
 					
@@ -329,7 +337,7 @@ public class ImportarEntidades {
 							empleo.setEstado(EstadoEmpleo.ACTIVO);
 							empleo.addMovimientoCreditos(movimientoIngresoAgente);
 							
-						}else{//es baja
+						}else if(esBaja.equalsIgnoreCase("BAJA")){//es baja
 							MovimientoCreditosImpl movimientoBajaAgente = new MovimientoCreditosImpl();
 							movimientoBajaAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.BajaAgente);
 							
