@@ -87,7 +87,7 @@
 					<div id="div_reparticionSearch">
 						<span class="searchDropDown">Reparticion: </span>
 						<#--span class="searchDropDown">Property: </span-->
-						<select id="hotelCode" name="hotelCode" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
+						<select id="reparticionCode" name="reparticionCode" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
 	
 							<#if myReparticiones?exists >
 								<option value="" >-- Seleccione Reparticion --</option>
@@ -336,10 +336,6 @@
 		</#if>
 		
 
-
-
-
-
 </div>
 <!--  end content -->
 <div class="clear">&nbsp;</div>
@@ -388,16 +384,16 @@
 		
 		$(function() {
 			
-			//if the user has access to only one hotel and it is not yet selected, then auto-select it
-			if( $("#hotelCode option").length == 2 && ($("#hotelCode option:eq(1)").prop('selected')!==true)){
-				$("#hotelCode option:eq(1)").prop("selected","selected");
-				onSelect($("#hotelCode option:selected").get(0),'${currentURL?default('')}');
+			//if the user has access to only one reparticion and it is not yet selected, then auto-select it
+			if( $("#reparticionCode option").length == 2 && ($("#reparticionCode option:eq(1)").prop('selected')!==true)){
+				$("#reparticionCode option:eq(1)").prop("selected","selected");
+				onSelect($("#reparticionCode option:selected").get(0),'${currentURL?default('')}');
 			}
 			
 			//AddIncSearch does not work for ie<8 or firefox < 3.6
 			/*if(browserLessThanIE8()==false && browserLessThanGecko1_9_2()==false){
-				//add search capability to hotel combo
-				$("#hotelCode").AddIncSearch(
+				//add search capability to reparticion combo
+				$("#reparticionCode").AddIncSearch(
 						{
 					        maxListSize: 200,
 					        maxMultiMatch: 150,
@@ -407,12 +403,12 @@
 						);
 			}*/
 			
-			//we store the current selected hotel for comparing in the onSelect function
-			currentSelectedValue=$("#hotelCode").val();
+			//we store the current selected reparticion for comparing in the onSelect function
+			currentSelectedValue=$("#reparticionCode").val();
 			
 					
 			
-			$('#hotelCode').bind('change', function() {
+			$('#reparticionCode').bind('change', function() {
 				onSelect(this,'${currentURL?default('')}');
 			});
 			

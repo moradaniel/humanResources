@@ -4,5 +4,4 @@
 <p>
 	<a href="reparticiones/main">Ir a Creditos por Reparticion</a>
 	<br/>
-	<#-- a href="hotels/main">Begin</a -->
 </p>
