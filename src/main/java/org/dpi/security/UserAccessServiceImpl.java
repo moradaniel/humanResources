@@ -28,13 +28,6 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.CollectionUtils;
 
-/**
- * 
- * TODO FIXME
- * This class will has to be revised with the MycrsUserServiceImpl, they both have similar methods for example
- * getHotelsForAccount. This duplications must be unified into only one class 
- *
- */
 public class UserAccessServiceImpl implements UserAccessService
 {
 	private Log log = LogFactory.getLog(this.getClass());
@@ -108,11 +101,6 @@ public class UserAccessServiceImpl implements UserAccessService
 		return this.getReparticionList(results,comp,getAccounts);
 	}
 	
-	
-	/**
-	 * FIXME Review the duplication with MycrsUserDaoHibImpl.getHotelsForAccount
-	 * 
-	 */
 	@SuppressWarnings("unchecked")
 	public Set<ReparticionAdminInfo> getReparticionListForAccount(final String aAccountName,Comparator<ReparticionAdminInfo> comp)
 	{
@@ -207,13 +195,13 @@ public class UserAccessServiceImpl implements UserAccessService
 	public boolean hasAccessToReparticion(final String aAccountName,final Long aReparticionId)
 	{
 		if (aAccountName == null) {
-			String msg = "Cannot check access of account to hotel with null account name";
+			String msg = "Cannot check access of account to reparticion with null account name";
 			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
 		if (aReparticionId == null) {
-			String msg = "Cannot check access account to hotel with null hotel code";
+			String msg = "Cannot check access account to reparticion with null reparticion code";
 			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}

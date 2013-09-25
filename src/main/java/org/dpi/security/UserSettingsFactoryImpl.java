@@ -57,11 +57,11 @@ public class UserSettingsFactoryImpl implements UserSettingsFactory
 	}
 
 
-	public static final String INVENTORY_VIEW_DAYS    = "mycrs.ui.inventory.viewDays";
-	public static final String EXPAND_INVENTORY_ROOMS = "mycrs.ui.inventory.showExpanded.roomTypes";
-	public static final String EXPAND_INVENTORY_RATES = "mycrs.ui.inventory.showExpanded.ratePlans";
-	public static final String LAST_HOTEL	          = "mycrs.ui.misc.lastHotel";
-	public static final String ASSURE_HOTEL_SETUP	  = "mycrs.ui.admin.assure.df.hotelSetup";
+	public static final String INVENTORY_VIEW_DAYS    = "ui.inventory.viewDays";
+	public static final String EXPAND_INVENTORY_ROOMS = "ui.inventory.showExpanded.roomTypes";
+	public static final String EXPAND_INVENTORY_RATES = "ui.inventory.showExpanded.ratePlans";
+	public static final String LAST_HOTEL	          = "ui.misc.lastHotel";
+	public static final String ASSURE_HOTEL_SETUP	  = "ui.admin.assure.df.hotelSetup";
 
 
 	//							settingTag						  			type			    default canModify  userSettingRole			description

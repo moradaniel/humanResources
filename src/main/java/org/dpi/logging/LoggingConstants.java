@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public abstract class LoggingConstants
 {
-	/** key for the 'native' hotel code by which the hotel is known in the mycrs system: the key value is "Hotel" */
+	/** key for the 'native' hotel code by which the hotel is known in the system: the key value is "Hotel" */
 	public static final String KEY_HOTEL    = "Hotel";
 
 	/** key for a Channel through which a Reservation may be coming the key value is "Channel" */

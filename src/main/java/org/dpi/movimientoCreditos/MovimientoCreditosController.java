@@ -32,16 +32,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MovimientoCreditosController {
-
-	//private ReparticionService reparticionService;
-
 	
 	private MovimientoCreditosService movimientoCreditosService;
 	
-	//@Resource(name = "empleoService")
 	private EmploymentService employmentService;
-
-	
 
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
@@ -96,9 +90,6 @@ public class MovimientoCreditosController {
 	}
 
 
-
-
-
 	public CentroSectorService getCentroSectorService() {
 		return centroSectorService;
 	}
@@ -107,8 +98,6 @@ public class MovimientoCreditosController {
 	public void setCentroSectorService(CentroSectorService centroSectorService) {
 		this.centroSectorService = centroSectorService;
 	}
-
-
 	
 	
 	@RequestMapping(value = "/reparticiones/movimientos/{id}/setupFormCambiarEstadoMovimientoCreditos", method = RequestMethod.GET)
@@ -149,9 +138,6 @@ public class MovimientoCreditosController {
 		List<MovimientoCreditos> movimientos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
 		MovimientoCreditos movimientoCreditos = movimientos.get(0);
 
-		//movimientoCreditos = movimientoCreditosForm.copyProperties(movimientoCreditos);
-		
-        //ModelAndView modelAndView = new ModelAndView("home"); 
           
 		movimientoCreditosService.changeGrantedStatus(movimientoCreditos, movimientoCreditosForm.getGrantedStatus());  
           
@@ -185,8 +171,6 @@ public class MovimientoCreditosController {
 
 			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
-			//todos los estados
-			//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EmploymentStatus.values()));
 
 			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);

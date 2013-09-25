@@ -12,6 +12,4 @@ public class MovimientoCreditosDTO {
 		this.name = name;
 	}
 	
-	
-
 }

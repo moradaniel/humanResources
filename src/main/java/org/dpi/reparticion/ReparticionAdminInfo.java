@@ -27,7 +27,7 @@ public class ReparticionAdminInfo implements Serializable
 	public ReparticionAdminInfo(Reparticion reparticion)
 	{
 		this.id = reparticion.getId();
-		this.nombre = reparticion.getNombre();//.getShort(); // TODO: Really should make sure this exists!
+		this.nombre = reparticion.getNombre();
 	}
 
 

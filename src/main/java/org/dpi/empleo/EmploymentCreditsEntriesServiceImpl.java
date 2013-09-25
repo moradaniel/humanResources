@@ -88,16 +88,6 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		if(resultEmployeeIds.contains(employee.getId())){
 			return;
 		}
-		
-				
-		
-		//ponerle fecha fin la fecha actual
-		//empleoActual.setFechaFin(new Date());
-		
-		//Agente agente = empleoActual.getAgente();
-		
-		//guardar empleo
-		//saveOrUpdate(empleoActual);
 
 		Categoria categoriaNueva = categoriaService.findByCodigo(codigoCategoriaNueva);
 		Empleo empleoNuevo = new EmpleoImpl();
@@ -151,9 +141,6 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		}	
 		
 		
-		//encontrar empleo
-		
-		
 		//ponerle fecha fin la fecha actual
 		empleo.setFechaFin(new Date());
 		empleo.setEstado(EmploymentStatus.BAJA);
@@ -193,8 +180,6 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		agenteService.save(nuevoAgentePropuesto);
 		
-		//al agente ponerlo en estado pendiente
-		
 		//crear empleo
 		Empleo nuevoEmpleoPropuesto = new EmpleoImpl();
 		nuevoEmpleoPropuesto.setAgente(nuevoAgentePropuesto);
@@ -208,8 +193,6 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//buscar centro sector
 		CentroSector centroSector = centroSectorService.findById(centroSectorId);
 		nuevoEmpleoPropuesto.setCentroSector(centroSector);
-		
-
 		
 		//Crear movimiento de ingreso
 		MovimientoCreditos movimientoCreditosIngreso = new MovimientoCreditosImpl();

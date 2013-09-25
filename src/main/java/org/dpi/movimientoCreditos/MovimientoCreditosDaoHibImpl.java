@@ -181,18 +181,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				
 			}
 
-			/*if(empleoQueryFilter.getEstadoEmpleo()!=null){
-				switch(empleoQueryFilter.getEstadoEmpleo()){
-					case ACTIVO: sb.append(" AND empleo.estado = '"+EstadoEmpleo.ACTIVO.name()+"' ");// AND empleo.fechaFin is null");
-					break;
-					case INACTIVO: sb.append(" AND empleo.fechaFin is not null");
-					break;
-					case TODOS: sb.append("");
-					break;
-	
-				}
-			}*/
-			
+		
 			if(!CollectionUtils.isEmpty(empleoQueryFilter.getEstadosEmpleo())){
 				sb.append(" AND (");
 				for (Iterator iterator = empleoQueryFilter.getEstadosEmpleo().iterator(); iterator.hasNext();) {

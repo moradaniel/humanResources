@@ -124,16 +124,7 @@ public class EmploymentController {
 			HttpServletRequest request, 
 			HttpServletResponse response,
 			@PathVariable Long id, Model model) {
-		/*if(!model.containsAttribute("nuevoEmpleo")){
 
-
-			// Create initial MyCrsAccountVO object
-			Empleo nuevoEmpleo = new EmpleoImpl();
-
-
-			// Add myCrsAccountVO to model so it can be display in view
-			model.addAttribute("nuevoEmpleo", nuevoEmpleo);
-		}*/
 
 		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
 
@@ -151,23 +142,8 @@ public class EmploymentController {
 				return "redirect:/reparticiones/reparticion/showEmpleos";
 			}
 
-			//Agente agenteACambiarCategoria = empleoActual.getAgente();
-
-
 			model.addAttribute("empleoActual", empleoActual);
 			model.addAttribute("categoriasDisponiblesParaAscenso", getCategoriasDisponiblesParaAscenso(empleoActual));
-
-			/*empleoService.darDeBaja(empleoACambiarCategoria);
-
-		Empleo empleoDadoDeBaja = empleoACambiarCategoria;
-
-		//buscar los empleos de la reparticion
-		empleoQueryFilter = new EmpleoQueryFilter();
-
-		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
-		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
-
-		empleos = empleoService.find(empleoQueryFilter);*/
 
 		}
 		return "movimientos/ascensoForm";
@@ -192,7 +168,7 @@ public class EmploymentController {
 
 
 		/*if(bindingResult.hasErrors()) { 
-			model.addAttribute("myCrsAccountVO", myCrsAccountVO); 
+			model.addAttribute("accountVO", accountVO); 
 			return VIEW_PAGE;
 		}*/
 
@@ -225,16 +201,10 @@ public class EmploymentController {
 
 
 		/*if(bindingResult.hasErrors()) { 
-			model.addAttribute("myCrsAccountVO", myCrsAccountVO); 
+			model.addAttribute("accountVO", accountVO); 
 			return VIEW_PAGE;
 		}*/
 
-/*		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
-		empleoQueryFilter.setEmpleoId(idEmpleoActual.toString());*/
-
-		//List<Empleo> empleos = empleoService.find(empleoQueryFilter);
-
-		//Empleo empleoActual = empleos.get(0);
 
 		employmentCreditsEntriesService.ingresarPropuestaAgente(codigoCategoriaPropuesta, Long.parseLong(centroSectorId));
 
@@ -266,11 +236,11 @@ public class EmploymentController {
 		/*if(!model.containsAttribute("nuevoEmpleo")){
 
 
-			// Create initial MyCrsAccountVO object
+			// Create initial object
 			Empleo nuevoEmpleo = new EmpleoImpl();
 
 
-			// Add myCrsAccountVO to model so it can be display in view
+			// Add to model so it can be display in view
 			model.addAttribute("nuevoEmpleo", nuevoEmpleo);
 		}*/
 
@@ -306,41 +276,6 @@ public class EmploymentController {
 		return "empleos/altaEmpleoForm";
 	}
 
-	/*@RequestMapping(value = "/empleos/crearEmpleo", method = RequestMethod.POST)
-	public String crearEmpleoFromForm(HttpServletRequest request, Model model) throws Exception {
-
-
-
-		String idAgente = ServletRequestUtils.getStringParameter(request, "idAgente");
-
-		String idCentroSector = ServletRequestUtils.getStringParameter(request, "idCentroSector");
-
-
-
-		/*
-		if (!StringUtils.hasText(codigoCategoriaPropuesta)){
-			return "redirect:/empleos/"+idEmpleoActual+"/cambiarCategoria";
-		}
-
-
-		/*if(bindingResult.hasErrors()) { 
-			model.addAttribute("myCrsAccountVO", myCrsAccountVO); 
-			return VIEW_PAGE;
-		}*/
-
-	/*
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
-		empleoQueryFilter.setEmpleoId(idEmpleoActual.toString());
-
-		List<Empleo> empleos = empleoService.find(empleoQueryFilter);
-
-		Empleo empleoActual = empleos.get(0);
-
-		empleoService.ascenderAgente(empleoActual, codigoCategoriaPropuesta);*/
-
-	/*return "redirect:/empleos/altaEmpleoForm";
-	}*/
-
 	
 	@RequestMapping(value = "/empleos/ingresarPropuestaAgenteForm", method = RequestMethod.GET)
 	public String setupFormIngresarPropuestaAgente(
@@ -350,11 +285,11 @@ public class EmploymentController {
 		/*if(!model.containsAttribute("nuevoEmpleo")){
 
 
-			// Create initial MyCrsAccountVO object
+			// Create initial  object
 			Empleo nuevoEmpleo = new EmpleoImpl();
 
 
-			// Add myCrsAccountVO to model so it can be display in view
+			// Add to model so it can be display in view
 			model.addAttribute("nuevoEmpleo", nuevoEmpleo);
 		}*/
 

@@ -95,21 +95,6 @@ public class ImportarEntidades {
 				
 			}
 		});
-		
-		//passwordsTool.setAccountService((AccountDao)context.getBean("accountDao"));
-		//passwordsTool.setMycrsJdbcTemplate((SimpleJdbcTemplate)context.getBean("mycrsJdbcTemplate"));
-		
-		
-		
-		/*SortedSet<Account> accounts = passwordsTool.getAccountService().loadAllAccounts(false);
-		
-		for(Account account:accounts){
-			
-			String unencryptedPassword = account.get
-			accounts
-		}*/
-
-
 
     }
 

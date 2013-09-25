@@ -21,8 +21,6 @@ public class HomeController {
 
 	static Logger log = LoggerFactory.getLogger(HomeController.class);
 
-
-
 	@Resource(name = "accountServiceGeneric")
 	private AccountService accountService;
 
@@ -31,13 +29,10 @@ public class HomeController {
 	}
 
 
-
-
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String homeByRol(HttpServletRequest request, HttpServletResponse response,/*@PathVariable Long reparticionId,*/ Model model) {
+	public String homeByRol(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		Account januxUserDetailsAccount = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		//AbstractUserSettings januxUserDetailsAccountSettings = settingsFactory.getSettingsForAccount(januxUserDetailsAccount);
 
 		Account account = accountService.loadAccountByName(januxUserDetailsAccount.getName());
 

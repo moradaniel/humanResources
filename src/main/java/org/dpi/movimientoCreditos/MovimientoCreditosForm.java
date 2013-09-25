@@ -8,8 +8,7 @@ public class MovimientoCreditosForm {
 	
 	private Long movimientoCreditosId;
 
-	//fields to ssow in labels
-	
+	//fields to show in labels
 	private String employeeName;
 	
 
@@ -29,8 +28,7 @@ public class MovimientoCreditosForm {
 		
 		//to edit
 		this.grantedStatus=movimientoCreditos.getGrantedStatus();
-		
-		
+				
 
 	}
 
@@ -57,14 +55,5 @@ public class MovimientoCreditosForm {
 	public void setGrantedStatus(GrantedStatus grantedStatus) {
 		this.grantedStatus = grantedStatus;
 	}
-
-
-	
-	public MovimientoCreditos copyProperties(MovimientoCreditos movimientoCreditos){
-		//movimientoCreditos.setGrantedStatus(this.grantedStatus);
-		return movimientoCreditos;
-	}
-
-	
 	
 }

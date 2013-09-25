@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ReparticionSearchController {
 
-	//private BookingService bookingService;
 	private ReparticionService reparticionService;
-
 
 	@Inject
 	public ReparticionSearchController(ReparticionService reparticionService) {
@@ -29,11 +27,6 @@ public class ReparticionSearchController {
 		return reparticionService;
 	}
 
-	/*@Inject
-	public void setReparticionService(
-			ReparticionService ReparticionService) {
-		this.reparticionService = ReparticionService;
-	}*/
 	
 	@RequestMapping(value = "/reparticiones/main", method = RequestMethod.GET)
 	public void main(SearchCriteria searchCriteria) {

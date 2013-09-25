@@ -38,11 +38,9 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	private ApplicationContext applicationContext;
 	
 	public MovimientoCreditosServiceImpl(	final MovimientoCreditosDao movimientoCreditosDao,
-											/*final EmpleoService empleoService,*/
 											final AgenteService agenteService,
 											final AdministradorCreditosService administradorCreditosService) {
 		this.movimientoCreditosDao = movimientoCreditosDao;
-		/*this.empleoService = empleoService;*/
 		this.agenteService = agenteService;
 		this.administradorCreditosService = administradorCreditosService;
 	}
@@ -341,8 +339,6 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		movimiento.setGrantedStatus(newEstado);
 		movimientoCreditosDao.saveOrUpdate(movimiento);
 		
-
-				
 	}
 
 	

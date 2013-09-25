@@ -26,6 +26,5 @@ public interface Agente extends Persistent,Serializable{
 	void setCondicion(CondicionAgente condicionAgente);
 
 	public Empleo getEmpleoActivo();
-	
-	
+		
 }

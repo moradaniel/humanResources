@@ -13,7 +13,7 @@
 	 
 	 
 	<#-- ,{ "URL":"admin/prefs/",     "label":"My Account",         "requiresReparticion":false, "doDisplay":true }
-	,{ "URL":"admin/mycrsaccount/",     "label":"MyCrs Account",         "requiresReparticion":false, "doDisplay":true }
+	,{ "URL":"admin/account/",     "label":"Account",         "requiresReparticion":false, "doDisplay":true }
 	,{ "URL":"bookadmin/Create", "label":"Create Reservation", "requiresReparticion":true,
 		"doDisplay":account?exists && account.hasPermissions("Create_Reservation", "READ") }
 	,{ "URL":"admin/users/",             "label":"Manage Users",     "requiresReparticion":false, 

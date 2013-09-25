@@ -26,7 +26,5 @@ public interface MovimientoCreditosService extends ApplicationContextAware
 	public void changeGrantedStatus(MovimientoCreditos movimiento, GrantedStatus newEstado);
 	
 	public Set<Long> haveMovimientosSolicitados(List<Long> agenteIds, Long idReparticion,Long idCreditsPeriod);
-	
-	//public MovimientoCreditos copyProperties(MovimientoCreditos from, MovimientoCreditos to);
 		
 }

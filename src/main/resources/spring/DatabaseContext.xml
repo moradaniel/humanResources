@@ -26,7 +26,7 @@
 
 
 	<!-- 
-		DataSource for the master mycrs database; the jdbc url is set as an override in a
+		DataSource for the master database; the jdbc url is set as an override in a
 		ApplicationContext.properties in the classpath
 	-->
 	<bean id="dpiDataSource" parent="oraclePooledDataSource">
@@ -54,11 +54,11 @@
 
 	<bean id="hibernateSessionFactory" parent="oracleHibSessionFactory">
 		<property name="dataSource"><ref bean="dpiDataSource"/></property>
-		<property name="mappingResources" ref="mycrsHibMappings"/>
+		<property name="mappingResources" ref="dpiHibMappings"/>
 	</bean>
 
 	<!-- The usual set of Hibernate mappings for the Services -->
-	<bean id="mycrsHibMappings" class="org.springframework.beans.factory.config.ListFactoryBean">
+	<bean id="dpiHibMappings" class="org.springframework.beans.factory.config.ListFactoryBean">
 		<property name="sourceList">
 			<list>
 				<value>/mappings/Reparticion.hbm.xml</value>

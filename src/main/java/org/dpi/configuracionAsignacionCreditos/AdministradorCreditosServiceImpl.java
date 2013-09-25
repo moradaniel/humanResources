@@ -246,18 +246,6 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService#getCreditosDisponibles(long)
-	 */
-	/*public int getCreditosDisponibles(long reparticionId){
-		return 0;
-	}*/
-	
-	
-	
-	/**
-	 * si un agente es dado de baja ya no suma por carga inicial
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public 	Long getCreditosPorCargaInicialDeReparticion(final CreditsPeriod creditsPeriod,final long reparticionId){
@@ -278,15 +266,6 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 						" where reparticion.id='"+reparticionId+"'" +
 						" AND movimiento.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.CargaInicialAgenteExistente.name()+"'"+
 						" AND movimiento.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
-						/*" AND agente.cuil not in "+
-							" (select agente2.cuil " +
-							" from MovimientoCreditosImpl movimiento2 " +
-							" INNER JOIN movimiento2.empleo empleo2 " +
-							" INNER JOIN empleo2.centroSector centroSector2 " +
-							" INNER JOIN centroSector2.reparticion reparticion2 "+
-							" INNER JOIN empleo2.agente agente2 "+
-							" where reparticion2.id='"+reparticionId+"'" +
-							" AND movimiento2.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.BajaAgente.name()+"')";*/
 				
 				Query query = sess.createQuery(queryStr);
 			
@@ -361,11 +340,6 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 				
 				sb.append(where);
 				
-/*						+
-						" where reparticion.id='"+reparticionId+"'" +
-						" AND " +
-						" (movimiento.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.IngresoAgente.name()+"' OR movimiento.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.AscensoAgente.name()+"')";
-	*/			
 				Query query = sess.createQuery(sb.toString());
 			
 				Long totalAmount = (Long) query.uniqueResult();
@@ -409,26 +383,10 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	}
 
 
-
-
-	/*@Override
-	public Long getCreditosDisponiblesAlInicioDelPeriodo(final CreditsPeriod creditsPeriod,Long reparticionId) {
-		Long creditosPorCargaInicialDeReparticion = getCreditosPorCargaInicialDeReparticion(creditsPeriod,reparticionId);
-		Long creditosPorBaja = getCreditosPorBajasDeReparticion(creditsPeriod,reparticionId);
-		
-		return creditosPorCargaInicialDeReparticion+creditosPorBaja;
-	}*/
-
-
 	@Override
 	public Long getCreditosPorIngresosOAscensosSolicitados(	CreditsPeriod creditsPeriod, Long reparticionId) {
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
-		
-		//todos los estados
-		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EmploymentStatus.values()));
-		
-		
 		
 		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
@@ -446,9 +404,7 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 			CreditsPeriod creditsPeriod, Long reparticionId) {
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
-		//todos los estados
-		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EmploymentStatus.values()));
-		
+	
 		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 		movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());

@@ -7,10 +7,6 @@ import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 
 public interface AdministradorCreditosService {
 
-	/**
-	 * TODO agregar fecha de validez
-	 * @return
-	 */
 	public int getCreditosPorCargaInicial(String codigoCategoria);
 	
 	public int getCreditosPorBaja(String codigoCategoria);
@@ -22,22 +18,18 @@ public interface AdministradorCreditosService {
 	public Long getCreditosPorCargaInicialDeReparticion(final CreditsPeriod creditsPeriod, final long reparticionId);
 	
 	public Long getCreditosPorBajasDeReparticion(final CreditsPeriod creditsPeriod, final long reparticionId);
-	
-
-	//public Long getCreditosDisponiblesAlInicioDelPeriodo(Long id);
 
 	public Long getCreditosPorIngresosOAscensosSolicitados(CreditsPeriod creditsPeriod, Long reparticionId);
+	
 	public Long getCreditosPorIngresosOAscensosOtorgados(CreditsPeriod creditsPeriod, Long reparticionId);
-	
-	
+		
 	public Long getCreditosDisponiblesSegunSolicitado(CreditsPeriod creditsPeriod,long reparticionId);
+	
 	public Long getCreditosDisponiblesSegunOtorgado(CreditsPeriod creditsPeriod,long reparticionId);
 	
 	public Long getTotalCreditos(final MovimientoCreditosQueryFilter movimientoCreditosQueryFilter);
 
 	public Long getCreditosDisponiblesAlInicioPeriodo(CreditsPeriod creditsPeriod, Long id);
-	//public Long getCreditosDisponiblesAlInicioDelPeriodo(final CreditsPeriod creditsPeriod,Long reparticionId);
 	
-
 
 }
