@@ -24,7 +24,6 @@ import biz.janux.calendar.DateRange;
 
 public class CreditsPeriodServiceImpl implements CreditsPeriodService
 {
-	//private static Log log = LogFactory.getLog(EmpleoServiceImpl.class);
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -73,7 +72,6 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 				creditsPeriodDao.saveOrUpdate(creditsPeriod);
 			}
 		
-	//	hotelDao.removeOrphanPolicies(aHotel);
 	}
 	
 	public void delete(CreditsPeriod creditsPeriod){
@@ -85,25 +83,16 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	{
 		return creditsPeriodDao;
 	}
-
 	
 	
 	public List<CreditsPeriod> findAll(){
 		return this.creditsPeriodDao.findAll();
 	}
 	
-	
-
-
-
 	public void setApplicationContext(final ApplicationContext aApplicationContext) throws BeansException
 	{
 		this.applicationContext = aApplicationContext;
 	}
-
-
-
-
 	
 	public AdministradorCreditosService getAdministradorCreditosService() {
 		return administradorCreditosService;
@@ -123,9 +112,6 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	public void setCategoriaService(CategoriaService categoriaService) {
 		this.categoriaService = categoriaService;
 	}
-
-
-
 	
 	public AgenteService getAgenteService() {
 		return agenteService;

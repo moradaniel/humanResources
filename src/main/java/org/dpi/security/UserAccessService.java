@@ -7,24 +7,9 @@ import java.util.Set;
 import org.dpi.reparticion.ReparticionAdminInfo;
 import org.janux.bus.security.Account;
 
-/**
- * 
- * TODO FIXME
- * This class will has to be revised with the MycrsUserServiceImpl, they both have similar methods for example
- * getHotelsForAccount. This duplications must be unified into only one class 
- *
- */
+
 public interface UserAccessService
 {
-	/**
-	 * @return Returns the datasource
-	 */
-	//DataSource getDataSource();
-	
-	/**
-	 * @param aDataSource The datasource to set.
-	 */
-	//void setDataSource(final DataSource aDataSource);
 	
 	/**
 	 * This method retrieves all the hotels that are linked to a specific account

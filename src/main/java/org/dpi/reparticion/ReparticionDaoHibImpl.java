@@ -17,7 +17,7 @@ import org.springframework.samples.travel.SearchCriteria;
 import org.springframework.util.StringUtils;
 
 /**
- * Used to create, save, retrieve, update and delete Hotel objects from
+ * Used to create, save, retrieve, update and delete Reparticion objects from
  * persistent storage
  *
  */
@@ -28,11 +28,11 @@ public class ReparticionDaoHibImpl extends DataAccessHibImplAbstract implements 
 	{
 		Chronometer timer = new Chronometer();
 
-		if (log.isDebugEnabled()) log.debug("attempting to find all hotels");
+		if (log.isDebugEnabled()) log.debug("attempting to find all reparticiones");
 
 		List<Reparticion> list = getHibernateTemplate().find("from ReparticionImpl order by code");
 
-		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " hotels in " + timer.printElapsedTime());
+		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " reparticiones in " + timer.printElapsedTime());
 
 		return list;
 	}
@@ -143,7 +143,7 @@ public class ReparticionDaoHibImpl extends DataAccessHibImplAbstract implements 
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("SELECT hh.id as hotelId, ");
+		sb.append("SELECT hh.id as reparticionId, ");
 		sb.append(" hh.nombre as reparticionName ");
 		sb.append(" FROM reparticion hh ");
 		
@@ -151,7 +151,7 @@ public class ReparticionDaoHibImpl extends DataAccessHibImplAbstract implements 
 		
 		List<Object[]> rawObjects = aQuery.list();
 		
-		List<ReparticionSearchInfo> hotelSearchInfos = new ArrayList<ReparticionSearchInfo>();
+		List<ReparticionSearchInfo> reparticionSearchInfos = new ArrayList<ReparticionSearchInfo>();
 		
 		for(Object[] object : rawObjects)
 		{
@@ -159,16 +159,12 @@ public class ReparticionDaoHibImpl extends DataAccessHibImplAbstract implements 
 			Long idReparticion = ((BigDecimal)object[0]).longValue();
 			searchInfo.setReparticionId(idReparticion);
 			searchInfo.setReparticionName(ObjectUtils.toString(object[1]));
-			//final String sHotelStatus = ObjectUtils.toString(object[3]);
-			/*if (StringUtils.hasText(sHotelStatus))
-			{
-				searchInfo.setHotelStatus(HotelStatus.valueOf(sHotelStatus));
-			}*/
+
 			
-			hotelSearchInfos.add(searchInfo);
+			reparticionSearchInfos.add(searchInfo);
 		}
 		
-		return hotelSearchInfos;
+		return reparticionSearchInfos;
 	}
 
 }

@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 
 
 /**
- * Used to create, save, retrieve, update and delete Hotel objects from
+ * Used to create, save, retrieve, update and delete Employment objects from
  * persistent storage
  *
  */

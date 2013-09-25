@@ -9,7 +9,7 @@ import biz.janux.calendar.DateRange;
 
 
 /**
- * Used to create, save, retrieve, update and delete Hotel objects from
+ * Used to create, save, retrieve, update and delete CreditsPeriod objects from
  * persistent storage
  *
  */
@@ -17,7 +17,7 @@ public interface CreditsPeriodService extends ApplicationContextAware
 {
 	
 	/**
-	 * DateRange that represents the period of time representing a Ejercicio Anual
+	 * DateRange that represents the period of time representing a CreditsPeriod
 	 * @param year
 	 * @return
 	 */
@@ -31,8 +31,7 @@ public interface CreditsPeriodService extends ApplicationContextAware
 	public List<CreditsPeriod> find(CreditsPeriodQueryFilter creditsPeriodQueryFilter);
 
 	public void delete(CreditsPeriod empleo);
-	
-	
+		
 	public void save(final CreditsPeriod empleo); 
 	
 	public void saveOrUpdate(final CreditsPeriod empleo); 

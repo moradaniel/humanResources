@@ -4,50 +4,39 @@ package org.dpi.reparticion;
 public class ReparticionSearchInfo {
 
 	Long reparticionId;
-	/*String hotelCode;*/
 	String reparticionName;
-	/*String line1;
-	String line2;
-	String line3;
-	String city;
-	String state;
-	String country;
-	String postalCode;
-	String phoneNumber;
-	String hotelChannels[];
-	HotelStatus hotelStatus;*/
-	
+
 
 	/**
-	 * @return the hotelId
+	 * @return the reparticionId
 	 */
 	public Long getReparticionId() {
 		return reparticionId;
 	}
 
 	/**
-	 * @param hotelId
-	 *            the hotelId to set
+	 * @param reparticionId
+	 *            the reparticionId to set
 	 */
-	public void setReparticionId(Long hotelId) {
-		this.reparticionId = hotelId;
+	public void setReparticionId(Long reparticionId) {
+		this.reparticionId = reparticionId;
 	}
 
 
 
 	/**
-	 * @return the hotelName
+	 * @return the reparticionName
 	 */
 	public String getReparticionName() {
 		return reparticionName;
 	}
 
 	/**
-	 * @param hotelName
-	 *            the hotelName to set
+	 * @param reparticionName
+	 *            the reparticionName to set
 	 */
-	public void setReparticionName(String hotelName) {
-		this.reparticionName = hotelName;
+	public void setReparticionName(String reparticionName) {
+		this.reparticionName = reparticionName;
 	}
 
 }

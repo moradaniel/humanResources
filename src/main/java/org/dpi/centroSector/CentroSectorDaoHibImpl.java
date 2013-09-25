@@ -33,7 +33,7 @@ public class CentroSectorDaoHibImpl extends DataAccessHibImplAbstract implements
 	{
 		Chronometer timer = new Chronometer();
 
-		if (log.isDebugEnabled()) log.debug("attempting to find all hotels");
+		if (log.isDebugEnabled()) log.debug("attempting to find all centrosectores");
 
 		List<CentroSector> list = getHibernateTemplate().find("from CentroSectorImpl order by code");
 
