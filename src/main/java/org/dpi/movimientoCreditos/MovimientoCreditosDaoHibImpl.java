@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.empleo.EmploymentQueryFilter;
+import org.dpi.empleo.EmploymentStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -14,6 +14,7 @@ import org.janux.bus.persistence.DataAccessHibImplAbstract;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * Used to create, save, retrieve, update and delete objects from
@@ -55,11 +56,13 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				StringBuffer sb = new StringBuffer();
 				sb.append(" FROM MovimientoCreditosImpl movimiento ");
 				sb.append(" LEFT OUTER JOIN FETCH movimiento.empleo empleo");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.agente ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.agente agente ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.centroSector centroSector");
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.categoria ");
 				sb.append(" LEFT OUTER JOIN FETCH movimiento.creditsPeriod creditsPeriod ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.empleoAnterior empleoAnterior");
+				sb.append(" LEFT OUTER JOIN FETCH empleoAnterior.categoria categoriaAnterior ");
 
 				sb.append(where);
 				
@@ -67,6 +70,8 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				sb.append(" empleo.fechaInicio desc ");
 				
 				Query q = sess.createQuery(select+sb.toString());
+				
+				
 				/*q.setParameter("franchising", franchising);
 				if (bind != null) {
 					q.setMaxResults(bind.getCountToLastElement());
@@ -119,8 +124,12 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 			sb.append(" AND creditsPeriod.id = ").append(movimientoQueryFilter.getIdCreditsPeriod()).append(" ");
 		}
 		
-		if(movimientoQueryFilter.getEmpleoQueryFilter()!=null) {
-			EmpleoQueryFilter empleoQueryFilter = movimientoQueryFilter.getEmpleoQueryFilter();
+		if(movimientoQueryFilter.hasCredits!=null && movimientoQueryFilter.hasCredits.booleanValue()==true){
+			sb.append(" AND cantidadCreditos > 0 ").append(" ");
+		}
+		
+		if(movimientoQueryFilter.getEmploymentQueryFilter()!=null) {
+			EmploymentQueryFilter empleoQueryFilter = movimientoQueryFilter.getEmploymentQueryFilter();
 			
 			String cuil = empleoQueryFilter.getCuil();
 			if(cuil!=null) {
@@ -151,6 +160,26 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 			if(idEmpleo!=null) {
 				sb.append(" AND empleo.id = '").append(idEmpleo).append("'");
 			}
+			
+			List<Long> agentesIds = empleoQueryFilter.getAgentesIds();
+			if(!CollectionUtils.isEmpty(agentesIds)){
+				if(agentesIds.size()==1) {
+					sb.append(" AND agente.id = '").append(agentesIds.get(0)).append("'");
+				}else{
+						sb.append(" AND (1<>1 ");
+						//take into account the limit of 1000 elements in an IN condition in Oracle
+						List<List<Long>> listsOfAgentsIds = org.dpi.util.CollectionUtils.chopped(agentesIds, 999);
+						for(List<Long> listOfAgentsIds :listsOfAgentsIds){
+							sb.append(" OR agente.id IN ( ")
+							.append(StringUtils.collectionToDelimitedString(listOfAgentsIds, ","))
+							.append(")");
+							
+						}
+						sb.append(")");
+
+				}
+				
+			}
 
 			/*if(empleoQueryFilter.getEstadoEmpleo()!=null){
 				switch(empleoQueryFilter.getEstadoEmpleo()){
@@ -167,7 +196,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 			if(!CollectionUtils.isEmpty(empleoQueryFilter.getEstadosEmpleo())){
 				sb.append(" AND (");
 				for (Iterator iterator = empleoQueryFilter.getEstadosEmpleo().iterator(); iterator.hasNext();) {
-					EstadoEmpleo estadoEmpleo = (EstadoEmpleo) iterator.next();
+					EmploymentStatus estadoEmpleo = (EmploymentStatus) iterator.next();
 					sb.append(" empleo.estado = '"+estadoEmpleo.name()+"' ");
 					if(iterator.hasNext()){
 						sb.append(" OR ");

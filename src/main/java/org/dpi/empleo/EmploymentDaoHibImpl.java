@@ -11,13 +11,14 @@ import org.janux.bus.persistence.DataAccessHibImplAbstract;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * Used to create, save, retrieve, update and delete objects from
  * persistent storage
  *
  */
-public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements EmpleoDao
+public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements EmploymentDao
 {
 	@SuppressWarnings("unchecked")
 	public List<Empleo> findAll()
@@ -35,7 +36,7 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 	
 	
 	@SuppressWarnings( "unchecked" )
-	public List<Empleo> find(final EmpleoQueryFilter empleoQueryFilter){
+	public List<Empleo> find(final EmploymentQueryFilter empleoQueryFilter){
 		Chronometer timer = new Chronometer();
 
 		if (log.isDebugEnabled()) log.debug("attempting to find Empleo with filter '" + empleoQueryFilter.toString() + "'" );
@@ -76,7 +77,7 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 		return list;
 	}
 	
-	private String buildWhereClause(EmpleoQueryFilter empleoQueryFilter) {
+	private String buildWhereClause(EmploymentQueryFilter empleoQueryFilter) {
 		StringBuffer sb = new StringBuffer();
 		if(empleoQueryFilter!=null) {
 			String cuil = empleoQueryFilter.getCuil();
@@ -99,9 +100,16 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 				sb.append(" AND empleo.categoria.codigo = '").append(codigoCategoria).append("'");
 			}
 			
-			Long idAgente = empleoQueryFilter.getAgenteId();
-			if(idAgente!=null) {
-				sb.append(" AND agente.id = '").append(idAgente).append("'");
+			List<Long> agentesIds = empleoQueryFilter.getAgentesIds();
+			if(!CollectionUtils.isEmpty(agentesIds)){
+				if(agentesIds.size()==1) {
+					sb.append(" AND agente.id = '").append(agentesIds.get(0)).append("'");
+				}else{
+					sb.append(" AND agente.id IN ( ").append(agentesIds)
+					.append(StringUtils.collectionToDelimitedString(agentesIds, ","))
+					.append(")");
+				}
+				
 			}
 			
 			String idReparticion = empleoQueryFilter.getReparticionId();
@@ -129,7 +137,7 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 			if(!CollectionUtils.isEmpty(empleoQueryFilter.getEstadosEmpleo())){
 				sb.append(" AND (");
 				for (Iterator iterator = empleoQueryFilter.getEstadosEmpleo().iterator(); iterator.hasNext();) {
-					EstadoEmpleo estadoEmpleo = (EstadoEmpleo) iterator.next();
+					EmploymentStatus estadoEmpleo = (EmploymentStatus) iterator.next();
 					sb.append(" empleo.estado = '"+estadoEmpleo.name()+"' ");
 					if(iterator.hasNext()){
 						sb.append(" OR ");
@@ -144,7 +152,7 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public List<Empleo> findEmpleosInactivos(final EmpleoQueryFilter empleoQueryFilter){
+	public List<Empleo> findEmpleosInactivos(final EmploymentQueryFilter empleoQueryFilter){
 		if (log.isDebugEnabled()) log.debug("attempting to find Empleo anterior a ascenso: movimiento Id: '" +/* movimentoAscenso.getId() + */"'" );
 
 		List<Empleo> list = getHibernateTemplate().executeFind(new HibernateCallback() {
@@ -185,7 +193,7 @@ public class EmpleoDaoHibImpl extends DataAccessHibImplAbstract implements Emple
 
 	
 	@SuppressWarnings( "unchecked" )
-	public Empleo findPreviousEmpleo(final EmpleoQueryFilter empleoQueryFilter) {
+	public Empleo findPreviousEmpleo(final EmploymentQueryFilter empleoQueryFilter) {
 		if (log.isDebugEnabled()) log.debug("attempting to find Empleo anterior a ascenso: movimiento Id: '" +/* movimentoAscenso.getId() + */"'" );
 
 		List<Empleo> list = getHibernateTemplate().executeFind(new HibernateCallback() {

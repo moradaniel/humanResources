@@ -14,15 +14,8 @@ import java.util.List;
  * 
  *
  */
-public class EmpleoQueryFilter implements Serializable {
+public class EmploymentQueryFilter implements Serializable {
 	
-	/*public enum estado{
-		ACTIVO,
-		DE_BAJA,
-		INACTIVO,
-		PENDIENTE,
-		TODOS
-	}*/
 
 	private static final long serialVersionUID = 1L;
 	
@@ -31,7 +24,7 @@ public class EmpleoQueryFilter implements Serializable {
 	private String codigoCentro;
 	private String codigoSector;
 	private String codigoCategoria;
-	private Long agenteId;
+	private List<Long> agentesIds= new ArrayList<Long>();
 
 	private String reparticionId;
 	private String empleoId;
@@ -40,7 +33,7 @@ public class EmpleoQueryFilter implements Serializable {
 	private Date fechaFin;
 
 	
-	List<EstadoEmpleo> estadosEmpleo = new ArrayList<EstadoEmpleo>();
+	List<EmploymentStatus> estadosEmpleo = new ArrayList<EmploymentStatus>();
 	
 	
 
@@ -104,24 +97,31 @@ public class EmpleoQueryFilter implements Serializable {
 		this.empleoId = empleoId;
 	}
 	
-	public List<EstadoEmpleo> getEstadosEmpleo() {
+	public List<EmploymentStatus> getEstadosEmpleo() {
 		return estadosEmpleo;
 	}
-	public void setEstadosEmpleo(List<EstadoEmpleo> estadosEmpleo) {
+	public void setEstadosEmpleo(List<EmploymentStatus> estadosEmpleo) {
 		this.estadosEmpleo = estadosEmpleo;
 	}
 	
-	public void addEstadoEmpleo(EstadoEmpleo estadoEmpleo){
+	public void addEstadoEmpleo(EmploymentStatus estadoEmpleo){
 		if(this.estadosEmpleo == null){
-			this.estadosEmpleo = new ArrayList<EstadoEmpleo>();
+			this.estadosEmpleo = new ArrayList<EmploymentStatus>();
 		}
 		this.estadosEmpleo.add(estadoEmpleo);
 	}
 	
-	public Long getAgenteId() {
-		return agenteId;
+	public List<Long> getAgentesIds() {
+		return agentesIds;
 	}
-	public void setAgenteId(Long agenteId) {
-		this.agenteId = agenteId;
+	
+	public void setAgentesIds(List<Long> agentesIds) {
+		this.agentesIds = agentesIds;
 	}
+	
+	public void addAgenteId(Long agenteId) {
+		this.agentesIds.add(agenteId);
+	}
+	
+	
 }
