@@ -24,7 +24,7 @@ public interface UserAccessService
 	 * This method retrieves a list of all the hotels that are linked to a specific account
 	 * @param aAccountName the account to lookup links for
 	 * @param comp optional Comparator
-	 * @return a set of ReparticionMiniInfo objects
+	 * @return a set of ReparticionAdminInfo objects
 	 */
 	Set<ReparticionAdminInfo> getReparticionListForAccount(final String aAccountName,Comparator<ReparticionAdminInfo> comp);
 
