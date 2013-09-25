@@ -32,7 +32,9 @@
 			<div id="table-actions">
 				<p class="buttoniseUs">
 					<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-						<a href="${requestContext.contextPath}/empleos/ingresarPropuestaAgenteForm">Ingresar Agente</a>
+						<#if canAccountIngresarAgente>
+							<a href="${requestContext.contextPath}/empleos/ingresarPropuestaAgenteForm">Ingresar Agente</a>
+						</#if>
 					</#if>
 				</p>
 			</div>	
@@ -62,21 +64,18 @@
 				    </#if>	
 				    
 				    	<tr class="${trStyle}">
-							<td>${empleoActivo.agente.apellidoNombre}</td>
-							<td>${empleoActivo.agente.condicion?default("")}</td>
-							<td>${empleoActivo.categoria.codigo}</td>
-							<td>${empleoActivo.centroSector.codigoCentro}</td>
-							<td>${empleoActivo.centroSector.nombreCentro}</td>
-							<td>${empleoActivo.centroSector.codigoSector}</td>
-							<td>${empleoActivo.centroSector.nombreSector}</td>
-							<#-- td>${empleo.address}</td>
-							<td>${empleo.city}, ${empleo.state}, ${empleo.country}</td>
-							<td>${empleo.zip}</td-->
+							<td>${empleoActivo.employment.agente.apellidoNombre}</td>
+							<td>${empleoActivo.employment.agente.condicion?default("")}</td>
+							<td>${empleoActivo.employment.categoria.codigo}</td>
+							<td>${empleoActivo.employment.centroSector.codigoCentro}</td>
+							<td>${empleoActivo.employment.centroSector.nombreCentro}</td>
+							<td>${empleoActivo.employment.centroSector.codigoSector}</td>
+							<td>${empleoActivo.employment.centroSector.nombreSector}</td>
 							<td>
 								
 								<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-									<#if !empleoActivo.agente.hasMovimientosAscensoPendientes() >
-										<a href="${empleosUrl}/${empleoActivo.id}/cambiarCategoria" class="ajaxLink">Cambiar Categoria</a>
+									<#if empleoActivo.canAccountAscenderAgente >
+										<a href="${empleosUrl}/${empleoActivo.employment.id}/cambiarCategoria" class="ajaxLink">Ascender Agente</a>
 									</#if>
 								</#if>
 								<#--	&nbsp;&nbsp;&nbsp;

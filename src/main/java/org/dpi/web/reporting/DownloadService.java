@@ -36,7 +36,7 @@ public class DownloadService {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public static final String TEMPLATE = "/WEB-INF/reports/nota_creditos.jrxml";
+	public static final String TEMPLATE = "/WEB-INF/reports/nota_creditos_conFechaImpresion.jrxml";
 	
 	
 	@Autowired

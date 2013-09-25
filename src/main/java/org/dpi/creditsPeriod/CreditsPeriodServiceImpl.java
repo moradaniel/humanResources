@@ -171,10 +171,21 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 
 
 	@Override
-	public int getCurrentEjercicioAnual() {
+	public int getCurrentCreditsPeriodYear() {
 		final Calendar c = Calendar.getInstance();
 		c.setTime(new Date());
 		return c.get(Calendar.YEAR);
+	}
+	
+	@Override
+	public CreditsPeriod getCurrentCreditsPeriod(){
+		CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+		creditsPeriodQueryFilter.setName("2013");//TODO get year from current date or better the ACTIVE period
+		
+		//obtener periodo actual
+		List<CreditsPeriod> currentCreditsPeriods = find(creditsPeriodQueryFilter);
+		CreditsPeriod currentCreditsPeriod = currentCreditsPeriods.get(0);
+		return currentCreditsPeriod;
 	}
 	
 }

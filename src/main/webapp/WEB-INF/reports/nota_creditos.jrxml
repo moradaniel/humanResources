@@ -60,7 +60,7 @@
 	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
 	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO" class="java.lang.Long"/>
 	<parameter name="CANTIDAD_CREDITOS_UTILIZADOS" class="java.lang.Long"/>
-	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DELS_PERIODO" class="java.lang.Long"/>
+	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO" class="java.lang.Long"/>
 	<title>
 		<band height="731" splitType="Stretch">
 			<staticText>
@@ -277,7 +277,7 @@ Ministro/Secretario de Estado de
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DELS_PERIODO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="246" y="10" width="251" height="19"/>

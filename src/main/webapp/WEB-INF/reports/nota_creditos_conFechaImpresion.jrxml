@@ -59,17 +59,11 @@
 	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.MovimientosIngresoReportDataSource" isForPrompting="false"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
 	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO" class="java.lang.Long"/>
+	<parameter name="CANTIDAD_CREDITOS_POR_BAJAS" class="java.lang.Long"/>
 	<parameter name="CANTIDAD_CREDITOS_UTILIZADOS" class="java.lang.Long"/>
-	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DELS_PERIODO" class="java.lang.Long"/>
+	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO" class="java.lang.Long"/>
 	<title>
 		<band height="758" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="dd3f1250-8dee-4f73-907f-56d7546fb12f" x="176" y="0" width="291" height="17"/>
-				<textElement textAlignment="Right">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[SAN JUAN, ....... de Setiembre de 2012.-]]></text>
-			</staticText>
 			<staticText>
 				<reportElement uuid="dd3f1250-8dee-4f73-907f-56d7546fb12f" x="0" y="39" width="278" height="49"/>
 				<textElement>
@@ -85,7 +79,7 @@ Ministro/Secretario de Estado de
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
-				<text><![CDATA[					Me dirijo a usted a fin de llevar a su conocimiento y consideración la nómina de los agentes propuestos para ser promocionados de acuerdo a lo prescripto en el CAPÍTULO III de la Ley Nro 8.243 y el Decreto Nro 0492-MHF-12, que reglamenta la misma.]]></text>
+				<text><![CDATA[					Me dirijo a usted a fin de llevar a su conocimiento y consideración la nómina de los agentes propuestos para ser promocionados de acuerdo a lo prescripto en el CAPITULO III de la Ley Nro 8.243 y el Decreto Nro 0492-MHF-12, que reglamenta la misma.]]></text>
 			</staticText>
 			<componentElement>
 				<reportElement uuid="2528ea09-0003-431d-b1c9-e0a1ccb5a5eb" key="table" style="table" positionType="Float" x="0" y="220" width="497" height="54"/>
@@ -239,10 +233,10 @@ Ministro/Secretario de Estado de
 				<textElement>
 					<font fontName="Times New Roman" size="12" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[RESUMEN DE LA DISPONIBILIDAD Y USO DEL CRÉDITO]]></text>
+				<text><![CDATA[RESUMEN DE LA DISPONIBILIDAD Y USO DEL CREDITO]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="0946bb0a-da3a-4ab6-b864-28a6cd5435da" positionType="Float" x="0" y="495" width="443" height="1"/>
+				<reportElement uuid="0946bb0a-da3a-4ab6-b864-28a6cd5435da" positionType="Float" x="0" y="516" width="443" height="1"/>
 			</line>
 			<textField>
 				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="325" y="455" width="118" height="19"/>
@@ -259,47 +253,68 @@ Ministro/Secretario de Estado de
 				<text><![CDATA[Créditos disponibles al inicio del proceso: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="90c988d4-c662-4540-9069-512d743b2850" positionType="Float" x="0" y="474" width="325" height="20"/>
+				<reportElement uuid="90c988d4-c662-4540-9069-512d743b2850" positionType="Float" x="0" y="495" width="325" height="20"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Créditos utilizados: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="798f1b5f-1594-416b-908c-d3655c398162" positionType="Float" x="0" y="494" width="325" height="20"/>
+				<reportElement uuid="798f1b5f-1594-416b-908c-d3655c398162" positionType="Float" x="0" y="517" width="325" height="20"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[SALDO AL FINAL DEL PROCESO: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="325" y="475" width="118" height="19"/>
+				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="325" y="496" width="118" height="19"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_UTILIZADOS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="325" y="495" width="118" height="19"/>
+				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="325" y="518" width="118" height="19"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DELS_PERIODO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd-MMMMM-yyyy hh:mm aaa" isBlankWhenNull="false">
-				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="278" y="514" width="165" height="20"/>
+				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="278" y="537" width="165" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="798f1b5f-1594-416b-908c-d3655c398162" positionType="Float" x="0" y="514" width="278" height="20"/>
+				<reportElement uuid="798f1b5f-1594-416b-908c-d3655c398162" positionType="Float" x="0" y="537" width="278" height="20"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Fecha y Hora de Impresion: ]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="325" y="475" width="118" height="19"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_POR_BAJAS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="90c988d4-c662-4540-9069-512d743b2850" positionType="Float" x="0" y="474" width="325" height="20"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Créditos por Bajas: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ef3f8769-b6de-4e98-bae2-6ea413638434" positionType="Float" x="176" y="0" width="291" height="19"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SAN JUAN, ....... de ............................. de "+ new Integer(new Date().getYear()+1900)+".-"]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 </jasperReport>

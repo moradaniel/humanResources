@@ -51,7 +51,7 @@
 						<td>						
 						<a href="showEmpleos" class="ajaxLink">Ver Agentes Activos</a>
 						<br/>
-						<a href="showMovimientos" class="ajaxLink">Ver Movimientos de Credito</a>
+						<a href="showMovimientos/2013" class="ajaxLink">Ver Movimientos de Credito</a>
 						</td>
 					</tr>
 
@@ -65,6 +65,7 @@
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Acreditados Por Bajas durante 2012</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos Otorgados 2012</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo de Creditos al Final del Periodo 2012</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
 					</tr>
 					
 					<tr>
@@ -72,6 +73,7 @@
 						<td>${creditosAcreditadosPorBajas2012?default("0")}</td>
 						<td>${creditosConsumidosPorIngresosOAscensosOtorgados2012?default("0")}</td>
 						<td>${saldoCreditosAlFinalPeriodo2012?default("0")}</td>
+						<td><a href="showMovimientos/2012" class="ajaxLink">Ver Movimientos de Credito</a></td>
 					</tr>
 
 				</table>

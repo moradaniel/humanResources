@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.dpi.categoria.CategoriaService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoService;
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.creditsPeriod.CreditsPeriodService;
+import org.dpi.empleo.EmploymentQueryFilter;
+import org.dpi.empleo.EmploymentService;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
@@ -21,7 +21,6 @@ import org.janux.bus.security.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -40,7 +39,7 @@ public class MovimientoCreditosController {
 	private MovimientoCreditosService movimientoCreditosService;
 	
 	//@Resource(name = "empleoService")
-	private EmpleoService empleoService;
+	private EmploymentService employmentService;
 
 	
 
@@ -52,7 +51,10 @@ public class MovimientoCreditosController {
 	
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
-
+	
+	
+	@Resource(name = "creditsPeriodService")
+	private CreditsPeriodService creditsPeriodService;
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
@@ -75,13 +77,13 @@ public class MovimientoCreditosController {
 		this.administradorCreditosService = administradorCreditosService;
 	}
 
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentService getEmploymentService() {
+		return employmentService;
 	}
 
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentService(EmploymentService empleoService) {
+		this.employmentService = empleoService;
 	}
 
 	public CategoriaService getCategoriaService() {
@@ -147,21 +149,26 @@ public class MovimientoCreditosController {
 		List<MovimientoCreditos> movimientos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
 		MovimientoCreditos movimientoCreditos = movimientos.get(0);
 
-		movimientoCreditos = movimientoCreditosForm.copyProperties(movimientoCreditos);
+		//movimientoCreditos = movimientoCreditosForm.copyProperties(movimientoCreditos);
 		
         //ModelAndView modelAndView = new ModelAndView("home"); 
           
-		movimientoCreditosService.saveOrUpdate(movimientoCreditos);  
+		movimientoCreditosService.changeGrantedStatus(movimientoCreditos, movimientoCreditosForm.getGrantedStatus());  
           
         //String message = "Team was successfully edited.";  
         //modelAndView.addObject("message", message);  
 
-        
-		return "redirect:/reparticiones/reparticion/showMovimientos";
+        String creditsPeriodName =  movimientoCreditos.getCreditsPeriod().getName();
+		return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodName;
     }  
 	
 	
-	
+	/**
+	 * Usado para AngularJS
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/reparticiones/reparticion/movimientos", method = RequestMethod.GET)
     @ResponseBody
 	public List<MovimientoCreditosDTO> getMovimientos(
@@ -176,13 +183,13 @@ public class MovimientoCreditosController {
 		if (reparticion != null){
 
 
-			EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
 			//todos los estados
-			empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
+			//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EmploymentStatus.values()));
 
 			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-			movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);
+			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.CargaInicialAgenteExistente);
 			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
 			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.BajaAgente);
@@ -193,9 +200,9 @@ public class MovimientoCreditosController {
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Account currenUser = (Account)accountObj;
 					
-			List<MovimientoCreditosAscensoVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currenUser);
+			List<MovimientoCreditosVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currenUser);
 			
-			for(MovimientoCreditosAscensoVO movimientoCreditosAscensoVO :movimientoCreditosVOReparticion){
+			for(MovimientoCreditosVO movimientoCreditosAscensoVO :movimientoCreditosVOReparticion){
 				MovimientoCreditosDTO movimientoCreditosDTO = new MovimientoCreditosDTO();
 				movimientoCreditosDTO.setName(movimientoCreditosAscensoVO.getMovimientoCreditos().getEmpleo().getAgente().getApellidoNombre());
 				movimientosCreditosDTO.add(movimientoCreditosDTO);
@@ -226,15 +233,16 @@ public class MovimientoCreditosController {
         		List<MovimientoCreditos> listMovimientoCreditos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
         		MovimientoCreditos movimientoCreditos = listMovimientoCreditos.get(0);
         		if(movimientoCreditos.getGrantedStatus()!=submittedMovimiento.getGrantedStatus()){
-        			movimientoCreditos.setGrantedStatus(submittedMovimiento.getGrantedStatus());
-        			movimientoCreditosService.saveOrUpdate(movimientoCreditos);
+        			//movimientoCreditos.setGrantedStatus(submittedMovimiento.getGrantedStatus());
+        			//movimientoCreditosService.saveOrUpdate(movimientoCreditos);
+        			movimientoCreditosService.changeGrantedStatus(movimientoCreditos,submittedMovimiento.getGrantedStatus());
         		}
         		
         	}
 
         }
          
-        return "redirect:/reparticiones/reparticion/showMovimientos";
+        return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodService.getCurrentCreditsPeriodYear();
 
     }
 	

@@ -49,7 +49,7 @@
 		"subNav": [
 			{ "URL":"reparticiones/reparticion/showCreditos",   "label":"Resumen Creditos",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") },
 			{ "URL":"reparticiones/reparticion/showEmpleos",   "label":"Agentes Activos",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") },
-			{ "URL":"reparticiones/reparticion/showMovimientos",   "label":"Movimientos de Credito",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") }
+			{ "URL":"reparticiones/reparticion/showMovimientos/2013",   "label":"Movimientos de Credito",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") }
 		]
 	},
 
