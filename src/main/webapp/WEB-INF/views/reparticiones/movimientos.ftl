@@ -19,8 +19,12 @@
 	
 	
 	<form id="cambioMultipleEstadoMovimientoForm" name="cambioMultipleEstadoMovimientoForm" action="${requestContext.contextPath}/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento" method="post">
-	<#-- input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" / -->
-		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+	
+	<#if canAccountCambiarEstadoMovimiento>
+		<input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" />
+	</#if>
+	
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 	<tr>
 		<th rowspan="3" class="sized"><img src="${requestContext.contextPath}/resources/images/admin/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
 		<th class="topleft"></th>
@@ -36,7 +40,7 @@
 		
 		<!-- boton reporte de creditos -->
 			<div id="table-actions">
-				<#-- if (creditosDisponibles >= 0)>
+				<#if (creditosDisponiblesSegunSolicitadoPeriodoActual >= 0)>
 					<p class="buttoniseUs">
 						<a href="${requestContext.contextPath}/reports/buildSetupPage">Generar Reporte</a>
 					</p>
@@ -48,7 +52,7 @@
 							</tr>
 						</table>
 					</div>
-				<if -->	
+				</#if>	
 			</div>
 
 		
@@ -58,6 +62,7 @@
 				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
+						<th class="table-header-repeat line-left"><a href="">Periodo</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Apellido y Nombre</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Condicion Agente</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Tipo Movimiento</a></th>
@@ -84,26 +89,26 @@
 			   	</#if>	
 			   	
 			   	
-		    	<#assign mostrarActionBorrarMovimento = false />
+		    	<#assign mostrarActionBorrarMovimiento = false />
 		    	<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-			    	<#assign mostrarActionBorrarMovimento = (movimiento.movimientoCreditos.tipoMovimientoCreditos != 'CargaInicialAgenteExistente' && movimiento.movimientoCreditos.tipoMovimientoCreditos != 'BajaAgente')/>
-			    	<#if movimiento.movimientoCreditos.tipoMovimientoCreditos == 'AscensoAgente' >
-			    		<#assign mostrarActionBorrarMovimento = mostrarActionBorrarMovimento && !movimiento.movimientoCreditos.empleo.fechaFin?exists />
-			    	</#if>	
+
+			    		<#assign mostrarActionBorrarMovimiento = movimiento.canAccountBorrarMovimiento/>
+	
 				</#if>
 				
 
 				<tr class="${trStyle}">
+					<td>${movimiento.movimientoCreditos.creditsPeriod.name}</td>
 					<td>${movimiento.movimientoCreditos.empleo.agente.apellidoNombre}</td>
 					<td>${movimiento.movimientoCreditos.empleo.agente.condicion?default("")}</td>
 					<td>${movimiento.movimientoCreditos.tipoMovimientoCreditos}</td>
 					<td>
-						<#-- if movimiento.canAccountCambiarEstadoMovimiento>
+						<#if movimiento.canAccountCambiarEstadoMovimiento>
 							<@spring.formSingleSelect "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].grantedStatus", grantedStatuses, "" />
 							<@spring.formHiddenInput "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].id" />	
-						<#else -->
+						<#else>
 							${movimiento.movimientoCreditos.grantedStatus}
-						<#-- /#if -->	
+						</#if>	
 					</td>
 					<td>${movimiento.movimientoCreditos.empleo.fechaInicio!""}</td>
 					<td>${movimiento.movimientoCreditos.empleo.fechaFin!""}</td>
@@ -119,7 +124,7 @@
 					<td>${movimiento.movimientoCreditos.empleo.centroSector.nombreSector}</td>
 					<td>${movimiento.movimientoCreditos.observaciones?default("")}</td>
 					<td>
-						<#if mostrarActionBorrarMovimento>
+						<#if mostrarActionBorrarMovimiento>
 							<a href="${reparticionesUrl}/reparticion/movimientos/${movimiento.movimientoCreditos.id}/borrar" class="ajaxLink">Borrar Movimiento</a>
 						</#if>
 						

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.dpi.agente.AgenteService;
 import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmpleoService;
+import org.dpi.empleo.EmploymentService;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
@@ -29,7 +29,7 @@ public class ActualizarEmpleoAnteriorAscensos {
 	
 	
 	
-	EmpleoService empleoService;
+	EmploymentService employmentService;
 		
 	MovimientoCreditosService movimientoCreditosService;
 
@@ -52,7 +52,7 @@ public class ActualizarEmpleoAnteriorAscensos {
 		final ActualizarEmpleoAnteriorAscensos actualizador = new ActualizarEmpleoAnteriorAscensos();
 		
 		
-		actualizador.setEmpleoService((EmpleoService)context.getBean("empleoService"));
+		actualizador.setEmploymentService((EmploymentService)context.getBean("empleoService"));
 		
 		actualizador.setMovimientoCreditosService((MovimientoCreditosService)context.getBean("movimientoCreditosService"));
 		
@@ -100,13 +100,13 @@ public class ActualizarEmpleoAnteriorAscensos {
 		for(MovimientoCreditos movimientoAscenso: movimientosAscenso){
 			//buscar el empleo anterior al empleo del movimiento de ascenso
 			Empleo empleoDelAscenso = movimientoAscenso.getEmpleo();
-			Empleo empleoAnteriorDelAscenso = empleoService.findPreviousEmpleo(empleoDelAscenso);
+			Empleo empleoAnteriorDelAscenso = employmentService.findPreviousEmpleo(empleoDelAscenso);
 			
 			//al empleo del movimiento de ascenso setearle el empleo anterior
 			empleoDelAscenso.setEmpleoAnterior(empleoAnteriorDelAscenso);
 			
 			//guardar empleo del ascenso
-			empleoService.saveOrUpdate(empleoDelAscenso);
+			employmentService.saveOrUpdate(empleoDelAscenso);
 			
 		}
 
@@ -122,12 +122,12 @@ public class ActualizarEmpleoAnteriorAscensos {
 	}
 	
 	
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentService getEmploymentService() {
+		return employmentService;
 	}
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentService(EmploymentService empleoService) {
+		this.employmentService = empleoService;
 	}
 	
 

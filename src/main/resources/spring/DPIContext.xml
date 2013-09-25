@@ -193,11 +193,11 @@
 		</property>
 	</bean>
 	
-	<bean id="empleoService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="employmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.empleo.EmpleoServiceImpl">
-				<constructor-arg><ref local="empleoDao"/></constructor-arg>
+			<bean class="org.dpi.empleo.EmploymentServiceImpl">
+				<constructor-arg><ref local="employmentDao"/></constructor-arg>
 				<property name="administradorCreditosService">
 					<ref bean="administradorCreditosService" />
 				</property>
@@ -220,19 +220,16 @@
 				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
-				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
-				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
-				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
 		</property>
 	</bean>
 
 	<!-- the Service DAO on which the Facade relies -->
-	<bean id="empleoDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="employmentDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.empleo.EmpleoDaoHibImpl">
+			<bean class="org.dpi.empleo.EmploymentDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -255,9 +252,12 @@
 		<property name="target">
 			<bean class="org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl">
 				<constructor-arg><ref local="movimientoCreditosDao"/></constructor-arg>
-				<constructor-arg><ref local="empleoService"/></constructor-arg>
+				<!-- >constructor-arg><ref local="empleoService"/></constructor-arg -->
 				<constructor-arg><ref local="agenteService"/></constructor-arg>
 				<constructor-arg><ref local="administradorCreditosService"/></constructor-arg>
+				<property name="employmentService">
+					<ref bean="employmentService" />
+				</property>
 			</bean>
 		</property>
 		<property name="transactionAttributes">
@@ -268,6 +268,7 @@
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
 				<prop key="actualizar*">PROPAGATION_REQUIRED</prop>
+				<prop key="change*">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
 		</property>
@@ -289,6 +290,40 @@
 				<prop key="update*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="employmentCreditsEntriesService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.empleo.EmploymentCreditsEntriesServiceImpl">
+				<!-- property name="administradorCreditosService">
+					<ref bean="administradorCreditosService" />
+				</property>
+				<property name="categoriaService">
+					<ref bean="categoriaService" />
+				</property>
+				<property name="agenteService">
+					<ref bean="agenteService" />
+				</property>
+				<property name="centroSectorService">
+					<ref bean="centroSectorService" />
+				</property -->
+				
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
+				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
 		</property>
 	</bean>

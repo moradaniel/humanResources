@@ -61,7 +61,7 @@ public class MovimientoCreditosForm {
 
 	
 	public MovimientoCreditos copyProperties(MovimientoCreditos movimientoCreditos){
-		movimientoCreditos.setGrantedStatus(this.grantedStatus);
+		//movimientoCreditos.setGrantedStatus(this.grantedStatus);
 		return movimientoCreditos;
 	}
 

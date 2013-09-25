@@ -27,14 +27,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class EmpleoController {
+public class EmploymentController {
 
-	//private ReparticionService reparticionService;
-
-	//@Resource(name = "empleoService")
-	private EmpleoService empleoService;
-
-
+	private EmploymentCreditsEntriesService employmentCreditsEntriesService;
+	
+	@Resource(name = "employmentService")
+	private EmploymentService employmentService;
+	
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
 
@@ -44,13 +43,11 @@ public class EmpleoController {
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
 
-	
-	
 
 
 	@Inject
-	public EmpleoController(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public EmploymentController(EmploymentCreditsEntriesService employmentCreditsEntriesService) {
+		this.employmentCreditsEntriesService = employmentCreditsEntriesService;
 	}
 
 
@@ -63,13 +60,13 @@ public class EmpleoController {
 		this.administradorCreditosService = administradorCreditosService;
 	}
 
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentCreditsEntriesService getEmploymentCreditsEntriesService() {
+		return employmentCreditsEntriesService;
 	}
 
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentCreditsEntriesService(EmploymentCreditsEntriesService employmentCreditsEntriesService) {
+		this.employmentCreditsEntriesService = employmentCreditsEntriesService;
 	}
 
 	public CategoriaService getCategoriaService() {
@@ -97,26 +94,26 @@ public class EmpleoController {
 
 	@RequestMapping(value = "/empleos/{id}/baja", method = RequestMethod.GET)
 	public String baja(@PathVariable Long id, Model model) {
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setEmpleoId(id.toString());
 
-		List<Empleo> empleos = empleoService.find(empleoQueryFilter);
+		List<Empleo> empleos = employmentService.find(empleoQueryFilter);
 
 		Empleo empleoADarDeBaja = empleos.get(0);
 
 
-		empleoService.darDeBaja(empleoADarDeBaja);
+		employmentCreditsEntriesService.darDeBaja(empleoADarDeBaja);
 
 		Empleo empleoDadoDeBaja = empleoADarDeBaja;
 
 
 		//buscar los empleos de la reparticion
-		empleoQueryFilter = new EmpleoQueryFilter();
+		empleoQueryFilter = new EmploymentQueryFilter();
 
 		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
 		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
 
-		empleos = empleoService.find(empleoQueryFilter);
+		empleos = employmentService.find(empleoQueryFilter);
 		model.addAttribute("empleos", empleos);
 
 		return "redirect:/reparticiones/" + reparticion.getId();
@@ -142,16 +139,16 @@ public class EmpleoController {
 
 		if (reparticion != null){
 
-			EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setEmpleoId(id.toString());
 
-			List<Empleo> empleos = empleoService.find(empleoQueryFilter);
+			List<Empleo> empleos = employmentService.find(empleoQueryFilter);
 
 			Empleo empleoActual = empleos.get(0);
 
-			if(empleoActual.getCentroSector().getReparticion().getId()!=reparticion.getId()){
+			if(empleoActual.getCentroSector().getReparticion().getId().longValue()!=reparticion.getId().longValue()){
 
-				return "home";
+				return "redirect:/reparticiones/reparticion/showEmpleos";
 			}
 
 			//Agente agenteACambiarCategoria = empleoActual.getAgente();
@@ -199,14 +196,14 @@ public class EmpleoController {
 			return VIEW_PAGE;
 		}*/
 
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setEmpleoId(idEmpleoActual.toString());
 
-		List<Empleo> empleos = empleoService.find(empleoQueryFilter);
+		List<Empleo> empleos = employmentService.find(empleoQueryFilter);
 
 		Empleo empleoActual = empleos.get(0);
 
-		empleoService.ascenderAgente(empleoActual, codigoCategoriaPropuesta);
+		employmentCreditsEntriesService.ascenderAgente(empleoActual, codigoCategoriaPropuesta);
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}
@@ -239,7 +236,7 @@ public class EmpleoController {
 
 		//Empleo empleoActual = empleos.get(0);
 
-		empleoService.ingresarPropuestaAgente(codigoCategoriaPropuesta, Long.parseLong(centroSectorId));
+		employmentCreditsEntriesService.ingresarPropuestaAgente(codigoCategoriaPropuesta, Long.parseLong(centroSectorId));
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}
@@ -438,5 +435,14 @@ public class EmpleoController {
 		reparticionService.saveOrUpdate(reparticion);
 		return (AjaxUtils.isAjaxRequest(requestedWith)) ? "reparticiones/show" : "redirect:/reparticiones/" + reparticion.getId();
 	}*/
+	
+	public EmploymentService getEmploymentService() {
+		return employmentService;
+	}
+
+
+	public void setEmploymentService(EmploymentService employmentService) {
+		this.employmentService = employmentService;
+	}
 
 }

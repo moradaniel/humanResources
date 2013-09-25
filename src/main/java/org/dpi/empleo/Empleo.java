@@ -26,9 +26,9 @@ public interface Empleo extends Persistent,Serializable{
 
 	void setCategoria(Categoria categoria);
 	
-	EstadoEmpleo getEstado();
+	EmploymentStatus getEstado();
 
-	void setEstado(EstadoEmpleo estado);
+	void setEstado(EmploymentStatus estado);
 
 	public Date getFechaInicio();
 
@@ -49,5 +49,6 @@ public interface Empleo extends Persistent,Serializable{
 	Empleo getEmpleoAnterior();
 
 	void setEmpleoAnterior(Empleo empleoAnterior);
+	
 
 }

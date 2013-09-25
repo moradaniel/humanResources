@@ -11,7 +11,7 @@ import org.dpi.util.BaseObject;
  * the language the text is written in and decide whether to show it or not depending on
  * Locale settings of who is going to visualize the text.
  * 
- * @author Martino Piccinato
+ * 
  */
 public class LocaleText extends BaseObject {
 

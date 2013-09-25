@@ -10,23 +10,23 @@ import org.springframework.context.ApplicationContextAware;
  * persistent storage
  *
  */
-public interface EmpleoService extends ApplicationContextAware
+public interface EmploymentService extends ApplicationContextAware
 {
 	/**
 	 * Returns a possibly lightweight representation of the corresponding Hotel, which may not
 	 * contain all associated objects, or <code>null</code> if the Hotel is not found.
 	 *
-	 * @param code a business code that uniquely identifies this Hotel
+	 * @param code a business code that uniquely identifies this Employment
 	 */
-	public List<Empleo> find(EmpleoQueryFilter empleoQueryFilter);
+	public List<Empleo> find(EmploymentQueryFilter empleoQueryFilter);
 
 	public Empleo findById(Long id);
 	
-	public void darDeBaja(Empleo empleoQueryFilter);
+
 	
-	public void ascenderAgente(Empleo empleo, String codigoCategoriaNueva);
 	
-	public List<Empleo> findEmpleosInactivos(final EmpleoQueryFilter empleoQueryFilter);
+	
+	public List<Empleo> findEmpleosInactivos(final EmploymentQueryFilter empleoQueryFilter);
 	
 	public void delete(Empleo empleo);
 	
@@ -36,14 +36,14 @@ public interface EmpleoService extends ApplicationContextAware
 	
 	public void saveOrUpdate(final Empleo empleo); 
 	
-	public EmpleoDao getEmpleoDao();
+	public EmploymentDao getEmploymentDao();
 
 
 	//Deprecated
 	public Empleo findPreviousEmpleo(Empleo empleo);
 
 
-	public void ingresarPropuestaAgente(String codigoCategoriaPropuesta,Long centroSectorId);
+	
 	
 	
 

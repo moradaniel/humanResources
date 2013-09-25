@@ -6,8 +6,7 @@ import java.util.Map;
 
 import org.dpi.agente.CondicionAgente;
 import org.dpi.creditsPeriod.CreditsPeriod;
-import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.empleo.EmploymentQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosDaoHibImpl;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
@@ -20,7 +19,6 @@ import org.janux.util.Chronometer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.util.CollectionUtils;
 
 public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract implements AdministradorCreditosService{
 
@@ -34,7 +32,7 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	
 	Map<String, Map<String, Integer>> creditosPorAscenso = new HashMap<String,Map<String, Integer>>();
 	
-	String MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS = "21";
+	//String MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS = "21";
 	
 	public AdministradorCreditosServiceImpl() {
 		creditosPorCargaInicial.put("12", 60);
@@ -216,16 +214,20 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	
 	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String codigoCategoriaActual, String codigoCategoriaNueva){
 		Integer creditos = 0;
-		if(condicionAgente!=null && condicionAgente == CondicionAgente.Profesional){
-			Integer intCodigoCategoria = Integer.parseInt(codigoCategoriaNueva);
-			if(intCodigoCategoria<=Integer.parseInt(MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS)){
+		/*if(	condicionAgente!=null && 
+			(condicionAgente == CondicionAgente.Profesional)
+		
+				){
+					
+			Integer intCodigoCategoriaNueva = Integer.parseInt(codigoCategoriaNueva);
+			if(intCodigoCategoriaNueva<=Integer.parseInt(MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS)){
 				creditos=0;
 			}else{
 				creditos = this.creditosPorAscenso.get(MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS).get(codigoCategoriaNueva);
 			}
-		}else{
+		}else{*/
 			creditos = this.creditosPorAscenso.get(codigoCategoriaActual).get(codigoCategoriaNueva);	
-		}
+		//}
 		
 		if(creditos==null){
 			creditos=0;
@@ -342,7 +344,7 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 				
 				Chronometer timer = new Chronometer();
 				
-				String reparticionId = movimientoCreditosQueryFilter.getEmpleoQueryFilter().getReparticionId();
+				String reparticionId = movimientoCreditosQueryFilter.getEmploymentQueryFilter().getReparticionId();
 
 				if (log.isDebugEnabled()) log.debug("attempting to find Movimientos with id: '" + reparticionId + "'");
 				
@@ -409,27 +411,27 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 
 
 
-	@Override
+	/*@Override
 	public Long getCreditosDisponiblesAlInicioDelPeriodo(final CreditsPeriod creditsPeriod,Long reparticionId) {
 		Long creditosPorCargaInicialDeReparticion = getCreditosPorCargaInicialDeReparticion(creditsPeriod,reparticionId);
 		Long creditosPorBaja = getCreditosPorBajasDeReparticion(creditsPeriod,reparticionId);
 		
 		return creditosPorCargaInicialDeReparticion+creditosPorBaja;
-	}
+	}*/
 
 
 	@Override
 	public Long getCreditosPorIngresosOAscensosSolicitados(	CreditsPeriod creditsPeriod, Long reparticionId) {
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
 		
 		//todos los estados
-		empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
+		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EmploymentStatus.values()));
 		
 		
 		
 		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-		movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);
+		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 		movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
 		
 		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
@@ -442,12 +444,13 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	@Override
 	public Long getCreditosPorIngresosOAscensosOtorgados(
 			CreditsPeriod creditsPeriod, Long reparticionId) {
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
 		//todos los estados
-		empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
+		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EmploymentStatus.values()));
+		
 		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-		movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);
+		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 		movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
 		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
 		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);

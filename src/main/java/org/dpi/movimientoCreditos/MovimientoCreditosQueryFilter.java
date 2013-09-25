@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dpi.empleo.EmpleoQueryFilter;
+import org.dpi.empleo.EmploymentQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 
 
@@ -19,7 +19,12 @@ import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 public class MovimientoCreditosQueryFilter implements Serializable {
 	
 	
-	EmpleoQueryFilter empleoQueryFilter;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	EmploymentQueryFilter empleoQueryFilter;
 	
 	Long id;
 	
@@ -29,15 +34,18 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 	
 	List<GrantedStatus> grantedStatuses = new ArrayList<GrantedStatus>();
 	
+	Boolean hasCredits = null;
+	
+
 	public MovimientoCreditosQueryFilter(){
 		
 	}
 
-	public EmpleoQueryFilter getEmpleoQueryFilter() {
+	public EmploymentQueryFilter getEmploymentQueryFilter() {
 		return empleoQueryFilter;
 	}
 
-	public void setEmpleoQueryFilter(EmpleoQueryFilter empleoQueryFilter) {
+	public void setEmploymentQueryFilter(EmploymentQueryFilter empleoQueryFilter) {
 		this.empleoQueryFilter = empleoQueryFilter;
 	}
 	
@@ -81,6 +89,14 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 
 	public void setIdCreditsPeriod(Long idCreditsPeriod) {
 		this.idCreditsPeriod = idCreditsPeriod;
+	}
+	
+	public Boolean isHasCredits() {
+		return hasCredits;
+	}
+
+	public void setHasCredits(Boolean hasCredits) {
+		this.hasCredits = hasCredits;
 	}
 	
 }

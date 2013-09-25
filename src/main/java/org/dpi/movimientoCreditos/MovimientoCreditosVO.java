@@ -1,7 +1,7 @@
 package org.dpi.movimientoCreditos;
 
 
-public class MovimientoCreditosAscensoVO{
+public class MovimientoCreditosVO{
 	
 
 	MovimientoCreditos movimientoCreditos =  new MovimientoCreditosImpl();
@@ -13,7 +13,7 @@ public class MovimientoCreditosAscensoVO{
 	boolean canAccountBorrarMovimiento = false;
 	boolean canAccountCambiarEstadoMovimiento = false;
 	
-	public MovimientoCreditosAscensoVO(){
+	public MovimientoCreditosVO(){
 		super();
 	}
 	
@@ -41,12 +41,12 @@ public class MovimientoCreditosAscensoVO{
 		this.categoriaPropuesta = categoriaPropuesta;
 	}
 	
-	public boolean isCanAccountBorrarMovimento() {
+	public boolean isCanAccountBorrarMovimiento() {
 		return canAccountBorrarMovimiento;
 	}
 
-	public void setCanAccountBorrarMovimiento(boolean canAccountBorrarMovimento) {
-		this.canAccountBorrarMovimiento = canAccountBorrarMovimento;
+	public void setCanAccountBorrarMovimiento(boolean canAccountBorrarMovimiento) {
+		this.canAccountBorrarMovimiento = canAccountBorrarMovimiento;
 	}
 
 	public boolean isCanAccountCambiarEstadoMovimiento() {

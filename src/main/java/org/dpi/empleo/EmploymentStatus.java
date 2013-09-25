@@ -1,6 +1,6 @@
 package org.dpi.empleo;
 
-public enum EstadoEmpleo {
+public enum EmploymentStatus {
 	ACTIVO,
 	INACTIVO, //el empleo fue creado en un periodo ya cerrado, el ascenso o ingreso fue solicitado pero NO fue otorgado
 	BAJA, 

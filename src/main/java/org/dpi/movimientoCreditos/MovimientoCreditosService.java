@@ -1,7 +1,9 @@
 package org.dpi.movimientoCreditos;
 
 import java.util.List;
+import java.util.Set;
 
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.janux.bus.security.Account;
 import org.springframework.context.ApplicationContextAware;
 
@@ -17,9 +19,13 @@ public interface MovimientoCreditosService extends ApplicationContextAware
 	public List<MovimientoCreditos> find(MovimientoCreditosQueryFilter movimientoCreditosQueryFilter);
 	public void delete(MovimientoCreditos movimientoCreditos);
 	
-	public List<MovimientoCreditosAscensoVO> buildMovimientoCreditosVO(List<MovimientoCreditos> movimientoCreditosReparticion, Account account);
+	public List<MovimientoCreditosVO> buildMovimientoCreditosVO(List<MovimientoCreditos> movimientoCreditosReparticion, Account account);
 	public void saveOrUpdate(final MovimientoCreditos movimientoCreditos);
 	public void actualizarCreditosPorAscenso();
+	
+	public void changeGrantedStatus(MovimientoCreditos movimiento, GrantedStatus newEstado);
+	
+	public Set<Long> haveMovimientosSolicitados(List<Long> agenteIds, Long idReparticion,Long idCreditsPeriod);
 	
 	//public MovimientoCreditos copyProperties(MovimientoCreditos from, MovimientoCreditos to);
 		

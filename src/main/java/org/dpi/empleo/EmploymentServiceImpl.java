@@ -1,24 +1,14 @@
 package org.dpi.empleo;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.dpi.agente.Agente;
-import org.dpi.agente.AgenteImpl;
-import org.dpi.agente.AgenteQueryFilter;
 import org.dpi.agente.AgenteService;
-import org.dpi.agente.EstadoAgente;
-import org.dpi.categoria.Categoria;
 import org.dpi.categoria.CategoriaService;
-import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.movimientoCreditos.MovimientoCreditos;
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
-import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
-import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -27,13 +17,13 @@ import org.springframework.util.CollectionUtils;
 
 
 
-public class EmpleoServiceImpl implements EmpleoService
+public class EmploymentServiceImpl implements EmploymentService
 {
 	//private static Log log = LogFactory.getLog(EmpleoServiceImpl.class);
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private final EmpleoDao empleoDao;
+	private final EmploymentDao empleoDao;
 	
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
@@ -47,15 +37,17 @@ public class EmpleoServiceImpl implements EmpleoService
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
 	
+	@Resource(name = "creditsPeriodService")
+	private CreditsPeriodService creditsPeriodService;
 
 	private ApplicationContext applicationContext;
 	
-	public EmpleoServiceImpl(final EmpleoDao empleoDao) {
+	public EmploymentServiceImpl(final EmploymentDao empleoDao) {
 		this.empleoDao = empleoDao;
 	}
 
 	
-	public List<Empleo> find(EmpleoQueryFilter empleoQueryFilter){
+	public List<Empleo> find(EmploymentQueryFilter empleoQueryFilter){
 		
 		return empleoDao.find(empleoQueryFilter);
 	}
@@ -173,7 +165,7 @@ public class EmpleoServiceImpl implements EmpleoService
 	// 	}
 	// }
 
-	public EmpleoDao getEmpleoDao()
+	public EmploymentDao getEmploymentDao()
 	{
 		return empleoDao;
 	}
@@ -254,103 +246,14 @@ public class EmpleoServiceImpl implements EmpleoService
 	}
 
 
-	@Override
-	public void darDeBaja(Empleo empleo) {
-		
-		//encontrar empleo
-		
-		
-		//ponerle fecha fin la fecha actual
-		empleo.setFechaFin(new Date());
-		empleo.setEstado(EstadoEmpleo.BAJA);
-		
-		//crear un movimiento de tipo baja 
-		MovimientoCreditosImpl movimientoBaja = new MovimientoCreditosImpl();
-		movimientoBaja.setTipoMovimientoCreditos(TipoMovimientoCreditos.BajaAgente);
-		int cantidadCreditosPorBaja = this.getAdministradorCreditosService().getCreditosPorBaja(empleo.getCategoria().getCodigo());
 
-		
-		movimientoBaja.setCantidadCreditos(cantidadCreditosPorBaja);
-		
-		
-		//setear empleo a movimiento  y agregar movimiento a empleo
-		empleo.addMovimientoCreditos(movimientoBaja);
-		
-		movimientoBaja.setEmpleo(empleo);
-		
-		//guardar movimiento y empleo
-		saveOrUpdate(empleo);
-		
-	}
+
 	
-	@Override
-	public void ascenderAgente(Empleo empleoActual, String codigoCategoriaNueva){
-		
-		
-		if(hasMovimientosAscensoPendientes(empleoActual.getAgente().getId(), empleoActual.getCentroSector().getReparticion().getId())){
-			return;
-		}
-		
-		
-		//ponerle fecha fin la fecha actual
-		//empleoActual.setFechaFin(new Date());
-		
-		Agente agente = empleoActual.getAgente();
-		
-		//guardar empleo
-		//saveOrUpdate(empleoActual);
-
-		Categoria categoriaNueva = categoriaService.findByCodigo(codigoCategoriaNueva);
-		Empleo empleoNuevo = new EmpleoImpl();
-		empleoNuevo.setAgente(empleoActual.getAgente());
-		empleoNuevo.setCategoria(categoriaNueva);
-		empleoNuevo.setCentroSector(empleoActual.getCentroSector());
-		empleoNuevo.setFechaInicio(new Date());
-		empleoNuevo.setEstado(EstadoEmpleo.PENDIENTE);
-		
-		//crear un movimiento de tipo ascenso 
-		MovimientoCreditosImpl movimientoAscenso = new MovimientoCreditosImpl();
-		movimientoAscenso.setTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-		int cantidadCreditosPorAscenso = this.getAdministradorCreditosService().getCreditosPorAscenso(agente.getCondicion(),empleoActual.getCategoria().getCodigo(),codigoCategoriaNueva);
-		movimientoAscenso.setGrantedStatus(GrantedStatus.Solicitado);
-
-		
-		movimientoAscenso.setCantidadCreditos(cantidadCreditosPorAscenso);
-		
-		
-		//setear empleo a movimiento  y agregar movimiento a empleo
-		empleoNuevo.addMovimientoCreditos(movimientoAscenso);
-		
-		movimientoAscenso.setEmpleo(empleoNuevo);
-		empleoNuevo.setEmpleoAnterior(empleoActual);
-		
-		
-		//guardar movimiento y empleo
-		saveOrUpdate(empleoNuevo);
-		
-	}
-	
-	private boolean hasMovimientosAscensoPendientes(Long idAgente, Long idReparticion) {
-		AgenteQueryFilter agenteQueryFilter = new AgenteQueryFilter();
-		agenteQueryFilter.setAgenteId(idAgente);
-		agenteQueryFilter.setReparticionId(idReparticion);
-		agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
-		
-
-		List<Agente> agentes = agenteService.find(agenteQueryFilter);
-		
-		Agente agente = agentes.get(0);
-		
-		if (agente.hasMovimientosAscensoPendientes()){
-			return true;
-		}
-
-		return false;
-	}
 
 
-	public List<Empleo> findEmpleosInactivos(final EmpleoQueryFilter empleoQueryFilter){
-		empleoQueryFilter.addEstadoEmpleo(EstadoEmpleo.INACTIVO);
+
+	public List<Empleo> findEmpleosInactivos(final EmploymentQueryFilter empleoQueryFilter){
+		empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.INACTIVO);
 		
 		return this.empleoDao.findEmpleosInactivos(empleoQueryFilter);
 	}
@@ -377,53 +280,17 @@ public class EmpleoServiceImpl implements EmpleoService
 
 	@Override
 	public Empleo findPreviousEmpleo(Empleo empleo){
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setCuil(empleo.getAgente().getCuil());
 		empleoQueryFilter.setReparticionId(empleo.getCentroSector().getReparticion().getId().toString());
 		
-		empleoQueryFilter.setEstadosEmpleo( CollectionUtils.arrayToList(EstadoEmpleo.values()));
+		empleoQueryFilter.setEstadosEmpleo( CollectionUtils.arrayToList(EmploymentStatus.values()));
 		empleoQueryFilter.setFechaFin(empleo.getFechaInicio());
 
 		return this.empleoDao.findPreviousEmpleo(empleoQueryFilter);
 	}
 
 
-	@Override
-	public void ingresarPropuestaAgente(String codigoCategoriaPropuesta,Long centroSectorId) {
-		// crear agente nn
-		Agente nuevoAgentePropuesto = createPendingAgent();
-		
-		agenteService.save(nuevoAgentePropuesto);
-		
-		//al agente ponerlo en estado pendiente
-		
-		//crear empleo
-		Empleo nuevoEmpleoPropuesto = new EmpleoImpl();
-		nuevoEmpleoPropuesto.setAgente(nuevoAgentePropuesto);
-		//setear categoria propuesta al empleo
-		nuevoEmpleoPropuesto.setCategoria(categoriaService.findByCodigo(codigoCategoriaPropuesta));
-		//al empleo ponerlo en estado pendiente
-		nuevoEmpleoPropuesto.setEstado(EstadoEmpleo.PENDIENTE);
-		
-		nuevoEmpleoPropuesto.setFechaInicio(new Date());
-		
-		//buscar centro sector
-		CentroSector centroSector = centroSectorService.findById(centroSectorId);
-		nuevoEmpleoPropuesto.setCentroSector(centroSector);
-		
-		//Crear movimiento de ingreso
-		MovimientoCreditos movimientoCreditosIngreso = new MovimientoCreditosImpl();
-		movimientoCreditosIngreso.setTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
-		
-		movimientoCreditosIngreso.setEmpleo(nuevoEmpleoPropuesto);
-		nuevoEmpleoPropuesto.addMovimientoCreditos(movimientoCreditosIngreso);
-		
-		int creditosPorIngreso = administradorCreditosService.getCreditosPorIngreso(codigoCategoriaPropuesta);
-		movimientoCreditosIngreso.setCantidadCreditos(creditosPorIngreso);
-		
-		this.save(nuevoEmpleoPropuesto);
-		
-	}
 	
 	public AgenteService getAgenteService() {
 		return agenteService;
@@ -434,12 +301,7 @@ public class EmpleoServiceImpl implements EmpleoService
 		this.agenteService = agenteService;
 	}
 	
-	private Agente createPendingAgent(){
-		AgenteImpl newAgente = new AgenteImpl();
-		newAgente.setApellidoNombre("Ingreso Nuevo Propuesto");
-		newAgente.setCuil("");
-		return newAgente;
-	}
+
 	
 	public CentroSectorService getCentroSectorService() {
 		return centroSectorService;
@@ -449,7 +311,6 @@ public class EmpleoServiceImpl implements EmpleoService
 	public void setCentroSectorService(CentroSectorService centroSectorService) {
 		this.centroSectorService = centroSectorService;
 	}
-	
 
 	
 }

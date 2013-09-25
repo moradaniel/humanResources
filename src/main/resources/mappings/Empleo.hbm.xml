@@ -16,7 +16,7 @@
 	<property name="fechaInicio" column="FECHAINICIO" type="timestamp"/> 
 	<property name="fechaFin" column="FECHAFIN" type="timestamp"/>
 
-	<property name="estado" column="ESTADO" type="org.dpi.persistence.EstadoEmpleoEnumUserType"/>
+	<property name="estado" column="ESTADO" type="org.dpi.persistence.EmploymentStatusEnumUserType"/>
    
 	<many-to-one 
 		name="agente"

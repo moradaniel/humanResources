@@ -18,9 +18,9 @@ import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmpleoImpl;
-import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoService;
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.empleo.EmploymentQueryFilter;
+import org.dpi.empleo.EmploymentService;
+import org.dpi.empleo.EmploymentStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
@@ -52,7 +52,7 @@ public class ImportarEntidades {
 	
 	CategoriaService categoriaService;
 	
-	EmpleoService empleoService;
+	EmploymentService employmentService;
 
 	AdministradorCreditosService administradorCreditosService;
 	
@@ -80,7 +80,7 @@ public class ImportarEntidades {
 		importadorEntidades.setCentroSectorService((CentroSectorService)context.getBean("centroSectorService"));
 		importadorEntidades.setAgenteService((AgenteService)context.getBean("agenteService"));
 		importadorEntidades.setCategoriaService((CategoriaService)context.getBean("categoriaService"));
-		importadorEntidades.setEmpleoService((EmpleoService)context.getBean("empleoService"));
+		importadorEntidades.setEmploymentService((EmploymentService)context.getBean("employmentService"));
 		
 		importadorEntidades.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
 		
@@ -133,19 +133,19 @@ public class ImportarEntidades {
 		String query = "SELECT	* " +
 					" FROM	CREDITOS.TODO " +
 					" WHERE	(CREDITOS.TODO.ESCALAFON = '6' or CREDITOS.TODO.ESCALAFON = '2')" + //solo escalafon general 02 y 06
-					"		AND CREDITOS.TODO.REPARTICION<>'#N/A'" +
+					"		AND CREDITOS.TODO.REPARTICION<>'#N/A'";
 					//"		AND CREDITOS.TODO.PARA_IMPORTAR='SI' " ;
-					"		AND CREDITOS.TODO.BAJA='BAJA'" ;
+					//"		AND CREDITOS.TODO.BAJA='BAJA'" ;
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 
 		List<Map<String, Object>> rows = getDpiJdbcTemplate().queryForList(query, parameters);
 		
 		for (Map<String, Object> row: rows) {
-			importarCategorias(row);
+			//importarCategorias(row);
 			importarAgentes(row);
-			importarReparticion(row);
-			importarRelacionEntreReparticionyCentroSector(row);
+			//importarReparticion(row);
+			//importarRelacionEntreReparticionyCentroSector(row);
 			importarEmpleos(row);
 			
 
@@ -277,9 +277,11 @@ public class ImportarEntidades {
 		String codigoSector = (String)row.get("SECTOR");
 		
 		CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
-		creditsPeriodQueryFilter.setName("2013");
+		creditsPeriodQueryFilter.setName("2012");
+		
 		List<CreditsPeriod> creditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
-		CreditsPeriod creditsPeriod = creditsPeriods.get(0);
+		
+		CreditsPeriod creditsPeriod = creditsPeriods.get(0); 
 		
 		if(codigoCentro!=null && codigoSector!=null){
 			
@@ -296,16 +298,87 @@ public class ImportarEntidades {
 
 					Categoria categoria = categoriaService.findByCodigo(codigoCategoria);
 				
-					EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+					EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 					empleoQueryFilter.setCuil(cuil);
 					empleoQueryFilter.setCodigoCentro(codigoCentro);
 					empleoQueryFilter.setCodigoSector(codigoSector);
 					empleoQueryFilter.setCodigoCategoria(codigoCategoria);
-					empleoQueryFilter.addEstadoEmpleo(EstadoEmpleo.ACTIVO);
+					empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.ACTIVO);
 					
 					
 					
-					List<Empleo> empleos = empleoService.find(empleoQueryFilter);
+					List<Empleo> empleos = employmentService.find(empleoQueryFilter);
+					
+					Empleo empleo = null;
+					if(CollectionUtils.isEmpty(empleos)){
+						//crear una entrada en empleo
+						empleo = new EmpleoImpl();
+						empleo.setAgente(agente);
+						empleo.setCentroSector(centroSector);
+						empleo.setCategoria(categoria);
+						empleo.setEstado(EmploymentStatus.ACTIVO);
+						
+						String esBaja = (String)row.get("BAJA");
+						
+						if(esBaja.equalsIgnoreCase("ALTA")){ //es Carga Inicial
+							MovimientoCreditosImpl movimientoCargaInicialAgente = new MovimientoCreditosImpl();
+							movimientoCargaInicialAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.CargaInicialAgenteExistente);
+							movimientoCargaInicialAgente.setGrantedStatus(GrantedStatus.Otorgado);
+							movimientoCargaInicialAgente.setCreditsPeriod(creditsPeriod);
+							int cantidadCreditosPorCargaInicial = this.administradorCreditosService.getCreditosPorCargaInicial(codigoCategoria);
+							
+							//empleo.setFechaInicio(creditsPeriod.getStartDate());
+							
+							movimientoCargaInicialAgente.setCantidadCreditos(cantidadCreditosPorCargaInicial);
+							movimientoCargaInicialAgente.setEmpleo(empleo);
+							
+							empleo.setEstado(EmploymentStatus.ACTIVO);
+							empleo.addMovimientoCreditos(movimientoCargaInicialAgente);
+							
+							employmentService.saveOrUpdate(empleo);
+							
+						}
+						
+					}
+				
+				}			
+			}
+		}
+		
+	}
+	
+	/*
+	private void importarEmpleos(Map<String, Object> row) throws RuntimeException{
+		String codigoCentro = (String)row.get("CENTRO");
+		String codigoSector = (String)row.get("SECTOR");
+		
+		CreditsPeriod creditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+		
+		if(codigoCentro!=null && codigoSector!=null){
+			
+			CentroSector centroSector = centroSectorService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
+			
+			String cuil = (String)row.get("CUIL");
+			
+			System.out.println(cuil);
+			
+			if(cuil!=null){
+				Agente agente = agenteService.findByCuil(cuil);
+				String codigoCategoria = (String)row.get("CATEGORIA");
+				if(codigoCategoria!=null){
+
+					Categoria categoria = categoriaService.findByCodigo(codigoCategoria);
+				
+					EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
+					empleoQueryFilter.setCuil(cuil);
+					empleoQueryFilter.setCodigoCentro(codigoCentro);
+					empleoQueryFilter.setCodigoSector(codigoSector);
+					empleoQueryFilter.setCodigoCategoria(codigoCategoria);
+					empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.ACTIVO);
+					
+					
+					
+					List<Empleo> empleos = employmentService.find(empleoQueryFilter);
 					
 					Empleo empleo = null;
 					if(CollectionUtils.isEmpty(empleos)){
@@ -334,7 +407,7 @@ public class ImportarEntidades {
 							movimientoIngresoAgente.setCantidadCreditos(0); //pase a planta de contratados no consume creditos
 							movimientoIngresoAgente.setEmpleo(empleo);
 							
-							empleo.setEstado(EstadoEmpleo.ACTIVO);
+							empleo.setEstado(EmploymentStatus.ACTIVO);
 							empleo.addMovimientoCreditos(movimientoIngresoAgente);
 							
 						}else if(esBaja.equalsIgnoreCase("BAJA")){//es baja
@@ -350,21 +423,21 @@ public class ImportarEntidades {
 							
 						
 							empleo.setFechaFin(creditsPeriod.getStartDate());
-							empleo.setEstado(EstadoEmpleo.BAJA);
+							empleo.setEstado(EmploymentStatus.BAJA);
 							
 							empleo.addMovimientoCreditos(movimientoBajaAgente);
 							
 						}
 						
 						
-						empleoService.saveOrUpdate(empleo);
+						employmentService.saveOrUpdate(empleo);
 											
 				
 				}			
 			}
 		}
 		
-	}
+	}*/
 	
 	/*
 	public AccountDao getAccountService() {
@@ -424,12 +497,12 @@ public class ImportarEntidades {
 		this.categoriaService = categoriaService;
 	}
 	
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentService getEmploymentService() {
+		return employmentService;
 	}
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentService(EmploymentService employmentService) {
+		this.employmentService = employmentService;
 	}
 
 	

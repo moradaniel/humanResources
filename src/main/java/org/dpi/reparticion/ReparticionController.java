@@ -15,15 +15,19 @@ import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoService;
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.empleo.EmploymentCreditsEntriesService;
+import org.dpi.empleo.EmploymentCreditsEntriesServiceImpl;
+import org.dpi.empleo.EmploymentQueryFilter;
+import org.dpi.empleo.EmploymentService;
+import org.dpi.empleo.EmploymentStatus;
+import org.dpi.empleo.EmploymentVO;
 import org.dpi.movimientoCreditos.CambiosMultiplesEstadoMovimientosForm;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
-import org.dpi.movimientoCreditos.MovimientoCreditosAscensoVO;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
+import org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl;
+import org.dpi.movimientoCreditos.MovimientoCreditosVO;
 import org.dpi.security.AccountSettings;
 import org.dpi.security.UserAccessService;
 import org.dpi.security.UserSettingsFactory;
@@ -85,8 +89,11 @@ public class ReparticionController {
 	@Resource(name = "accountServiceGeneric")
 	private AccountService accountService;
 
-	@Resource(name = "empleoService")
-	private EmpleoService empleoService;
+	@Resource(name = "employmentService")
+	private EmploymentService employmentService;
+	
+	@Resource(name = "employmentCreditsEntriesService")
+	private EmploymentCreditsEntriesService employmentCreditsEntriesService;
 
 	@Resource(name = "agenteService")
 	private AgenteService agenteService;
@@ -119,13 +126,13 @@ public class ReparticionController {
 		this.administradorCreditosService = administradorCreditosService;
 	}
 
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentService getEmploymentService() {
+		return employmentService;
 	}
 
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentService(EmploymentService employmentService) {
+		this.employmentService = employmentService;
 	}
 
 	/*@ModelAttribute
@@ -151,12 +158,7 @@ public class ReparticionController {
 				model.addAttribute(PARAM_REPARTICION_ID, reparticion.getId());
 			}
 			
-			CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
-			creditsPeriodQueryFilter.setName("2013");//TODO get year from current date or better the ACTIVE period
-			
-			//obtener periodo actual
-			List<CreditsPeriod> currentCreditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
-			CreditsPeriod currentCreditsPeriod = currentCreditsPeriods.get(0);
+			CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 			
 			Long creditosDisponiblesInicioPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod,reparticion.getId());
 			model.addAttribute("creditosDisponiblesInicioPeriodoActual", creditosDisponiblesInicioPeriodoActual);
@@ -220,12 +222,23 @@ public class ReparticionController {
 
 		if (reparticion != null){
 			
-			EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(String.valueOf(reparticion.getId()));
-			empleoQueryFilter.addEstadoEmpleo(EstadoEmpleo.ACTIVO);
+			empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.ACTIVO);
 			
-			List<Empleo> empleosActivos = empleoService.find(empleoQueryFilter);
-			model.addAttribute("empleosActivos", empleosActivos);
+			List<Empleo> empleosActivos = employmentService.find(empleoQueryFilter);
+			
+			//canAccountAscenderAgente
+			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			Account currenUser = (Account)accountObj;
+			List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(empleosActivos,reparticion.getId(),currenUser);
+			
+			model.addAttribute("empleosActivos", employmentsVO);
+			
+			
+			Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			model.addAttribute("canAccountIngresarAgente", EmploymentCreditsEntriesServiceImpl.canAccountIngresarAgente(currentUser));
+			
 
 
 		}
@@ -242,53 +255,75 @@ public class ReparticionController {
 		return (AjaxUtils.isAjaxRequest(requestedWith)) ? "reparticiones/show" : "redirect:/reparticiones/" + reparticion.getId();
 	}
 
-	@RequestMapping(value = "/reparticiones/reparticion/showMovimientos", method = RequestMethod.GET)
+	@RequestMapping(value = "/reparticiones/reparticion/showMovimientos/{creditsPeriodName}", method = RequestMethod.GET)
 	public String showMovimientos(
 			HttpServletRequest request, 
 			HttpServletResponse response,
-			/*@PathVariable Long reparticionId,*/ Model model) {
+			@PathVariable Long creditsPeriodName,
+			Model model) {
 
 		// get the current reparticion in the session
 		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
-
+		
+		
 		if (reparticion != null){
+			
+			long currentPeriodName = creditsPeriodService.getCurrentCreditsPeriodYear();
+			
+			if(creditsPeriodName!=null){
+					if(creditsPeriodName<2012){
+						creditsPeriodName=currentPeriodName;
+					}else
+						if(creditsPeriodName>currentPeriodName){
+							creditsPeriodName=currentPeriodName;
+						}
+			}
+			else{//default to current period
+				creditsPeriodName=currentPeriodName;//TODO get year from current date or better the ACTIVE period
+			}
+			
 
 
-			EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
 			
 			//todos los estados
 			//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 
 			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-			movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoQueryFilter);
+			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 			//todos los tipos de movimientos
 			//movimientoCreditosQueryFilter.setTiposMovimientoCreditos(CollectionUtils.arrayToList(TipoMovimientoCreditos.values()));
 
 			CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
-			creditsPeriodQueryFilter.setName("2013");//TODO get year from current date or better the ACTIVE period
+			creditsPeriodQueryFilter.setName(String.valueOf(creditsPeriodName));
 			
-			//obtener periodo actual
 			List<CreditsPeriod> currentCreditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
-			CreditsPeriod currentCreditsPeriod = currentCreditsPeriods.get(0);
-			movimientoCreditosQueryFilter.setIdCreditsPeriod(currentCreditsPeriod.getId());
+			CreditsPeriod creditsPeriod = currentCreditsPeriods.get(0);
+			movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
 			
 			List<MovimientoCreditos> movimientoCreditosReparticion = movimientoCreditosService.find(movimientoCreditosQueryFilter);
 			
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Account currenUser = (Account)accountObj;
 					
-			List<MovimientoCreditosAscensoVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currenUser);
+			List<MovimientoCreditosVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currenUser);
 					
 			model.addAttribute("movimientos", movimientoCreditosVOReparticion);
 			
 			CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm =  new CambiosMultiplesEstadoMovimientosForm();
-			for(MovimientoCreditosAscensoVO movimientoCreditosAscensoVO :movimientoCreditosVOReparticion){
-				cambiosMultiplesEstadoMovimientosForm.getMovimientos().add(movimientoCreditosAscensoVO.getMovimientoCreditos());
+			for(MovimientoCreditosVO movimientoCreditosVO :movimientoCreditosVOReparticion){
+				cambiosMultiplesEstadoMovimientosForm.getMovimientos().add(movimientoCreditosVO.getMovimientoCreditos());
 			}
 			
 			model.addAttribute("grantedStatuses", GrantedStatus.values());
 			model.addAttribute("cambiosMultiplesEstadoMovimientosForm", cambiosMultiplesEstadoMovimientosForm);
+			
+			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod(),reparticion.getId());
+			model.addAttribute("creditosDisponiblesSegunSolicitadoPeriodoActual", creditosDisponiblesSegunSolicitadoPeriodoActual);
+			
+			Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			model.addAttribute("canAccountCambiarEstadoMovimiento",MovimientoCreditosServiceImpl.canAccountCambiarEstadoMovimientos(currentUser));
 			
 		}
 		return "reparticiones/movimientos";
@@ -313,9 +348,9 @@ public class ReparticionController {
 		if (reparticion != null){
 			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
 			movimientoCreditosQueryFilter.setId(movimientoId);
-			EmpleoQueryFilter empleoFilter = new EmpleoQueryFilter();
+			EmploymentQueryFilter empleoFilter = new EmploymentQueryFilter();
 			empleoFilter.setReparticionId(reparticion.getId().toString());
-			movimientoCreditosQueryFilter.setEmpleoQueryFilter(empleoFilter);
+			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoFilter);
 
 			MovimientoCreditos movimiento = movimientoCreditosService.find(movimientoCreditosQueryFilter).get(0);
 
@@ -324,7 +359,7 @@ public class ReparticionController {
 			}
 		}
 
-		return "redirect:/reparticiones/reparticion/showMovimientos";
+		return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodService.getCurrentCreditsPeriodYear();
 
 	}
 
@@ -363,7 +398,7 @@ public class ReparticionController {
 
 	/** 
 	 * Loads the Reparticion in the Request, and checks that the current account has the proper
-	 * permissions to view that hotel
+	 * permissions to view that Reparticion
 	 */
 	public static void refreshRequestReparticion(HttpServletRequest request,ReparticionService reparticionService,
 			UserAccessService accessService,boolean checkAccess)

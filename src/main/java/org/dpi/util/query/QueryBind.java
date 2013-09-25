@@ -20,7 +20,7 @@ import org.hibernate.criterion.DetachedCriteria;
  * paging, and very common by date filtering.
  * 
  *  
- * @author Martino  Piccinato
+ * 
  *
  */
 public class QueryBind extends BaseObject implements Serializable {
@@ -30,7 +30,7 @@ public class QueryBind extends BaseObject implements Serializable {
     /**
      * Possible items ordering by field.
      * 
-     * @author Martino Piccinato
+     * 
      *
      */
     public enum OrderDirection {

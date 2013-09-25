@@ -7,9 +7,8 @@ import org.dpi.agente.Agente;
 import org.dpi.agente.AgenteQueryFilter;
 import org.dpi.agente.AgenteService;
 import org.dpi.agente.CondicionAgente;
-import org.dpi.agente.EstadoAgente;
 import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmpleoService;
+import org.dpi.empleo.EmploymentCreditsEntriesService;
 import org.dpi.reparticion.ReparticionSearchInfo;
 import org.dpi.reparticion.ReparticionService;
 import org.slf4j.Logger;
@@ -31,7 +30,7 @@ public class ActualizarAgentesProfesionales {
 	
 	
 	
-	EmpleoService empleoService;
+	EmploymentCreditsEntriesService employmentCreditsEntriesService;
 		
 	//MovimientoCreditosService movimientoCreditosService;
 
@@ -56,7 +55,7 @@ public class ActualizarAgentesProfesionales {
 		actualizador.setReparticionService((ReparticionService)context.getBean("reparticionService"));
 		actualizador.setAgenteService((AgenteService)context.getBean("agenteService"));
 		
-		actualizador.setEmpleoService((EmpleoService)context.getBean("empleoService"));
+		actualizador.setEmploymentCreditsEntriesService((EmploymentCreditsEntriesService)context.getBean("employmentCreditsEntriesService"));
 		
 		//actualizador.setMovimientoCreditosService((MovimientoCreditosService)context.getBean("movimientoCreditosService"));
 		
@@ -107,7 +106,7 @@ public class ActualizarAgentesProfesionales {
 			//por cada reparticion obtener los agentes activos y profesionales
 			AgenteQueryFilter agenteQueryFilter = new AgenteQueryFilter();
 			agenteQueryFilter.setReparticionId(reparticionSearchInfo.getReparticionId());
-			agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
+			//agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
 			agenteQueryFilter.setCondicionAgente(CondicionAgente.Profesional);
 			
 			List<Agente> agentes = this.agenteService.find(agenteQueryFilter);
@@ -119,8 +118,8 @@ public class ActualizarAgentesProfesionales {
 				Empleo empleoActivo = agente.getEmpleoActivo();
 				Integer codigoCategoriaEmpleoActivo = Integer.parseInt(empleoActivo.getCategoria().getCodigo());
 				
-				if(!agente.hasMovimientosAscensoPendientes() && codigoCategoriaEmpleoActivo <21 ){
-					empleoService.ascenderAgente( agente.getEmpleoActivo(), "21");
+				if(true/*!empleoActivo.hasMovimientosAscensoPendientes() && codigoCategoriaEmpleoActivo <21 */){
+					employmentCreditsEntriesService.ascenderAgente( agente.getEmpleoActivo(), "21");
 					totalAgentesProfesionalesActivosAscendidosAutomaticamente++;
 				}
 			}
@@ -141,12 +140,12 @@ public class ActualizarAgentesProfesionales {
 	}
 	
 	
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentCreditsEntriesService getEmploymentCreditsEntriesService() {
+		return employmentCreditsEntriesService;
 	}
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentCreditsEntriesService(EmploymentCreditsEntriesService employmentCreditsEntriesService) {
+		this.employmentCreditsEntriesService = employmentCreditsEntriesService;
 	}
 	
 	/*

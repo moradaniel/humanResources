@@ -1,7 +1,7 @@
 package utils;
 
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.empleo.EmpleoService;
+import org.dpi.empleo.EmploymentService;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -12,7 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class ActualizadorCantidadCreditosIngresosAscensos {
 	
 	
-	EmpleoService empleoService;
+	EmploymentService employmentService;
 	
 	MovimientoCreditosService movimientoCreditosService;
 
@@ -33,7 +33,7 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 
 		final ActualizadorCantidadCreditosIngresosAscensos actualizador = new ActualizadorCantidadCreditosIngresosAscensos();
 		
-		actualizador.setEmpleoService((EmpleoService)context.getBean("empleoService"));
+		actualizador.setEmploymentService((EmploymentService)context.getBean("empleoService"));
 		actualizador.setMovimientoCreditosService((MovimientoCreditosService)context.getBean("movimientoCreditosService"));
 		
 		
@@ -82,12 +82,12 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 	}
 	
 	
-	public EmpleoService getEmpleoService() {
-		return empleoService;
+	public EmploymentService getEmploymentService() {
+		return employmentService;
 	}
 
-	public void setEmpleoService(EmpleoService empleoService) {
-		this.empleoService = empleoService;
+	public void setEmploymentService(EmploymentService empleoService) {
+		this.employmentService = empleoService;
 	}
 	
 	public MovimientoCreditosService getMovimientoCreditosService() {

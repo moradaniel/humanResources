@@ -1,12 +1,12 @@
 package org.dpi.persistence;
 
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.empleo.EmploymentStatus;
 
 
-	public class EstadoEmpleoEnumUserType extends EnumUserType<EstadoEmpleo>{
+	public class EmploymentStatusEnumUserType extends EnumUserType<EmploymentStatus>{
 
-	    public EstadoEmpleoEnumUserType() { 
-	        super(EstadoEmpleo.class); 
+	    public EmploymentStatusEnumUserType() { 
+	        super(EmploymentStatus.class); 
 	    } 
 	}
 		
