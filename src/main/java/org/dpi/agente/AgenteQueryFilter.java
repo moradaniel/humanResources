@@ -20,7 +20,7 @@ public class AgenteQueryFilter implements Serializable {
 	private Long agenteId;
 	private CondicionAgente condicionAgente;
 
-	EstadoAgente estadoAgente = EstadoAgente.ACTIVO;
+	//EstadoAgente estadoAgente = EstadoAgente.ACTIVO;
 	
 
 	private Long reparticionId;
@@ -46,12 +46,13 @@ public class AgenteQueryFilter implements Serializable {
 		this.reparticionId = reparticionId;
 	}
 	
-	public EstadoAgente getEstadoAgente() {
+	/*public EstadoAgente getEstadoAgente() {
 		return estadoAgente;
-	}
-	public void setEstadoAgente(EstadoAgente estadoAgente) {
+	}*/
+	
+	/*public void setEstadoAgente(EstadoAgente estadoAgente) {
 		this.estadoAgente = estadoAgente;
-	}
+	}*/
 	
 	public Long getAgenteId() {
 		return agenteId;

@@ -36,7 +36,7 @@ public interface AdministradorCreditosService {
 	public Long getTotalCreditos(final MovimientoCreditosQueryFilter movimientoCreditosQueryFilter);
 
 	public Long getCreditosDisponiblesAlInicioPeriodo(CreditsPeriod creditsPeriod, Long id);
-	public Long getCreditosDisponiblesAlInicioDelPeriodo(final CreditsPeriod creditsPeriod,Long reparticionId);
+	//public Long getCreditosDisponiblesAlInicioDelPeriodo(final CreditsPeriod creditsPeriod,Long reparticionId);
 	
 
 

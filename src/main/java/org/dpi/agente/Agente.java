@@ -22,9 +22,10 @@ public interface Agente extends Persistent,Serializable{
 	public void setEmpleos(Set<Empleo> empleos);
 
 	CondicionAgente getCondicion();
+	
 	void setCondicion(CondicionAgente condicionAgente);
 
 	public Empleo getEmpleoActivo();
 	
-	public boolean hasMovimientosAscensoPendientes();
+	
 }

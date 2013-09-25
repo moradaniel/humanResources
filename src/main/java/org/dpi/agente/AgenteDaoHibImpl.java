@@ -3,7 +3,6 @@ package org.dpi.agente;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.dpi.empleo.EstadoEmpleo;
 import org.dpi.util.PageList;
 import org.dpi.util.query.QueryBind;
 import org.hibernate.HibernateException;
@@ -341,7 +340,7 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 				sb.append(" AND agente.condicion =  :condicionAgente ");
 			}
 
-			if(agenteQueryFilter.getEstadoAgente()!=null){
+			/*if(agenteQueryFilter.getEstadoAgente()!=null){
 				switch(agenteQueryFilter.getEstadoAgente()){
 					//un agente esta activo si tiene un empleo en estado ACTIVO
 					case ACTIVO: 	sb.append(" AND  agente.id in ");
@@ -357,22 +356,14 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 
 									sb.append("	)");
 							
-							/*"exists ( "+
-									 " from " +
-									 " LEFT OUTER JOIN EmpleoImpl as empleo2 "+
-									 "  where empleo2.agente = agente "+
-									 "  and empleo2.estado = '"+EstadoEmpleo.ACTIVO.name()+"'"+
-									 "	)");*/
-									 
+								 
 
 					break;
-/*					case INACTIVO: sb.append(" AND empleo.fechaFin is not null");
-					break;*/
 					case TODOS: sb.append("");
 					break;
 	
 				}
-			}
+			}*/
 
 		}
 		return sb.toString();
