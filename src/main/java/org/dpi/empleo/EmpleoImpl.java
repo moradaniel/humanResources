@@ -4,13 +4,20 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.agente.Agente;
 import org.dpi.categoria.Categoria;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
+import org.janux.util.JanuxToStringStyle;
 
 public class EmpleoImpl  extends PersistentAbstract implements Empleo{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	Agente agente;
 	CentroSector centroSector;
@@ -19,7 +26,7 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	
 	private Set<MovimientoCreditos> movimientosCreditos = new HashSet<MovimientoCreditos>();
 
-	EstadoEmpleo estado;
+	EmploymentStatus estado;
 	
 	Date fechaInicio;
 	Date fechaFin;
@@ -90,12 +97,12 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	}
 
 	@Override
-	public EstadoEmpleo getEstado() {
+	public EmploymentStatus getEstado() {
 		return estado;
 	}
 
 	@Override
-	public void setEstado(EstadoEmpleo estado) {
+	public void setEstado(EmploymentStatus estado) {
 		this.estado= estado;
 		
 	}
@@ -115,6 +122,21 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	@Override
 	public void setEmpleoAnterior(Empleo empleoAnterior) {
 		this.empleoAnterior = empleoAnterior;
+	}
+	
+	
+	
+	public String toString() 
+	{
+		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
+		
+		sb.append(super.toString());
+		
+		sb.append("categoria", getCategoria().getCodigo());
+		sb.append("estado", getEstado());
+
+		
+		return sb.toString();
 	}
 
 }

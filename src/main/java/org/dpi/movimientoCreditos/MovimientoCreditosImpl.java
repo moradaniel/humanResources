@@ -1,8 +1,10 @@
 package org.dpi.movimientoCreditos;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.empleo.Empleo;
+import org.janux.util.JanuxToStringStyle;
 
 public class MovimientoCreditosImpl  extends PersistentAbstract implements MovimientoCreditos{
 	
@@ -90,5 +92,19 @@ public class MovimientoCreditosImpl  extends PersistentAbstract implements Movim
 		this.grantedStatus = grantedStatus;
 	}
 
+	@Override
+	public String toString() 
+	{
+		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
+		
+		sb.append(super.toString());
+		
+		sb.append("tipoMovimientoCreditos", getTipoMovimientoCreditos().name());
+		sb.append("grantedStatus", getGrantedStatus().name());
+		sb.append("creditos", getCantidadCreditos());
+
+		
+		return sb.toString();
+	}
 	
 }

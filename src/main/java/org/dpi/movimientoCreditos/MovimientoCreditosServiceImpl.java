@@ -1,21 +1,25 @@
 package org.dpi.movimientoCreditos;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dpi.agente.Agente;
 import org.dpi.agente.AgenteService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmpleoQueryFilter;
-import org.dpi.empleo.EmpleoService;
-import org.dpi.empleo.EstadoEmpleo;
+import org.dpi.empleo.EmploymentQueryFilter;
+import org.dpi.empleo.EmploymentService;
+import org.dpi.empleo.EmploymentStatus;
+import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 
@@ -24,7 +28,11 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	private final MovimientoCreditosDao movimientoCreditosDao;
-	private final EmpleoService empleoService;
+	//private final EmpleoService empleoService;
+	
+	//@Resource(name = "empleoService")
+	private EmploymentService employmentService;
+	
 	private final AgenteService agenteService;
 	private AdministradorCreditosService administradorCreditosService;
 	
@@ -33,11 +41,11 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	private ApplicationContext applicationContext;
 	
 	public MovimientoCreditosServiceImpl(	final MovimientoCreditosDao movimientoCreditosDao,
-											final EmpleoService empleoService,
+											/*final EmpleoService empleoService,*/
 											final AgenteService agenteService,
 											final AdministradorCreditosService administradorCreditosService) {
 		this.movimientoCreditosDao = movimientoCreditosDao;
-		this.empleoService = empleoService;
+		/*this.empleoService = empleoService;*/
 		this.agenteService = agenteService;
 		this.administradorCreditosService = administradorCreditosService;
 	}
@@ -56,42 +64,42 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 
 	public void delete(final MovimientoCreditos movimiento)
 	{
+		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(currentUser!=null){
+			log.info("================ user:"+currentUser.getName()+" attempting to delete creditsEntry: "+movimiento.toString());/*+ movimiento.getId()+
+					" Type:"+movimiento.getTipoMovimientoCreditos().name()+
+					" Agent name:"+ movimiento.getEmpleo().getAgente().getApellidoNombre()+
+					" from status: "+movimiento.getGrantedStatus().name() + " to "+newEstado.name());*/	
+		}
+		
 		if(movimiento.getTipoMovimientoCreditos().equals(TipoMovimientoCreditos.BajaAgente)){
 			movimiento.getEmpleo().setFechaFin(null);
-			movimiento.getEmpleo().setEstado(EstadoEmpleo.ACTIVO);
+			movimiento.getEmpleo().setEstado(EmploymentStatus.ACTIVO);
 			
-			empleoService.saveOrUpdate(movimiento.getEmpleo());
+			employmentService.saveOrUpdate(movimiento.getEmpleo());
 			movimientoCreditosDao.delete(movimiento);
-		}
+		}else
 		if(movimiento.getTipoMovimientoCreditos().equals(TipoMovimientoCreditos.AscensoAgente)){
-			//encontrar empleo anterior
-			EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
-			empleoQueryFilter.setCuil(movimiento.getEmpleo().getAgente().getCuil());
-			empleoQueryFilter.setReparticionId(movimiento.getEmpleo().getCentroSector().getReparticion().getId().toString());
 			
-			List<Empleo> listaEmpleosAnteriores = empleoService.findEmpleosInactivos(empleoQueryFilter);
-			
-			Empleo empleoAnterior = listaEmpleosAnteriores.get(0);
-			
-			//borrar fecha fin
-			empleoAnterior.setFechaFin(null);
-			empleoService.saveOrUpdate(empleoAnterior);
-			
-			//borrar movimiento actual
-			Empleo empleoActual = movimiento.getEmpleo();
+			//borrar movimiento 
+			Empleo empleoPendiente = movimiento.getEmpleo();
 			movimientoCreditosDao.delete(movimiento);
-			//borrar empleo actual
-			empleoService.delete(empleoActual);
-		}
+			//borrar empleo pendiente
+			employmentService.delete(empleoPendiente);
+		}else
 		
 		if(movimiento.getTipoMovimientoCreditos().equals(TipoMovimientoCreditos.IngresoAgente)){
 			
 			Agente agenteABorrar = movimiento.getEmpleo().getAgente();
 			
-			empleoService.delete(movimiento.getEmpleo());
+			employmentService.delete(movimiento.getEmpleo());
 			
 			agenteService.delete(agenteABorrar);
 					
+		}
+		
+		if(currentUser!=null){
+			log.info("================ user:"+currentUser.getName()+" Successfully performed: delete creditsEntry - "+ movimiento.toString());	
 		}
 
 	}
@@ -263,16 +271,15 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	}
 	
 	
-	public List<MovimientoCreditosAscensoVO> buildMovimientoCreditosVO(
+	public List<MovimientoCreditosVO> buildMovimientoCreditosVO(
 			List<MovimientoCreditos> movimientoCreditosReparticion, Account account) {
-		List<MovimientoCreditosAscensoVO> movimientosCreditosVO = new ArrayList<MovimientoCreditosAscensoVO>();
+		List<MovimientoCreditosVO> movimientosCreditosVO = new ArrayList<MovimientoCreditosVO>();
 		for(MovimientoCreditos movimientoCreditos:movimientoCreditosReparticion){
-			MovimientoCreditosAscensoVO movimientoCreditosVO = new MovimientoCreditosAscensoVO();
+			MovimientoCreditosVO movimientoCreditosVO = new MovimientoCreditosVO();
 			movimientoCreditosVO.setMovimientoCreditos(movimientoCreditos);
 			if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente){
-				//Empleo empleoPrevio = empleoService.findPreviousEmpleo(movimientoCreditos.getEmpleo());
-				Empleo empleoPrevio = movimientoCreditos.getEmpleo().getEmpleoAnterior();
-				movimientoCreditosVO.setCategoriaActual(empleoPrevio.getCategoria().getCodigo());
+				Empleo empleoAnterior = movimientoCreditos.getEmpleo().getEmpleoAnterior();
+				movimientoCreditosVO.setCategoriaActual(empleoAnterior.getCategoria().getCodigo());
 				movimientoCreditosVO.setCategoriaPropuesta(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
 			}else{
 				movimientoCreditosVO.setCategoriaActual(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
@@ -301,13 +308,19 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		 if(movimientoCreditos.getTipoMovimientoCreditos()== TipoMovimientoCreditos.CargaInicialAgenteExistente){
 			 return false;
 		 }
+		 
+		 if(movimientoCreditos.getTipoMovimientoCreditos()== TipoMovimientoCreditos.IngresoAgente){
+			 if(movimientoCreditos.getCantidadCreditos()==0){
+				 return false;
+			 }
+		 }
 
 		 
 		 return true;
 	}
 
 
-	public boolean canAccountCambiarEstadoMovimientos(Account account) {
+	public static boolean canAccountCambiarEstadoMovimientos(Account account) {
 		
 		if(account.hasPermissions("Manage_MovimientoCreditos", "UPDATE_STATUS")){
 			return true;
@@ -346,6 +359,10 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			return false;
 		}
 		
+		if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.IngresoAgente && movimientoCreditos.getGrantedStatus()==GrantedStatus.Otorgado){
+			return false;
+		}
+		
 		
 		if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente && movimientoCreditos.getEmpleo().isClosed()){
 			return false;
@@ -370,6 +387,7 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		movimientoCreditosDao.save(movimientoCreditos);
 	}*/
 	
+	@Override
 	public void actualizarCreditosPorAscenso(){
 		//obtener movimientos de tipo Ascenso
 		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
@@ -402,5 +420,124 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		this.administradorCreditosService = administradorCreditosService;
 	}
 	
+	@Override
+	public void changeGrantedStatus(MovimientoCreditos movimiento, GrantedStatus newEstado){
+		
+
+		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(currentUser!=null){
+			log.info("user:"+currentUser.getName()+" attempting to change granted status of movimiento:"+ movimiento.getId()+
+					" Type:"+movimiento.getTipoMovimientoCreditos().name()+
+					" Agent name:"+ movimiento.getEmpleo().getAgente().getApellidoNombre()+
+					" from status: "+movimiento.getGrantedStatus().name() + " to "+newEstado.name());	
+		}	
+		
+		if(movimiento.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente){
+		
+			if(movimiento.getGrantedStatus()==GrantedStatus.Solicitado){
+				if(newEstado==GrantedStatus.Otorgado){
+					Empleo empleoActual = movimiento.getEmpleo();
+					
+					empleoActual = employmentService.findById(empleoActual.getId());
+					empleoActual.setEstado(EmploymentStatus.ACTIVO);
+					
+					employmentService.saveOrUpdate(empleoActual);
+				
+					Empleo empleoAnterior = employmentService.findById(empleoActual.getEmpleoAnterior().getId());
+					
+					empleoAnterior.setEstado(EmploymentStatus.INACTIVO);
+								
+					
+					employmentService.saveOrUpdate(empleoAnterior);
+				}
+				
+			}else{
+					if(movimiento.getGrantedStatus()==GrantedStatus.Otorgado){
+						if(newEstado==GrantedStatus.Solicitado){
+							Empleo empleoActual = movimiento.getEmpleo();
+							
+							empleoActual = employmentService.findById(empleoActual.getId());
+							
+							empleoActual.setEstado(EmploymentStatus.INACTIVO);
+							
+							employmentService.saveOrUpdate(empleoActual);
+						
+							Empleo empleoAnterior = employmentService.findById(empleoActual.getEmpleoAnterior().getId());
+							
+							empleoAnterior.setEstado(EmploymentStatus.ACTIVO);
+							
+							employmentService.saveOrUpdate(empleoAnterior);
+													
+						}
+					}
+				}
+		
+		}else 
+			if(movimiento.getTipoMovimientoCreditos()==TipoMovimientoCreditos.IngresoAgente){
+				if(movimiento.getGrantedStatus()==GrantedStatus.Solicitado){
+					if(newEstado==GrantedStatus.Otorgado){
+						Empleo empleo = movimiento.getEmpleo();
+						
+						empleo = employmentService.findById(empleo.getId());
+						
+						empleo.setEstado(EmploymentStatus.ACTIVO);
+						employmentService.saveOrUpdate(empleo);
+					}
+				}else
+					if(movimiento.getGrantedStatus()==GrantedStatus.Otorgado){
+						if(newEstado==GrantedStatus.Solicitado){
+							Empleo empleo = movimiento.getEmpleo();
+							
+							empleo = employmentService.findById(empleo.getId());
+							
+							empleo.setEstado(EmploymentStatus.INACTIVO);
+							employmentService.saveOrUpdate(empleo);
+						}
+					}
+
+			}
+		
+		movimiento.setGrantedStatus(newEstado);
+		movimientoCreditosDao.saveOrUpdate(movimiento);
+		
+
+				
+	}
+
+	
+	@Override
+	public Set<Long> haveMovimientosSolicitados(List<Long> agentesIds, Long idReparticion,Long idCreditsPeriod) {
+		
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
+		empleoQueryFilter.setReparticionId(String.valueOf(idReparticion));
+		empleoQueryFilter.setAgentesIds(agentesIds);
+		empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.PENDIENTE);
+		
+		
+		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
+		
+		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
+		movimientoCreditosQueryFilter.setIdCreditsPeriod(idCreditsPeriod);
+		movimientoCreditosQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
+		
+		
+		List<MovimientoCreditos> movimientosSolicitados = this.find(movimientoCreditosQueryFilter);
+
+		Set<Long> resultAgentesIds = new HashSet<Long>();
+		for(MovimientoCreditos movimientoCreditos : movimientosSolicitados){
+			resultAgentesIds.add(movimientoCreditos.getEmpleo().getAgente().getId());
+		}
+		
+		return resultAgentesIds;
+	}
+	
+	public EmploymentService getEmploymentService() {
+		return employmentService;
+	}
+
+
+	public void setEmploymentService(EmploymentService empleoService) {
+		this.employmentService = empleoService;
+	}
 
 }

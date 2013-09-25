@@ -3,11 +3,11 @@ package org.dpi.agente;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EstadoEmpleo;
-import org.dpi.movimientoCreditos.MovimientoCreditos;
-import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.empleo.EmploymentStatus;
+import org.janux.util.JanuxToStringStyle;
 
 public class AgenteImpl  extends PersistentAbstract implements Agente{
 	/**
@@ -55,26 +55,27 @@ public class AgenteImpl  extends PersistentAbstract implements Agente{
 		this.empleos = empleos;
 	}
 	
-	@Override
-	public boolean hasMovimientosAscensoPendientes() {
-		for(Empleo empleo:this.empleos){
-			for(MovimientoCreditos movimiento : empleo.getMovimientosCreditos()){
-				if(movimiento.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente){
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
+
 	
 	public Empleo getEmpleoActivo(){
 		for(Empleo empleo:this.empleos){
-			if(empleo.getEstado()==EstadoEmpleo.ACTIVO){
+			if(empleo.getEstado()==EmploymentStatus.ACTIVO){
 				return empleo;
 			}
 		}
 		return null;
 	}
 	
+	public String toString() 
+	{
+		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
+		
+		sb.append(super.toString());
+		
+		sb.append("cuil", getCuil());
+		sb.append("apellidoNombre", getApellidoNombre());
+
+		
+		return sb.toString();
+	}
 }

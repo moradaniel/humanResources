@@ -1,5 +1,8 @@
 package org.dpi.domain;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.janux.util.JanuxToStringStyle;
+
 /**
  ***************************************************************************************************
  * Utility class that provides an Integer identity field
@@ -18,4 +21,15 @@ public abstract class PersistentAbstract implements Persistent
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String toString() 
+	{
+		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
+		
+		sb.append("id", getId());
+		
+		return sb.toString();
+	}
+	
 } // end class PersistentAbstract

@@ -1,7 +1,9 @@
 package org.dpi.centroSector;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.reparticion.Reparticion;
+import org.janux.util.JanuxToStringStyle;
 
 public class CentroSectorImpl  extends PersistentAbstract implements CentroSector{
 	String codigoCentro;
@@ -52,6 +54,19 @@ public class CentroSectorImpl  extends PersistentAbstract implements CentroSecto
 	public void setReparticion(Reparticion reparticion) {
 		this.reparticion = reparticion;
 		
+	}
+	
+	public String toString(){
+		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
+		
+		sb.append(super.toString());
+		
+		sb.append("codigoCentro", getCodigoCentro());
+		sb.append("codigoSector", getCodigoSector());
+		sb.append("nombreCentro", getNombreCentro());
+		sb.append("nombreSector", getNombreSector());
+		
+		return sb.toString();
 	}
 
 

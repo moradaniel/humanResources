@@ -11,6 +11,6 @@
 		 </#if>
 	</#if -->
 
-	<#return false>
+	<#return true>
 </#function>
 

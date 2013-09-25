@@ -13,6 +13,7 @@ import org.dpi.security.UserSettingsFactory;
 import org.janux.bus.security.Account;
 import org.janux.bus.security.Role;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -95,7 +96,12 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 			if (!(principal instanceof Account))
 			{
 				return true; // still anonymous; nothing to do yet;
+			}else{
+				WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails();
+				log.info("User:"+((Account)principal).getName()+" accessing from IP:"+ webAuthenticationDetails.getRemoteAddress());
 			}
+			
+			
 			return true;
 		}
 		return true;
