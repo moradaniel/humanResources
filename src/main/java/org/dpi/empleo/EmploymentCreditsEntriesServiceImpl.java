@@ -67,7 +67,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 
 	@Override
-	public void ascenderAgente(Empleo empleoActual, String codigoCategoriaNueva){
+	public void ascenderAgente(Empleo currentEmployment, String codigoCategoriaNueva){
 		
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
@@ -80,28 +80,29 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 		
-		Agente employee = empleoActual.getAgente();
+		Agente employee = currentEmployment.getAgente();
 		List<Long> employeeIds = new ArrayList<Long>();
 		employeeIds.add(employee.getId());
-		Set<Long>resultEmployeeIds = movimientoCreditosService.haveMovimientosSolicitados(employeeIds, empleoActual.getCentroSector().getReparticion().getId(), currentCreditsPeriod.getId());
+		Set<Long>resultEmployeeIds = movimientoCreditosService.haveMovimientosSolicitados(employeeIds, currentEmployment.getCentroSector().getReparticion().getId(), currentCreditsPeriod.getId());
 		
 		if(resultEmployeeIds.contains(employee.getId())){
 			return;
 		}
 
 		Categoria categoriaNueva = categoriaService.findByCodigo(codigoCategoriaNueva);
-		Empleo empleoNuevo = new EmpleoImpl();
-		empleoNuevo.setAgente(empleoActual.getAgente());
-		empleoNuevo.setCategoria(categoriaNueva);
-		empleoNuevo.setCentroSector(empleoActual.getCentroSector());
-		empleoNuevo.setFechaInicio(new Date());
-		empleoNuevo.setEstado(EmploymentStatus.PENDIENTE);
+		Empleo newEmployment = new EmpleoImpl();
+		newEmployment.setAgente(currentEmployment.getAgente());
+		newEmployment.setCategoria(categoriaNueva);
+		newEmployment.setCentroSector(currentEmployment.getCentroSector());
+		newEmployment.setOccupationalGroup(currentEmployment.getOccupationalGroup());
+		newEmployment.setFechaInicio(new Date());
+		newEmployment.setEstado(EmploymentStatus.PENDIENTE);
 		
 		
 		//crear un movimiento de tipo ascenso 
 		MovimientoCreditosImpl movimientoAscenso = new MovimientoCreditosImpl();
 		movimientoAscenso.setTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondicion(),empleoActual.getCategoria().getCodigo(),codigoCategoriaNueva);
+		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondicion(),currentEmployment.getCategoria().getCodigo(),codigoCategoriaNueva);
 		movimientoAscenso.setGrantedStatus(GrantedStatus.Solicitado);
 		movimientoAscenso.setCreditsPeriod(currentCreditsPeriod);
 
@@ -110,21 +111,21 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		
 		//setear empleo a movimiento  y agregar movimiento a empleo
-		empleoNuevo.addMovimientoCreditos(movimientoAscenso);
+		newEmployment.addMovimientoCreditos(movimientoAscenso);
 		
-		movimientoAscenso.setEmpleo(empleoNuevo);
+		movimientoAscenso.setEmpleo(newEmployment);
 
 		//set previous employment
-		empleoNuevo.setEmpleoAnterior(empleoActual);
+		newEmployment.setEmpleoAnterior(currentEmployment);
 		
 		
 		//guardar movimiento y empleo
-		employmentService.saveOrUpdate(empleoNuevo);
+		employmentService.saveOrUpdate(newEmployment);
 		
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" Successfully performed: ascender agente - "+
-					" centrosector: "+empleoNuevo.getCentroSector().toString()+
-					" Employee :"+ empleoNuevo.getAgente().toString()+
+					" centrosector: "+newEmployment.getCentroSector().toString()+
+					" Employee :"+ newEmployment.getAgente().toString()+
 					" creditsEntry: "+movimientoAscenso.toString());	
 		}
 	}

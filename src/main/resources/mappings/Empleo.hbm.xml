@@ -59,5 +59,12 @@
 		foreign-key="fk_Empleo_Empleo_Anterior"
 		not-null="false"/>
 		
+	<many-to-one 
+		name="occupationalGroup"
+		class="org.dpi.occupationalGroup.OccupationalGroupImpl"
+ 		column="OCCUPATIONAL_GROUP_ID" 
+		foreign-key="fk_Employment_OccupationalGroup"
+		not-null="true"/>
+		
   </class>
 </hibernate-mapping>

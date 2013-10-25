@@ -68,6 +68,7 @@
 				<value>/mappings/Empleo.hbm.xml</value>
 				<value>/mappings/MovimientoCreditos.hbm.xml</value>
 				<value>/mappings/CreditsPeriod.hbm.xml</value>
+				<value>/mappings/OccupationalGroup.hbm.xml</value>
 				<value>/mappings/Account.hbm.xml</value>
 				<value>/mappings/Role.hbm.xml</value>
 				<value>/mappings/PermissionContext.hbm.xml</value>

@@ -9,6 +9,7 @@ import org.dpi.categoria.Categoria;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.Persistent;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
+import org.dpi.occupationalGroup.OccupationalGroup;
 
 
 public interface Empleo extends Persistent,Serializable{
@@ -49,6 +50,10 @@ public interface Empleo extends Persistent,Serializable{
 	Empleo getEmpleoAnterior();
 
 	void setEmpleoAnterior(Empleo empleoAnterior);
+	
+	public OccupationalGroup getOccupationalGroup();
+
+	public void setOccupationalGroup(OccupationalGroup occupationalGroup);
 	
 
 }

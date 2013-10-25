@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+       "-//Hibernate/Hibernate Mapping DTD//EN"
+       "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="org.dpi.occupationalGroup.OccupationalGroupImpl"    table="OCCUPATIONAL_GROUP">
+
+    <id name="id" column="ID" type="long">  
+          <generator class="sequence">   
+				<param name="sequence">OCCUPATIONAL_GROUP_SEQ</param>
+          </generator>  
+        </id> 
+    
+    <property name="code" column="CODE" type="string" not-null="true"/>
+    <property name="name" column="NAME" type="string" not-null="true"/>
+    <property name="description" column="DESCRIPTION" type="string"/>
+        
+    <!-- many occupational groups can be children of one parent occupational group -->
+    <many-to-one
+			name="parentOccupationalGroup"
+			class="org.dpi.occupationalGroup.OccupationalGroupImpl"
+			column="PARENT_OCCUP_GROUP_ID"
+			not-null="false"
+			lazy="proxy"
+			cascade="none"
+			foreign-key="fk_OccGroup_parentOccGroup"
+		>
+			<meta attribute="use-in-tostring">true</meta>
+			<meta attribute="use-in-equals">true</meta>
+		</many-to-one>
+		
+	<set name="childrenOccupationalGroup" cascade="save-update" lazy="true" inverse="true">
+		<key column="PARENT_OCCUP_GROUP_ID" foreign-key="fk_OccGroup_parentOccGroup"/>
+		<one-to-many class="org.dpi.occupationalGroup.OccupationalGroupImpl"/>
+	</set>
+	
+	<many-to-one name="minimumCategory"
+		class="org.dpi.categoria.CategoriaImpl"
+		column="MINIMUM_CATEGORY_ID"
+		not-null="true"
+		foreign-key="fk_occgroup_min_cat"/>
+		
+	<many-to-one name="maximumCategory"
+		class="org.dpi.categoria.CategoriaImpl"
+		column="MAXIMUM_CATEGORY_ID"
+		not-null="true"
+		foreign-key="fk_occgroup_max_cat"/>
+
+  </class>
+</hibernate-mapping>

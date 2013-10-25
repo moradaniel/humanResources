@@ -57,6 +57,13 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.categoria ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.movimientosCreditos ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.occupationalGroup occupationalGroup");
+				sb.append(" LEFT OUTER JOIN FETCH occupationalGroup.minimumCategory minimumCategory ");
+				sb.append(" LEFT OUTER JOIN FETCH occupationalGroup.maximumCategory maximumCategory ");
+				sb.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup");
+				sb.append(" LEFT OUTER JOIN FETCH parentOccupationalGroup.minimumCategory parentOccupationalGroupMinimumCategory ");
+				sb.append(" LEFT OUTER JOIN FETCH parentOccupationalGroup.maximumCategory parentOccupationalGroupMaximumCategory ");
+				
 
 				sb.append(where);
 				

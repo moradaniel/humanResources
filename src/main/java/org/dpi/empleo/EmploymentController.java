@@ -1,6 +1,5 @@
 package org.dpi.empleo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,11 +7,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dpi.categoria.Categoria;
 import org.dpi.categoria.CategoriaService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
 import org.dpi.web.response.StatusResponse;
@@ -39,6 +38,11 @@ public class EmploymentController {
 
 	@Resource(name = "categoriaService")
 	private CategoriaService categoriaService;
+
+	@Resource(name = "occupationalGroupService")
+	private OccupationalGroupService occupationalGroupService;
+
+	
 	
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
@@ -143,7 +147,7 @@ public class EmploymentController {
 			}
 
 			model.addAttribute("empleoActual", empleoActual);
-			model.addAttribute("categoriasDisponiblesParaAscenso", getCategoriasDisponiblesParaAscenso(empleoActual));
+			model.addAttribute("categoriasDisponiblesParaAscenso", employmentService.getAvailableCategoriesForPromotion(empleoActual));
 
 		}
 		return "movimientos/ascensoForm";
@@ -212,22 +216,7 @@ public class EmploymentController {
 	}
 
 
-	private List<Categoria> getCategoriasDisponiblesParaAscenso(Empleo empleo){
-		List <Categoria> categoriasDisponibles = new ArrayList<Categoria>();
-		List <Categoria> todasLasCategorias = this.categoriaService.findAll();
 
-		for(Categoria categoria: todasLasCategorias){
-			Integer codigoCategoria = Integer.parseInt(categoria.getCodigo());
-			if(codigoCategoria<=24){
-				if(codigoCategoria > Integer.parseInt(empleo.getCategoria().getCodigo())){
-					categoriasDisponibles.add(categoria);
-				}
-			}
-		}
-
-		return categoriasDisponibles;
-
-	}
 
 
 

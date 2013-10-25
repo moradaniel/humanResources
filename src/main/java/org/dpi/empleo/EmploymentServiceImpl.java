@@ -1,14 +1,18 @@
 package org.dpi.empleo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.dpi.agente.AgenteService;
+import org.dpi.categoria.Categoria;
 import org.dpi.categoria.CategoriaService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
+import org.dpi.occupationalGroup.OccupationalGroup;
+import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -29,6 +33,10 @@ public class EmploymentServiceImpl implements EmploymentService
 	
 	@Resource(name = "categoriaService")
 	private CategoriaService categoriaService;
+
+	@Resource(name = "occupationalGroupService")
+	private OccupationalGroupService occupationalGroupService;
+	
 	
 	@Resource(name = "agenteService")
 	private AgenteService agenteService;
@@ -123,6 +131,35 @@ public class EmploymentServiceImpl implements EmploymentService
 		empleoQueryFilter.setFechaFin(empleo.getFechaInicio());
 
 		return this.empleoDao.findPreviousEmpleo(empleoQueryFilter);
+	}
+	
+	
+	public List<Categoria> getAvailableCategoriesForPromotion(Empleo employment){
+		List <Categoria> availableCategories = new ArrayList<Categoria>();
+		List <Categoria> allCategories = this.categoriaService.findAll();
+
+		//get first level occupational group
+		OccupationalGroup employmentOccupationalGroup = this.occupationalGroupService.findById(employment.getOccupationalGroup().getId());
+		
+		//get second level occupational group
+		OccupationalGroup parentEmploymentOccupationalGroup = employmentOccupationalGroup.getParentOccupationalGroup(); 
+		
+		int minimumCategoryCodeInt = Integer.parseInt(parentEmploymentOccupationalGroup.getMinimumCategory().getCodigo());
+		int maximumCategoryCodeInt = Integer.parseInt(parentEmploymentOccupationalGroup.getMaximumCategory().getCodigo());
+		
+		int currentEmploymentCategoryCodeInt = Integer.parseInt(employment.getCategoria().getCodigo());
+		
+		for(Categoria category: allCategories){
+			Integer categoryCode = Integer.parseInt(category.getCodigo());
+			if(categoryCode >= minimumCategoryCodeInt && categoryCode <= maximumCategoryCodeInt){
+				if(categoryCode > currentEmploymentCategoryCodeInt ){
+					availableCategories.add(category);
+				}
+			}
+		}
+
+		return availableCategories;
+
 	}
 
 

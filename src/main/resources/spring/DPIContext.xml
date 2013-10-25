@@ -343,15 +343,12 @@
 				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
-				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
-				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
-				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
 		</property>
 	</bean>
 	
-		<!-- the Service DAO on which the Facade relies -->
+	<!-- the Service DAO on which the Facade relies -->
 	<bean id="creditsPeriodDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
@@ -371,6 +368,46 @@
 		</property>
 	</bean>
 	
+	<bean id="occupationalGroupService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.occupationalGroup.OccupationalGroupServiceImpl">
+				<constructor-arg><ref local="occupationalGroupDao"/></constructor-arg>
+		
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+
+				<prop key="*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- the Service DAO on which the Facade relies -->
+	<bean id="occupationalGroupDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property> 
+		<property name="target">
+			<bean class="org.dpi.occupationalGroup.OccupationalGroupDaoHibImpl">
+				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
 	
 	<bean id="downloadService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 

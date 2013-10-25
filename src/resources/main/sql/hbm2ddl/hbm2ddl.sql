@@ -43,6 +43,7 @@
         CENTROSECTORID number(19,0) not null,
         CATEGORIAID number(19,0) not null,
         EMPLEO_ANTERIOR_ID number(19,0),
+        OCCUPATIONAL_GROUP_ID number(19,0) not null,
         primary key (ID)
     );
 
@@ -54,6 +55,17 @@
         TIPOMOVIMIENTOCREDITOS varchar2(255 char) not null,
         GRANTED_STATUS varchar2(255 char) not null,
         OBSERVACIONES varchar2(255 char),
+        primary key (ID)
+    );
+
+    create table OCCUPATIONAL_GROUP (
+        ID number(19,0) not null,
+        CODE varchar2(255 char) not null,
+        NAME varchar2(255 char) not null,
+        DESCRIPTION varchar2(255 char),
+        PARENT_OCCUP_GROUP_ID number(19,0),
+        MINIMUM_CATEGORY_ID number(19,0) not null,
+        MAXIMUM_CATEGORY_ID number(19,0) not null,
         primary key (ID)
     );
 
@@ -70,7 +82,7 @@
         references REPARTICION;
 
     alter table CREDITSPERIOD 
-        add constraint fk_CREDITSPERIOD_CREDITSPERIOD_PREVIOUS 
+        add constraint fk_CRPERIOD_CRPERIOD_PREVIOUS 
         foreign key (PREVIOUS_CREDITSPERIOD_ID) 
         references CREDITSPERIOD;
 
@@ -90,6 +102,11 @@
         references CATEGORIA;
 
     alter table EMPLEO 
+        add constraint fk_Employment_OccupationalGroup 
+        foreign key (OCCUPATIONAL_GROUP_ID) 
+        references OCCUPATIONAL_GROUP;
+
+    alter table EMPLEO 
         add constraint fk_Empleo_Empleo_Anterior 
         foreign key (EMPLEO_ANTERIOR_ID) 
         references EMPLEO;
@@ -104,6 +121,21 @@
         foreign key (CREDITSPERIODID) 
         references CREDITSPERIOD;
 
+    alter table OCCUPATIONAL_GROUP 
+        add constraint fk_occgroup_max_cat 
+        foreign key (MAXIMUM_CATEGORY_ID) 
+        references CATEGORIA;
+
+    alter table OCCUPATIONAL_GROUP 
+        add constraint fk_occgroup_min_cat 
+        foreign key (MINIMUM_CATEGORY_ID) 
+        references CATEGORIA;
+
+    alter table OCCUPATIONAL_GROUP 
+        add constraint fk_OccGroup_parentOccGroup 
+        foreign key (PARENT_OCCUP_GROUP_ID) 
+        references OCCUPATIONAL_GROUP;
+
     create sequence AGENTE_SEQ;
 
     create sequence CATEGORIA_SEQ;
@@ -115,5 +147,7 @@
     create sequence EMPLEO_SEQ;
 
     create sequence MOVIMIENTOCREDITOS_SEQ;
+
+    create sequence OCCUPATIONAL_GROUP_SEQ;
 
     create sequence REPARTICION_SEQ;

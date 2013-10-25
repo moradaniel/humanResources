@@ -185,6 +185,7 @@ create table EMPLEO (ID number(19,0) not null,
 	CATEGORIAID number(19,0) not null,
 	ESTADO  VARCHAR2(255 BYTE) NOT NULL,
 	EMPLEO_ANTERIOR_ID number(19,0),
+	OCCUPATIONAL_GROUP_ID number(19,0),
 	primary key (ID));
 
 CREATE SEQUENCE CREDITOS.EMPLEO_SEQ
@@ -532,20 +533,74 @@ ALTER TABLE CREDITOS.REPARTICION_ACCOUNT ADD (
 	end;
 	/ 
 
-alter table MOVIMIENTOCREDITOS 
+alter table CREDITOS.MOVIMIENTOCREDITOS 
         add constraint fk_MovimientoCredito_CreditsPeriod 
         foreign key (CREDITSPERIODID) 
         references CREDITSPERIOD;
         
         
-alter table EMPLEO 
+alter table CREDITOS.EMPLEO 
         add constraint fk_Empleo_Empleo_Anterior 
         foreign key (EMPLEO_ANTERIOR_ID) 
         references Empleo;        
 
       
-alter table CREDITSPERIOD 
+alter table CREDITOS.CREDITSPERIOD 
         add constraint fk_CRPERIOD_CRPERIOD_PREVIOUS 
         foreign key (PREVIOUS_CREDITSPERIOD_ID) 
         references CREDITSPERIOD;
+        
+        
+/* Occupational group*/
+        
+create table CREDITOS.OCCUPATIONAL_GROUP (
+        ID number(19,0) not null,
+        CODE varchar2(255 char) not null,
+        NAME varchar2(255 char) not null,
+        DESCRIPTION varchar2(255 char),
+        PARENT_OCCUP_GROUP_ID number(19,0),
+		MINIMUM_CATEGORY_ID number(19,0) not null,
+        MAXIMUM_CATEGORY_ID number(19,0) not null,
+        primary key (ID)
+    );
+       
+alter table CREDITOS.OCCUPATIONAL_GROUP 
+        add constraint fk_OccupGroup_parentOccupGroup 
+        foreign key (PARENT_OCCUP_GROUP_ID) 
+        references OCCUPATIONAL_GROUP;
+
+alter table CREDITOS.EMPLEO 
+        add constraint fk_Employment_OccupGroup 
+        foreign key (OCCUPATIONAL_GROUP_ID) 
+        references OCCUPATIONAL_GROUP;
+
+alter table CREDITOS.OCCUPATIONAL_GROUP 
+        add constraint fk_occgroup_max_cat 
+        foreign key (MAXIMUM_CATEGORY_ID) 
+        references CATEGORIA;
+
+alter table CREDITOS.OCCUPATIONAL_GROUP 
+        add constraint fk_occgroup_min_cat 
+        foreign key (MINIMUM_CATEGORY_ID) 
+        references CATEGORIA;
+
+        
+CREATE SEQUENCE CREDITOS.OCCUPATIONAL_GROUP_SEQ
+  START WITH 1
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE OR REPLACE TRIGGER CREDITOS.OCCUPATIONAL_GROUP_TRG
+before insert ON CREDITOS.OCCUPATIONAL_GROUP for each row
+WHEN (
+new.id is null
+      )
+begin
+    select CREDITOS.OCCUPATIONAL_GROUP_SEQ.nextval into :new.id from dual;
+end;
+/ 
   

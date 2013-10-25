@@ -10,6 +10,7 @@ import org.dpi.categoria.Categoria;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
+import org.dpi.occupationalGroup.OccupationalGroup;
 import org.janux.util.JanuxToStringStyle;
 
 public class EmpleoImpl  extends PersistentAbstract implements Empleo{
@@ -33,7 +34,9 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	
 	Empleo empleoAnterior;
 	
+	OccupationalGroup occupationalGroup;
 	
+
 	@Override
 	public Agente getAgente() {
 		return this.agente;
@@ -44,6 +47,7 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 		this.agente=agente;
 		
 	}
+	
 	@Override
 	public CentroSector getCentroSector() {
 		return this.centroSector;
@@ -55,27 +59,33 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 		
 	}
 	
+	@Override
 	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
+	@Override
 	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 
+	@Override
 	public Date getFechaFin() {
 		return fechaFin;
 	}
 
+	@Override
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 	
 	
+	@Override
 	public Categoria getCategoria() {
 		return categoria;
 	}
-
+	
+	@Override
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
@@ -124,8 +134,17 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 		this.empleoAnterior = empleoAnterior;
 	}
 	
+	@Override
+	public OccupationalGroup getOccupationalGroup() {
+		return occupationalGroup;
+	}
+
+	@Override
+	public void setOccupationalGroup(OccupationalGroup occupationalGroup) {
+		this.occupationalGroup = occupationalGroup;
+	}
 	
-	
+	@Override
 	public String toString() 
 	{
 		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);

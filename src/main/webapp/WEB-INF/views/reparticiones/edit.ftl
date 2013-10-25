@@ -48,6 +48,8 @@
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Apellido y Nombre</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Condicion Agente</a>	</th>
 						<th class="table-header-repeat line-left "><a href="">Categoria</a></th>
+						<th class="table-header-repeat line-left "><a href="">Tramo</a></th>
+						<th class="table-header-repeat line-left "><a href="">Agrupamiento</a></th>
 						<th class="table-header-repeat line-left "><a href="">Codigo Centro</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Nombre Centro</a></th>
 						<th class="table-header-repeat line-left "><a href="">Codigo Sector</a></th>
@@ -67,17 +69,36 @@
 							<td>${empleoActivo.employment.agente.apellidoNombre}</td>
 							<td>${empleoActivo.employment.agente.condicion?default("")}</td>
 							<td>${empleoActivo.employment.categoria.codigo}</td>
+							
+							
+							<td>
+								<#if empleoActivo.employment.occupationalGroup?exists >
+									${empleoActivo.employment.occupationalGroup.name} - ${empleoActivo.employment.occupationalGroup.code}
+								<#else>
+									<span class="error-text">Error Falta asignar Tramo</span>								
+								</#if>
+								
+							</td>
+							
+							<td>
+								<#if empleoActivo.employment.occupationalGroup?exists && empleoActivo.employment.occupationalGroup.parentOccupationalGroup?exists>
+									${empleoActivo.employment.occupationalGroup.parentOccupationalGroup.name}
+								</#if>
+							</td>
+							
 							<td>${empleoActivo.employment.centroSector.codigoCentro}</td>
 							<td>${empleoActivo.employment.centroSector.nombreCentro}</td>
 							<td>${empleoActivo.employment.centroSector.codigoSector}</td>
 							<td>${empleoActivo.employment.centroSector.nombreSector}</td>
 							<td>
-								
+							
+							<#if empleoActivo.employment.occupationalGroup?exists >
 								<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
 									<#if empleoActivo.canAccountAscenderAgente >
 										<a href="${empleosUrl}/${empleoActivo.employment.id}/cambiarCategoria" class="ajaxLink">Ascender Agente</a>
 									</#if>
 								</#if>
+							</#if>
 								<#--	&nbsp;&nbsp;&nbsp;
 								<a href="${empleosUrl}/${empleo.id}/baja" class="ajaxLink">Baja</a> -->
 							

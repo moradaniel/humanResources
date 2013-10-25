@@ -37,8 +37,7 @@
 		<mapping resource="mappings/MovimientoCreditos.hbm.xml" />
 		<mapping resource="mappings/Empleo.hbm.xml" />
 		<mapping resource="mappings/CreditsPeriod.hbm.xml" />
-		
-		
+		<mapping resource="mappings/OccupationalGroup.hbm.xml" />
         
         
     </session-factory>
