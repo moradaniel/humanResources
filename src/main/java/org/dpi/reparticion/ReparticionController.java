@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.dpi.agente.AgenteService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.empleo.Empleo;
@@ -36,6 +37,7 @@ import org.janux.bus.persistence.EntityNotFoundException;
 import org.janux.bus.security.Account;
 import org.janux.bus.security.AccountImpl;
 import org.janux.bus.security.AccountService;
+import org.janux.bus.security.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.samples.travel.AjaxUtils;
@@ -263,6 +265,7 @@ public class ReparticionController {
 		
 		if (reparticion != null){
 			
+			//by default use current period
 			long currentPeriodName = creditsPeriodService.getCurrentCreditsPeriodYear();
 			
 			if(creditsPeriodName!=null){
@@ -288,18 +291,22 @@ public class ReparticionController {
 			CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
 			creditsPeriodQueryFilter.setName(String.valueOf(creditsPeriodName));
 			
-			List<CreditsPeriod> currentCreditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
-			CreditsPeriod creditsPeriod = currentCreditsPeriods.get(0);
+			List<CreditsPeriod> creditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
+			CreditsPeriod creditsPeriod = creditsPeriods.get(0);
 			movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
 			
 			List<MovimientoCreditos> movimientoCreditosReparticion = movimientoCreditosService.find(movimientoCreditosQueryFilter);
 			
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			Account currenUser = (Account)accountObj;
+			Account currentUser = (Account)accountObj;
 					
-			List<MovimientoCreditosVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currenUser);
+			List<MovimientoCreditosVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currentUser);
 					
 			model.addAttribute("movimientos", movimientoCreditosVOReparticion);
+			
+			//------------------ Should we build the form for editing status? -----------------------------
+			
+			model.addAttribute("canAccountChangeCreditsEntryStatusOfPeriod",MovimientoCreditosServiceImpl.canChangeCreditsEntryStatus(currentUser, creditsPeriod));
 			
 			CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm =  new CambiosMultiplesEstadoMovimientosForm();
 			for(MovimientoCreditosVO movimientoCreditosVO :movimientoCreditosVOReparticion){
@@ -309,11 +316,37 @@ public class ReparticionController {
 			model.addAttribute("grantedStatuses", GrantedStatus.values());
 			model.addAttribute("cambiosMultiplesEstadoMovimientosForm", cambiosMultiplesEstadoMovimientosForm);
 			
-			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod(),reparticion.getId());
-			model.addAttribute("creditosDisponiblesSegunSolicitadoPeriodoActual", creditosDisponiblesSegunSolicitadoPeriodoActual);
 			
-			Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			model.addAttribute("canAccountCambiarEstadoMovimiento",MovimientoCreditosServiceImpl.canAccountCambiarEstadoMovimientos(currentUser));
+			
+			//------------------ Should we show the report generation button? -----------------------------			
+			
+			
+			boolean showReportGenerationButton = false;
+			boolean canGenerateReport = false;
+			//TODO create a permission by report generation
+			for(Role role : currentUser.getRoles()){
+				if(role.getName().equals("RESPONSABLE_REPARTICION")){
+					canGenerateReport = true;
+					break;
+				}	
+
+			}
+			
+			if(canGenerateReport){
+				model.addAttribute("canGenerateReport", canGenerateReport);
+				if(creditsPeriod.getStatus()==Status.Active){
+					Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod(),reparticion.getId());
+					showReportGenerationButton = creditosDisponiblesSegunSolicitadoPeriodoActual >=0;
+				}
+			}
+			
+			
+			model.addAttribute("showReportGenerationButton", showReportGenerationButton);
+			
+			
+			
+			
+			
 			
 		}
 		return "reparticiones/movimientos";

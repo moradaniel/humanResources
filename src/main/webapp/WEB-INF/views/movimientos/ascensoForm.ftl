@@ -19,6 +19,26 @@
 			</td>
 		</tr>
 		<tr>
+			<td><label>Tramo</label></td>
+			<td>
+				<#if empleoActual.occupationalGroup?exists >
+					${empleoActual.occupationalGroup.name} -  ${empleoActual.occupationalGroup.code} 
+					- Minima Categoria:${empleoActual.occupationalGroup.minimumCategory.codigo}   
+					- Maxima Categoria:${empleoActual.occupationalGroup.maximumCategory.codigo}
+				</#if>	
+			</td>
+		</tr>
+		<tr>
+			<td><label>Agrupamiento</label></td>
+			<td>
+				<#if empleoActual.occupationalGroup?exists && empleoActual.occupationalGroup.parentOccupationalGroup?exists>
+					${empleoActual.occupationalGroup.parentOccupationalGroup.name} - ${empleoActual.occupationalGroup.parentOccupationalGroup.code} 
+					- Minima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.minimumCategory.codigo}   
+					- Maxima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.maximumCategory.codigo}
+				</#if>	
+			</td>
+		</tr>
+		<tr>
 			<td><label>Categoria Actual</label></td>
 			<td>
 				${empleoActual.categoria.codigo}

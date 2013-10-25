@@ -8,6 +8,7 @@ import java.util.Set;
 import org.dpi.agente.Agente;
 import org.dpi.agente.AgenteService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmploymentQueryFilter;
@@ -130,8 +131,8 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 				movimientoCreditosVO.setCategoriaActual(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
 			}
 			
-			movimientoCreditosVO.setCanAccountBorrarMovimiento(canMovimientoBeDeletedByAccount(movimientoCreditos,account));
-			movimientoCreditosVO.setCanAccountCambiarEstadoMovimiento(canAccountCambiarEstadoDelMovimiento(movimientoCreditos,account));
+			movimientoCreditosVO.setCanAccountBorrarMovimiento(canCreditsEntryBeDeletedByAccount(movimientoCreditos,account));
+			movimientoCreditosVO.setCanAccountChangeCreditsEntryStatus(canAccountChangeCreditsEntryStatus(movimientoCreditos,account));
 			
 			movimientosCreditosVO.add(movimientoCreditosVO);
 		}
@@ -140,22 +141,27 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		return movimientosCreditosVO;
 	}
 	
-	public boolean canAccountCambiarEstadoDelMovimiento(MovimientoCreditos movimientoCreditos, Account account) {
-		return canAccountCambiarEstadoMovimientos(account) && canMovimientoBeStatusChanged(movimientoCreditos);
+	public boolean canAccountChangeCreditsEntryStatus(MovimientoCreditos creditsEntry, Account account) {
+		return canChangeCreditsEntryStatus(account) && canCreditsEntryStatusBeChanged(creditsEntry);
 	}
 	
-	public boolean canMovimientoBeStatusChanged(
-			MovimientoCreditos movimientoCreditos) {
+	public boolean canCreditsEntryStatusBeChanged(
+			MovimientoCreditos creditsEntry) {
+		
+		//only creditsEntries of Active periods can be changed 
+		if(creditsEntry.getCreditsPeriod().getStatus()!=CreditsPeriod.Status.Active){
+			return false;
+		}else
 
-		 if(movimientoCreditos.getTipoMovimientoCreditos()== TipoMovimientoCreditos.BajaAgente){
+		 if(creditsEntry.getTipoMovimientoCreditos()== TipoMovimientoCreditos.BajaAgente){
 			 return false;
-		 }
-		 if(movimientoCreditos.getTipoMovimientoCreditos()== TipoMovimientoCreditos.CargaInicialAgenteExistente){
+		 }else
+		 if(creditsEntry.getTipoMovimientoCreditos()== TipoMovimientoCreditos.CargaInicialAgenteExistente){
 			 return false;
-		 }
+		 }else
 		 
-		 if(movimientoCreditos.getTipoMovimientoCreditos()== TipoMovimientoCreditos.IngresoAgente){
-			 if(movimientoCreditos.getCantidadCreditos()==0){
+		 if(creditsEntry.getTipoMovimientoCreditos()== TipoMovimientoCreditos.IngresoAgente){
+			 if(creditsEntry.getCantidadCreditos()==0){
 				 return false;
 			 }
 		 }
@@ -164,8 +170,18 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		 return true;
 	}
 
+	
+	public static boolean canChangeCreditsEntryStatus(Account account, CreditsPeriod creditsPeriod) {
+		if(creditsPeriod.getStatus()!=Status.Active){
+			return false;
+		}else
+		if(canChangeCreditsEntryStatus(account)){
+			return true;
+		}
+		return false;
+	}
 
-	public static boolean canAccountCambiarEstadoMovimientos(Account account) {
+	public static boolean canChangeCreditsEntryStatus(Account account) {
 		
 		if(account.hasPermissions("Manage_MovimientoCreditos", "UPDATE_STATUS")){
 			return true;
@@ -174,13 +190,13 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	}
 
 
-	public boolean canMovimientoBeDeletedByAccount(MovimientoCreditos movimiento, Account account){
+	public boolean canCreditsEntryBeDeletedByAccount(MovimientoCreditos movimiento, Account account){
 		
-		return canAccountDeleteMovimientos(account) && canMovimientoBeDeleted(movimiento);
+		return canDeleteCreditsEntry(account) && canCreditsEntryBeDeleted(movimiento);
 		
 	}
 	
-	public boolean canAccountDeleteMovimientos(Account account) {
+	public boolean canDeleteCreditsEntry(Account account) {
 		
 		if(account.hasPermissions("Manage_MovimientoCreditos", "DELETE")){
 			return true;
@@ -189,27 +205,27 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 	}
 
 
-	public boolean canMovimientoBeDeleted(MovimientoCreditos movimientoCreditos){
+	public boolean canCreditsEntryBeDeleted(MovimientoCreditos creditsEntry){
 		
 				
-		if(isMovimientoCerrado(movimientoCreditos)){
+		if(isCreditsEntryClosed(creditsEntry)){
 			return false;
 		}
 		
-		if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.BajaAgente){
+		if(creditsEntry.getTipoMovimientoCreditos()==TipoMovimientoCreditos.BajaAgente){
 			return false;
 		}
 		
-		if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.CargaInicialAgenteExistente){
+		if(creditsEntry.getTipoMovimientoCreditos()==TipoMovimientoCreditos.CargaInicialAgenteExistente){
 			return false;
 		}
 		
-		if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.IngresoAgente && movimientoCreditos.getGrantedStatus()==GrantedStatus.Otorgado){
+		if(creditsEntry.getTipoMovimientoCreditos()==TipoMovimientoCreditos.IngresoAgente && creditsEntry.getGrantedStatus()==GrantedStatus.Otorgado){
 			return false;
 		}
 		
 		
-		if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente && movimientoCreditos.getEmpleo().isClosed()){
+		if(creditsEntry.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente && creditsEntry.getEmpleo().isClosed()){
 			return false;
 		}
 				
@@ -217,9 +233,9 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		return true;
 	}
 
-	private boolean isMovimientoCerrado(MovimientoCreditos movimientoCreditos) {
+	private boolean isCreditsEntryClosed(MovimientoCreditos creditsEntry) {
 		
-		if(movimientoCreditos.getCreditsPeriod().getStatus() == Status.Closed ){
+		if(creditsEntry.getCreditsPeriod().getStatus() == Status.Closed ){
 			return true;
 		}
 		

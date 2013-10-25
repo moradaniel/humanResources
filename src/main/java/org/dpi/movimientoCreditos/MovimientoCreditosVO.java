@@ -53,7 +53,7 @@ public class MovimientoCreditosVO{
 		return canAccountCambiarEstadoMovimiento;
 	}
 
-	public void setCanAccountCambiarEstadoMovimiento(
+	public void setCanAccountChangeCreditsEntryStatus(
 			boolean canAccountCambiarEstadoMovimiento) {
 		this.canAccountCambiarEstadoMovimiento = canAccountCambiarEstadoMovimiento;
 	}

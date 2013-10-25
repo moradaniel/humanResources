@@ -20,7 +20,7 @@
 	
 	<form id="cambioMultipleEstadoMovimientoForm" name="cambioMultipleEstadoMovimientoForm" action="${requestContext.contextPath}/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento" method="post">
 	
-	<#if canAccountCambiarEstadoMovimiento>
+	<#if canAccountChangeCreditsEntryStatusOfPeriod>
 		<input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" />
 	</#if>
 	
@@ -40,18 +40,20 @@
 		
 		<!-- boton reporte de creditos -->
 			<div id="table-actions">
-				<#if (creditosDisponiblesSegunSolicitadoPeriodoActual >= 0)>
+				<#if (showReportGenerationButton)>
 					<p class="buttoniseUs">
 						<a href="${requestContext.contextPath}/reports/buildSetupPage">Generar Reporte</a>
 					</p>
 				<#else>
-					<div id="message-red">
-						<table border="0" width="100%" cellpadding="0" cellspacing="0">
-							<tr>
-								<td class="red-left">No se puede generar el reporte de creditos teniendo saldo negativo.</td>
-							</tr>
-						</table>
-					</div>
+					<#if canGenerateReport?exists>
+						<div id="message-red">
+							<table border="0" width="100%" cellpadding="0" cellspacing="0">
+								<tr>
+									<td class="red-left">No se puede generar el reporte de creditos teniendo saldo negativo o de periodos cerrados.</td>
+								</tr>
+							</table>
+						</div>
+					</#if>	
 				</#if>	
 			</div>
 

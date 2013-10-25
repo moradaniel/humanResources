@@ -214,26 +214,12 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	
 	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String codigoCategoriaActual, String codigoCategoriaNueva){
 		Integer creditos = 0;
-		/*if(	condicionAgente!=null && 
-			(condicionAgente == CondicionAgente.Profesional)
-		
-				){
-					
-			Integer intCodigoCategoriaNueva = Integer.parseInt(codigoCategoriaNueva);
-			if(intCodigoCategoriaNueva<=Integer.parseInt(MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS)){
-				creditos=0;
-			}else{
-				creditos = this.creditosPorAscenso.get(MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS).get(codigoCategoriaNueva);
-			}
-		}else{*/
-			creditos = this.creditosPorAscenso.get(codigoCategoriaActual).get(codigoCategoriaNueva);	
-		//}
-		
+		creditos = this.creditosPorAscenso.get(codigoCategoriaActual).get(codigoCategoriaNueva);	
+
 		if(creditos==null){
 			creditos=0;
 		}
 		return creditos;
-		
 	}
 	
 	public int getCreditosPorIngreso(String codigoCategoria){
@@ -435,6 +421,8 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 		
 		return totalPorCargaInicial+totalPorBajas-totalcreditosDisponiblesSegunOtorgadoPeriodoActual;
 	}
+
+	
 
 
 }
