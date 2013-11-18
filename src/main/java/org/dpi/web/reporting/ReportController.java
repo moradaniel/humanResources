@@ -166,8 +166,10 @@ public class ReportController {
 			GenericReportRecord record = new GenericReportRecord();
 			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.AGENTE_APELLIDO_NOMBRE.name(),movimientoCreditosAscensosReparticionVO.getMovimientoCreditos().getEmpleo().getAgente().getApellidoNombre());
 			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.AGENTE_CUIL.name(),movimientoCreditosAscensosReparticionVO.getMovimientoCreditos().getEmpleo().getAgente().getCuil());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.AGENTE_CATEGORIA_ACTUAL.name(),movimientoCreditosAscensosReparticionVO.getCategoriaActual());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.AGENTE_CATEGORIA_PROPUESTA.name(),movimientoCreditosAscensosReparticionVO.getCategoriaPropuesta());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_CATEGORIA_ACTUAL.name(),movimientoCreditosAscensosReparticionVO.getCategoriaActual());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_CATEGORIA_PROPUESTA.name(),movimientoCreditosAscensosReparticionVO.getCategoriaPropuesta());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_OCCUPATIONAL_GROUP.name(),movimientoCreditosAscensosReparticionVO.getOccupationalGroup());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),movimientoCreditosAscensosReparticionVO.getParentOccupationalGroup());
 			records.add(record);
 		}
 		
@@ -181,7 +183,7 @@ public class ReportController {
 		for(MovimientoCreditos movimientoCreditosIngreso:movimientoCreditosIngresosReparticion){
 			GenericReportRecord record = new GenericReportRecord();
 			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.AGENTE_NUEVO_PERFIL.name(),"");
-			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.AGENTE_NUEVO_AGRUPAMIENTO.name(),"");
+			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),"");
 			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.AGENTE_NUEVO_CATEGORIA_PROPUESTA.name(),movimientoCreditosIngreso.getEmpleo().getCategoria().getCodigo());
 			
 			records.add(record);

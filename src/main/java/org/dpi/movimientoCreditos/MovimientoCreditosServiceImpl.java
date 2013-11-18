@@ -131,6 +131,13 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 				movimientoCreditosVO.setCategoriaActual(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
 			}
 			
+			if(movimientoCreditos.getEmpleo().getOccupationalGroup()!=null){
+				movimientoCreditosVO.setOccupationalGroup(movimientoCreditos.getEmpleo().getOccupationalGroup().getName());
+				if(movimientoCreditos.getEmpleo().getOccupationalGroup().getParentOccupationalGroup()!=null){
+					movimientoCreditosVO.setParentOccupationalGroup(movimientoCreditos.getEmpleo().getOccupationalGroup().getParentOccupationalGroup().getName());
+				}
+			}
+			
 			movimientoCreditosVO.setCanAccountBorrarMovimiento(canCreditsEntryBeDeletedByAccount(movimientoCreditos,account));
 			movimientoCreditosVO.setCanAccountChangeCreditsEntryStatus(canAccountChangeCreditsEntryStatus(movimientoCreditos,account));
 			

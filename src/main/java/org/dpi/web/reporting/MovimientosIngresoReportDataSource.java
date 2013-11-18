@@ -19,7 +19,7 @@ public class MovimientosIngresoReportDataSource implements JRDataSource
 	
 	public enum ReportFieldID {
 		AGENTE_NUEVO_PERFIL,
-		AGENTE_NUEVO_AGRUPAMIENTO,
+		NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP,
 		AGENTE_NUEVO_CATEGORIA_PROPUESTA
 	};
 	

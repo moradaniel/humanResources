@@ -10,6 +10,11 @@ public class MovimientoCreditosVO{
 
 	String categoriaPropuesta;
 	
+	String occupationalGroup;
+
+	String parentOccupationalGroup;
+	
+		
 	boolean canAccountBorrarMovimiento = false;
 	boolean canAccountCambiarEstadoMovimiento = false;
 	
@@ -58,5 +63,20 @@ public class MovimientoCreditosVO{
 		this.canAccountCambiarEstadoMovimiento = canAccountCambiarEstadoMovimiento;
 	}
 
+	public String getOccupationalGroup() {
+		return occupationalGroup;
+	}
+
+	public void setOccupationalGroup(String occupationalGroup) {
+		this.occupationalGroup = occupationalGroup;
+	}
+
+	public String getParentOccupationalGroup() {
+		return parentOccupationalGroup;
+	}
+
+	public void setParentOccupationalGroup(String parentOccupationalGroup) {
+		this.parentOccupationalGroup = parentOccupationalGroup;
+	}
 
 }

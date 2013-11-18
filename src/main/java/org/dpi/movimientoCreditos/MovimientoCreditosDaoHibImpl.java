@@ -63,6 +63,8 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				sb.append(" LEFT OUTER JOIN FETCH movimiento.creditsPeriod creditsPeriod ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.empleoAnterior empleoAnterior");
 				sb.append(" LEFT OUTER JOIN FETCH empleoAnterior.categoria categoriaAnterior ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.occupationalGroup occupationalGroup");
+				sb.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup");
 
 				sb.append(where);
 				

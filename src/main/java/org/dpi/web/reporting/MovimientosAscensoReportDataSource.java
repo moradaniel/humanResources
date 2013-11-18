@@ -20,8 +20,10 @@ public class MovimientosAscensoReportDataSource implements JRDataSource
 	public enum ReportFieldID {
 		AGENTE_APELLIDO_NOMBRE,
 		AGENTE_CUIL,
-		AGENTE_CATEGORIA_ACTUAL,
-		AGENTE_CATEGORIA_PROPUESTA
+		EMPLOYMENT_CATEGORIA_ACTUAL,
+		EMPLOYMENT_CATEGORIA_PROPUESTA,
+		EMPLOYMENT_OCCUPATIONAL_GROUP,
+		EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP
 	};
 	
 	public MovimientosAscensoReportDataSource(List<GenericReportRecord> records)
