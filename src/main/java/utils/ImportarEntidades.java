@@ -6,9 +6,9 @@ import java.util.Map;
 import org.dpi.agente.Agente;
 import org.dpi.agente.AgenteImpl;
 import org.dpi.agente.AgenteService;
-import org.dpi.categoria.Categoria;
-import org.dpi.categoria.CategoriaImpl;
-import org.dpi.categoria.CategoriaService;
+import org.dpi.category.Category;
+import org.dpi.category.CategoryImpl;
+import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorImpl;
 import org.dpi.centroSector.CentroSectorService;
@@ -50,7 +50,7 @@ public class ImportarEntidades {
 	
 	AgenteService agenteService;
 	
-	CategoriaService categoriaService;
+	CategoryService categoryService;
 	
 	EmploymentService employmentService;
 
@@ -79,7 +79,7 @@ public class ImportarEntidades {
 		importadorEntidades.setReparticionService((ReparticionService)context.getBean("reparticionService"));
 		importadorEntidades.setCentroSectorService((CentroSectorService)context.getBean("centroSectorService"));
 		importadorEntidades.setAgenteService((AgenteService)context.getBean("agenteService"));
-		importadorEntidades.setCategoriaService((CategoriaService)context.getBean("categoriaService"));
+		importadorEntidades.setCategoryService((CategoryService)context.getBean("categoriaService"));
 		importadorEntidades.setEmploymentService((EmploymentService)context.getBean("employmentService"));
 		
 		importadorEntidades.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
@@ -244,15 +244,15 @@ public class ImportarEntidades {
 	}
 	
 	private void importarCategorias(Map<String, Object> row) {
-		String codigoCategoria = (String)row.get("CATEGORIA");
-		if(codigoCategoria!=null){
-			Categoria categoria = categoriaService.findByCodigo(codigoCategoria);
+		String categoryCode = (String)row.get("CATEGORIA");
+		if(categoryCode!=null){
+			Category categoria = categoryService.findByCode(categoryCode);
 			//si no existe todavia, crearlo
 			if(categoria==null){
-				CategoriaImpl newCategoria = new CategoriaImpl();
-				newCategoria.setCodigo(codigoCategoria);
-				categoriaService.saveOrUpdate(newCategoria);
-				sLog.info("Created new categoria "+ newCategoria.getId()+ ": " +newCategoria.getCodigo() );
+				CategoryImpl newCategory = new CategoryImpl();
+				newCategory.setCode(categoryCode);
+				categoryService.saveOrUpdate(newCategory);
+				sLog.info("Created new categoria "+ newCategory.getId()+ ": " +newCategory.getCode() );
 			}
 		}
 	}
@@ -278,16 +278,16 @@ public class ImportarEntidades {
 			
 			if(cuil!=null){
 				Agente agente = agenteService.findByCuil(cuil);
-				String codigoCategoria = (String)row.get("CATEGORIA");
-				if(codigoCategoria!=null){
+				String categoryCode = (String)row.get("CATEGORIA");
+				if(categoryCode!=null){
 
-					Categoria categoria = categoriaService.findByCodigo(codigoCategoria);
+					Category categoria = categoryService.findByCode(categoryCode);
 				
 					EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 					empleoQueryFilter.setCuil(cuil);
 					empleoQueryFilter.setCodigoCentro(codigoCentro);
 					empleoQueryFilter.setCodigoSector(codigoSector);
-					empleoQueryFilter.setCodigoCategoria(codigoCategoria);
+					empleoQueryFilter.setCategoryCode(categoryCode);
 					empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.ACTIVO);
 					
 					
@@ -300,7 +300,7 @@ public class ImportarEntidades {
 						empleo = new EmpleoImpl();
 						empleo.setAgente(agente);
 						empleo.setCentroSector(centroSector);
-						empleo.setCategoria(categoria);
+						empleo.setCategory(categoria);
 						empleo.setEstado(EmploymentStatus.ACTIVO);
 						
 						String esBaja = (String)row.get("BAJA");
@@ -310,7 +310,7 @@ public class ImportarEntidades {
 							movimientoCargaInicialAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.CargaInicialAgenteExistente);
 							movimientoCargaInicialAgente.setGrantedStatus(GrantedStatus.Otorgado);
 							movimientoCargaInicialAgente.setCreditsPeriod(creditsPeriod);
-							int cantidadCreditosPorCargaInicial = this.administradorCreditosService.getCreditosPorCargaInicial(codigoCategoria);
+							int cantidadCreditosPorCargaInicial = this.administradorCreditosService.getCreditosPorCargaInicial(categoryCode);
 							
 							//empleo.setFechaInicio(creditsPeriod.getStartDate());
 							
@@ -474,12 +474,12 @@ public class ImportarEntidades {
 		this.agenteService = agenteService;
 	}
 	
-	public CategoriaService getCategoriaService() {
-		return categoriaService;
+	public CategoryService getCategoryService() {
+		return categoryService;
 	}
 
-	public void setCategoriaService(CategoriaService categoriaService) {
-		this.categoriaService = categoriaService;
+	public void setCategoryService(CategoryService categoriaService) {
+		this.categoryService = categoriaService;
 	}
 	
 	public EmploymentService getEmploymentService() {

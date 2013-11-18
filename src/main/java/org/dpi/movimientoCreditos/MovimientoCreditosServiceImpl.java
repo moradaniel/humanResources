@@ -125,10 +125,10 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			movimientoCreditosVO.setMovimientoCreditos(movimientoCreditos);
 			if(movimientoCreditos.getTipoMovimientoCreditos()==TipoMovimientoCreditos.AscensoAgente){
 				Empleo empleoAnterior = movimientoCreditos.getEmpleo().getEmpleoAnterior();
-				movimientoCreditosVO.setCategoriaActual(empleoAnterior.getCategoria().getCodigo());
-				movimientoCreditosVO.setCategoriaPropuesta(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
+				movimientoCreditosVO.setCurrentCategory(empleoAnterior.getCategory().getCode());
+				movimientoCreditosVO.setProposedCategory(movimientoCreditos.getEmpleo().getCategory().getCode());
 			}else{
-				movimientoCreditosVO.setCategoriaActual(movimientoCreditos.getEmpleo().getCategoria().getCodigo());
+				movimientoCreditosVO.setCurrentCategory(movimientoCreditos.getEmpleo().getCategory().getCode());
 			}
 			
 			if(movimientoCreditos.getEmpleo().getOccupationalGroup()!=null){
@@ -260,11 +260,11 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			Empleo empleoaActualizar = movimientoCreditos.getEmpleo();
 			//Obtener el empleo anterior al EmpleoaActualizar (EmpleoAnterior)
 			Empleo empleoAnterior = empleoaActualizar.getEmpleoAnterior();
-			//Obtener la categoria del EmpleoAnterior
+			//get the category of the previous employment
 			//Obtener los creditos por ascenso para la categoria anterior y la categoria actual
 			int nuevaCantidaddeCreditos = administradorCreditosService.getCreditosPorAscenso(empleoAnterior.getAgente().getCondicion(), 
-																							empleoAnterior.getCategoria().getCodigo(),
-																							empleoaActualizar.getCategoria().getCodigo());
+																							empleoAnterior.getCategory().getCode(),
+																							empleoaActualizar.getCategory().getCode());
 			movimientoCreditos.setCantidadCreditos(nuevaCantidaddeCreditos);
 			this.saveOrUpdate(movimientoCreditos);
 			

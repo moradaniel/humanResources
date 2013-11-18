@@ -68,7 +68,7 @@
 				    	<tr class="${trStyle}">
 							<td>${empleoActivo.employment.agente.apellidoNombre}</td>
 							<td>${empleoActivo.employment.agente.condicion?default("")}</td>
-							<td>${empleoActivo.employment.categoria.codigo}</td>
+							<td>${empleoActivo.employment.category.code}</td>
 							
 							
 							<td>
@@ -95,7 +95,7 @@
 							<#if empleoActivo.employment.occupationalGroup?exists >
 								<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
 									<#if empleoActivo.canAccountAscenderAgente >
-										<a href="${empleosUrl}/${empleoActivo.employment.id}/cambiarCategoria" class="ajaxLink">Ascender Agente</a>
+										<a href="${empleosUrl}/${empleoActivo.employment.id}/promoteEmployment" class="ajaxLink">Ascender Agente</a>
 									</#if>
 								</#if>
 							</#if>

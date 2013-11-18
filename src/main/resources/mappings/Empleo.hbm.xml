@@ -33,10 +33,10 @@
 		not-null="true"/>
 
 	<many-to-one 
-		name="categoria"
-		class="org.dpi.categoria.CategoriaImpl"
- 		column="CATEGORIAID" 
-		foreign-key="fk_Empleo_Categoria"
+		name="category"
+		class="org.dpi.category.CategoryImpl"
+ 		column="CATEGORYID" 
+		foreign-key="fk_Empleo_Category"
 		not-null="true"/>
 		
 	<!-- one-to-one name="movimientoCreditos" 

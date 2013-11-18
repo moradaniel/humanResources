@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dpi.categoria.CategoriaService;
+import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
@@ -36,8 +36,8 @@ public class EmploymentController {
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
 
-	@Resource(name = "categoriaService")
-	private CategoriaService categoriaService;
+	@Resource(name = "categoryService")
+	private CategoryService categoryService;
 
 	@Resource(name = "occupationalGroupService")
 	private OccupationalGroupService occupationalGroupService;
@@ -73,13 +73,13 @@ public class EmploymentController {
 		this.employmentCreditsEntriesService = employmentCreditsEntriesService;
 	}
 
-	public CategoriaService getCategoriaService() {
-		return categoriaService;
+	public CategoryService getCategoryService() {
+		return categoryService;
 	}
 
 
-	public void setCategoriaService(CategoriaService categoriaService) {
-		this.categoriaService = categoriaService;
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
 	}
 
 
@@ -123,8 +123,8 @@ public class EmploymentController {
 		return "redirect:/reparticiones/" + reparticion.getId();
 	}
 
-	@RequestMapping(value = "/empleos/{id}/cambiarCategoria", method = RequestMethod.GET)
-	public String setupFormCambiarCategoria(
+	@RequestMapping(value = "/empleos/{id}/promoteEmployment", method = RequestMethod.GET)
+	public String setupFormCambiarCategory(
 			HttpServletRequest request, 
 			HttpServletResponse response,
 			@PathVariable Long id, Model model) {
@@ -147,7 +147,7 @@ public class EmploymentController {
 			}
 
 			model.addAttribute("empleoActual", empleoActual);
-			model.addAttribute("categoriasDisponiblesParaAscenso", employmentService.getAvailableCategoriesForPromotion(empleoActual));
+			model.addAttribute("availableCategoriesForPromotion", employmentService.getAvailableCategoriesForPromotion(empleoActual));
 
 		}
 		return "movimientos/ascensoForm";
@@ -164,10 +164,10 @@ public class EmploymentController {
 
 		String idEmpleoActual = ServletRequestUtils.getStringParameter(request, "idEmpleoActual");
 
-		String codigoCategoriaPropuesta = ServletRequestUtils.getStringParameter(request, "codigoCategoriaPropuesta");
+		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
-		if (!StringUtils.hasText(codigoCategoriaPropuesta)){
-			return "redirect:/empleos/"+idEmpleoActual+"/cambiarCategoria";
+		if (!StringUtils.hasText(proposedCategoryCode)){
+			return "redirect:/empleos/"+idEmpleoActual+"/cambiarCategory";
 		}
 
 
@@ -183,7 +183,7 @@ public class EmploymentController {
 
 		Empleo empleoActual = empleos.get(0);
 
-		employmentCreditsEntriesService.ascenderAgente(empleoActual, codigoCategoriaPropuesta);
+		employmentCreditsEntriesService.ascenderAgente(empleoActual, proposedCategoryCode);
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}
@@ -197,9 +197,9 @@ public class EmploymentController {
 		//String idEmpleoActual = ServletRequestUtils.getStringParameter(request, "idEmpleoActual");
 
 		String centroSectorId = ServletRequestUtils.getStringParameter(request, "centroSectorId");
-		String codigoCategoriaPropuesta = ServletRequestUtils.getStringParameter(request, "codigoCategoriaPropuesta");
+		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
-		if (!StringUtils.hasText(centroSectorId) || !StringUtils.hasText(codigoCategoriaPropuesta)){
+		if (!StringUtils.hasText(centroSectorId) || !StringUtils.hasText(proposedCategoryCode)){
 			return "redirect:/empleos/ingresarPropuestaAgenteForm";
 		}
 
@@ -210,7 +210,7 @@ public class EmploymentController {
 		}*/
 
 
-		employmentCreditsEntriesService.ingresarPropuestaAgente(codigoCategoriaPropuesta, Long.parseLong(centroSectorId));
+		employmentCreditsEntriesService.ingresarPropuestaAgente(proposedCategoryCode, Long.parseLong(centroSectorId));
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}

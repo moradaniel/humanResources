@@ -11,8 +11,8 @@ import javax.annotation.Resource;
 import org.dpi.agente.Agente;
 import org.dpi.agente.AgenteImpl;
 import org.dpi.agente.AgenteService;
-import org.dpi.categoria.Categoria;
-import org.dpi.categoria.CategoriaService;
+import org.dpi.category.Category;
+import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
@@ -47,8 +47,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	@Resource(name = "creditsPeriodService")
 	private CreditsPeriodService creditsPeriodService;
 	
-	@Resource(name = "categoriaService")
-	private CategoriaService categoriaService;
+	@Resource(name = "categoryService")
+	private CategoryService categoryService;
 	
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
@@ -67,7 +67,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 
 	@Override
-	public void ascenderAgente(Empleo currentEmployment, String codigoCategoriaNueva){
+	public void ascenderAgente(Empleo currentEmployment, String newCategoryCode){
 		
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
@@ -89,10 +89,10 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 			return;
 		}
 
-		Categoria categoriaNueva = categoriaService.findByCodigo(codigoCategoriaNueva);
+		Category newCategory = categoryService.findByCode(newCategoryCode);
 		Empleo newEmployment = new EmpleoImpl();
 		newEmployment.setAgente(currentEmployment.getAgente());
-		newEmployment.setCategoria(categoriaNueva);
+		newEmployment.setCategory(newCategory);
 		newEmployment.setCentroSector(currentEmployment.getCentroSector());
 		newEmployment.setOccupationalGroup(currentEmployment.getOccupationalGroup());
 		newEmployment.setFechaInicio(new Date());
@@ -102,7 +102,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear un movimiento de tipo ascenso 
 		MovimientoCreditosImpl movimientoAscenso = new MovimientoCreditosImpl();
 		movimientoAscenso.setTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondicion(),currentEmployment.getCategoria().getCodigo(),codigoCategoriaNueva);
+		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondicion(),currentEmployment.getCategory().getCode(),newCategoryCode);
 		movimientoAscenso.setGrantedStatus(GrantedStatus.Solicitado);
 		movimientoAscenso.setCreditsPeriod(currentCreditsPeriod);
 
@@ -149,7 +149,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear un movimiento de tipo baja 
 		MovimientoCreditosImpl movimientoBaja = new MovimientoCreditosImpl();
 		movimientoBaja.setTipoMovimientoCreditos(TipoMovimientoCreditos.BajaAgente);
-		int cantidadCreditosPorBaja = administradorCreditosService.getCreditosPorBaja(empleo.getCategoria().getCodigo());
+		int cantidadCreditosPorBaja = administradorCreditosService.getCreditosPorBaja(empleo.getCategory().getCode());
 
 		
 		movimientoBaja.setCantidadCreditos(cantidadCreditosPorBaja);
@@ -167,7 +167,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	
 	
 	@Override
-	public void ingresarPropuestaAgente(String codigoCategoriaPropuesta,Long centroSectorId) {
+	public void ingresarPropuestaAgente(String proposedCategoryCode,Long centroSectorId) {
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" attempting to ingresar propuesta agente:");/*+ movimiento.getId()+
@@ -184,8 +184,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear empleo
 		Empleo nuevoEmpleoPropuesto = new EmpleoImpl();
 		nuevoEmpleoPropuesto.setAgente(nuevoAgentePropuesto);
-		//setear categoria propuesta al empleo
-		nuevoEmpleoPropuesto.setCategoria(categoriaService.findByCodigo(codigoCategoriaPropuesta));
+		//set proposed category to the employment
+		nuevoEmpleoPropuesto.setCategory(categoryService.findByCode(proposedCategoryCode));
 		//al empleo ponerlo en estado pendiente
 		nuevoEmpleoPropuesto.setEstado(EmploymentStatus.PENDIENTE);
 		
@@ -204,7 +204,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		movimientoCreditosIngreso.setEmpleo(nuevoEmpleoPropuesto);
 		nuevoEmpleoPropuesto.addMovimientoCreditos(movimientoCreditosIngreso);
 		
-		int creditosPorIngreso = administradorCreditosService.getCreditosPorIngreso(codigoCategoriaPropuesta);
+		int creditosPorIngreso = administradorCreditosService.getCreditosPorIngreso(proposedCategoryCode);
 		movimientoCreditosIngreso.setCantidadCreditos(creditosPorIngreso);
 		
 		employmentService.save(nuevoEmpleoPropuesto);

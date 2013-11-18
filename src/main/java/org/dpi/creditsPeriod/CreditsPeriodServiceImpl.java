@@ -10,7 +10,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.dpi.agente.AgenteService;
-import org.dpi.categoria.CategoriaService;
+import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.slf4j.Logger;
@@ -34,8 +34,8 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
 	
-	@Resource(name = "categoriaService")
-	private CategoriaService categoriaService;
+	@Resource(name = "categoryService")
+	private CategoryService categoryService;
 	
 	@Resource(name = "agenteService")
 	private AgenteService agenteService;
@@ -104,13 +104,13 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 		this.administradorCreditosService = administradorCreditosService;
 	}
 
-	public CategoriaService getCategoriaService() {
-		return categoriaService;
+	public CategoryService getCategoryService() {
+		return categoryService;
 	}
 
 
-	public void setCategoriaService(CategoriaService categoriaService) {
-		this.categoriaService = categoriaService;
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
 	}
 	
 	public AgenteService getAgenteService() {

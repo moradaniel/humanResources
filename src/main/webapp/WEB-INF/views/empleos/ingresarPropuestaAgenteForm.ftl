@@ -8,7 +8,7 @@
 	
 		<tr>
 			<td>
-				<select id="codigoCategoriaPropuesta" name="codigoCategoriaPropuesta" >
+				<select id="proposedCategoryCode" name="proposedCategoryCode" >
 					<#-- assign keys = dropDownListMap?keys -->
 					<option value="">- Elija Categoria -</option>
 					<option value="12">12</option>

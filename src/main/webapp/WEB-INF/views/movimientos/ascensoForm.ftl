@@ -23,8 +23,8 @@
 			<td>
 				<#if empleoActual.occupationalGroup?exists >
 					${empleoActual.occupationalGroup.name} -  ${empleoActual.occupationalGroup.code} 
-					- Minima Categoria:${empleoActual.occupationalGroup.minimumCategory.codigo}   
-					- Maxima Categoria:${empleoActual.occupationalGroup.maximumCategory.codigo}
+					- Minima Categoria:${empleoActual.occupationalGroup.minimumCategory.code}   
+					- Maxima Categoria:${empleoActual.occupationalGroup.maximumCategory.code}
 				</#if>	
 			</td>
 		</tr>
@@ -33,27 +33,27 @@
 			<td>
 				<#if empleoActual.occupationalGroup?exists && empleoActual.occupationalGroup.parentOccupationalGroup?exists>
 					${empleoActual.occupationalGroup.parentOccupationalGroup.name} - ${empleoActual.occupationalGroup.parentOccupationalGroup.code} 
-					- Minima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.minimumCategory.codigo}   
-					- Maxima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.maximumCategory.codigo}
+					- Minima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.minimumCategory.code}   
+					- Maxima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.maximumCategory.code}
 				</#if>	
 			</td>
 		</tr>
 		<tr>
 			<td><label>Categoria Actual</label></td>
 			<td>
-				${empleoActual.categoria.codigo}
+				${empleoActual.category.code}
 			</td>
 		</tr>
 		<tr>
 			<td><label>Categoria Propuesta</label></td>
 			<td>
-				<select id="codigoCategoriaPropuesta" name="codigoCategoriaPropuesta" >
+				<select id="proposedCategoryCode" name="proposedCategoryCode" >
 					<#-- assign keys = dropDownListMap?keys -->
 					<option value="">- Elija Categoria -</option>
-					<#list categoriasDisponiblesParaAscenso as categoria>
+					<#list availableCategoriesForPromotion as category>
 						<#assign selected="">
-						<#if (categoriaSeleccionada?exists && key.codigo == categoriaSeleccionada)><#assign selected="selected"/></#if>
-						<option value="${categoria.codigo}" ${selected}>${categoria.codigo?default("")}</option>
+						<#if (selectedCategory?exists && key.code == selectedCategory)><#assign selected="selected"/></#if>
+						<option value="${category.code}" ${selected}>${category.code?default("")}</option>
 					</#list>
 				</select>
 			

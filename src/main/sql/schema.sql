@@ -152,12 +152,12 @@ CREATE OR REPLACE TRIGGER CREDITOS.AGENTE_TRG
 	end;
 /
 	
-create table CATEGORIA (ID number(19,0) not null, 
-		CODIGO varchar2(255 char), 
+create table CATEGORY (ID number(19,0) not null, 
+		CODE varchar2(255 char), 
 		primary key (ID));
 
 		
-CREATE SEQUENCE CREDITOS.CATEGORIA_SEQ
+CREATE SEQUENCE CREDITOS.CATEGORY_SEQ
   START WITH 1
   MAXVALUE 9999999999999999999999999999
   MINVALUE 1
@@ -166,13 +166,13 @@ CREATE SEQUENCE CREDITOS.CATEGORIA_SEQ
   NOORDER;
 
 
-CREATE OR REPLACE TRIGGER CREDITOS.CATEGORIA_TRG
-	before insert ON CREDITOS.CATEGORIA for each row
+CREATE OR REPLACE TRIGGER CREDITOS.CATEGORY_TRG
+	before insert ON CREDITOS.CATEGORY for each row
 	WHEN (
 	new.id is null
 	      )
 	begin
-	    select CREDITOS.CATEGORIA_SEQ.nextval into :new.id from dual;
+	    select CREDITOS.CATEGORY_SEQ.nextval into :new.id from dual;
 	end;
 /	
 	
@@ -182,7 +182,7 @@ create table EMPLEO (ID number(19,0) not null,
 	FECHAFIN        TIMESTAMP(7),
 	AGENTEID number(19,0) not null, 
 	CENTROSECTORID number(19,0) not null, 
-	CATEGORIAID number(19,0) not null,
+	CATEGORYID number(19,0) not null,
 	ESTADO  VARCHAR2(255 BYTE) NOT NULL,
 	EMPLEO_ANTERIOR_ID number(19,0),
 	OCCUPATIONAL_GROUP_ID number(19,0),
@@ -209,7 +209,7 @@ CREATE OR REPLACE TRIGGER CREDITOS.EMPLEO_TRG
 	
 alter table EMPLEO add constraint fk_Empleo_CentroSector foreign key (CENTROSECTORID) references CENTROSECTOR;
 alter table EMPLEO add constraint fk_Empleo_Agente foreign key (AGENTEID) references AGENTE;	
-alter table EMPLEO add constraint fk_Empleo_Categoria foreign key (CATEGORIAID) references CATEGORIA;
+alter table EMPLEO add constraint fk_Empleo_Category foreign key (CATEGORYID) references CATEGORY;
 
 
 create table MOVIMIENTOCREDITOS (ID number(19,0) not null, 
@@ -577,12 +577,12 @@ alter table CREDITOS.EMPLEO
 alter table CREDITOS.OCCUPATIONAL_GROUP 
         add constraint fk_occgroup_max_cat 
         foreign key (MAXIMUM_CATEGORY_ID) 
-        references CATEGORIA;
+        references CATEGORY;
 
 alter table CREDITOS.OCCUPATIONAL_GROUP 
         add constraint fk_occgroup_min_cat 
         foreign key (MINIMUM_CATEGORY_ID) 
-        references CATEGORIA;
+        references CATEGORY;
 
         
 CREATE SEQUENCE CREDITOS.OCCUPATIONAL_GROUP_SEQ

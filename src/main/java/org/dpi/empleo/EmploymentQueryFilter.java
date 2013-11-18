@@ -23,7 +23,7 @@ public class EmploymentQueryFilter implements Serializable {
 	private String cuil;
 	private String codigoCentro;
 	private String codigoSector;
-	private String codigoCategoria;
+	private String categoryCode;
 	private List<Long> agentesIds= new ArrayList<Long>();
 
 	private String reparticionId;
@@ -76,11 +76,11 @@ public class EmploymentQueryFilter implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public String getCodigoCategoria() {
-		return codigoCategoria;
+	public String getCategoryCode() {
+		return categoryCode;
 	}
-	public void setCodigoCategoria(String codigoCategoria) {
-		this.codigoCategoria = codigoCategoria;
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	
 	public String getReparticionId() {

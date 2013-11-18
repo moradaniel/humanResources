@@ -3,15 +3,15 @@
        "-//Hibernate/Hibernate Mapping DTD//EN"
        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="org.dpi.categoria.CategoriaImpl"    table="CATEGORIA">
+  <class name="org.dpi.category.CategoryImpl"    table="CATEGORY">
 
     <id name="id" column="ID" type="long">  
           <generator class="sequence">   
-				<param name="sequence">CATEGORIA_SEQ</param>
+				<param name="sequence">CATEGORY_SEQ</param>
           </generator>  
         </id> 
         
-    <property name="codigo" column="CODIGO" type="string"/> 
+    <property name="code" column="CODE" type="string"/> 
     
 
   </class>

@@ -59,10 +59,10 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				sb.append(" LEFT OUTER JOIN FETCH empleo.agente agente ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.centroSector centroSector");
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.categoria ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.category ");
 				sb.append(" LEFT OUTER JOIN FETCH movimiento.creditsPeriod creditsPeriod ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.empleoAnterior empleoAnterior");
-				sb.append(" LEFT OUTER JOIN FETCH empleoAnterior.categoria categoriaAnterior ");
+				sb.append(" LEFT OUTER JOIN FETCH empleoAnterior.category previousCategory ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.occupationalGroup occupationalGroup");
 				sb.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup");
 
@@ -148,9 +148,9 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				sb.append(" AND empleo.centroSector.codigoSector = '").append(codigoSector).append("'");
 			}
 			
-			String codigoCategoria = empleoQueryFilter.getCodigoCategoria();
-			if(codigoCategoria!=null) {
-				sb.append(" AND empleo.categoria.codigo = '").append(codigoCategoria).append("'");
+			String categoryCode = empleoQueryFilter.getCategoryCode();
+			if(categoryCode!=null) {
+				sb.append(" AND empleo.category.code = '").append(categoryCode).append("'");
 			}
 			
 			String idReparticion = empleoQueryFilter.getReparticionId();

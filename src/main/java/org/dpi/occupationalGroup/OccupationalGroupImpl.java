@@ -3,7 +3,7 @@ package org.dpi.occupationalGroup;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.dpi.categoria.Categoria;
+import org.dpi.category.Category;
 import org.dpi.domain.PersistentAbstract;
 
 public class OccupationalGroupImpl extends PersistentAbstract implements OccupationalGroup{
@@ -17,9 +17,9 @@ public class OccupationalGroupImpl extends PersistentAbstract implements Occupat
 	String name;
 	String description;
 	
-	Categoria minimumCategory;
+	Category minimumCategory;
 	
-	Categoria maximumCategory;
+	Category maximumCategory;
 	
 	OccupationalGroup parentOccupationalGroup;
 		
@@ -78,22 +78,22 @@ public class OccupationalGroupImpl extends PersistentAbstract implements Occupat
 	}
 	
 	@Override
-	public Categoria getMinimumCategory() {
+	public Category getMinimumCategory() {
 		return minimumCategory;
 	}
 
 	@Override
-	public void setMinimumCategory(Categoria minimumCategory) {
+	public void setMinimumCategory(Category minimumCategory) {
 		this.minimumCategory = minimumCategory;
 	}
 
 	@Override
-	public Categoria getMaximumCategory() {
+	public Category getMaximumCategory() {
 		return maximumCategory;
 	}
 
 	@Override
-	public void setMaximumCategory(Categoria maximumCategory) {
+	public void setMaximumCategory(Category maximumCategory) {
 		this.maximumCategory = maximumCategory;
 	}
 

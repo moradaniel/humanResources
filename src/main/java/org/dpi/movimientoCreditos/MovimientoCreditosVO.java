@@ -6,9 +6,9 @@ public class MovimientoCreditosVO{
 
 	MovimientoCreditos movimientoCreditos =  new MovimientoCreditosImpl();
 	
-	String categoriaActual;
+	String currentCategory;
 
-	String categoriaPropuesta;
+	String proposedCategory;
 	
 	String occupationalGroup;
 
@@ -30,20 +30,20 @@ public class MovimientoCreditosVO{
 		this.movimientoCreditos = movimientoCreditos;
 	}
 
-	public String getCategoriaActual() {
-		return categoriaActual;
+	public String getCurrentCategory() {
+		return currentCategory;
 	}
 
-	public void setCategoriaActual(String categoriaActual) {
-		this.categoriaActual = categoriaActual;
+	public void setCurrentCategory(String currentCategory) {
+		this.currentCategory = currentCategory;
 	}
 
-	public String getCategoriaPropuesta() {
-		return categoriaPropuesta;
+	public String getProposedCategory() {
+		return proposedCategory;
 	}
 
-	public void setCategoriaPropuesta(String categoriaPropuesta) {
-		this.categoriaPropuesta = categoriaPropuesta;
+	public void setProposedCategory(String proposedCategory) {
+		this.proposedCategory = proposedCategory;
 	}
 	
 	public boolean isCanAccountBorrarMovimiento() {

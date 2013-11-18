@@ -3,7 +3,7 @@ package org.dpi.occupationalGroup;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.dpi.categoria.Categoria;
+import org.dpi.category.Category;
 import org.dpi.domain.Persistent;
 
 
@@ -32,13 +32,13 @@ public interface OccupationalGroup extends Persistent,Serializable{
 			Set<OccupationalGroup> childrenOccupationalGroup);
 	
 	
-	public Categoria getMinimumCategory();
+	public Category getMinimumCategory();
 	
-	public void setMinimumCategory(Categoria minimumCategory);
+	public void setMinimumCategory(Category minimumCategory);
 
-	public Categoria getMaximumCategory();
+	public Category getMaximumCategory();
 
-	public void setMaximumCategory(Categoria maximumCategory);
+	public void setMaximumCategory(Category maximumCategory);
 	
 
 }

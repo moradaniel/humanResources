@@ -35,13 +35,13 @@
 	</set>
 	
 	<many-to-one name="minimumCategory"
-		class="org.dpi.categoria.CategoriaImpl"
+		class="org.dpi.category.CategoryImpl"
 		column="MINIMUM_CATEGORY_ID"
 		not-null="true"
 		foreign-key="fk_occgroup_min_cat"/>
 		
 	<many-to-one name="maximumCategory"
-		class="org.dpi.categoria.CategoriaImpl"
+		class="org.dpi.category.CategoryImpl"
 		column="MAXIMUM_CATEGORY_ID"
 		not-null="true"
 		foreign-key="fk_occgroup_max_cat"/>

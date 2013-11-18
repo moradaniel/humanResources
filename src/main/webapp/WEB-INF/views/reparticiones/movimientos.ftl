@@ -116,9 +116,9 @@
 					<td>${movimiento.movimientoCreditos.empleo.fechaFin!""}</td>
 					<td>${movimiento.movimientoCreditos.cantidadCreditos}</td>
 					
-					<td>${movimiento.categoriaActual?default("")}</td>
+					<td>${movimiento.currentCategory?default("")}</td>
 					
-					<td>${movimiento.categoriaPropuesta?default("")}</td>
+					<td>${movimiento.proposedCategory?default("")}</td>
 					
 					<td>${movimiento.movimientoCreditos.empleo.centroSector.codigoCentro}</td>
 					<td>${movimiento.movimientoCreditos.empleo.centroSector.nombreCentro}</td>

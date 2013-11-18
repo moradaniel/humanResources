@@ -2,7 +2,7 @@ package org.dpi.empleo;
 
 import java.util.List;
 
-import org.dpi.categoria.Categoria;
+import org.dpi.category.Category;
 import org.springframework.context.ApplicationContextAware;
 
 
@@ -36,6 +36,6 @@ public interface EmploymentService extends ApplicationContextAware
 	//Deprecated
 	public Empleo findPreviousEmpleo(Empleo empleo);
 
-	public List<Categoria> getAvailableCategoriesForPromotion(Empleo empleoActual);
+	public List<Category> getAvailableCategoriesForPromotion(Empleo empleoActual);
 
 }

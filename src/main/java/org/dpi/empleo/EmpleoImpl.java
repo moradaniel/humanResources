@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.agente.Agente;
-import org.dpi.categoria.Categoria;
+import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
@@ -23,7 +23,7 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	Agente agente;
 	CentroSector centroSector;
 	
-	Categoria categoria;
+	Category category;
 	
 	private Set<MovimientoCreditos> movimientosCreditos = new HashSet<MovimientoCreditos>();
 
@@ -81,13 +81,13 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	
 	
 	@Override
-	public Categoria getCategoria() {
-		return categoria;
+	public Category getCategory() {
+		return category;
 	}
 	
 	@Override
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 	
 	@Override
@@ -151,7 +151,7 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 		
 		sb.append(super.toString());
 		
-		sb.append("categoria", getCategoria().getCodigo());
+		sb.append("category", getCategory().getCode());
 		sb.append("estado", getEstado());
 
 		

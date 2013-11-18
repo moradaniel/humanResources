@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import org.dpi.agente.Agente;
-import org.dpi.categoria.Categoria;
+import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.Persistent;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
@@ -23,9 +23,9 @@ public interface Empleo extends Persistent,Serializable{
 
 	void setCentroSector(CentroSector centroSector);
 	
-	Categoria getCategoria();
+	Category getCategory();
 
-	void setCategoria(Categoria categoria);
+	void setCategory(Category category);
 	
 	EmploymentStatus getEstado();
 

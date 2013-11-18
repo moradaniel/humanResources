@@ -48,8 +48,8 @@
 	<subDataset name="TableDataset_Ascensos" uuid="8ed087b1-164d-4078-85a5-fecad399c5d1">
 		<field name="AGENTE_APELLIDO_NOMBRE" class="java.lang.String"/>
 		<field name="AGENTE_CUIL" class="java.lang.String"/>
-		<field name="EMPLOYMENT_CATEGORIA_ACTUAL" class="java.lang.String"/>
-		<field name="EMPLOYMENT_CATEGORIA_PROPUESTA" class="java.lang.String"/>
+		<field name="EMPLOYMENT_CURRENT_CATEGORY" class="java.lang.String"/>
+		<field name="EMPLOYMENT_PROPOSED_CATEGORY" class="java.lang.String"/>
 		<field name="EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
 		<field name="EMPLOYMENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
 	</subDataset>
@@ -146,7 +146,7 @@ Ministro/Secretario de Estado de
 									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{EMPLOYMENT_CATEGORIA_ACTUAL}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{EMPLOYMENT_CURRENT_CATEGORY}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -164,7 +164,7 @@ Ministro/Secretario de Estado de
 							<textField>
 								<reportElement x="0" y="0" width="57" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
-								<textFieldExpression><![CDATA[$F{EMPLOYMENT_CATEGORIA_PROPUESTA}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{EMPLOYMENT_PROPOSED_CATEGORY}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

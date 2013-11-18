@@ -6,8 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.dpi.agente.AgenteService;
-import org.dpi.categoria.Categoria;
-import org.dpi.categoria.CategoriaService;
+import org.dpi.category.Category;
+import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
@@ -31,8 +31,8 @@ public class EmploymentServiceImpl implements EmploymentService
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
 	
-	@Resource(name = "categoriaService")
-	private CategoriaService categoriaService;
+	@Resource(name = "categoryService")
+	private CategoryService categoryService;
 
 	@Resource(name = "occupationalGroupService")
 	private OccupationalGroupService occupationalGroupService;
@@ -111,13 +111,13 @@ public class EmploymentServiceImpl implements EmploymentService
 		this.administradorCreditosService = administradorCreditosService;
 	}
 
-	public CategoriaService getCategoriaService() {
-		return categoriaService;
+	public CategoryService getCategoryService() {
+		return categoryService;
 	}
 
 
-	public void setCategoriaService(CategoriaService categoriaService) {
-		this.categoriaService = categoriaService;
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
 	}
 
 
@@ -134,9 +134,9 @@ public class EmploymentServiceImpl implements EmploymentService
 	}
 	
 	
-	public List<Categoria> getAvailableCategoriesForPromotion(Empleo employment){
-		List <Categoria> availableCategories = new ArrayList<Categoria>();
-		List <Categoria> allCategories = this.categoriaService.findAll();
+	public List<Category> getAvailableCategoriesForPromotion(Empleo employment){
+		List <Category> availableCategories = new ArrayList<Category>();
+		List <Category> allCategories = this.categoryService.findAll();
 
 		//get first level occupational group
 		OccupationalGroup employmentOccupationalGroup = this.occupationalGroupService.findById(employment.getOccupationalGroup().getId());
@@ -144,13 +144,13 @@ public class EmploymentServiceImpl implements EmploymentService
 		//get second level occupational group
 		OccupationalGroup parentEmploymentOccupationalGroup = employmentOccupationalGroup.getParentOccupationalGroup(); 
 		
-		int minimumCategoryCodeInt = Integer.parseInt(parentEmploymentOccupationalGroup.getMinimumCategory().getCodigo());
-		int maximumCategoryCodeInt = Integer.parseInt(parentEmploymentOccupationalGroup.getMaximumCategory().getCodigo());
+		int minimumCategoryCodeInt = Integer.parseInt(parentEmploymentOccupationalGroup.getMinimumCategory().getCode());
+		int maximumCategoryCodeInt = Integer.parseInt(parentEmploymentOccupationalGroup.getMaximumCategory().getCode());
 		
-		int currentEmploymentCategoryCodeInt = Integer.parseInt(employment.getCategoria().getCodigo());
+		int currentEmploymentCategoryCodeInt = Integer.parseInt(employment.getCategory().getCode());
 		
-		for(Categoria category: allCategories){
-			Integer categoryCode = Integer.parseInt(category.getCodigo());
+		for(Category category: allCategories){
+			Integer categoryCode = Integer.parseInt(category.getCode());
 			if(categoryCode >= minimumCategoryCodeInt && categoryCode <= maximumCategoryCodeInt){
 				if(categoryCode > currentEmploymentCategoryCodeInt ){
 					availableCategories.add(category);

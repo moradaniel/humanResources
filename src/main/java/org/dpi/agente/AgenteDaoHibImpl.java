@@ -171,7 +171,7 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 				sb.append(" LEFT OUTER JOIN FETCH agente.empleos empleo");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.centroSector centroSector");
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.categoria ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.category ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.movimientosCreditos ");
 
 				sb.append(where);

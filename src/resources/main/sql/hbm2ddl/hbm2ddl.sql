@@ -7,9 +7,9 @@
         primary key (ID)
     );
 
-    create table CATEGORIA (
+    create table CATEGORY (
         ID number(19,0) not null,
-        CODIGO varchar2(255 char),
+        CODE varchar2(255 char),
         primary key (ID)
     );
 
@@ -41,7 +41,7 @@
         ESTADO varchar2(255 char),
         AGENTEID number(19,0) not null,
         CENTROSECTORID number(19,0) not null,
-        CATEGORIAID number(19,0) not null,
+        CATEGORYID number(19,0) not null,
         EMPLEO_ANTERIOR_ID number(19,0),
         OCCUPATIONAL_GROUP_ID number(19,0) not null,
         primary key (ID)
@@ -97,9 +97,9 @@
         references AGENTE;
 
     alter table EMPLEO 
-        add constraint fk_Empleo_Categoria 
-        foreign key (CATEGORIAID) 
-        references CATEGORIA;
+        add constraint fk_Empleo_Category 
+        foreign key (CATEGORYID) 
+        references CATEGORY;
 
     alter table EMPLEO 
         add constraint fk_Employment_OccupationalGroup 
@@ -124,12 +124,12 @@
     alter table OCCUPATIONAL_GROUP 
         add constraint fk_occgroup_max_cat 
         foreign key (MAXIMUM_CATEGORY_ID) 
-        references CATEGORIA;
+        references CATEGORY;
 
     alter table OCCUPATIONAL_GROUP 
         add constraint fk_occgroup_min_cat 
         foreign key (MINIMUM_CATEGORY_ID) 
-        references CATEGORIA;
+        references CATEGORY;
 
     alter table OCCUPATIONAL_GROUP 
         add constraint fk_OccGroup_parentOccGroup 
@@ -138,7 +138,7 @@
 
     create sequence AGENTE_SEQ;
 
-    create sequence CATEGORIA_SEQ;
+    create sequence CATEGORY_SEQ;
 
     create sequence CENTROSECTOR_SEQ;
 

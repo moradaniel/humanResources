@@ -25,8 +25,8 @@ public class ReparticionImpl extends PersistentAbstract implements Reparticion {
 		return this.code;
 	}
 	
-	public void setCode(String codigo){
-		this.code = codigo;
+	public void setCode(String code){
+		this.code = code;
 	}
 	
 	public String getNombre() {

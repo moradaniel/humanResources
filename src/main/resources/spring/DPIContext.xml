@@ -154,11 +154,11 @@
 		</property>
 	</bean>
 	
-	<bean id="categoriaService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="categoryService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.categoria.CategoriaServiceImpl">
-				<constructor-arg><ref local="categoriaDao"/></constructor-arg>
+			<bean class="org.dpi.category.CategoryServiceImpl">
+				<constructor-arg><ref local="categoryDao"/></constructor-arg>
 			</bean>
 		</property>
 		<property name="transactionAttributes">
@@ -174,10 +174,10 @@
 	</bean>
 
 	<!-- the Service DAO on which the Facade relies -->
-	<bean id="categoriaDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="categoryDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.categoria.CategoriaDaoHibImpl">
+			<bean class="org.dpi.category.CategoryDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -201,8 +201,8 @@
 				<property name="administradorCreditosService">
 					<ref bean="administradorCreditosService" />
 				</property>
-				<property name="categoriaService">
-					<ref bean="categoriaService" />
+				<property name="categoryService">
+					<ref bean="categoryService" />
 				</property>
 				<property name="agenteService">
 					<ref bean="agenteService" />
@@ -301,8 +301,8 @@
 				<!-- property name="administradorCreditosService">
 					<ref bean="administradorCreditosService" />
 				</property>
-				<property name="categoriaService">
-					<ref bean="categoriaService" />
+				<property name="categoryService">
+					<ref bean="categoryService" />
 				</property>
 				<property name="agenteService">
 					<ref bean="agenteService" />

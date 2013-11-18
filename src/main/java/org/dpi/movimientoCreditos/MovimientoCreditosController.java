@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dpi.categoria.CategoriaService;
+import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
@@ -40,8 +40,8 @@ public class MovimientoCreditosController {
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
 
-	@Resource(name = "categoriaService")
-	private CategoriaService categoriaService;
+	@Resource(name = "categoryService")
+	private CategoryService categoryService;
 	
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
@@ -80,13 +80,13 @@ public class MovimientoCreditosController {
 		this.employmentService = empleoService;
 	}
 
-	public CategoriaService getCategoriaService() {
-		return categoriaService;
+	public CategoryService getCategoryService() {
+		return categoryService;
 	}
 
 
-	public void setCategoriaService(CategoriaService categoriaService) {
-		this.categoriaService = categoriaService;
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
 	}
 
 

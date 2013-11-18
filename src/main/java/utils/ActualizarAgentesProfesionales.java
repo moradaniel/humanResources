@@ -116,9 +116,9 @@ public class ActualizarAgentesProfesionales {
 				// ascenderlo a categoria 21
 				
 				Empleo empleoActivo = agente.getEmpleoActivo();
-				Integer codigoCategoriaEmpleoActivo = Integer.parseInt(empleoActivo.getCategoria().getCodigo());
+				Integer activeEmploymentCategoryCode = Integer.parseInt(empleoActivo.getCategory().getCode());
 				
-				if(true/*!empleoActivo.hasMovimientosAscensoPendientes() && codigoCategoriaEmpleoActivo <21 */){
+				if(true/*!empleoActivo.hasMovimientosAscensoPendientes() && codigoCategoryEmpleoActivo <21 */){
 					employmentCreditsEntriesService.ascenderAgente( agente.getEmpleoActivo(), "21");
 					totalAgentesProfesionalesActivosAscendidosAutomaticamente++;
 				}

@@ -192,8 +192,8 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	}
 
 	
-	public int getCreditosPorCargaInicial(String codigoCategoria){
-		Integer creditos = creditosPorCargaInicial.get(codigoCategoria);
+	public int getCreditosPorCargaInicial(String categoryCode){
+		Integer creditos = creditosPorCargaInicial.get(categoryCode);
 		if(creditos==null){
 			creditos=0;
 		}
@@ -202,8 +202,8 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	}
 	
 
-	public int getCreditosPorBaja(String codigoCategoria){
-		Integer creditos = creditosASumarPorBaja.get(codigoCategoria);
+	public int getCreditosPorBaja(String categoryCode){
+		Integer creditos = creditosASumarPorBaja.get(categoryCode);
 		if(creditos==null){
 			creditos=0;
 		}
@@ -212,9 +212,9 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	}
 	
 	
-	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String codigoCategoriaActual, String codigoCategoriaNueva){
+	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String currentCategoryCode, String newCategoryCode){
 		Integer creditos = 0;
-		creditos = this.creditosPorAscenso.get(codigoCategoriaActual).get(codigoCategoriaNueva);	
+		creditos = this.creditosPorAscenso.get(currentCategoryCode).get(newCategoryCode);	
 
 		if(creditos==null){
 			creditos=0;
@@ -222,8 +222,8 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 		return creditos;
 	}
 	
-	public int getCreditosPorIngreso(String codigoCategoria){
-		Integer creditos = this.creditosARestarPorIngreso.get(codigoCategoria);
+	public int getCreditosPorIngreso(String categoryCode){
+		Integer creditos = this.creditosARestarPorIngreso.get(categoryCode);
 		if(creditos==null){
 			creditos=0;
 		}

@@ -7,13 +7,13 @@ import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 
 public interface AdministradorCreditosService {
 
-	public int getCreditosPorCargaInicial(String codigoCategoria);
+	public int getCreditosPorCargaInicial(String categoryCode);
 	
-	public int getCreditosPorBaja(String codigoCategoria);
+	public int getCreditosPorBaja(String categoryCode);
 	
-	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String codigoCategoriaActual, String codigoCategoriaNueva);
+	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String currentCategoryCode, String newCategoryCode);
 	
-	public int getCreditosPorIngreso(String codigoCategoria);
+	public int getCreditosPorIngreso(String categoryCode);
 	
 	public Long getCreditosPorCargaInicialDeReparticion(final CreditsPeriod creditsPeriod, final long reparticionId);
 	
