@@ -24,7 +24,7 @@ public class MovimientoCreditosForm {
 		this.movimientoCreditosId=movimientoCreditos.getId();
 		
 		//to show
-		this.employeeName=movimientoCreditos.getEmpleo().getAgente().getApellidoNombre();
+		this.employeeName=movimientoCreditos.getEmpleo().getPerson().getApellidoNombre();
 		
 		//to edit
 		this.grantedStatus=movimientoCreditos.getGrantedStatus();

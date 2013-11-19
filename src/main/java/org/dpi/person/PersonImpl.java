@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,10 +6,9 @@ import java.util.Set;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmploymentStatus;
 import org.janux.util.JanuxToStringStyle;
 
-public class AgenteImpl  extends PersistentAbstract implements Agente{
+public class PersonImpl  extends PersistentAbstract implements Person{
 	/**
 	 * 
 	 */
@@ -17,8 +16,8 @@ public class AgenteImpl  extends PersistentAbstract implements Agente{
 	
 	String cuil;
 	String apellidoNombre;
-	CondicionAgente condicion;
-	private Set<Empleo> empleos = new HashSet<Empleo>();
+	PersonCondition condition;
+	private Set<Empleo> employments = new HashSet<Empleo>();
 
 	public String getCuil() {
 		return cuil;
@@ -37,33 +36,22 @@ public class AgenteImpl  extends PersistentAbstract implements Agente{
 	}
 
 	@Override
-	public CondicionAgente getCondicion() {
-		return condicion;
+	public PersonCondition getCondition() {
+		return condition;
 	}
 
 	@Override
-	public void setCondicion(CondicionAgente condicionAgente) {
-		condicion = condicionAgente;
+	public void setCondition(PersonCondition personCondition) {
+		condition = personCondition;
 		
 	}
 
 	public Set<Empleo> getEmpleos() {
-		return empleos;
+		return employments;
 	}
 
 	public void setEmpleos(Set<Empleo> empleos) {
-		this.empleos = empleos;
-	}
-	
-
-	
-	public Empleo getEmpleoActivo(){
-		for(Empleo empleo:this.empleos){
-			if(empleo.getEstado()==EmploymentStatus.ACTIVO){
-				return empleo;
-			}
-		}
-		return null;
+		this.employments = empleos;
 	}
 	
 	public String toString() 

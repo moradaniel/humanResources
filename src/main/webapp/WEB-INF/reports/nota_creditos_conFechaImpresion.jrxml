@@ -46,17 +46,17 @@
 		</box>
 	</style>
 	<subDataset name="TableDataset_Ascensos" uuid="8ed087b1-164d-4078-85a5-fecad399c5d1">
-		<field name="AGENTE_APELLIDO_NOMBRE" class="java.lang.String"/>
-		<field name="AGENTE_CUIL" class="java.lang.String"/>
+		<field name="PERSON_APELLIDO_NOMBRE" class="java.lang.String"/>
+		<field name="PERSON_CUIL" class="java.lang.String"/>
 		<field name="EMPLOYMENT_CURRENT_CATEGORY" class="java.lang.String"/>
 		<field name="EMPLOYMENT_PROPOSED_CATEGORY" class="java.lang.String"/>
 		<field name="EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
 		<field name="EMPLOYMENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="TableDataset_Ingresos" uuid="f7de51a8-05af-4936-8a78-b22b412dc4d2">
-		<field name="AGENTE_NUEVO_PERFIL" class="java.lang.String"/>
+		<field name="PERSON_NUEVO_PERFIL" class="java.lang.String"/>
 		<field name="NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
-		<field name="AGENTE_NUEVO_CATEGORIA_PROPUESTA" class="java.lang.String"/>
+		<field name="PERSON_NUEVO_CATEGORIA_PROPUESTA" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.MovimientosAscensoReportDataSource" isForPrompting="false"/>
 	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.MovimientosIngresoReportDataSource" isForPrompting="false"/>
@@ -106,7 +106,7 @@ Ministro/Secretario de Estado de
 							<textField>
 								<reportElement x="0" y="0" width="135" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
-								<textFieldExpression><![CDATA[$F{AGENTE_APELLIDO_NOMBRE}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{PERSON_APELLIDO_NOMBRE}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -124,7 +124,7 @@ Ministro/Secretario de Estado de
 							<textField>
 								<reportElement x="0" y="0" width="55" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
-								<textFieldExpression><![CDATA[$F{AGENTE_CUIL}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{PERSON_CUIL}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -254,7 +254,7 @@ Ministro/Secretario de Estado de
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="157" height="20" uuid="0c191d25-5bc5-4297-b336-16590b2c8da1"/>
-								<textFieldExpression><![CDATA[$F{AGENTE_NUEVO_PERFIL}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{PERSON_NUEVO_PERFIL}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -269,7 +269,7 @@ Ministro/Secretario de Estado de
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 							<textField isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="120" height="20" uuid="a629df5f-be3b-47a5-ad86-d1a72d41da0f"/>
-								<textFieldExpression><![CDATA[$F{AGENTE_NUEVO_CATEGORIA_PROPUESTA}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{PERSON_NUEVO_CATEGORIA_PROPUESTA}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

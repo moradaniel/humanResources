@@ -18,9 +18,9 @@ public class MovimientosIngresoReportDataSource implements JRDataSource
 	protected int currRowNum = 0;
 	
 	public enum ReportFieldID {
-		AGENTE_NUEVO_PERFIL,
+		PERSON_NUEVO_PERFIL,
 		NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP,
-		AGENTE_NUEVO_CATEGORIA_PROPUESTA
+		PERSON_NUEVO_CATEGORIA_PROPUESTA
 	};
 	
 	public MovimientosIngresoReportDataSource(List<GenericReportRecord> records)

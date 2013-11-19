@@ -32,7 +32,7 @@
 
         <mapping resource="mappings/Reparticion.hbm.xml" />
         <mapping resource="mappings/CentroSector.hbm.xml" />
-		<mapping resource="mappings/Agente.hbm.xml" />
+		<mapping resource="mappings/Person.hbm.xml" />
 		<mapping resource="mappings/Category.hbm.xml" />
 		<mapping resource="mappings/MovimientoCreditos.hbm.xml" />
 		<mapping resource="mappings/Empleo.hbm.xml" />

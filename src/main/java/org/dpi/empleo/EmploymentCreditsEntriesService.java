@@ -13,11 +13,11 @@ import org.springframework.context.ApplicationContextAware;
  */
 public interface EmploymentCreditsEntriesService extends ApplicationContextAware
 {
-	public void ascenderAgente(Empleo empleo, String newCategoryCode);
+	public void promotePerson(Empleo empleo, String newCategoryCode);
 	
 	public void darDeBaja(Empleo empleo);
 	
-	public void ingresarPropuestaAgente(String proposedCategoryCode,Long centroSectorId);
+	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId);
 
 	public List<EmploymentVO> buildEmploymentsVO(List<Empleo> empleosActivos, Long reparticionId, Account currenUser);
 }

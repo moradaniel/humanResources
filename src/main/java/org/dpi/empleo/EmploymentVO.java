@@ -7,7 +7,7 @@ public class EmploymentVO{
 
 	Empleo employment =  new EmpleoImpl();
 	
-	boolean canAccountAscenderAgente = false;
+	boolean canAccountPromotePerson = false;
 		
 	public EmploymentVO(){
 		super();
@@ -22,12 +22,12 @@ public class EmploymentVO{
 	}
 
 	
-	public boolean isCanAccountAscenderAgente() {
-		return canAccountAscenderAgente;
+	public boolean isCanAccountPromotePerson() {
+		return canAccountPromotePerson;
 	}
 
-	public void setCanAccountAscenderAgente(boolean canAccountAscenderAgente) {
-		this.canAccountAscenderAgente = canAccountAscenderAgente;
+	public void setCanAccountPromotePerson(boolean canAccountPromotePerson) {
+		this.canAccountPromotePerson = canAccountPromotePerson;
 	}
 
 }

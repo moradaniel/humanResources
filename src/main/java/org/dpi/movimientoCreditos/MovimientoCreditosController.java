@@ -188,7 +188,7 @@ public class MovimientoCreditosController {
 			
 			for(MovimientoCreditosVO movimientoCreditosAscensoVO :movimientoCreditosVOReparticion){
 				MovimientoCreditosDTO movimientoCreditosDTO = new MovimientoCreditosDTO();
-				movimientoCreditosDTO.setName(movimientoCreditosAscensoVO.getMovimientoCreditos().getEmpleo().getAgente().getApellidoNombre());
+				movimientoCreditosDTO.setName(movimientoCreditosAscensoVO.getMovimientoCreditos().getEmpleo().getPerson().getApellidoNombre());
 				movimientosCreditosDTO.add(movimientoCreditosDTO);
 			}
 					

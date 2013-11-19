@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.dpi.agente.AgenteService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
@@ -29,6 +28,7 @@ import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
 import org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl;
 import org.dpi.movimientoCreditos.MovimientoCreditosVO;
+import org.dpi.person.PersonService;
 import org.dpi.security.AccountSettings;
 import org.dpi.security.UserAccessService;
 import org.dpi.security.UserSettingsFactory;
@@ -97,8 +97,8 @@ public class ReparticionController {
 	@Resource(name = "employmentCreditsEntriesService")
 	private EmploymentCreditsEntriesService employmentCreditsEntriesService;
 
-	@Resource(name = "agenteService")
-	private AgenteService agenteService;
+	@Resource(name = "personService")
+	private PersonService personService;
 
 
 	@Resource(name = "administradorCreditosService")
@@ -225,7 +225,7 @@ public class ReparticionController {
 			
 			List<Empleo> empleosActivos = employmentService.find(empleoQueryFilter);
 			
-			//canAccountAscenderAgente
+			//canAccountPromotePerson
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Account currenUser = (Account)accountObj;
 			List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(empleosActivos,reparticion.getId(),currenUser);
@@ -234,7 +234,7 @@ public class ReparticionController {
 			
 			
 			Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			model.addAttribute("canAccountIngresarAgente", EmploymentCreditsEntriesServiceImpl.canAccountIngresarAgente(currentUser));
+			model.addAttribute("canAccountProposeNewEmployment", EmploymentCreditsEntriesServiceImpl.canAccountProposeNewEmployment(currentUser));
 			
 
 

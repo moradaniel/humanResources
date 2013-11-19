@@ -24,7 +24,7 @@ public class EmploymentQueryFilter implements Serializable {
 	private String codigoCentro;
 	private String codigoSector;
 	private String categoryCode;
-	private List<Long> agentesIds= new ArrayList<Long>();
+	private List<Long> personsIds= new ArrayList<Long>();
 
 	private String reparticionId;
 	private String empleoId;
@@ -111,16 +111,16 @@ public class EmploymentQueryFilter implements Serializable {
 		this.estadosEmpleo.add(estadoEmpleo);
 	}
 	
-	public List<Long> getAgentesIds() {
-		return agentesIds;
+	public List<Long> getPersonsIds() {
+		return personsIds;
 	}
 	
-	public void setAgentesIds(List<Long> agentesIds) {
-		this.agentesIds = agentesIds;
+	public void setPersonsIds(List<Long> personsIds) {
+		this.personsIds = personsIds;
 	}
 	
-	public void addAgenteId(Long agenteId) {
-		this.agentesIds.add(agenteId);
+	public void addPersonId(Long personId) {
+		this.personsIds.add(personId);
 	}
 	
 	

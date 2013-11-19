@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.util.List;
 
@@ -11,51 +11,51 @@ import org.springframework.context.ApplicationContext;
 
 
 
-public class AgenteServiceImpl implements AgenteService
+public class PersonServiceImpl implements PersonService
 {
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	private final AgenteDao agenteDao;
+	private final PersonDao agenteDao;
 	private ApplicationContext applicationContext;
 	
-	public AgenteServiceImpl(final AgenteDao agenteDao) {
+	public PersonServiceImpl(final PersonDao agenteDao) {
 		this.agenteDao = agenteDao;
 	}
 
 	
-	public Agente findByCuil(String cuil){
+	public Person findByCuil(String cuil){
 		
 		return agenteDao.findByCuil(cuil);
 	}
 
 	
-	public void save(final Agente agente) 
+	public void save(final Person agente) 
 	{
 		agenteDao.save(agente);
 	}
 	
-	public void delete(Agente agente){
+	public void delete(Person agente){
 		agenteDao.delete(agente);
 	}
 	
-	public void saveOrUpdate(final Agente agente) 
+	public void saveOrUpdate(final Person agente) 
 	{
 		agenteDao.saveOrUpdate(agente);
 	}
 
 
-	public AgenteDao getAgenteDao()
+	public PersonDao getAgenteDao()
 	{
 		return agenteDao;
 	}
 
 	
-	public List<Agente> findAll(){
+	public List<Person> findAll(){
 		return this.agenteDao.findAll();
 	}
 	
-	public PageList<Agente> findAgentes(final QueryBind bind,
-			   final AgenteQueryFilter filter,
+	public PageList<Person> findAgentes(final QueryBind bind,
+			   final PersonQueryFilter filter,
 			   boolean isForExcel){
 		
 		return this.agenteDao.findAgentes(bind, filter, isForExcel);
@@ -68,7 +68,7 @@ public class AgenteServiceImpl implements AgenteService
 
 
 	@Override
-	public List<Agente> find(AgenteQueryFilter agenteQueryFilter) {
+	public List<Person> find(PersonQueryFilter agenteQueryFilter) {
 		return this.agenteDao.find(agenteQueryFilter);
 	}
 }

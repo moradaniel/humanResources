@@ -9,8 +9,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/empleos/altaEmpleoForm.ftl" />
 	</definition>
 
-	<definition name="empleos/ingresarPropuestaAgenteForm" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/empleos/ingresarPropuestaAgenteForm.ftl" />
+	<definition name="empleos/proposeNewEmploymentForm" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/empleos/proposeNewEmploymentForm.ftl" />
 	</definition>
 
 	

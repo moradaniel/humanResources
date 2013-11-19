@@ -63,7 +63,7 @@
 			<list>
 				<value>/mappings/Reparticion.hbm.xml</value>
 				<value>/mappings/CentroSector.hbm.xml</value>
-				<value>/mappings/Agente.hbm.xml</value>
+				<value>/mappings/Person.hbm.xml</value>
 				<value>/mappings/Category.hbm.xml</value>
 				<value>/mappings/Empleo.hbm.xml</value>
 				<value>/mappings/MovimientoCreditos.hbm.xml</value>

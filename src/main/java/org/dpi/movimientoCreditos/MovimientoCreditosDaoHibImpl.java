@@ -56,7 +56,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				StringBuffer sb = new StringBuffer();
 				sb.append(" FROM MovimientoCreditosImpl movimiento ");
 				sb.append(" LEFT OUTER JOIN FETCH movimiento.empleo empleo");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.agente agente ");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.person person ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.centroSector centroSector");
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.category ");
@@ -68,7 +68,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 
 				sb.append(where);
 				
-				sb.append(" ORDER BY empleo.agente.apellidoNombre asc, ");
+				sb.append(" ORDER BY empleo.person.apellidoNombre asc, ");
 				sb.append(" empleo.fechaInicio desc ");
 				
 				Query q = sess.createQuery(select+sb.toString());
@@ -135,7 +135,7 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 			
 			String cuil = empleoQueryFilter.getCuil();
 			if(cuil!=null) {
-				sb.append(" AND empleo.agente.cuil = '").append(cuil).append("'");
+				sb.append(" AND empleo.person.cuil = '").append(cuil).append("'");
 			}
 			
 			String codigoCentro = empleoQueryFilter.getCodigoCentro();
@@ -163,16 +163,16 @@ public class MovimientoCreditosDaoHibImpl extends DataAccessHibImplAbstract impl
 				sb.append(" AND empleo.id = '").append(idEmpleo).append("'");
 			}
 			
-			List<Long> agentesIds = empleoQueryFilter.getAgentesIds();
-			if(!CollectionUtils.isEmpty(agentesIds)){
-				if(agentesIds.size()==1) {
-					sb.append(" AND agente.id = '").append(agentesIds.get(0)).append("'");
+			List<Long> personsIds = empleoQueryFilter.getPersonsIds();
+			if(!CollectionUtils.isEmpty(personsIds)){
+				if(personsIds.size()==1) {
+					sb.append(" AND person.id = '").append(personsIds.get(0)).append("'");
 				}else{
 						sb.append(" AND (1<>1 ");
 						//take into account the limit of 1000 elements in an IN condition in Oracle
-						List<List<Long>> listsOfAgentsIds = org.dpi.util.CollectionUtils.chopped(agentesIds, 999);
+						List<List<Long>> listsOfAgentsIds = org.dpi.util.CollectionUtils.chopped(personsIds, 999);
 						for(List<Long> listOfAgentsIds :listsOfAgentsIds){
-							sb.append(" OR agente.id IN ( ")
+							sb.append(" OR person.id IN ( ")
 							.append(StringUtils.collectionToDelimitedString(listOfAgentsIds, ","))
 							.append(")");
 							

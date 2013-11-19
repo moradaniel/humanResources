@@ -2,7 +2,7 @@ package org.dpi.web.response;
 
 import java.io.Serializable;
 
-public class AgenteDto implements Serializable {
+public class PersonDto implements Serializable {
 	
 	private Long id;
 	private String apellidoNombre;

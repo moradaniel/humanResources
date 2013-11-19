@@ -4,20 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import org.dpi.agente.Agente;
 import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.Persistent;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.occupationalGroup.OccupationalGroup;
+import org.dpi.person.Person;
 
 
 public interface Empleo extends Persistent,Serializable{
 	
 
-	Agente getAgente();
+	Person getPerson();
 
-	void setAgente(Agente agente);
+	void setPerson(Person person);
 
 	CentroSector getCentroSector();
 

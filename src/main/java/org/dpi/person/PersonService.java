@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContextAware;
  * persistent storage
  *
  */
-public interface AgenteService extends ApplicationContextAware
+public interface PersonService extends ApplicationContextAware
 {
 	/**
 	 * Returns a possibly lightweight representation of the corresponding Agente, which may not
@@ -20,22 +20,22 @@ public interface AgenteService extends ApplicationContextAware
 	 *
 	 * @param code a business code that uniquely identifies this Agente
 	 */
-	public Agente findByCuil(String cuil);
+	public Person findByCuil(String cuil);
 	
 	
-	public PageList<Agente> findAgentes(final QueryBind bind,
-			   final AgenteQueryFilter filter,
+	public PageList<Person> findAgentes(final QueryBind bind,
+			   final PersonQueryFilter filter,
 			   boolean isForExcel);
 
-	public void delete(Agente agente);
+	public void delete(Person agente);
 	
-	public void save(final Agente agente); 
+	public void save(final Person agente); 
 	
-	public void saveOrUpdate(final Agente agente); 
+	public void saveOrUpdate(final Person agente); 
 	
-	public AgenteDao getAgenteDao();
+	public PersonDao getAgenteDao();
 
-	public List<Agente> find(AgenteQueryFilter agenteQueryFilter);
+	public List<Person> find(PersonQueryFilter agenteQueryFilter);
 
 
 }

@@ -52,7 +52,7 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 				
 				StringBuffer sb = new StringBuffer();
 				sb.append(" FROM EmpleoImpl empleo ");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.agente agente");
+				sb.append(" LEFT OUTER JOIN FETCH empleo.person person");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.centroSector centroSector");
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
 				sb.append(" LEFT OUTER JOIN FETCH empleo.category ");
@@ -67,7 +67,7 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 
 				sb.append(where);
 				
-				sb.append(" ORDER BY empleo.agente.apellidoNombre asc ");
+				sb.append(" ORDER BY empleo.person.apellidoNombre asc ");
 				
 				Query q = sess.createQuery(select+sb.toString());
 				/*q.setParameter("franchising", franchising);
@@ -89,7 +89,7 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 		if(empleoQueryFilter!=null) {
 			String cuil = empleoQueryFilter.getCuil();
 			if(cuil!=null) {
-				sb.append(" AND empleo.agente.cuil = '").append(cuil).append("'");
+				sb.append(" AND empleo.person.cuil = '").append(cuil).append("'");
 			}
 			
 			String codigoCentro = empleoQueryFilter.getCodigoCentro();
@@ -107,13 +107,13 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 				sb.append(" AND empleo.category.code = '").append(categoryCode).append("'");
 			}
 			
-			List<Long> agentesIds = empleoQueryFilter.getAgentesIds();
-			if(!CollectionUtils.isEmpty(agentesIds)){
-				if(agentesIds.size()==1) {
-					sb.append(" AND agente.id = '").append(agentesIds.get(0)).append("'");
+			List<Long> personsIds = empleoQueryFilter.getPersonsIds();
+			if(!CollectionUtils.isEmpty(personsIds)){
+				if(personsIds.size()==1) {
+					sb.append(" AND person.id = '").append(personsIds.get(0)).append("'");
 				}else{
-					sb.append(" AND agente.id IN ( ").append(agentesIds)
-					.append(StringUtils.collectionToDelimitedString(agentesIds, ","))
+					sb.append(" AND person.id IN ( ").append(personsIds)
+					.append(StringUtils.collectionToDelimitedString(personsIds, ","))
 					.append(")");
 				}
 				

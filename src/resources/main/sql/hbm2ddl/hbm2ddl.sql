@@ -1,9 +1,9 @@
 
-    create table AGENTE (
+    create table PERSON (
         ID number(19,0) not null,
         APELLIDONOMBRE varchar2(255 char),
         CUIL varchar2(255 char),
-        CONDICION varchar2(255 char),
+        CONDITION varchar2(255 char),
         primary key (ID)
     );
 
@@ -92,9 +92,9 @@
         references CENTROSECTOR;
 
     alter table EMPLEO 
-        add constraint fk_Empleo_Agente 
-        foreign key (AGENTEID) 
-        references AGENTE;
+        add constraint fk_Empleo_Person 
+        foreign key (PERSONID) 
+        references PERSON;
 
     alter table EMPLEO 
         add constraint fk_Empleo_Category 
@@ -136,7 +136,7 @@
         foreign key (PARENT_OCCUP_GROUP_ID) 
         references OCCUPATIONAL_GROUP;
 
-    create sequence AGENTE_SEQ;
+    create sequence PERSON_SEQ;
 
     create sequence CATEGORY_SEQ;
 

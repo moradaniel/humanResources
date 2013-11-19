@@ -115,11 +115,11 @@
 		</property>
 	</bean>
 
-	<bean id="agenteService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="personService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.agente.AgenteServiceImpl">
-				<constructor-arg><ref local="agenteDao"/></constructor-arg>
+			<bean class="org.dpi.person.PersonServiceImpl">
+				<constructor-arg><ref local="personDao"/></constructor-arg>
 			</bean>
 		</property>
 		<property name="transactionAttributes">
@@ -135,10 +135,10 @@
 	</bean>
 
 	<!-- the Service DAO on which the Facade relies -->
-	<bean id="agenteDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="personDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.agente.AgenteDaoHibImpl">
+			<bean class="org.dpi.person.PersonDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -204,8 +204,8 @@
 				<property name="categoryService">
 					<ref bean="categoryService" />
 				</property>
-				<property name="agenteService">
-					<ref bean="agenteService" />
+				<property name="personService">
+					<ref bean="personService" />
 				</property>
 				<property name="centroSectorService">
 					<ref bean="centroSectorService" />
@@ -253,7 +253,7 @@
 			<bean class="org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl">
 				<constructor-arg><ref local="movimientoCreditosDao"/></constructor-arg>
 				<!-- >constructor-arg><ref local="empleoService"/></constructor-arg -->
-				<constructor-arg><ref local="agenteService"/></constructor-arg>
+				<constructor-arg><ref local="personService"/></constructor-arg>
 				<constructor-arg><ref local="administradorCreditosService"/></constructor-arg>
 				<property name="employmentService">
 					<ref bean="employmentService" />
@@ -304,8 +304,8 @@
 				<property name="categoryService">
 					<ref bean="categoryService" />
 				</property>
-				<property name="agenteService">
-					<ref bean="agenteService" />
+				<property name="personService">
+					<ref bean="personService" />
 				</property>
 				<property name="centroSectorService">
 					<ref bean="centroSectorService" />
@@ -321,8 +321,8 @@
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
 				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
-				<prop key="ascenderAgente">PROPAGATION_REQUIRED</prop>
-				<prop key="ingresarPropuestaAgente">PROPAGATION_REQUIRED</prop>
+				<prop key="promotePerson">PROPAGATION_REQUIRED</prop>
+				<prop key="proposeNewEmployment">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
 		</property>

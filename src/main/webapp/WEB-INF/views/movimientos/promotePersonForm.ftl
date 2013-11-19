@@ -5,7 +5,7 @@
 
 <h2>Movimiento Ascenso</h2>
 
-<form id="ascensoForm" name="ascensoForm" action="${requestContext.contextPath}/empleos/updateAscenso" method="post">
+<form id="promotePersonForm" name="promotePersonForm" action="${requestContext.contextPath}/empleos/updateAscenso" method="post">
 
 
 	<input type="hidden" name="idEmpleoActual" value="${empleoActual.id?default('')}"/>
@@ -15,7 +15,7 @@
 		<tr>
 			<td><label>Apellido Nombre</label></td>
 			<td>
-				${empleoActual.agente.apellidoNombre}
+				${empleoActual.person.apellidoNombre}
 			</td>
 		</tr>
 		<tr>

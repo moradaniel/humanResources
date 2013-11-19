@@ -18,8 +18,8 @@ public class MovimientosAscensoReportDataSource implements JRDataSource
 	protected int currRowNum = 0;
 	
 	public enum ReportFieldID {
-		AGENTE_APELLIDO_NOMBRE,
-		AGENTE_CUIL,
+		PERSON_APELLIDO_NOMBRE,
+		PERSON_CUIL,
 		EMPLOYMENT_CURRENT_CATEGORY,
 		EMPLOYMENT_PROPOSED_CATEGORY,
 		EMPLOYMENT_OCCUPATIONAL_GROUP,

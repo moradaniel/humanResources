@@ -8,9 +8,6 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.dpi.agente.Agente;
-import org.dpi.agente.AgenteImpl;
-import org.dpi.agente.AgenteService;
 import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
@@ -23,6 +20,9 @@ import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.person.Person;
+import org.dpi.person.PersonImpl;
+import org.dpi.person.PersonService;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +54,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	private AdministradorCreditosService administradorCreditosService;
 	
 	
-	@Resource(name = "agenteService")
-	private AgenteService agenteService;
+	@Resource(name = "personService")
+	private PersonService personService;
 	
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
@@ -67,11 +67,11 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 
 	@Override
-	public void ascenderAgente(Empleo currentEmployment, String newCategoryCode){
+	public void promotePerson(Empleo currentEmployment, String newCategoryCode){
 		
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" attempting to ascender agente:");/*+ movimiento.getId()+
+			log.info("================ user:"+currentUser.getName()+" attempting to promote person:");/*+ movimiento.getId()+
 					" Type:"+movimiento.getTipoMovimientoCreditos().name()+
 					" Agent name:"+ movimiento.getEmpleo().getAgente().getApellidoNombre()+
 					" from status: "+movimiento.getGrantedStatus().name() + " to "+newEstado.name());*/	
@@ -80,7 +80,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 		
-		Agente employee = currentEmployment.getAgente();
+		Person employee = currentEmployment.getPerson();
 		List<Long> employeeIds = new ArrayList<Long>();
 		employeeIds.add(employee.getId());
 		Set<Long>resultEmployeeIds = movimientoCreditosService.haveMovimientosSolicitados(employeeIds, currentEmployment.getCentroSector().getReparticion().getId(), currentCreditsPeriod.getId());
@@ -91,7 +91,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 
 		Category newCategory = categoryService.findByCode(newCategoryCode);
 		Empleo newEmployment = new EmpleoImpl();
-		newEmployment.setAgente(currentEmployment.getAgente());
+		newEmployment.setPerson(currentEmployment.getPerson());
 		newEmployment.setCategory(newCategory);
 		newEmployment.setCentroSector(currentEmployment.getCentroSector());
 		newEmployment.setOccupationalGroup(currentEmployment.getOccupationalGroup());
@@ -102,7 +102,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear un movimiento de tipo ascenso 
 		MovimientoCreditosImpl movimientoAscenso = new MovimientoCreditosImpl();
 		movimientoAscenso.setTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondicion(),currentEmployment.getCategory().getCode(),newCategoryCode);
+		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondition(),currentEmployment.getCategory().getCode(),newCategoryCode);
 		movimientoAscenso.setGrantedStatus(GrantedStatus.Solicitado);
 		movimientoAscenso.setCreditsPeriod(currentCreditsPeriod);
 
@@ -123,9 +123,9 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		employmentService.saveOrUpdate(newEmployment);
 		
 		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" Successfully performed: ascender agente - "+
+			log.info("================ user:"+currentUser.getName()+" Successfully performed: promote person - "+
 					" centrosector: "+newEmployment.getCentroSector().toString()+
-					" Employee :"+ newEmployment.getAgente().toString()+
+					" Employee :"+ newEmployment.getPerson().toString()+
 					" creditsEntry: "+movimientoAscenso.toString());	
 		}
 	}
@@ -167,7 +167,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	
 	
 	@Override
-	public void ingresarPropuestaAgente(String proposedCategoryCode,Long centroSectorId) {
+	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId) {
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" attempting to ingresar propuesta agente:");/*+ movimiento.getId()+
@@ -177,13 +177,13 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		}
 		
 		// crear agente nn
-		Agente nuevoAgentePropuesto = createPendingAgent();
+		Person nuevoAgentePropuesto = createPendingAgent();
 		
-		agenteService.save(nuevoAgentePropuesto);
+		personService.save(nuevoAgentePropuesto);
 		
 		//crear empleo
 		Empleo nuevoEmpleoPropuesto = new EmpleoImpl();
-		nuevoEmpleoPropuesto.setAgente(nuevoAgentePropuesto);
+		nuevoEmpleoPropuesto.setPerson(nuevoAgentePropuesto);
 		//set proposed category to the employment
 		nuevoEmpleoPropuesto.setCategory(categoryService.findByCode(proposedCategoryCode));
 		//al empleo ponerlo en estado pendiente
@@ -219,8 +219,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 	
 	
-	private Agente createPendingAgent(){
-		AgenteImpl newAgente = new AgenteImpl();
+	private Person createPendingAgent(){
+		PersonImpl newAgente = new PersonImpl();
 		newAgente.setApellidoNombre("Ingreso Nuevo Propuesto");
 		newAgente.setCuil("");
 		return newAgente;
@@ -242,12 +242,12 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		List<Long> posiblesAgentesIds = new ArrayList<Long>();
 		for(Empleo employment:empleosActivos){
-			posiblesAgentesIds.add(employment.getAgente().getId());
+			posiblesAgentesIds.add(employment.getPerson().getId());
 		}
 		
-		Set<Long> agentesIds = new HashSet<Long>();
-		if(canAccountAscenderAgente(currenUser)){
-			agentesIds = movimientoCreditosService.haveMovimientosSolicitados(posiblesAgentesIds, reparticionId, currentCreditsPeriod.getId());
+		Set<Long> personsIds = new HashSet<Long>();
+		if(canAccountPromotePerson(currenUser)){
+			personsIds = movimientoCreditosService.haveMovimientosSolicitados(posiblesAgentesIds, reparticionId, currentCreditsPeriod.getId());
 		}
 		
 		List<EmploymentVO> employmentsVO = new ArrayList<EmploymentVO>();
@@ -255,7 +255,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 			EmploymentVO employmentVO = new EmploymentVO();
 			employmentVO.setEmployment(employment);
 			
-			employmentVO.setCanAccountAscenderAgente(canAccountAscenderAgente(currenUser) && !agentesIds.contains(employment.getAgente().getId()));
+			employmentVO.setCanAccountPromotePerson(canAccountPromotePerson(currenUser) && !personsIds.contains(employment.getPerson().getId()));
 
 			employmentsVO.add(employmentVO);
 		}
@@ -264,7 +264,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		return employmentsVO;
 	}
 	
-	public static boolean canAccountAscenderAgente(Account account) {
+	public static boolean canAccountPromotePerson(Account account) {
 		
 		if(account.hasPermissions("Manage_MovimientoCreditos", "CREATE")){
 			return true;
@@ -272,7 +272,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		return false;
 	}
 	
-	public static boolean canAccountIngresarAgente(Account account) {
+	public static boolean canAccountProposeNewEmployment(Account account) {
 		
 		if(account.hasPermissions("Manage_MovimientoCreditos", "CREATE")){
 			return true;

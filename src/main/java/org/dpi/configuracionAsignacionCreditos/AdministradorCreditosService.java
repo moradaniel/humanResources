@@ -1,8 +1,8 @@
 package org.dpi.configuracionAsignacionCreditos;
 
-import org.dpi.agente.CondicionAgente;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
+import org.dpi.person.PersonCondition;
 
 
 public interface AdministradorCreditosService {
@@ -11,7 +11,7 @@ public interface AdministradorCreditosService {
 	
 	public int getCreditosPorBaja(String categoryCode);
 	
-	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String currentCategoryCode, String newCategoryCode);
+	public int getCreditosPorAscenso(PersonCondition personCondition, String currentCategoryCode, String newCategoryCode);
 	
 	public int getCreditosPorIngreso(String categoryCode);
 	

@@ -32,8 +32,8 @@
 			<div id="table-actions">
 				<p class="buttoniseUs">
 					<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-						<#if canAccountIngresarAgente>
-							<a href="${requestContext.contextPath}/empleos/ingresarPropuestaAgenteForm">Ingresar Agente</a>
+						<#if canAccountProposeNewEmployment>
+							<a href="${requestContext.contextPath}/empleos/proposeNewEmploymentForm">Ingresar Agente</a>
 						</#if>
 					</#if>
 				</p>
@@ -66,8 +66,8 @@
 				    </#if>	
 				    
 				    	<tr class="${trStyle}">
-							<td>${empleoActivo.employment.agente.apellidoNombre}</td>
-							<td>${empleoActivo.employment.agente.condicion?default("")}</td>
+							<td>${empleoActivo.employment.person.apellidoNombre}</td>
+							<td>${empleoActivo.employment.person.condicion?default("")}</td>
 							<td>${empleoActivo.employment.category.code}</td>
 							
 							
@@ -94,7 +94,7 @@
 							
 							<#if empleoActivo.employment.occupationalGroup?exists >
 								<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-									<#if empleoActivo.canAccountAscenderAgente >
+									<#if empleoActivo.canAccountPromotePerson >
 										<a href="${empleosUrl}/${empleoActivo.employment.id}/promoteEmployment" class="ajaxLink">Ascender Agente</a>
 									</#if>
 								</#if>

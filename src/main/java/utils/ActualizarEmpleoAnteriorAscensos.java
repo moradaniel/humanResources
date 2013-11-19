@@ -2,13 +2,13 @@ package utils;
 
 import java.util.List;
 
-import org.dpi.agente.AgenteService;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmploymentService;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditosService;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.person.PersonService;
 import org.dpi.reparticion.ReparticionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class ActualizarEmpleoAnteriorAscensos {
 	
 	ReparticionService reparticionService;
 	
-	AgenteService agenteService;
+	PersonService agenteService;
 	
 	
 	

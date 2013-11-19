@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.dpi.agente.Agente;
-import org.dpi.agente.AgenteService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
@@ -15,6 +13,8 @@ import org.dpi.empleo.EmploymentQueryFilter;
 import org.dpi.empleo.EmploymentService;
 import org.dpi.empleo.EmploymentStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
+import org.dpi.person.Person;
+import org.dpi.person.PersonService;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,17 +32,17 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 
 	private EmploymentService employmentService;
 	
-	private final AgenteService agenteService;
+	private final PersonService personService;
 	private AdministradorCreditosService administradorCreditosService;
 	
 
 	private ApplicationContext applicationContext;
 	
 	public MovimientoCreditosServiceImpl(	final MovimientoCreditosDao movimientoCreditosDao,
-											final AgenteService agenteService,
+											final PersonService personService,
 											final AdministradorCreditosService administradorCreditosService) {
 		this.movimientoCreditosDao = movimientoCreditosDao;
-		this.agenteService = agenteService;
+		this.personService = personService;
 		this.administradorCreditosService = administradorCreditosService;
 	}
 
@@ -64,7 +64,7 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" attempting to delete creditsEntry: "+movimiento.toString());/*+ movimiento.getId()+
 					" Type:"+movimiento.getTipoMovimientoCreditos().name()+
-					" Agent name:"+ movimiento.getEmpleo().getAgente().getApellidoNombre()+
+					" Agent name:"+ movimiento.getEmpleo().getPerson().getApellidoNombre()+
 					" from status: "+movimiento.getGrantedStatus().name() + " to "+newEstado.name());*/	
 		}
 		
@@ -86,11 +86,11 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		
 		if(movimiento.getTipoMovimientoCreditos().equals(TipoMovimientoCreditos.IngresoAgente)){
 			
-			Agente agenteABorrar = movimiento.getEmpleo().getAgente();
+			Person personToBeDeleted = movimiento.getEmpleo().getPerson();
 			
 			employmentService.delete(movimiento.getEmpleo());
 			
-			agenteService.delete(agenteABorrar);
+			personService.delete(personToBeDeleted);
 					
 		}
 		
@@ -262,7 +262,7 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 			Empleo empleoAnterior = empleoaActualizar.getEmpleoAnterior();
 			//get the category of the previous employment
 			//Obtener los creditos por ascenso para la categoria anterior y la categoria actual
-			int nuevaCantidaddeCreditos = administradorCreditosService.getCreditosPorAscenso(empleoAnterior.getAgente().getCondicion(), 
+			int nuevaCantidaddeCreditos = administradorCreditosService.getCreditosPorAscenso(empleoAnterior.getPerson().getCondition(), 
 																							empleoAnterior.getCategory().getCode(),
 																							empleoaActualizar.getCategory().getCode());
 			movimientoCreditos.setCantidadCreditos(nuevaCantidaddeCreditos);
@@ -290,7 +290,7 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		if(currentUser!=null){
 			log.info("user:"+currentUser.getName()+" attempting to change granted status of movimiento:"+ movimiento.getId()+
 					" Type:"+movimiento.getTipoMovimientoCreditos().name()+
-					" Agent name:"+ movimiento.getEmpleo().getAgente().getApellidoNombre()+
+					" Agent name:"+ movimiento.getEmpleo().getPerson().getApellidoNombre()+
 					" from status: "+movimiento.getGrantedStatus().name() + " to "+newEstado.name());	
 		}	
 		
@@ -370,7 +370,7 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 		empleoQueryFilter.setReparticionId(String.valueOf(idReparticion));
-		empleoQueryFilter.setAgentesIds(agentesIds);
+		empleoQueryFilter.setPersonsIds(agentesIds);
 		empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.PENDIENTE);
 		
 		
@@ -383,12 +383,12 @@ public class MovimientoCreditosServiceImpl implements MovimientoCreditosService
 		
 		List<MovimientoCreditos> movimientosSolicitados = this.find(movimientoCreditosQueryFilter);
 
-		Set<Long> resultAgentesIds = new HashSet<Long>();
+		Set<Long> resultPersonsIds = new HashSet<Long>();
 		for(MovimientoCreditos movimientoCreditos : movimientosSolicitados){
-			resultAgentesIds.add(movimientoCreditos.getEmpleo().getAgente().getId());
+			resultPersonsIds.add(movimientoCreditos.getEmpleo().getPerson().getId());
 		}
 		
-		return resultAgentesIds;
+		return resultPersonsIds;
 	}
 	
 	public EmploymentService getEmploymentService() {

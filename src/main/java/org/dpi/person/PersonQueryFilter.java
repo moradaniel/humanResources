@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.io.Serializable;
 
@@ -11,14 +11,14 @@ import java.io.Serializable;
  * 
  *
  */
-public class AgenteQueryFilter implements Serializable {
+public class PersonQueryFilter implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String apellidoNombre;
 	private String cuil;
 	private Long agenteId;
-	private CondicionAgente condicionAgente;
+	private PersonCondition condicionAgente;
 
 
 	private Long reparticionId;
@@ -51,11 +51,11 @@ public class AgenteQueryFilter implements Serializable {
 		this.agenteId = agenteId;
 	}
 	
-	public CondicionAgente getCondicionAgente() {
+	public PersonCondition getCondicionAgente() {
 		return condicionAgente;
 	}
 	
-	public void setCondicionAgente(CondicionAgente condicionAgente) {
+	public void setCondicionAgente(PersonCondition condicionAgente) {
 		this.condicionAgente = condicionAgente;
 	}
 

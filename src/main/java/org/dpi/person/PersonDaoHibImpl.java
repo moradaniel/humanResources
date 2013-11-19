@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
  * persistent storage
  *
  */
-public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements AgenteDao
+public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements PersonDao
 {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -31,20 +31,20 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 			+ "FROM AgenteImpl agentes ";
 	
 	@SuppressWarnings("unchecked")
-	public List<Agente> findAll()
+	public List<Person> findAll()
 	{
 		Chronometer timer = new Chronometer();
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all agentes");
 
-		List<Agente> list = getHibernateTemplate().find("from AgenteImpl order by cuil");
+		List<Person> list = getHibernateTemplate().find("from AgenteImpl order by cuil");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " agente in " + timer.printElapsedTime());
 
 		return list;
 	}	
 	
-	public Agente findByCuil(String cuil){
+	public Person findByCuil(String cuil){
 		Chronometer timer = new Chronometer();
 
 		if (log.isDebugEnabled()) log.debug("attempting to find Agente with cuil '" + cuil );
@@ -58,7 +58,7 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 		
 		List list = getHibernateTemplate().findByNamedParam(queryString, paramNames, paramValues);
 
-		Agente agente = (list.size() > 0) ? (Agente)list.get(0) : null;
+		Person agente = (list.size() > 0) ? (Person)list.get(0) : null;
 
 		if (agente == null) {
 			log.warn("Unable to find Agente with cuil '" + cuil);
@@ -71,15 +71,15 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 	}
 	
 	
-	public PageList<Agente> findAgentes(final QueryBind bind,
-			   final AgenteQueryFilter filter,
+	public PageList<Person> findAgentes(final QueryBind bind,
+			   final PersonQueryFilter filter,
 			   boolean isForExcel) {
 
 		return doInHibernate(LIST_QUERY, LIST_QUERY_COUNT,
 		buildWhereClauseAgenteRequest(null, "", bind, filter), bind);
 	}
 	
-	private String buildWhereClauseAgenteRequest(Integer id, String KeyId, QueryBind bind, AgenteQueryFilter filter) {
+	private String buildWhereClauseAgenteRequest(Integer id, String KeyId, QueryBind bind, PersonQueryFilter filter) {
 
 		StringBuilder query_where = new StringBuilder();
 //		 if the id is  null that means we want to retrieve all loans for all Area Manager
@@ -151,13 +151,13 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 	}
 
 	@Override
-	public List<Agente> find(final AgenteQueryFilter agenteQueryFilter) {
+	public List<Person> find(final PersonQueryFilter agenteQueryFilter) {
 		Chronometer timer = new Chronometer();
 
 		if (log.isDebugEnabled()) log.debug("attempting to find Agente with filter '" + agenteQueryFilter.toString() + "'" );
 
 		@SuppressWarnings("unchecked")
-		List<Agente> list = getHibernateTemplate().executeFind(new HibernateCallback() {
+		List<Person> list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	
@@ -205,7 +205,7 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 					q.setMaxResults(bind.getCountToLastElement());
 					q.setFirstResult(bind.getFirstElement());
 				}*/				
-				List<Agente> list = q.list();
+				List<Person> list = q.list();
 				return list;
 			}
 		});
@@ -214,7 +214,7 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 		return list;
 	}
 	
-	private String buildWhereClause(AgenteQueryFilter agenteQueryFilter) {
+	private String buildWhereClause(PersonQueryFilter agenteQueryFilter) {
 		StringBuffer sb = new StringBuffer();
 		if(agenteQueryFilter!=null) {
 			String cuil = agenteQueryFilter.getCuil();
@@ -232,7 +232,7 @@ public class AgenteDaoHibImpl extends DataAccessHibImplAbstract implements Agent
 				sb.append(" AND centroSector.reparticion.id = :idReparticion ");
 			}
 
-			CondicionAgente condicionAgente = agenteQueryFilter.getCondicionAgente();
+			PersonCondition condicionAgente = agenteQueryFilter.getCondicionAgente();
 			if(condicionAgente!=null) {
 				sb.append(" AND agente.condicion =  :condicionAgente ");
 			}

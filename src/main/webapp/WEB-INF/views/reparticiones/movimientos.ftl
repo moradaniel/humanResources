@@ -101,8 +101,8 @@
 
 				<tr class="${trStyle}">
 					<td>${movimiento.movimientoCreditos.creditsPeriod.name}</td>
-					<td>${movimiento.movimientoCreditos.empleo.agente.apellidoNombre}</td>
-					<td>${movimiento.movimientoCreditos.empleo.agente.condicion?default("")}</td>
+					<td>${movimiento.movimientoCreditos.empleo.person.apellidoNombre}</td>
+					<td>${movimiento.movimientoCreditos.empleo.person.condition?default("")}</td>
 					<td>${movimiento.movimientoCreditos.tipoMovimientoCreditos}</td>
 					<td>
 						<#if movimiento.canAccountCambiarEstadoMovimiento>

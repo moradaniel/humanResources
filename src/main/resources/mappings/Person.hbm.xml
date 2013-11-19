@@ -4,23 +4,23 @@
        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	
-  <class name="org.dpi.agente.AgenteImpl"    table="AGENTE">
+  <class name="org.dpi.person.PersonImpl"    table="PERSON">
 
     <id name="id" column="ID" type="long">  
           <generator class="sequence">   
-				<param name="sequence">AGENTE_SEQ</param>
+				<param name="sequence">PERSON_SEQ</param>
           </generator>  
         </id> 
         
     <property name="apellidoNombre" column="APELLIDONOMBRE" type="string"/> 
     <property name="cuil" column="CUIL" type="string"/>
-    <property name="condicion" column="CONDICION" type="org.dpi.persistence.CondicionAgenteEnumUserType"/>
+    <property name="condition" column="CONDITION" type="org.dpi.persistence.PersonConditionEnumUserType"/>
 
     
 <!-- this association is bidirectional
-    	empleo side is marked as inverse="true" so the owner of the relation is Agente -->
+    	empleo side is marked as inverse="true" so the owner of the relation is Person -->
     <set name="empleos" cascade="save-update" lazy="true" inverse="true">
-		<key column="AGENTEID" foreign-key="fk_Empleo_Agente"/>
+		<key column="PERSONID" foreign-key="fk_Empleo_Person"/>
 		<one-to-many class="org.dpi.empleo.EmpleoImpl"/>
 	</set>
 

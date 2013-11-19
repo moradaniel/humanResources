@@ -19,10 +19,10 @@
 	<property name="estado" column="ESTADO" type="org.dpi.persistence.EmploymentStatusEnumUserType"/>
    
 	<many-to-one 
-		name="agente"
-		class="org.dpi.agente.AgenteImpl"
- 		column="AGENTEID" 
-		foreign-key="fk_Empleo_Agente"
+		name="person"
+		class="org.dpi.person.PersonImpl"
+ 		column="PERSONID" 
+		foreign-key="fk_Empleo_Person"
 		not-null="true"/>
 		
 	<many-to-one 

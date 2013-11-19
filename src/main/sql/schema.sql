@@ -127,13 +127,13 @@ ALTER TABLE CREDITOS.CENTROSECTOR ADD (
   
 
   
-create table AGENTE (ID number(19,0) not null, 
+create table PERSON (ID number(19,0) not null, 
 	APELLIDONOMBRE varchar2(255 char), 
 	CUIL varchar2(255 char), 
 	CONDICION varchar2(255 char),
 	primary key (ID));
 
-CREATE SEQUENCE CREDITOS.AGENTE_SEQ
+CREATE SEQUENCE CREDITOS.PERSON_SEQ
   START WITH 1
   MAXVALUE 9999999999999999999999999999
   MINVALUE 1
@@ -142,13 +142,13 @@ CREATE SEQUENCE CREDITOS.AGENTE_SEQ
   NOORDER;
 
 
-CREATE OR REPLACE TRIGGER CREDITOS.AGENTE_TRG
-	before insert ON CREDITOS.AGENTE for each row
+CREATE OR REPLACE TRIGGER CREDITOS.PERSON_TRG
+	before insert ON CREDITOS.PERSON for each row
 	WHEN (
 	new.id is null
 	      )
 	begin
-	    select CREDITOS.AGENTE_SEQ.nextval into :new.id from dual;
+	    select CREDITOS.PERSON_SEQ.nextval into :new.id from dual;
 	end;
 /
 	
@@ -180,7 +180,7 @@ CREATE OR REPLACE TRIGGER CREDITOS.CATEGORY_TRG
 create table EMPLEO (ID number(19,0) not null, 
 	FECHAINICIO     TIMESTAMP(7),
 	FECHAFIN        TIMESTAMP(7),
-	AGENTEID number(19,0) not null, 
+	PERSONID number(19,0) not null, 
 	CENTROSECTORID number(19,0) not null, 
 	CATEGORYID number(19,0) not null,
 	ESTADO  VARCHAR2(255 BYTE) NOT NULL,
@@ -208,7 +208,7 @@ CREATE OR REPLACE TRIGGER CREDITOS.EMPLEO_TRG
 /
 	
 alter table EMPLEO add constraint fk_Empleo_CentroSector foreign key (CENTROSECTORID) references CENTROSECTOR;
-alter table EMPLEO add constraint fk_Empleo_Agente foreign key (AGENTEID) references AGENTE;	
+alter table EMPLEO add constraint fk_Empleo_Person foreign key (PERSONID) references PERSON;	
 alter table EMPLEO add constraint fk_Empleo_Category foreign key (CATEGORYID) references CATEGORY;
 
 

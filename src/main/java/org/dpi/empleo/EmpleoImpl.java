@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.dpi.agente.Agente;
 import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.occupationalGroup.OccupationalGroup;
+import org.dpi.person.Person;
 import org.janux.util.JanuxToStringStyle;
 
 public class EmpleoImpl  extends PersistentAbstract implements Empleo{
@@ -20,7 +20,7 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	Agente agente;
+	Person person;
 	CentroSector centroSector;
 	
 	Category category;
@@ -38,13 +38,13 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	
 
 	@Override
-	public Agente getAgente() {
-		return this.agente;
+	public Person getPerson() {
+		return this.person;
 	}
 
 	@Override
-	public void setAgente(Agente agente) {
-		this.agente=agente;
+	public void setPerson(Person person) {
+		this.person=person;
 		
 	}
 	

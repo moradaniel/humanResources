@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -7,7 +7,7 @@ import org.dpi.domain.Persistent;
 import org.dpi.empleo.Empleo;
 
 
-public interface Agente extends Persistent,Serializable{
+public interface Person extends Persistent,Serializable{
 
 	String getApellidoNombre();
 
@@ -21,10 +21,10 @@ public interface Agente extends Persistent,Serializable{
 
 	public void setEmpleos(Set<Empleo> empleos);
 
-	CondicionAgente getCondicion();
+	PersonCondition getCondition();
 	
-	void setCondicion(CondicionAgente condicionAgente);
+	void setCondition(PersonCondition personCondition);
 
-	public Empleo getEmpleoActivo();
+	
 		
 }

@@ -5,8 +5,8 @@
 	
 <tiles-definitions>
 
-	<definition name="movimientos/ascensoForm" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/movimientos/ascensoForm.ftl" />
+	<definition name="movimientos/promotePersonForm" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/movimientos/promotePersonForm.ftl" />
 	</definition>
 	
 	<definition name="movimientos/cambioEstadoMovimientoForm" extends="standardLayout" templateType="freemarker">

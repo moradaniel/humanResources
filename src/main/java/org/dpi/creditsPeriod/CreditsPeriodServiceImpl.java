@@ -9,10 +9,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.dpi.agente.AgenteService;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.person.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -37,8 +37,8 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
 	
-	@Resource(name = "agenteService")
-	private AgenteService agenteService;
+	@Resource(name = "personService")
+	private PersonService personService;
 	
 	@Resource(name = "centroSectorService")
 	private CentroSectorService centroSectorService;
@@ -113,13 +113,13 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 		this.categoryService = categoryService;
 	}
 	
-	public AgenteService getAgenteService() {
-		return agenteService;
+	public PersonService getPersonService() {
+		return personService;
 	}
 
 
-	public void setAgenteService(AgenteService agenteService) {
-		this.agenteService = agenteService;
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
 	}
 
 	public CentroSectorService getCentroSectorService() {

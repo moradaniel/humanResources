@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dpi.agente.CondicionAgente;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.empleo.EmploymentQueryFilter;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosDaoHibImpl;
 import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.person.PersonCondition;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -212,7 +212,7 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	}
 	
 	
-	public int getCreditosPorAscenso(CondicionAgente condicionAgente, String currentCategoryCode, String newCategoryCode){
+	public int getCreditosPorAscenso(PersonCondition personCondition, String currentCategoryCode, String newCategoryCode){
 		Integer creditos = 0;
 		creditos = this.creditosPorAscenso.get(currentCategoryCode).get(newCategoryCode);	
 
@@ -248,7 +248,7 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 						" INNER JOIN movimiento.empleo empleo " +
 						" INNER JOIN empleo.centroSector centroSector " +
 						" INNER JOIN centroSector.reparticion reparticion "+
-						" INNER JOIN empleo.agente agente "+
+						" INNER JOIN empleo.person person "+
 						" where reparticion.id='"+reparticionId+"'" +
 						" AND movimiento.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.CargaInicialAgenteExistente.name()+"'"+
 						" AND movimiento.creditsPeriod.id = '"+creditsPeriod.getId()+"'";

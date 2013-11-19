@@ -3,12 +3,12 @@ package utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dpi.agente.Agente;
-import org.dpi.agente.AgenteQueryFilter;
-import org.dpi.agente.AgenteService;
-import org.dpi.agente.CondicionAgente;
 import org.dpi.empleo.Empleo;
 import org.dpi.empleo.EmploymentCreditsEntriesService;
+import org.dpi.person.Person;
+import org.dpi.person.PersonCondition;
+import org.dpi.person.PersonQueryFilter;
+import org.dpi.person.PersonService;
 import org.dpi.reparticion.ReparticionSearchInfo;
 import org.dpi.reparticion.ReparticionService;
 import org.slf4j.Logger;
@@ -26,17 +26,12 @@ public class ActualizarAgentesProfesionales {
 	
 	ReparticionService reparticionService;
 	
-	AgenteService agenteService;
+	PersonService personService;
 	
 	
 	
 	EmploymentCreditsEntriesService employmentCreditsEntriesService;
 		
-	//MovimientoCreditosService movimientoCreditosService;
-
-	//AdministradorCreditosService administradorCreditosService;
-	
-
 	
 	TransactionTemplate transactionTemplate;
 	
@@ -53,14 +48,9 @@ public class ActualizarAgentesProfesionales {
 		final ActualizarAgentesProfesionales actualizador = new ActualizarAgentesProfesionales();
 		
 		actualizador.setReparticionService((ReparticionService)context.getBean("reparticionService"));
-		actualizador.setAgenteService((AgenteService)context.getBean("agenteService"));
+		actualizador.setAgenteService((PersonService)context.getBean("agenteService"));
 		
 		actualizador.setEmploymentCreditsEntriesService((EmploymentCreditsEntriesService)context.getBean("employmentCreditsEntriesService"));
-		
-		//actualizador.setMovimientoCreditosService((MovimientoCreditosService)context.getBean("movimientoCreditosService"));
-		
-		
-		//actualizador.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
 		
 		actualizador.setTransactionTemplate((TransactionTemplate)context.getBean("transactionTemplate"));
 		
@@ -76,19 +66,7 @@ public class ActualizarAgentesProfesionales {
 		
     }
 
-	/*
-    public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService=administradorCreditosService;
-		
-	}
 
-	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return this.administradorCreditosService;
-	}*/
-
-	
 	/**
      * 
      */
@@ -104,22 +82,22 @@ public class ActualizarAgentesProfesionales {
 		for(ReparticionSearchInfo reparticionSearchInfo: reparticionSearchInfos)
 		{
 			//por cada reparticion obtener los agentes activos y profesionales
-			AgenteQueryFilter agenteQueryFilter = new AgenteQueryFilter();
+			PersonQueryFilter agenteQueryFilter = new PersonQueryFilter();
 			agenteQueryFilter.setReparticionId(reparticionSearchInfo.getReparticionId());
 			//agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
-			agenteQueryFilter.setCondicionAgente(CondicionAgente.Profesional);
+			agenteQueryFilter.setCondicionAgente(PersonCondition.Profesional);
 			
-			List<Agente> agentes = this.agenteService.find(agenteQueryFilter);
+			List<Person> agentes = this.personService.find(agenteQueryFilter);
 			totalAgentesProfesionalesActivos +=agentes.size();
-			for(Agente agente: agentes){
+			for(Person person: agentes){
 				//si el agente no tiene movimientos de asenso pendientes y la categoria es menor a 21
 				// ascenderlo a categoria 21
 				
-				Empleo empleoActivo = agente.getEmpleoActivo();
+				Empleo empleoActivo = null;
 				Integer activeEmploymentCategoryCode = Integer.parseInt(empleoActivo.getCategory().getCode());
 				
 				if(true/*!empleoActivo.hasMovimientosAscensoPendientes() && codigoCategoryEmpleoActivo <21 */){
-					employmentCreditsEntriesService.ascenderAgente( agente.getEmpleoActivo(), "21");
+					employmentCreditsEntriesService.promotePerson( empleoActivo, "21");
 					totalAgentesProfesionalesActivosAscendidosAutomaticamente++;
 				}
 			}
@@ -167,12 +145,12 @@ public class ActualizarAgentesProfesionales {
 		this.reparticionService = reparticionService;
 	}
 
-	public AgenteService getAgenteService() {
-		return agenteService;
+	public PersonService getAgenteService() {
+		return personService;
 	}
 
-	public void setAgenteService(AgenteService agenteService) {
-		this.agenteService = agenteService;
+	public void setAgenteService(PersonService agenteService) {
+		this.personService = agenteService;
 	}
 
 

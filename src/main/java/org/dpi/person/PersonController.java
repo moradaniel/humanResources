@@ -1,4 +1,4 @@
-package org.dpi.agente;
+package org.dpi.person;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.dpi.util.query.QueryBind.OrderDirection;
 import org.dpi.web.AgenteMapper;
 import org.dpi.web.JqgridFilter;
 import org.dpi.web.JqgridObjectMapper;
-import org.dpi.web.response.AgenteDto;
+import org.dpi.web.response.PersonDto;
 import org.dpi.web.response.JqgridResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class AgenteController {
+public class PersonController {
 
-	private AgenteService agenteService;
+	private PersonService personService;
 	
 	@Inject
-	public AgenteController(AgenteService agenteService) {
-		this.agenteService = agenteService;
+	public PersonController(PersonService personService) {
+		this.personService = personService;
 	}
 
 
-	@RequestMapping(value="/agentes/search", produces="application/json")
-	public @ResponseBody JqgridResponse<AgenteDto> records(
+	@RequestMapping(value="/persons/search", produces="application/json")
+	public @ResponseBody JqgridResponse<PersonDto> records(
     		@RequestParam("_search") Boolean search,
     		@RequestParam(value="filters", required=false) String filters,
     		@RequestParam(value="page", required=false) Integer page,//pageNumber requested
@@ -63,7 +63,7 @@ public class AgenteController {
 	/**
 	 * Helper method for returning filtered records
 	 */
-	public JqgridResponse<AgenteDto> getFilteredRecords(String filters, QueryBind bind, Integer page) {
+	public JqgridResponse<PersonDto> getFilteredRecords(String filters, QueryBind bind, Integer page) {
 		String apellidoNombre = null;
 		String cuil = null;
 
@@ -79,20 +79,20 @@ public class AgenteController {
 			}
 		}	
 		
-		AgenteQueryFilter agenteFilter = new AgenteQueryFilter();
+		PersonQueryFilter agenteFilter = new PersonQueryFilter();
 		
 		agenteFilter.setApellidoNombre(apellidoNombre);
 		agenteFilter.setCuil(cuil);
 		
-		PageList<Agente> agentes = agenteService.findAgentes(bind, agenteFilter, false);
+		PageList<Person> agentes = personService.findAgentes(bind, agenteFilter, false);
 		
         
         if (page > agentes.getTotalPageCount()){ 
         	page=agentes.getTotalPageCount().intValue();
         }
         
-		List<AgenteDto> agenteDtos = AgenteMapper.map(agentes);
-		JqgridResponse<AgenteDto> response = new JqgridResponse<AgenteDto>();
+		List<PersonDto> agenteDtos = AgenteMapper.map(agentes);
+		JqgridResponse<PersonDto> response = new JqgridResponse<PersonDto>();
 		response.setRows(agenteDtos);
 		response.setRecords(agentes.getTotalItems().toString());
 		response.setTotal(agentes.getTotalPageCount().toString());

@@ -3,9 +3,6 @@ package utils;
 import java.util.List;
 import java.util.Map;
 
-import org.dpi.agente.Agente;
-import org.dpi.agente.AgenteImpl;
-import org.dpi.agente.AgenteService;
 import org.dpi.category.Category;
 import org.dpi.category.CategoryImpl;
 import org.dpi.category.CategoryService;
@@ -24,6 +21,9 @@ import org.dpi.empleo.EmploymentStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
 import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
 import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.person.Person;
+import org.dpi.person.PersonImpl;
+import org.dpi.person.PersonService;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionImpl;
 import org.dpi.reparticion.ReparticionService;
@@ -48,7 +48,7 @@ public class ImportarEntidades {
 	
 	CentroSectorService centroSectorService;
 	
-	AgenteService agenteService;
+	PersonService personService;
 	
 	CategoryService categoryService;
 	
@@ -78,7 +78,7 @@ public class ImportarEntidades {
 		
 		importadorEntidades.setReparticionService((ReparticionService)context.getBean("reparticionService"));
 		importadorEntidades.setCentroSectorService((CentroSectorService)context.getBean("centroSectorService"));
-		importadorEntidades.setAgenteService((AgenteService)context.getBean("agenteService"));
+		importadorEntidades.setAgenteService((PersonService)context.getBean("agenteService"));
 		importadorEntidades.setCategoryService((CategoryService)context.getBean("categoriaService"));
 		importadorEntidades.setEmploymentService((EmploymentService)context.getBean("employmentService"));
 		
@@ -231,14 +231,14 @@ public class ImportarEntidades {
 	private void importarAgentes(Map<String, Object> row) {
 		String cuil = (String)row.get("CUIL");
 		if(cuil!=null){
-			Agente agente = agenteService.findByCuil(cuil);
+			Person agente = personService.findByCuil(cuil);
 			//si no existe todavia, crearlo
 			if(agente==null){
-				AgenteImpl newAgente = new AgenteImpl();
+				PersonImpl newAgente = new PersonImpl();
 				newAgente.setCuil(cuil);
 				String apellidoNombre = (String)row.get("APELLIDONOMBRE");
 				newAgente.setApellidoNombre(apellidoNombre);
-				agenteService.saveOrUpdate(newAgente);
+				personService.saveOrUpdate(newAgente);
 			}
 		}
 	}
@@ -277,7 +277,7 @@ public class ImportarEntidades {
 			System.out.println(cuil);
 			
 			if(cuil!=null){
-				Agente agente = agenteService.findByCuil(cuil);
+				Person person = personService.findByCuil(cuil);
 				String categoryCode = (String)row.get("CATEGORIA");
 				if(categoryCode!=null){
 
@@ -298,7 +298,7 @@ public class ImportarEntidades {
 					if(CollectionUtils.isEmpty(empleos)){
 						//crear una entrada en empleo
 						empleo = new EmpleoImpl();
-						empleo.setAgente(agente);
+						empleo.setPerson(person);
 						empleo.setCentroSector(centroSector);
 						empleo.setCategory(categoria);
 						empleo.setEstado(EmploymentStatus.ACTIVO);
@@ -466,12 +466,12 @@ public class ImportarEntidades {
 		this.transactionTemplate = transactionTemplate;
 	}
 	
-	public AgenteService getAgenteService() {
-		return agenteService;
+	public PersonService getAgenteService() {
+		return personService;
 	}
 
-	public void setAgenteService(AgenteService agenteService) {
-		this.agenteService = agenteService;
+	public void setAgenteService(PersonService agenteService) {
+		this.personService = agenteService;
 	}
 	
 	public CategoryService getCategoryService() {

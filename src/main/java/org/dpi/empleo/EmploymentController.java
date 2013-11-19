@@ -150,7 +150,7 @@ public class EmploymentController {
 			model.addAttribute("availableCategoriesForPromotion", employmentService.getAvailableCategoriesForPromotion(empleoActual));
 
 		}
-		return "movimientos/ascensoForm";
+		return "movimientos/promotePersonForm";
 	}
 
 
@@ -183,14 +183,14 @@ public class EmploymentController {
 
 		Empleo empleoActual = empleos.get(0);
 
-		employmentCreditsEntriesService.ascenderAgente(empleoActual, proposedCategoryCode);
+		employmentCreditsEntriesService.promotePerson(empleoActual, proposedCategoryCode);
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}
 
 	
-	@RequestMapping(value = "/empleos/ingresarPropuestaAgenteForm", method = RequestMethod.POST)
-	public String ingresarPropuestaAgenteFromForm(HttpServletRequest request, Model model) throws Exception {
+	@RequestMapping(value = "/empleos/proposeNewEmploymentForm", method = RequestMethod.POST)
+	public String proposeNewEmploymentFromForm(HttpServletRequest request, Model model) throws Exception {
 
 
 
@@ -200,7 +200,7 @@ public class EmploymentController {
 		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
 		if (!StringUtils.hasText(centroSectorId) || !StringUtils.hasText(proposedCategoryCode)){
-			return "redirect:/empleos/ingresarPropuestaAgenteForm";
+			return "redirect:/empleos/proposeNewEmploymentForm";
 		}
 
 
@@ -210,7 +210,7 @@ public class EmploymentController {
 		}*/
 
 
-		employmentCreditsEntriesService.ingresarPropuestaAgente(proposedCategoryCode, Long.parseLong(centroSectorId));
+		employmentCreditsEntriesService.proposeNewEmployment(proposedCategoryCode, Long.parseLong(centroSectorId));
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}
@@ -266,7 +266,7 @@ public class EmploymentController {
 	}
 
 	
-	@RequestMapping(value = "/empleos/ingresarPropuestaAgenteForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/empleos/proposeNewEmploymentForm", method = RequestMethod.GET)
 	public String setupFormIngresarPropuestaAgente(
 													HttpServletRequest request, 
 													HttpServletResponse response,
@@ -317,7 +317,7 @@ public class EmploymentController {
 		
 		model.addAttribute("centroSectoresDeReparticion", centroSectoresReparticion);
 		
-		return "empleos/ingresarPropuestaAgenteForm";
+		return "empleos/proposeNewEmploymentForm";
 	}
 	
 	@RequestMapping(value="/empleos/crearEmpleo", produces="application/json", method=RequestMethod.POST)
