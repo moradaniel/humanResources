@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.util.List;
 
@@ -19,23 +19,23 @@ public interface EmploymentService extends ApplicationContextAware
 	 *
 	 * @param code a business code that uniquely identifies this Employment
 	 */
-	public List<Empleo> find(EmploymentQueryFilter empleoQueryFilter);
+	public List<Employment> find(EmploymentQueryFilter employmentQueryFilter);
 
-	public Empleo findById(Long id);
+	public Employment findById(Long id);
 	
-	public List<Empleo> findEmpleosInactivos(final EmploymentQueryFilter empleoQueryFilter);
+	public List<Employment> findInactiveEmployments(final EmploymentQueryFilter employmentQueryFilter);
 	
-	public void delete(Empleo empleo);
+	public void delete(Employment employment);
 		
-	public void save(final Empleo empleo); 
+	public void save(final Employment employment); 
 	
-	public void saveOrUpdate(final Empleo empleo); 
+	public void saveOrUpdate(final Employment employment); 
 	
 	public EmploymentDao getEmploymentDao();
 
 	//Deprecated
-	public Empleo findPreviousEmpleo(Empleo empleo);
+	public Employment findPreviousEmployment(Employment employment);
 
-	public List<Category> getAvailableCategoriesForPromotion(Empleo empleoActual);
+	public List<Category> getAvailableCategoriesForPromotion(Employment currentEmployment);
 
 }

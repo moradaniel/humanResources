@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.domain.PersistentAbstract;
-import org.dpi.empleo.Empleo;
+import org.dpi.employment.Employment;
 import org.janux.util.JanuxToStringStyle;
 
 public class PersonImpl  extends PersistentAbstract implements Person{
@@ -17,7 +17,7 @@ public class PersonImpl  extends PersistentAbstract implements Person{
 	String cuil;
 	String apellidoNombre;
 	PersonCondition condition;
-	private Set<Empleo> employments = new HashSet<Empleo>();
+	private Set<Employment> employments = new HashSet<Employment>();
 
 	public String getCuil() {
 		return cuil;
@@ -46,11 +46,11 @@ public class PersonImpl  extends PersistentAbstract implements Person{
 		
 	}
 
-	public Set<Empleo> getEmpleos() {
+	public Set<Employment> getEmployments() {
 		return employments;
 	}
 
-	public void setEmpleos(Set<Empleo> empleos) {
+	public void setEmployments(Set<Employment> empleos) {
 		this.employments = empleos;
 	}
 	

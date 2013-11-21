@@ -1,12 +1,12 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.PersistentAbstract;
-import org.dpi.empleo.Empleo;
+import org.dpi.employment.Employment;
 import org.janux.util.JanuxToStringStyle;
 
-public class MovimientoCreditosImpl  extends PersistentAbstract implements MovimientoCreditos{
+public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntry{
 	
 
 	/**
@@ -14,9 +14,9 @@ public class MovimientoCreditosImpl  extends PersistentAbstract implements Movim
 	 */
 	private static final long serialVersionUID = 1L;
 
-	TipoMovimientoCreditos tipoMovimientoCreditos;
+	CreditsEntryType creditsEntryType;
 
-	Empleo empleo;
+	Employment employment;
 	int cantidadCreditos;
 
 	private String observaciones;
@@ -25,19 +25,19 @@ public class MovimientoCreditosImpl  extends PersistentAbstract implements Movim
 	
 	private GrantedStatus grantedStatus;
 	
-	public MovimientoCreditosImpl() {
+	public CreditsEntryImpl() {
 		super();
 	}
 	
 	
 	@Override
-	public Empleo getEmpleo() {
-		return this.empleo;
+	public Employment getEmployment() {
+		return this.employment;
 	}
 
 	@Override
-	public void setEmpleo(Empleo empleo) {
-		this.empleo=empleo;
+	public void setEmployment(Employment employment) {
+		this.employment=employment;
 		
 	}
 	@Override
@@ -52,13 +52,13 @@ public class MovimientoCreditosImpl  extends PersistentAbstract implements Movim
 	}
 	
 	
-	public TipoMovimientoCreditos getTipoMovimientoCreditos() {
-		return tipoMovimientoCreditos;
+	public CreditsEntryType getCreditsEntryType() {
+		return creditsEntryType;
 	}
 
-	public void setTipoMovimientoCreditos(
-			TipoMovimientoCreditos tipoMovimientoCreditos) {
-		this.tipoMovimientoCreditos = tipoMovimientoCreditos;
+	public void setCreditsEntryType(
+			CreditsEntryType creditsEntryType) {
+		this.creditsEntryType = creditsEntryType;
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class MovimientoCreditosImpl  extends PersistentAbstract implements Movim
 		
 		sb.append(super.toString());
 		
-		sb.append("tipoMovimientoCreditos", getTipoMovimientoCreditos().name());
+		sb.append("creditsEntryType", getCreditsEntryType().name());
 		sb.append("grantedStatus", getGrantedStatus().name());
 		sb.append("creditos", getCantidadCreditos());
 

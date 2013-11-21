@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.util.List;
 
@@ -98,33 +98,33 @@ public class EmploymentController {
 
 	@RequestMapping(value = "/empleos/{id}/baja", method = RequestMethod.GET)
 	public String baja(@PathVariable Long id, Model model) {
-		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setEmpleoId(id.toString());
+		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+		employmentQueryFilter.setEmploymentId(id.toString());
 
-		List<Empleo> empleos = employmentService.find(empleoQueryFilter);
+		List<Employment> employments = employmentService.find(employmentQueryFilter);
 
-		Empleo empleoADarDeBaja = empleos.get(0);
+		Employment empleoADarDeBaja = employments.get(0);
 
 
 		employmentCreditsEntriesService.darDeBaja(empleoADarDeBaja);
 
-		Empleo empleoDadoDeBaja = empleoADarDeBaja;
+		Employment empleoDadoDeBaja = empleoADarDeBaja;
 
 
 		//buscar los empleos de la reparticion
-		empleoQueryFilter = new EmploymentQueryFilter();
+		employmentQueryFilter = new EmploymentQueryFilter();
 
 		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
-		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
+		employmentQueryFilter.setReparticionId(reparticion.getId().toString());
 
-		empleos = employmentService.find(empleoQueryFilter);
-		model.addAttribute("empleos", empleos);
+		employments = employmentService.find(employmentQueryFilter);
+		model.addAttribute("empleos", employments);
 
 		return "redirect:/reparticiones/" + reparticion.getId();
 	}
 
-	@RequestMapping(value = "/empleos/{id}/promoteEmployment", method = RequestMethod.GET)
-	public String setupFormCambiarCategory(
+	@RequestMapping(value = "/empleos/{id}/promotePerson", method = RequestMethod.GET)
+	public String setupFormPromotePerson(
 			HttpServletRequest request, 
 			HttpServletResponse response,
 			@PathVariable Long id, Model model) {
@@ -134,20 +134,20 @@ public class EmploymentController {
 
 		if (reparticion != null){
 
-			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-			empleoQueryFilter.setEmpleoId(id.toString());
+			EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+			employmentQueryFilter.setEmploymentId(id.toString());
 
-			List<Empleo> empleos = employmentService.find(empleoQueryFilter);
+			List<Employment> employments = employmentService.find(employmentQueryFilter);
 
-			Empleo empleoActual = empleos.get(0);
+			Employment currentEmployment = employments.get(0);
 
-			if(empleoActual.getCentroSector().getReparticion().getId().longValue()!=reparticion.getId().longValue()){
+			if(currentEmployment.getCentroSector().getReparticion().getId().longValue()!=reparticion.getId().longValue()){
 
 				return "redirect:/reparticiones/reparticion/showEmpleos";
 			}
 
-			model.addAttribute("empleoActual", empleoActual);
-			model.addAttribute("availableCategoriesForPromotion", employmentService.getAvailableCategoriesForPromotion(empleoActual));
+			model.addAttribute("currentEmployment", currentEmployment);
+			model.addAttribute("availableCategoriesForPromotion", employmentService.getAvailableCategoriesForPromotion(currentEmployment));
 
 		}
 		return "movimientos/promotePersonForm";
@@ -157,17 +157,17 @@ public class EmploymentController {
 
 
 
-	@RequestMapping(value = "/empleos/updateAscenso", method = RequestMethod.POST)
-	public String updateAscensoFromForm(HttpServletRequest request, Model model) throws Exception {
+	@RequestMapping(value = "/empleos/promotePerson", method = RequestMethod.POST)
+	public String promotePersonFromForm(HttpServletRequest request, Model model) throws Exception {
 
 
 
-		String idEmpleoActual = ServletRequestUtils.getStringParameter(request, "idEmpleoActual");
+		String idCurrentEmployment = ServletRequestUtils.getStringParameter(request, "idCurrentEmployment");
 
 		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
 		if (!StringUtils.hasText(proposedCategoryCode)){
-			return "redirect:/empleos/"+idEmpleoActual+"/cambiarCategory";
+			return "redirect:/empleos/"+idCurrentEmployment+"/promotePerson";
 		}
 
 
@@ -177,13 +177,13 @@ public class EmploymentController {
 		}*/
 
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setEmpleoId(idEmpleoActual.toString());
+		empleoQueryFilter.setEmploymentId(idCurrentEmployment.toString());
 
-		List<Empleo> empleos = employmentService.find(empleoQueryFilter);
+		List<Employment> empleos = employmentService.find(empleoQueryFilter);
 
-		Empleo empleoActual = empleos.get(0);
+		Employment currentEmployment = empleos.get(0);
 
-		employmentCreditsEntriesService.promotePerson(empleoActual, proposedCategoryCode);
+		employmentCreditsEntriesService.promotePerson(currentEmployment, proposedCategoryCode);
 
 		return "redirect:/reparticiones/reparticion/showEmpleos";
 	}
@@ -230,31 +230,31 @@ public class EmploymentController {
 
 
 			// Add to model so it can be display in view
-			model.addAttribute("nuevoEmpleo", nuevoEmpleo);
+			model.addAttribute("nuevoEmployment", nuevoEmployment);
 		}*/
 
 		/*
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
-		empleoQueryFilter.setEmpleoId(id.toString());
+		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
+		empleoQueryFilter.setEmploymentId(id.toString());
 
-		List<Empleo> empleos = empleoService.find(empleoQueryFilter);
+		List<Employment> empleos = empleoService.find(empleoQueryFilter);
 
-		Empleo empleoActual = empleos.get(0);
+		Employment currentEmployment = empleos.get(0);
 
-		Agente agenteACambiarCategoria = empleoActual.getAgente();
+		Agente agenteACambiarCategoria = currentEmployment.getAgente();
 
 
-		model.addAttribute("empleoActual", empleoActual);
-		model.addAttribute("categoriasDisponiblesParaAscenso", getCategoriasDisponiblesParaAscenso(empleoActual));
+		model.addAttribute("currentEmployment", currentEmployment);
+		model.addAttribute("categoriasDisponiblesParaAscenso", getCategoriasDisponiblesParaAscenso(currentEmployment));
 		 */
 
 
 		/*empleoService.darDeBaja(empleoACambiarCategoria);
 
-		Empleo empleoDadoDeBaja = empleoACambiarCategoria;
+		Employment empleoDadoDeBaja = empleoACambiarCategoria;
 
 		//buscar los empleos de la reparticion
-		empleoQueryFilter = new EmpleoQueryFilter();
+		empleoQueryFilter = new EmploymentQueryFilter();
 
 		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
 		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
@@ -271,39 +271,39 @@ public class EmploymentController {
 													HttpServletRequest request, 
 													HttpServletResponse response,
 													Model model) {
-		/*if(!model.containsAttribute("nuevoEmpleo")){
+		/*if(!model.containsAttribute("nuevoEmployment")){
 
 
 			// Create initial  object
-			Empleo nuevoEmpleo = new EmpleoImpl();
+			Employment nuevoEmployment = new EmploymentImpl();
 
 
 			// Add to model so it can be display in view
-			model.addAttribute("nuevoEmpleo", nuevoEmpleo);
+			model.addAttribute("nuevoEmployment", nuevoEmployment);
 		}*/
 
 		/*
-		EmpleoQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
-		empleoQueryFilter.setEmpleoId(id.toString());
+		EmploymentQueryFilter empleoQueryFilter = new EmpleoQueryFilter();
+		empleoQueryFilter.setEmploymentId(id.toString());
 
-		List<Empleo> empleos = empleoService.find(empleoQueryFilter);
+		List<Employment> empleos = empleoService.find(empleoQueryFilter);
 
-		Empleo empleoActual = empleos.get(0);
+		Employment currentEmployment = empleos.get(0);
 
-		Agente agenteACambiarCategoria = empleoActual.getAgente();
+		Agente agenteACambiarCategoria = currentEmployment.getAgente();
 
 
-		model.addAttribute("empleoActual", empleoActual);
-		model.addAttribute("categoriasDisponiblesParaAscenso", getCategoriasDisponiblesParaAscenso(empleoActual));
+		model.addAttribute("currentEmployment", currentEmployment);
+		model.addAttribute("categoriasDisponiblesParaAscenso", getCategoriasDisponiblesParaAscenso(currentEmployment));
 		 */
 
 
 		/*empleoService.darDeBaja(empleoACambiarCategoria);
 
-		Empleo empleoDadoDeBaja = empleoACambiarCategoria;
+		Employment empleoDadoDeBaja = empleoACambiarCategoria;
 
 		//buscar los empleos de la reparticion
-		empleoQueryFilter = new EmpleoQueryFilter();
+		empleoQueryFilter = new EmploymentQueryFilter();
 
 		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
 		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
@@ -322,7 +322,7 @@ public class EmploymentController {
 	
 	@RequestMapping(value="/empleos/crearEmpleo", produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody StatusResponse crearEmpleoFromForm(
-			@RequestParam String idAgente,
+			@RequestParam String idPerson,
 			@RequestParam String idCentroSector){
 
 		//User newUser = new User(username, password, firstName, lastName, new Role(role));
@@ -334,7 +334,7 @@ public class EmploymentController {
 		if(result){
 			response.setMessage("Empleo dado de alta con exito");
 		}else{
-			response.setMessage("Error al crear empleo");
+			response.setMessage("Error al crear employment");
 
 		}
 		return response;

@@ -185,14 +185,14 @@ public class CentroSectorDaoHibImpl extends DataAccessHibImplAbstract implements
 	public List<CentroSector> findCentroSectores(final Reparticion reparticion){
 		Chronometer timer = new Chronometer();
 
-		//if (log.isDebugEnabled()) log.debug("attempting to find Empleo with filter '" + empleoQueryFilter.toString() + "'" );
+		//if (log.isDebugEnabled()) log.debug("attempting to find employment with filter '" + employmentQueryFilter.toString() + "'" );
 
 		List<CentroSector> list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	
 				
-				//String where = " WHERE 1=1 "+buildWhereClause(empleoQueryFilter);
+				//String where = " WHERE 1=1 "+buildWhereClause(employmentQueryFilter);
 				
 				String select = "Select centroSector ";
 				
@@ -217,7 +217,7 @@ public class CentroSectorDaoHibImpl extends DataAccessHibImplAbstract implements
 			}
 		});
 		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved empleo with codigo '" + codigo+ "' in " + timer.printElapsedTime());
+		//if (log.isDebugEnabled()) log.debug("successfully retrieved employment with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return list;
 	}
 }

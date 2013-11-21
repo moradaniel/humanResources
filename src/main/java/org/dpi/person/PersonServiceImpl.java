@@ -15,50 +15,50 @@ public class PersonServiceImpl implements PersonService
 {
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	private final PersonDao agenteDao;
+	private final PersonDao personDao;
 	private ApplicationContext applicationContext;
 	
-	public PersonServiceImpl(final PersonDao agenteDao) {
-		this.agenteDao = agenteDao;
+	public PersonServiceImpl(final PersonDao personDao) {
+		this.personDao = personDao;
 	}
 
 	
 	public Person findByCuil(String cuil){
 		
-		return agenteDao.findByCuil(cuil);
+		return personDao.findByCuil(cuil);
 	}
 
 	
-	public void save(final Person agente) 
+	public void save(final Person person) 
 	{
-		agenteDao.save(agente);
+		personDao.save(person);
 	}
 	
-	public void delete(Person agente){
-		agenteDao.delete(agente);
+	public void delete(Person person){
+		personDao.delete(person);
 	}
 	
-	public void saveOrUpdate(final Person agente) 
+	public void saveOrUpdate(final Person person) 
 	{
-		agenteDao.saveOrUpdate(agente);
+		personDao.saveOrUpdate(person);
 	}
 
 
-	public PersonDao getAgenteDao()
+	public PersonDao getPersonDao()
 	{
-		return agenteDao;
+		return personDao;
 	}
 
 	
 	public List<Person> findAll(){
-		return this.agenteDao.findAll();
+		return this.personDao.findAll();
 	}
 	
-	public PageList<Person> findAgentes(final QueryBind bind,
+	public PageList<Person> findPersons(final QueryBind bind,
 			   final PersonQueryFilter filter,
 			   boolean isForExcel){
 		
-		return this.agenteDao.findAgentes(bind, filter, isForExcel);
+		return this.personDao.findPersons(bind, filter, isForExcel);
 	}
 
 	public void setApplicationContext(final ApplicationContext aApplicationContext) throws BeansException
@@ -68,7 +68,7 @@ public class PersonServiceImpl implements PersonService
 
 
 	@Override
-	public List<Person> find(PersonQueryFilter agenteQueryFilter) {
-		return this.agenteDao.find(agenteQueryFilter);
+	public List<Person> find(PersonQueryFilter personQueryFilter) {
+		return this.personDao.find(personQueryFilter);
 	}
 }

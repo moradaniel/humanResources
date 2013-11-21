@@ -3,8 +3,8 @@
 <#import "/WEB-INF/views/creditosUtils.ftl" as creditosUtils />
 
 
-<div id="empleoResults">
-<#if !empleosActivos?has_content>
+<div id="employmentResults">
+<#if !activeEmployments?has_content>
 	<p>No se encontraron Agentes. Por favor cambie el criterio de busqueda.</p>
 <#else>
 
@@ -59,21 +59,21 @@
 					</tr>
 									
 
-				<#list empleosActivos as empleoActivo>
+				<#list activeEmployments as activeEmployment>
 					<#assign trStyle= "" >
-					<#if (empleoActivo_index % 2) == 0>
+					<#if (activeEmployment_index % 2) == 0>
 				    	<#assign trStyle= "alternate-row" >
 				    </#if>	
 				    
 				    	<tr class="${trStyle}">
-							<td>${empleoActivo.employment.person.apellidoNombre}</td>
-							<td>${empleoActivo.employment.person.condicion?default("")}</td>
-							<td>${empleoActivo.employment.category.code}</td>
+							<td>${activeEmployment.employment.person.apellidoNombre}</td>
+							<td>${activeEmployment.employment.person.condicion?default("")}</td>
+							<td>${activeEmployment.employment.category.code}</td>
 							
 							
 							<td>
-								<#if empleoActivo.employment.occupationalGroup?exists >
-									${empleoActivo.employment.occupationalGroup.name} - ${empleoActivo.employment.occupationalGroup.code}
+								<#if activeEmployment.employment.occupationalGroup?exists >
+									${activeEmployment.employment.occupationalGroup.name} - ${activeEmployment.employment.occupationalGroup.code}
 								<#else>
 									<span class="error-text">Error Falta asignar Tramo</span>								
 								</#if>
@@ -81,21 +81,21 @@
 							</td>
 							
 							<td>
-								<#if empleoActivo.employment.occupationalGroup?exists && empleoActivo.employment.occupationalGroup.parentOccupationalGroup?exists>
-									${empleoActivo.employment.occupationalGroup.parentOccupationalGroup.name}
+								<#if activeEmployment.employment.occupationalGroup?exists && activeEmployment.employment.occupationalGroup.parentOccupationalGroup?exists>
+									${activeEmployment.employment.occupationalGroup.parentOccupationalGroup.name}
 								</#if>
 							</td>
 							
-							<td>${empleoActivo.employment.centroSector.codigoCentro}</td>
-							<td>${empleoActivo.employment.centroSector.nombreCentro}</td>
-							<td>${empleoActivo.employment.centroSector.codigoSector}</td>
-							<td>${empleoActivo.employment.centroSector.nombreSector}</td>
+							<td>${activeEmployment.employment.centroSector.codigoCentro}</td>
+							<td>${activeEmployment.employment.centroSector.nombreCentro}</td>
+							<td>${activeEmployment.employment.centroSector.codigoSector}</td>
+							<td>${activeEmployment.employment.centroSector.nombreSector}</td>
 							<td>
 							
-							<#if empleoActivo.employment.occupationalGroup?exists >
+							<#if activeEmployment.employment.occupationalGroup?exists >
 								<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-									<#if empleoActivo.canAccountPromotePerson >
-										<a href="${empleosUrl}/${empleoActivo.employment.id}/promoteEmployment" class="ajaxLink">Ascender Agente</a>
+									<#if activeEmployment.canAccountPromotePerson >
+										<a href="${empleosUrl}/${activeEmployment.employment.id}/promotePerson" class="ajaxLink">Ascender Agente</a>
 									</#if>
 								</#if>
 							</#if>
@@ -107,7 +107,7 @@
 				    
 				
 			</#list>
-			<#if !empleosActivos?has_content>
+			<#if !activeEmployments?has_content>
 				<tr>
 					<td colspan="5">No se encontraron agentes</td>
 				</tr>

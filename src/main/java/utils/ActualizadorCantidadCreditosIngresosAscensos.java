@@ -1,8 +1,8 @@
 package utils;
 
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
-import org.dpi.empleo.EmploymentService;
-import org.dpi.movimientoCreditos.MovimientoCreditosService;
+import org.dpi.creditsEntry.CreditsEntryService;
+import org.dpi.employment.EmploymentService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.TransactionStatus;
@@ -14,7 +14,7 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 	
 	EmploymentService employmentService;
 	
-	MovimientoCreditosService movimientoCreditosService;
+	CreditsEntryService creditsEntryService;
 
 	AdministradorCreditosService administradorCreditosService;
 	
@@ -33,8 +33,8 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 
 		final ActualizadorCantidadCreditosIngresosAscensos actualizador = new ActualizadorCantidadCreditosIngresosAscensos();
 		
-		actualizador.setEmploymentService((EmploymentService)context.getBean("empleoService"));
-		actualizador.setMovimientoCreditosService((MovimientoCreditosService)context.getBean("movimientoCreditosService"));
+		actualizador.setEmploymentService((EmploymentService)context.getBean("employmentService"));
+		actualizador.setCreditsEntryService((CreditsEntryService)context.getBean("creditsEntryService"));
 		
 		
 		actualizador.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
@@ -70,7 +70,7 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
      */
 	private void actualizar() throws RuntimeException{
 		
-		this.movimientoCreditosService.actualizarCreditosPorAscenso();
+		this.creditsEntryService.actualizarCreditosPorAscenso();
 	}
 	
 	public TransactionTemplate getTransactionTemplate() {
@@ -86,17 +86,17 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 		return employmentService;
 	}
 
-	public void setEmploymentService(EmploymentService empleoService) {
-		this.employmentService = empleoService;
+	public void setEmploymentService(EmploymentService employmentService) {
+		this.employmentService = employmentService;
 	}
 	
-	public MovimientoCreditosService getMovimientoCreditosService() {
-		return movimientoCreditosService;
+	public CreditsEntryService getCreditsEntryService() {
+		return creditsEntryService;
 	}
 
-	public void setMovimientoCreditosService(
-			MovimientoCreditosService movimientoCreditosService) {
-		this.movimientoCreditosService = movimientoCreditosService;
+	public void setCreditsEntryService(
+			CreditsEntryService creditsEntryService) {
+		this.creditsEntryService = creditsEntryService;
 	}
 
 

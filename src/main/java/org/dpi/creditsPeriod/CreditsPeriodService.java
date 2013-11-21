@@ -21,7 +21,7 @@ public interface CreditsPeriodService extends ApplicationContextAware
 	 * @param year
 	 * @return
 	 */
-	public DateRange getDateRangeForEjercicioAnual(int year);
+	public DateRange getDateRangeForYear(int year);
 	
 	
 	public boolean isDateWithinEjercicioAnual(Date date, int year);
@@ -30,11 +30,11 @@ public interface CreditsPeriodService extends ApplicationContextAware
 	
 	public List<CreditsPeriod> find(CreditsPeriodQueryFilter creditsPeriodQueryFilter);
 
-	public void delete(CreditsPeriod empleo);
+	public void delete(CreditsPeriod employment);
 		
-	public void save(final CreditsPeriod empleo); 
+	public void save(final CreditsPeriod employment); 
 	
-	public void saveOrUpdate(final CreditsPeriod empleo); 
+	public void saveOrUpdate(final CreditsPeriod employment); 
 	
 	public CreditsPeriodDao getCreditsPeriodDao();
 	

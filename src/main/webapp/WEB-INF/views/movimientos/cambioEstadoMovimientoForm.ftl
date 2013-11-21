@@ -8,21 +8,21 @@
 <form id="cambioEstadoMovimientoForm" name="cambioEstadoMovimientoForm" action="${requestContext.contextPath}/movimientos/cambiarEstadoMovimiento" method="post">
 
 	
-	<@spring.formHiddenInput "movimientoCreditosForm.movimientoCreditosId" />
+	<@spring.formHiddenInput "creditsEntryForm.creditsEntryId" />
 
 	<table border="0">
 	
 		<tr>
 			<td><label>Apellido Nombre</label></td>
 			<td>
-				${movimientoCreditosForm.employeeName}
+				${creditsEntryForm.employeeName}
 			</td>
 		</tr>
 
 
 		<tr>
 			<td><label>Estado</label></td>
-			<td><@spring.formSingleSelect "movimientoCreditosForm.grantedStatus", grantedStatuses, "" /></td>
+			<td><@spring.formSingleSelect "creditsEntryForm.grantedStatus", grantedStatuses, "" /></td>
 		</tr>
 
 		<tr><td><br></td></tr>

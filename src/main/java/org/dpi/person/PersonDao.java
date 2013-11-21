@@ -17,10 +17,10 @@ public interface PersonDao extends HibernateDataAccessObject
 	
 	public Person findByCuil(String cuil);
 	
-	public PageList<Person> findAgentes(final QueryBind bind,
+	public PageList<Person> findPersons(final QueryBind bind,
 			   final PersonQueryFilter filter,
 			   boolean isForExcel);
 
-	public List<Person> find(PersonQueryFilter agenteQueryFilter);
+	public List<Person> find(PersonQueryFilter personQueryFilter);
 	
 }

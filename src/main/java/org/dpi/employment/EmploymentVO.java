@@ -1,11 +1,11 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 
 
 public class EmploymentVO{
 	
 
-	Empleo employment =  new EmpleoImpl();
+	Employment employment =  new EmploymentImpl();
 	
 	boolean canAccountPromotePerson = false;
 		
@@ -13,11 +13,11 @@ public class EmploymentVO{
 		super();
 	}
 	
-	public Empleo getEmployment() {
+	public Employment getEmployment() {
 		return employment;
 	}
 
-	public void setEmployment(Empleo employment) {
+	public void setEmployment(Employment employment) {
 		this.employment = employment;
 	}
 

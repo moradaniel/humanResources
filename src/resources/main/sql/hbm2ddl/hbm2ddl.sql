@@ -34,7 +34,7 @@
         primary key (ID)
     );
 
-    create table EMPLEO (
+    create table EMPLOYMENT (
         ID number(19,0) not null,
         FECHAINICIO timestamp,
         FECHAFIN timestamp,
@@ -42,17 +42,17 @@
         AGENTEID number(19,0) not null,
         CENTROSECTORID number(19,0) not null,
         CATEGORYID number(19,0) not null,
-        EMPLEO_ANTERIOR_ID number(19,0),
+        PREVIOUS_EMPLOYMENT_ID number(19,0),
         OCCUPATIONAL_GROUP_ID number(19,0) not null,
         primary key (ID)
     );
 
-    create table MOVIMIENTOCREDITOS (
+    create table CREDITSENTRY (
         ID number(19,0) not null,
         CANTIDADCREDITOS number(10,0),
-        EMPLEOID number(19,0),
+        EMPLOYMENTID number(19,0),
         CREDITSPERIODID number(19,0) not null,
-        TIPOMOVIMIENTOCREDITOS varchar2(255 char) not null,
+        CREDITS_ENTRY_TYPE varchar2(255 char) not null,
         GRANTED_STATUS varchar2(255 char) not null,
         OBSERVACIONES varchar2(255 char),
         primary key (ID)
@@ -86,38 +86,38 @@
         foreign key (PREVIOUS_CREDITSPERIOD_ID) 
         references CREDITSPERIOD;
 
-    alter table EMPLEO 
-        add constraint fk_Empleo_CentroSector 
+    alter table EMPLOYMENT 
+        add constraint fk_Employment_CentroSector 
         foreign key (CENTROSECTORID) 
         references CENTROSECTOR;
 
-    alter table EMPLEO 
-        add constraint fk_Empleo_Person 
+    alter table EMPLOYMENT 
+        add constraint fk_Employment_Person 
         foreign key (PERSONID) 
         references PERSON;
 
-    alter table EMPLEO 
-        add constraint fk_Empleo_Category 
+    alter table EMPLOYMENT 
+        add constraint fk_Employment_Category 
         foreign key (CATEGORYID) 
         references CATEGORY;
 
-    alter table EMPLEO 
+    alter table EMPLOYMENT 
         add constraint fk_Employment_OccupationalGroup 
         foreign key (OCCUPATIONAL_GROUP_ID) 
         references OCCUPATIONAL_GROUP;
 
-    alter table EMPLEO 
-        add constraint fk_Empleo_Empleo_Anterior 
-        foreign key (EMPLEO_ANTERIOR_ID) 
-        references EMPLEO;
+    alter table EMPLOYMENT 
+        add constraint fk_Employment_Previous_Employment 
+        foreign key (PREVIOUS_EMPLOYMENT_ID) 
+        references EMPLOYMENT;
 
-    alter table MOVIMIENTOCREDITOS 
-        add constraint fk_MovimientoCreditos_Empleo 
-        foreign key (EMPLEOID) 
-        references EMPLEO;
+    alter table CREDITSENTRY 
+        add constraint fk_CreditsEntry_Employment 
+        foreign key (EMPLOYMENTID) 
+        references EMPLOYMENT;
 
-    alter table MOVIMIENTOCREDITOS 
-        add constraint fk_MovimientoCredito_CreditsPeriod 
+    alter table CREDITSENTRY 
+        add constraint fk_CreditsEntry_CreditsPeriod 
         foreign key (CREDITSPERIODID) 
         references CREDITSPERIOD;
 
@@ -144,9 +144,9 @@
 
     create sequence CREDITSPERIOD_SEQ;
 
-    create sequence EMPLEO_SEQ;
+    create sequence EMPLOYMENT_SEQ;
 
-    create sequence MOVIMIENTOCREDITOS_SEQ;
+    create sequence CREDITSENTRY_SEQ;
 
     create sequence OCCUPATIONAL_GROUP_SEQ;
 

@@ -196,7 +196,7 @@
 	<bean id="employmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.empleo.EmploymentServiceImpl">
+			<bean class="org.dpi.employment.EmploymentServiceImpl">
 				<constructor-arg><ref local="employmentDao"/></constructor-arg>
 				<property name="administradorCreditosService">
 					<ref bean="administradorCreditosService" />
@@ -229,7 +229,7 @@
 	<bean id="employmentDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.empleo.EmploymentDaoHibImpl">
+			<bean class="org.dpi.employment.EmploymentDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -247,12 +247,12 @@
 	
 	
 	
-	<bean id="movimientoCreditosService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="creditsEntryService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl">
-				<constructor-arg><ref local="movimientoCreditosDao"/></constructor-arg>
-				<!-- >constructor-arg><ref local="empleoService"/></constructor-arg -->
+			<bean class="org.dpi.creditsEntry.CreditsEntryServiceImpl">
+				<constructor-arg><ref local="creditsEntryDao"/></constructor-arg>
+				<!-- >constructor-arg><ref local="employmentService"/></constructor-arg -->
 				<constructor-arg><ref local="personService"/></constructor-arg>
 				<constructor-arg><ref local="administradorCreditosService"/></constructor-arg>
 				<property name="employmentService">
@@ -275,10 +275,10 @@
 	</bean>
 
 	<!-- the Service DAO on which the Facade relies -->
-	<bean id="movimientoCreditosDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="creditsEntryDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.movimientoCreditos.MovimientoCreditosDaoHibImpl">
+			<bean class="org.dpi.creditsEntry.CreditsEntryDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -297,7 +297,7 @@
 	<bean id="employmentCreditsEntriesService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.empleo.EmploymentCreditsEntriesServiceImpl">
+			<bean class="org.dpi.employment.EmploymentCreditsEntriesServiceImpl">
 				<!-- property name="administradorCreditosService">
 					<ref bean="administradorCreditosService" />
 				</property>

@@ -5,43 +5,43 @@
 
 <h2>Movimiento Ascenso</h2>
 
-<form id="promotePersonForm" name="promotePersonForm" action="${requestContext.contextPath}/empleos/updateAscenso" method="post">
+<form id="promotePersonForm" name="promotePersonForm" action="${requestContext.contextPath}/empleos/promotePerson" method="post">
 
 
-	<input type="hidden" name="idEmpleoActual" value="${empleoActual.id?default('')}"/>
+	<input type="hidden" name="idCurrentEmployment" value="${currentEmployment.id?default('')}"/>
 
 	<table border="0">
 	
 		<tr>
 			<td><label>Apellido Nombre</label></td>
 			<td>
-				${empleoActual.person.apellidoNombre}
+				${currentEmployment.person.apellidoNombre}
 			</td>
 		</tr>
 		<tr>
 			<td><label>Tramo</label></td>
 			<td>
-				<#if empleoActual.occupationalGroup?exists >
-					${empleoActual.occupationalGroup.name} -  ${empleoActual.occupationalGroup.code} 
-					- Minima Categoria:${empleoActual.occupationalGroup.minimumCategory.code}   
-					- Maxima Categoria:${empleoActual.occupationalGroup.maximumCategory.code}
+				<#if currentEmployment.occupationalGroup?exists >
+					${currentEmployment.occupationalGroup.name} -  ${currentEmployment.occupationalGroup.code} 
+					- Minima Categoria:${currentEmployment.occupationalGroup.minimumCategory.code}   
+					- Maxima Categoria:${currentEmployment.occupationalGroup.maximumCategory.code}
 				</#if>	
 			</td>
 		</tr>
 		<tr>
 			<td><label>Agrupamiento</label></td>
 			<td>
-				<#if empleoActual.occupationalGroup?exists && empleoActual.occupationalGroup.parentOccupationalGroup?exists>
-					${empleoActual.occupationalGroup.parentOccupationalGroup.name} - ${empleoActual.occupationalGroup.parentOccupationalGroup.code} 
-					- Minima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.minimumCategory.code}   
-					- Maxima Categoria:${empleoActual.occupationalGroup.parentOccupationalGroup.maximumCategory.code}
+				<#if currentEmployment.occupationalGroup?exists && currentEmployment.occupationalGroup.parentOccupationalGroup?exists>
+					${currentEmployment.occupationalGroup.parentOccupationalGroup.name} - ${currentEmployment.occupationalGroup.parentOccupationalGroup.code} 
+					- Minima Categoria:${currentEmployment.occupationalGroup.parentOccupationalGroup.minimumCategory.code}   
+					- Maxima Categoria:${currentEmployment.occupationalGroup.parentOccupationalGroup.maximumCategory.code}
 				</#if>	
 			</td>
 		</tr>
 		<tr>
 			<td><label>Categoria Actual</label></td>
 			<td>
-				${empleoActual.category.code}
+				${currentEmployment.category.code}
 			</td>
 		</tr>
 		<tr>

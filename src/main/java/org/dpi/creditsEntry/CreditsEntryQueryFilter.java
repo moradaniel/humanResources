@@ -1,11 +1,11 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dpi.empleo.EmploymentQueryFilter;
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
+import org.dpi.employment.EmploymentQueryFilter;
 
 
 /**
@@ -16,7 +16,7 @@ import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
  * 
  *
  */
-public class MovimientoCreditosQueryFilter implements Serializable {
+public class CreditsEntryQueryFilter implements Serializable {
 	
 	
 	/**
@@ -24,29 +24,29 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	EmploymentQueryFilter empleoQueryFilter;
+	EmploymentQueryFilter employmentQueryFilter;
 	
 	Long id;
 	
 	Long idCreditsPeriod;
 
-	List<TipoMovimientoCreditos> tiposMovimientoCreditos = new ArrayList<TipoMovimientoCreditos>();
+	List<CreditsEntryType> creditsEntryTypes = new ArrayList<CreditsEntryType>();
 	
 	List<GrantedStatus> grantedStatuses = new ArrayList<GrantedStatus>();
 	
 	Boolean hasCredits = null;
 	
 
-	public MovimientoCreditosQueryFilter(){
+	public CreditsEntryQueryFilter(){
 		
 	}
 
 	public EmploymentQueryFilter getEmploymentQueryFilter() {
-		return empleoQueryFilter;
+		return employmentQueryFilter;
 	}
 
-	public void setEmploymentQueryFilter(EmploymentQueryFilter empleoQueryFilter) {
-		this.empleoQueryFilter = empleoQueryFilter;
+	public void setEmploymentQueryFilter(EmploymentQueryFilter employmentQueryFilter) {
+		this.employmentQueryFilter = employmentQueryFilter;
 	}
 	
 	public Long getId() {
@@ -57,17 +57,17 @@ public class MovimientoCreditosQueryFilter implements Serializable {
 		this.id = id;
 	}
 	
-	public List<TipoMovimientoCreditos> getTiposMovimientoCreditos() {
-		return tiposMovimientoCreditos;
+	public List<CreditsEntryType> getCreditsEntryTypes() {
+		return creditsEntryTypes;
 	}
 
-	public void setTiposMovimientoCreditos(
-			List<TipoMovimientoCreditos> tiposMovimientoCreditos) {
-		this.tiposMovimientoCreditos = tiposMovimientoCreditos;
+	public void setCreditsEntryTypes(
+			List<CreditsEntryType> tiposCreditsEntry) {
+		this.creditsEntryTypes = tiposCreditsEntry;
 	}
 	
-	public void addTipoMovimientoCreditos(TipoMovimientoCreditos tipoMovimientoCreditos) {
-		this.tiposMovimientoCreditos.add(tipoMovimientoCreditos);
+	public void addCreditsEntryType(CreditsEntryType tipoCreditsEntry) {
+		this.creditsEntryTypes.add(tipoCreditsEntry);
 	}
 	
 	public List<GrantedStatus> getGrantedStatuses(){

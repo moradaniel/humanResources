@@ -1,30 +1,30 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
 import java.io.Serializable;
 
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.Persistent;
-import org.dpi.empleo.Empleo;
+import org.dpi.employment.Employment;
 
 
-public interface MovimientoCreditos extends Persistent,Serializable{
+public interface CreditsEntry extends Persistent,Serializable{
 	
 	public enum GrantedStatus{
 		Solicitado, //Requested
 		Otorgado //Granted
 	}
 
-	Empleo getEmpleo();
+	Employment getEmployment();
 
-	void setEmpleo(Empleo empleo);
+	void setEmployment(Employment employment);
 	
 	int getCantidadCreditos();
 
 	void setCantidadCreditos(int cantidadCreditos);
 	
-	public TipoMovimientoCreditos getTipoMovimientoCreditos();
+	public CreditsEntryType getCreditsEntryType();
 
-	public void setTipoMovimientoCreditos(TipoMovimientoCreditos tipoMovimientoCreditos);
+	public void setCreditsEntryType(CreditsEntryType creditsEntryType);
 	
 	void setObservaciones(String observaciones);
 	

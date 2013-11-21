@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class EmploymentServiceImpl implements EmploymentService
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private final EmploymentDao empleoDao;
+	private final EmploymentDao employmentDao;
 	
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
@@ -49,45 +49,45 @@ public class EmploymentServiceImpl implements EmploymentService
 
 	private ApplicationContext applicationContext;
 	
-	public EmploymentServiceImpl(final EmploymentDao empleoDao) {
-		this.empleoDao = empleoDao;
+	public EmploymentServiceImpl(final EmploymentDao employmentDao) {
+		this.employmentDao = employmentDao;
 	}
 
 	
-	public List<Empleo> find(EmploymentQueryFilter empleoQueryFilter){
+	public List<Employment> find(EmploymentQueryFilter employmentQueryFilter){
 		
-		return empleoDao.find(empleoQueryFilter);
+		return employmentDao.find(employmentQueryFilter);
 	}
 
-	public Empleo findById(Long id){
-		return empleoDao.findById(id);
+	public Employment findById(Long id){
+		return employmentDao.findById(id);
 	}
 	
-	public void save(final Empleo empleo) 
+	public void save(final Employment employment) 
 	{
-		empleoDao.save(empleo);
+		employmentDao.save(employment);
 	}
 	
-	public void saveOrUpdate(final Empleo empleo) 
+	public void saveOrUpdate(final Employment employment) 
 	{
-		if (empleo.getId() != null) { // it is an update
-			 empleoDao.merge(empleo);
+		if (employment.getId() != null) { // it is an update
+			 employmentDao.merge(employment);
 			} else { // you are saving a new one
-			 empleoDao.saveOrUpdate(empleo);
+			 employmentDao.saveOrUpdate(employment);
 			}
 	}
 	
-	public void delete(Empleo empleo){
-		empleoDao.delete(empleo);
+	public void delete(Employment employment){
+		employmentDao.delete(employment);
 	}
 
 	public EmploymentDao getEmploymentDao()
 	{
-		return empleoDao;
+		return employmentDao;
 	}
 
-	public List<Empleo> findAll(){
-		return this.empleoDao.findAll();
+	public List<Employment> findAll(){
+		return this.employmentDao.findAll();
 	}
 
 	public void setApplicationContext(final ApplicationContext aApplicationContext) throws BeansException
@@ -95,10 +95,10 @@ public class EmploymentServiceImpl implements EmploymentService
 		this.applicationContext = aApplicationContext;
 	}
 
-	public List<Empleo> findEmpleosInactivos(final EmploymentQueryFilter empleoQueryFilter){
-		empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.INACTIVO);
+	public List<Employment> findInactiveEmployments(final EmploymentQueryFilter employmentQueryFilter){
+		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.INACTIVO);
 		
-		return this.empleoDao.findEmpleosInactivos(empleoQueryFilter);
+		return this.employmentDao.findInactivEmployments(employmentQueryFilter);
 	}
 	
 	public AdministradorCreditosService getAdministradorCreditosService() {
@@ -122,19 +122,19 @@ public class EmploymentServiceImpl implements EmploymentService
 
 
 	@Override
-	public Empleo findPreviousEmpleo(Empleo empleo){
-		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setCuil(empleo.getPerson().getCuil());
-		empleoQueryFilter.setReparticionId(empleo.getCentroSector().getReparticion().getId().toString());
+	public Employment findPreviousEmployment(Employment employment){
+		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+		employmentQueryFilter.setCuil(employment.getPerson().getCuil());
+		employmentQueryFilter.setReparticionId(employment.getCentroSector().getReparticion().getId().toString());
 		
-		empleoQueryFilter.setEstadosEmpleo( CollectionUtils.arrayToList(EmploymentStatus.values()));
-		empleoQueryFilter.setFechaFin(empleo.getFechaInicio());
+		employmentQueryFilter.setEmploymentStatuses( CollectionUtils.arrayToList(EmploymentStatus.values()));
+		employmentQueryFilter.setFechaFin(employment.getFechaInicio());
 
-		return this.empleoDao.findPreviousEmpleo(empleoQueryFilter);
+		return this.employmentDao.findPreviousEmployment(employmentQueryFilter);
 	}
 	
 	
-	public List<Category> getAvailableCategoriesForPromotion(Empleo employment){
+	public List<Category> getAvailableCategoriesForPromotion(Employment employment){
 		List <Category> availableCategories = new ArrayList<Category>();
 		List <Category> allCategories = this.categoryService.findAll();
 

@@ -1,6 +1,6 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
-public enum TipoMovimientoCreditos {
+public enum CreditsEntryType {
 
 	CargaInicialAgenteExistente,
 	IngresoAgente,

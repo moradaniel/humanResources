@@ -71,7 +71,7 @@ public class CreditsPeriodDaoHibImpl extends DataAccessHibImplAbstract implement
 			}
 		});
 		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved empleo with codigo '" + codigo+ "' in " + timer.printElapsedTime());
+		//if (log.isDebugEnabled()) log.debug("successfully retrieved  with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return list;
 	}
 	

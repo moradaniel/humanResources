@@ -10,8 +10,8 @@ import org.dpi.util.query.QueryBind.OrderDirection;
 import org.dpi.web.AgenteMapper;
 import org.dpi.web.JqgridFilter;
 import org.dpi.web.JqgridObjectMapper;
-import org.dpi.web.response.PersonDto;
 import org.dpi.web.response.JqgridResponse;
+import org.dpi.web.response.PersonDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,7 +84,7 @@ public class PersonController {
 		agenteFilter.setApellidoNombre(apellidoNombre);
 		agenteFilter.setCuil(cuil);
 		
-		PageList<Person> agentes = personService.findAgentes(bind, agenteFilter, false);
+		PageList<Person> agentes = personService.findPersons(bind, agenteFilter, false);
 		
         
         if (page > agentes.getTotalPageCount()){ 

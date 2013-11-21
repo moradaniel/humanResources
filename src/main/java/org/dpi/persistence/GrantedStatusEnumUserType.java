@@ -1,6 +1,6 @@
 package org.dpi.persistence;
 
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 
 public class GrantedStatusEnumUserType extends EnumUserType<GrantedStatus>{
 

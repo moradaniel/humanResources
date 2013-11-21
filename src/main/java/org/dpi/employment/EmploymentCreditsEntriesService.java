@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import org.springframework.context.ApplicationContextAware;
  */
 public interface EmploymentCreditsEntriesService extends ApplicationContextAware
 {
-	public void promotePerson(Empleo empleo, String newCategoryCode);
+	public void promotePerson(Employment empleo, String newCategoryCode);
 	
-	public void darDeBaja(Empleo empleo);
+	public void darDeBaja(Employment empleo);
 	
 	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId);
 
-	public List<EmploymentVO> buildEmploymentsVO(List<Empleo> empleosActivos, Long reparticionId, Account currenUser);
+	public List<EmploymentVO> buildEmploymentsVO(List<Employment> activeEmployments, Long reparticionId, Account currenUser);
 }

@@ -5,58 +5,58 @@
 <hibernate-mapping>
 
 	
-  <class name="org.dpi.empleo.EmpleoImpl"    table="EMPLEO">
+  <class name="org.dpi.employment.EmploymentImpl"    table="EMPLOYMENT">
 
     <id name="id" column="ID" type="long">  
           <generator class="sequence">   
-				<param name="sequence">EMPLEO_SEQ</param>
+				<param name="sequence">EMPLOYMENT_SEQ</param>
           </generator>  
         </id> 
         
 	<property name="fechaInicio" column="FECHAINICIO" type="timestamp"/> 
 	<property name="fechaFin" column="FECHAFIN" type="timestamp"/>
 
-	<property name="estado" column="ESTADO" type="org.dpi.persistence.EmploymentStatusEnumUserType"/>
+	<property name="status" column="STATUS" type="org.dpi.persistence.EmploymentStatusEnumUserType"/>
    
 	<many-to-one 
 		name="person"
 		class="org.dpi.person.PersonImpl"
  		column="PERSONID" 
-		foreign-key="fk_Empleo_Person"
+		foreign-key="fk_Employment_Person"
 		not-null="true"/>
 		
 	<many-to-one 
 		name="centroSector"
 		class="org.dpi.centroSector.CentroSectorImpl"
  		column="CENTROSECTORID" 
-		foreign-key="fk_Empleo_CentroSector"
+		foreign-key="fk_Employment_CentroSector"
 		not-null="true"/>
 
 	<many-to-one 
 		name="category"
 		class="org.dpi.category.CategoryImpl"
  		column="CATEGORYID" 
-		foreign-key="fk_Empleo_Category"
+		foreign-key="fk_Employment_Category"
 		not-null="true"/>
 		
-	<!-- one-to-one name="movimientoCreditos" 
-				class="org.dpi.movimientoCreditos.MovimientoCreditosImpl" 
-				property-ref="empleo"
+	<!-- one-to-one name="creditsEntry" 
+				class="org.dpi.creditsEntry.CreditsEntryImpl" 
+				property-ref="employment"
 				cascade="save-update">
 	</one-to-one --> 
 	
 	    <!-- this association is bidirectional
-    	movimientocreditos side is marked as inverse="true" so the owner of the relation is Empleo-->
-    <set name="movimientosCreditos" cascade="all" lazy="true" inverse="true">
-		<key column="EMPLEOID" foreign-key="fk_MovimientoCreditos_Empleo"/>
-		<one-to-many class="org.dpi.movimientoCreditos.MovimientoCreditosImpl"/>
+    	movimientocreditos side is marked as inverse="true" so the owner of the relation is Employment-->
+    <set name="creditsEntries" cascade="all" lazy="true" inverse="true">
+		<key column="EMPLOYMENTID" foreign-key="fk_CreditsEntry_Employment"/>
+		<one-to-many class="org.dpi.creditsEntry.CreditsEntryImpl"/>
 	</set>
 	
 	<many-to-one 
-		name="empleoAnterior"
-		class="org.dpi.empleo.EmpleoImpl"
- 		column="EMPLEO_ANTERIOR_ID" 
-		foreign-key="fk_Empleo_Empleo_Anterior"
+		name="previousEmployment"
+		class="org.dpi.employment.EmploymentImpl"
+ 		column="PREVIOUS_EMPLOYMENT_ID" 
+		foreign-key="fk_Employment_Previous_Employment"
 		not-null="false"/>
 		
 	<many-to-one 

@@ -2,12 +2,12 @@ package utils;
 
 import java.util.List;
 
-import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmploymentService;
-import org.dpi.movimientoCreditos.MovimientoCreditos;
-import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
-import org.dpi.movimientoCreditos.MovimientoCreditosService;
-import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.creditsEntry.CreditsEntry;
+import org.dpi.creditsEntry.CreditsEntryQueryFilter;
+import org.dpi.creditsEntry.CreditsEntryService;
+import org.dpi.creditsEntry.CreditsEntryType;
+import org.dpi.employment.Employment;
+import org.dpi.employment.EmploymentService;
 import org.dpi.person.PersonService;
 import org.dpi.reparticion.ReparticionService;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class ActualizarEmpleoAnteriorAscensos {
 	
 	EmploymentService employmentService;
 		
-	MovimientoCreditosService movimientoCreditosService;
+	CreditsEntryService creditsEntryService;
 
 	//AdministradorCreditosService administradorCreditosService;
 	
@@ -52,9 +52,9 @@ public class ActualizarEmpleoAnteriorAscensos {
 		final ActualizarEmpleoAnteriorAscensos actualizador = new ActualizarEmpleoAnteriorAscensos();
 		
 		
-		actualizador.setEmploymentService((EmploymentService)context.getBean("empleoService"));
+		actualizador.setEmploymentService((EmploymentService)context.getBean("employmentService"));
 		
-		actualizador.setMovimientoCreditosService((MovimientoCreditosService)context.getBean("movimientoCreditosService"));
+		actualizador.setCreditsEntryService((CreditsEntryService)context.getBean("creditsEntryService"));
 		
 		
 		//actualizador.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
@@ -93,17 +93,17 @@ public class ActualizarEmpleoAnteriorAscensos {
 
 		
 		//obtener todos los movimientos de ascenso
-		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
 		
-		List<MovimientoCreditos> movimientosAscenso = movimientoCreditosService.find(movimientoCreditosQueryFilter);
-		for(MovimientoCreditos movimientoAscenso: movimientosAscenso){
+		List<CreditsEntry> movimientosAscenso = creditsEntryService.find(creditsEntryQueryFilter);
+		for(CreditsEntry movimientoAscenso: movimientosAscenso){
 			//buscar el empleo anterior al empleo del movimiento de ascenso
-			Empleo empleoDelAscenso = movimientoAscenso.getEmpleo();
-			Empleo empleoAnteriorDelAscenso = employmentService.findPreviousEmpleo(empleoDelAscenso);
+			Employment empleoDelAscenso = movimientoAscenso.getEmployment();
+			Employment empleoAnteriorDelAscenso = employmentService.findPreviousEmployment(empleoDelAscenso);
 			
 			//al empleo del movimiento de ascenso setearle el empleo anterior
-			empleoDelAscenso.setEmpleoAnterior(empleoAnteriorDelAscenso);
+			empleoDelAscenso.setPreviousEmployment(empleoAnteriorDelAscenso);
 			
 			//guardar empleo del ascenso
 			employmentService.saveOrUpdate(empleoDelAscenso);
@@ -126,19 +126,19 @@ public class ActualizarEmpleoAnteriorAscensos {
 		return employmentService;
 	}
 
-	public void setEmploymentService(EmploymentService empleoService) {
-		this.employmentService = empleoService;
+	public void setEmploymentService(EmploymentService employmentService) {
+		this.employmentService = employmentService;
 	}
 	
 
 	
-	public MovimientoCreditosService getMovimientoCreditosService() {
-		return movimientoCreditosService;
+	public CreditsEntryService getCreditsEntryService() {
+		return creditsEntryService;
 	}
 
-	public void setMovimientoCreditosService(
-			MovimientoCreditosService movimientoCreditosService) {
-		this.movimientoCreditosService = movimientoCreditosService;
+	public void setCreditsEntryService(
+			CreditsEntryService creditsEntryService) {
+		this.creditsEntryService = creditsEntryService;
 	}
 	
 

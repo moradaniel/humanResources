@@ -1,6 +1,6 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
-public class MovimientoCreditosDTO {
+public class CreditsEntryDTO {
 
 	String name;
 

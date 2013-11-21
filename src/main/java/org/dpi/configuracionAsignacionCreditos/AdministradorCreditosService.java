@@ -1,7 +1,7 @@
 package org.dpi.configuracionAsignacionCreditos;
 
+import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriod;
-import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
 import org.dpi.person.PersonCondition;
 
 
@@ -27,7 +27,7 @@ public interface AdministradorCreditosService {
 	
 	public Long getCreditosDisponiblesSegunOtorgado(CreditsPeriod creditsPeriod,long reparticionId);
 	
-	public Long getTotalCreditos(final MovimientoCreditosQueryFilter movimientoCreditosQueryFilter);
+	public Long getTotalCreditos(final CreditsEntryQueryFilter creditsEntryQueryFilter);
 
 	public Long getCreditosDisponiblesAlInicioPeriodo(CreditsPeriod creditsPeriod, Long id);
 	

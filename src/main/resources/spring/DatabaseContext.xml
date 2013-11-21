@@ -65,8 +65,8 @@
 				<value>/mappings/CentroSector.hbm.xml</value>
 				<value>/mappings/Person.hbm.xml</value>
 				<value>/mappings/Category.hbm.xml</value>
-				<value>/mappings/Empleo.hbm.xml</value>
-				<value>/mappings/MovimientoCreditos.hbm.xml</value>
+				<value>/mappings/Employment.hbm.xml</value>
+				<value>/mappings/CreditsEntry.hbm.xml</value>
 				<value>/mappings/CreditsPeriod.hbm.xml</value>
 				<value>/mappings/OccupationalGroup.hbm.xml</value>
 				<value>/mappings/Account.hbm.xml</value>

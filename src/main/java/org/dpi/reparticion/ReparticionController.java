@@ -10,24 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsEntry.CambiosMultiplesEstadoMovimientosForm;
+import org.dpi.creditsEntry.CreditsEntry;
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
+import org.dpi.creditsEntry.CreditsEntryQueryFilter;
+import org.dpi.creditsEntry.CreditsEntryService;
+import org.dpi.creditsEntry.CreditsEntryServiceImpl;
+import org.dpi.creditsEntry.CreditsEntryVO;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
-import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmploymentCreditsEntriesService;
-import org.dpi.empleo.EmploymentCreditsEntriesServiceImpl;
-import org.dpi.empleo.EmploymentQueryFilter;
-import org.dpi.empleo.EmploymentService;
-import org.dpi.empleo.EmploymentStatus;
-import org.dpi.empleo.EmploymentVO;
-import org.dpi.movimientoCreditos.CambiosMultiplesEstadoMovimientosForm;
-import org.dpi.movimientoCreditos.MovimientoCreditos;
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
-import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
-import org.dpi.movimientoCreditos.MovimientoCreditosService;
-import org.dpi.movimientoCreditos.MovimientoCreditosServiceImpl;
-import org.dpi.movimientoCreditos.MovimientoCreditosVO;
+import org.dpi.employment.Employment;
+import org.dpi.employment.EmploymentCreditsEntriesService;
+import org.dpi.employment.EmploymentCreditsEntriesServiceImpl;
+import org.dpi.employment.EmploymentQueryFilter;
+import org.dpi.employment.EmploymentService;
+import org.dpi.employment.EmploymentStatus;
+import org.dpi.employment.EmploymentVO;
 import org.dpi.person.PersonService;
 import org.dpi.security.AccountSettings;
 import org.dpi.security.UserAccessService;
@@ -104,8 +104,8 @@ public class ReparticionController {
 	@Resource(name = "administradorCreditosService")
 	private AdministradorCreditosService administradorCreditosService;
 
-	@Resource(name = "movimientoCreditosService")
-	private MovimientoCreditosService movimientoCreditosService;
+	@Resource(name = "creditsEntryService")
+	private CreditsEntryService creditsEntryService;
 	
 	@Resource(name = "creditsPeriodService")
 	private CreditsPeriodService creditsPeriodService;
@@ -221,16 +221,16 @@ public class ReparticionController {
 			
 			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(String.valueOf(reparticion.getId()));
-			empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.ACTIVO);
+			empleoQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);
 			
-			List<Empleo> empleosActivos = employmentService.find(empleoQueryFilter);
+			List<Employment> activeEmployments = employmentService.find(empleoQueryFilter);
 			
 			//canAccountPromotePerson
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Account currenUser = (Account)accountObj;
-			List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(empleosActivos,reparticion.getId(),currenUser);
+			List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(activeEmployments,reparticion.getId(),currenUser);
 			
-			model.addAttribute("empleosActivos", employmentsVO);
+			model.addAttribute("activeEmployments", employmentsVO);
 			
 			
 			Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -285,32 +285,32 @@ public class ReparticionController {
 			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
 
-			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
+			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+			creditsEntryQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 
 			CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
 			creditsPeriodQueryFilter.setName(String.valueOf(creditsPeriodName));
 			
 			List<CreditsPeriod> creditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
 			CreditsPeriod creditsPeriod = creditsPeriods.get(0);
-			movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
+			creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
 			
-			List<MovimientoCreditos> movimientoCreditosReparticion = movimientoCreditosService.find(movimientoCreditosQueryFilter);
+			List<CreditsEntry> creditsEntryReparticion = creditsEntryService.find(creditsEntryQueryFilter);
 			
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Account currentUser = (Account)accountObj;
 					
-			List<MovimientoCreditosVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currentUser);
+			List<CreditsEntryVO> creditsEntryVOReparticion = creditsEntryService.buildCreditsEntryVO(creditsEntryReparticion,currentUser);
 					
-			model.addAttribute("movimientos", movimientoCreditosVOReparticion);
+			model.addAttribute("movimientos", creditsEntryVOReparticion);
 			
 			//------------------ Should we build the form for editing status? -----------------------------
 			
-			model.addAttribute("canAccountChangeCreditsEntryStatusOfPeriod",MovimientoCreditosServiceImpl.canChangeCreditsEntryStatus(currentUser, creditsPeriod));
+			model.addAttribute("canAccountChangeCreditsEntryStatusOfPeriod",CreditsEntryServiceImpl.canChangeCreditsEntryStatus(currentUser, creditsPeriod));
 			
 			CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm =  new CambiosMultiplesEstadoMovimientosForm();
-			for(MovimientoCreditosVO movimientoCreditosVO :movimientoCreditosVOReparticion){
-				cambiosMultiplesEstadoMovimientosForm.getMovimientos().add(movimientoCreditosVO.getMovimientoCreditos());
+			for(CreditsEntryVO creditsEntryVO :creditsEntryVOReparticion){
+				cambiosMultiplesEstadoMovimientosForm.getMovimientos().add(creditsEntryVO.getCreditsEntry());
 			}
 			
 			model.addAttribute("grantedStatuses", GrantedStatus.values());
@@ -349,7 +349,7 @@ public class ReparticionController {
 			
 			
 		}
-		return "reparticiones/movimientos";
+		return "reparticiones/creditsentries";
 	}
 	
 	
@@ -365,16 +365,16 @@ public class ReparticionController {
 		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
 
 		if (reparticion != null){
-			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-			movimientoCreditosQueryFilter.setId(movimientoId);
+			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+			creditsEntryQueryFilter.setId(movimientoId);
 			EmploymentQueryFilter empleoFilter = new EmploymentQueryFilter();
 			empleoFilter.setReparticionId(reparticion.getId().toString());
-			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoFilter);
+			creditsEntryQueryFilter.setEmploymentQueryFilter(empleoFilter);
 
-			MovimientoCreditos movimiento = movimientoCreditosService.find(movimientoCreditosQueryFilter).get(0);
+			CreditsEntry movimiento = creditsEntryService.find(creditsEntryQueryFilter).get(0);
 
 			if(movimiento!=null){
-				movimientoCreditosService.delete(movimiento);	
+				creditsEntryService.delete(movimiento);	
 			}
 		}
 
@@ -388,14 +388,14 @@ public class ReparticionController {
 	}*/
 
 
-	public MovimientoCreditosService getMovimientoCreditosService() {
-		return movimientoCreditosService;
+	public CreditsEntryService getCreditsEntryService() {
+		return creditsEntryService;
 	}
 
 
-	public void setMovimientoCreditosService(
-			MovimientoCreditosService movimientoCreditosService) {
-		this.movimientoCreditosService = movimientoCreditosService;
+	public void setCreditsEntryService(
+			CreditsEntryService creditsEntryService) {
+		this.creditsEntryService = creditsEntryService;
 	}
 
 

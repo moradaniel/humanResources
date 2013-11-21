@@ -4,12 +4,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
+import org.dpi.creditsEntry.CreditsEntryDaoHibImpl;
+import org.dpi.creditsEntry.CreditsEntryQueryFilter;
+import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
-import org.dpi.empleo.EmploymentQueryFilter;
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
-import org.dpi.movimientoCreditos.MovimientoCreditosDaoHibImpl;
-import org.dpi.movimientoCreditos.MovimientoCreditosQueryFilter;
-import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.person.PersonCondition;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -243,15 +243,15 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 
 				if (log.isDebugEnabled()) log.debug("attempting to find Reparticion with id: '" + reparticionId + "'");
 
-				String queryStr = "select sum(movimiento.cantidadCreditos) " +
-						" from MovimientoCreditosImpl movimiento " +
-						" INNER JOIN movimiento.empleo empleo " +
-						" INNER JOIN empleo.centroSector centroSector " +
+				String queryStr = "select sum(entry.cantidadCreditos) " +
+						" from CreditsEntryImpl entry " +
+						" INNER JOIN entry.employment employment " +
+						" INNER JOIN employment.centroSector centroSector " +
 						" INNER JOIN centroSector.reparticion reparticion "+
-						" INNER JOIN empleo.person person "+
+						" INNER JOIN employment.person person "+
 						" where reparticion.id='"+reparticionId+"'" +
-						" AND movimiento.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.CargaInicialAgenteExistente.name()+"'"+
-						" AND movimiento.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
+						" AND entry.creditsEntryType = '"+CreditsEntryType.CargaInicialAgenteExistente.name()+"'"+
+						" AND entry.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
 				
 				Query query = sess.createQuery(queryStr);
 			
@@ -278,14 +278,14 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 
 				if (log.isDebugEnabled()) log.debug("attempting to find Reparticion with id: '" + reparticionId + "'");
 
-				String queryStr = "select sum(movimiento.cantidadCreditos) " +
-						" from MovimientoCreditosImpl movimiento " +
-						" INNER JOIN movimiento.empleo empleo " +
-						" INNER JOIN empleo.centroSector centroSector " +
+				String queryStr = "select sum(entry.cantidadCreditos) " +
+						" from CreditsEntryImpl entry " +
+						" INNER JOIN entry.employment employment " +
+						" INNER JOIN employment.centroSector centroSector " +
 						" INNER JOIN centroSector.reparticion reparticion "+
 						" where reparticion.id='"+reparticionId+"'" +
-						" AND movimiento.tipoMovimientoCreditos = '"+TipoMovimientoCreditos.BajaAgente.name()+"'"+
-						" AND movimiento.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
+						" AND entry.creditsEntryType = '"+CreditsEntryType.BajaAgente.name()+"'"+
+						" AND entry.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
 				Query query = sess.createQuery(queryStr);
 			
 				Long totalAmount = (Long) query.uniqueResult();
@@ -302,26 +302,26 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public 	Long getTotalCreditos(final MovimientoCreditosQueryFilter movimientoCreditosQueryFilter){
+	public 	Long getTotalCreditos(final CreditsEntryQueryFilter creditsEntryQueryFilter){
 		return (Long) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess)
 				throws HibernateException, SQLException  {
 				
 				Chronometer timer = new Chronometer();
 				
-				String reparticionId = movimientoCreditosQueryFilter.getEmploymentQueryFilter().getReparticionId();
+				String reparticionId = creditsEntryQueryFilter.getEmploymentQueryFilter().getReparticionId();
 
 				if (log.isDebugEnabled()) log.debug("attempting to find Movimientos with id: '" + reparticionId + "'");
 				
-				String where = " WHERE 1=1 " + MovimientoCreditosDaoHibImpl.buildWhereClause(movimientoCreditosQueryFilter);
+				String where = " WHERE 1=1 " + CreditsEntryDaoHibImpl.buildWhereClause(creditsEntryQueryFilter);
 
 				StringBuffer sb = new StringBuffer();
-				sb.append("select sum(movimiento.cantidadCreditos) ");
-				sb.append(" from MovimientoCreditosImpl movimiento ");
-				sb.append(" INNER JOIN movimiento.empleo empleo ");
-				sb.append(" INNER JOIN empleo.centroSector centroSector ");
+				sb.append("select sum(entry.cantidadCreditos) ");
+				sb.append(" from CreditsEntryImpl entry ");
+				sb.append(" INNER JOIN entry.employment employment ");
+				sb.append(" INNER JOIN employment.centroSector centroSector ");
 				sb.append(" INNER JOIN centroSector.reparticion reparticion ");
-				sb.append(" INNER JOIN movimiento.creditsPeriod creditsPeriod ");
+				sb.append(" INNER JOIN entry.creditsPeriod creditsPeriod ");
 				
 				
 				sb.append(where);
@@ -371,33 +371,33 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 
 	@Override
 	public Long getCreditosPorIngresosOAscensosSolicitados(	CreditsPeriod creditsPeriod, Long reparticionId) {
-		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
+		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+		employmentQueryFilter.setReparticionId(String.valueOf(reparticionId));
 		
-		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
-		movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
+		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
 		
-		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
-		movimientoCreditosQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
-		movimientoCreditosQueryFilter.addGrantedStatus(GrantedStatus.Otorgado); //Un movimiento Otorgado tambien es solicitado(fue solicitado en algun momento)
-		return getTotalCreditos(movimientoCreditosQueryFilter);
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado); //Un entry Otorgado tambien es solicitado(fue solicitado en algun momento)
+		return getTotalCreditos(creditsEntryQueryFilter);
 	}
 	
 	@Override
 	public Long getCreditosPorIngresosOAscensosOtorgados(
 			CreditsPeriod creditsPeriod, Long reparticionId) {
-		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
+		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+		employmentQueryFilter.setReparticionId(String.valueOf(reparticionId));
 	
-		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-		movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
-		movimientoCreditosQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
-		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-		movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
-		movimientoCreditosQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
-		return getTotalCreditos(movimientoCreditosQueryFilter);
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
+		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
+		return getTotalCreditos(creditsEntryQueryFilter);
 	}
 
 

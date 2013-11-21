@@ -1,10 +1,10 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
 
-public class MovimientoCreditosVO{
+public class CreditsEntryVO{
 	
 
-	MovimientoCreditos movimientoCreditos =  new MovimientoCreditosImpl();
+	CreditsEntry creditsEntry =  new CreditsEntryImpl();
 	
 	String currentCategory;
 
@@ -18,16 +18,16 @@ public class MovimientoCreditosVO{
 	boolean canAccountBorrarMovimiento = false;
 	boolean canAccountCambiarEstadoMovimiento = false;
 	
-	public MovimientoCreditosVO(){
+	public CreditsEntryVO(){
 		super();
 	}
 	
-	public MovimientoCreditos getMovimientoCreditos() {
-		return movimientoCreditos;
+	public CreditsEntry getCreditsEntry() {
+		return creditsEntry;
 	}
 
-	public void setMovimientoCreditos(MovimientoCreditos movimientoCreditos) {
-		this.movimientoCreditos = movimientoCreditos;
+	public void setCreditsEntry(CreditsEntry creditsEntry) {
+		this.creditsEntry = creditsEntry;
 	}
 
 	public String getCurrentCategory() {

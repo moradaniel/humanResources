@@ -17,8 +17,8 @@ public class PersonQueryFilter implements Serializable {
 	
 	private String apellidoNombre;
 	private String cuil;
-	private Long agenteId;
-	private PersonCondition condicionAgente;
+	private Long personId;
+	private PersonCondition personCondition;
 
 
 	private Long reparticionId;
@@ -44,19 +44,19 @@ public class PersonQueryFilter implements Serializable {
 		this.reparticionId = reparticionId;
 	}
 	
-	public Long getAgenteId() {
-		return agenteId;
+	public Long getPersonId() {
+		return personId;
 	}
-	public void setAgenteId(Long agenteId) {
-		this.agenteId = agenteId;
-	}
-	
-	public PersonCondition getCondicionAgente() {
-		return condicionAgente;
+	public void setPersonId(Long personId) {
+		this.personId = personId;
 	}
 	
-	public void setCondicionAgente(PersonCondition condicionAgente) {
-		this.condicionAgente = condicionAgente;
+	public PersonCondition getPersonCondition() {
+		return personCondition;
+	}
+	
+	public void setPersonCondition(PersonCondition personCondition) {
+		this.personCondition = personCondition;
 	}
 
 }

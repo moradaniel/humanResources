@@ -3,8 +3,8 @@ package utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmploymentCreditsEntriesService;
+import org.dpi.employment.Employment;
+import org.dpi.employment.EmploymentCreditsEntriesService;
 import org.dpi.person.Person;
 import org.dpi.person.PersonCondition;
 import org.dpi.person.PersonQueryFilter;
@@ -85,7 +85,7 @@ public class ActualizarAgentesProfesionales {
 			PersonQueryFilter agenteQueryFilter = new PersonQueryFilter();
 			agenteQueryFilter.setReparticionId(reparticionSearchInfo.getReparticionId());
 			//agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
-			agenteQueryFilter.setCondicionAgente(PersonCondition.Profesional);
+			agenteQueryFilter.setPersonCondition(PersonCondition.Profesional);
 			
 			List<Person> agentes = this.personService.find(agenteQueryFilter);
 			totalAgentesProfesionalesActivos +=agentes.size();
@@ -93,11 +93,11 @@ public class ActualizarAgentesProfesionales {
 				//si el agente no tiene movimientos de asenso pendientes y la categoria es menor a 21
 				// ascenderlo a categoria 21
 				
-				Empleo empleoActivo = null;
-				Integer activeEmploymentCategoryCode = Integer.parseInt(empleoActivo.getCategory().getCode());
+				Employment activeEmployment = null;
+				Integer activeEmploymentCategoryCode = Integer.parseInt(activeEmployment.getCategory().getCode());
 				
-				if(true/*!empleoActivo.hasMovimientosAscensoPendientes() && codigoCategoryEmpleoActivo <21 */){
-					employmentCreditsEntriesService.promotePerson( empleoActivo, "21");
+				if(true/*!activeEmployment.hasMovimientosAscensoPendientes() && codigoCategoryactiveEmployment <21 */){
+					employmentCreditsEntriesService.promotePerson( activeEmployment, "21");
 					totalAgentesProfesionalesActivosAscendidosAutomaticamente++;
 				}
 			}
@@ -128,13 +128,13 @@ public class ActualizarAgentesProfesionales {
 	
 	/*
 	
-	public MovimientoCreditosService getMovimientoCreditosService() {
-		return movimientoCreditosService;
+	public CreditsEntryService getCreditsEntryService() {
+		return creditsEntryService;
 	}
 
-	public void setMovimientoCreditosService(
-			MovimientoCreditosService movimientoCreditosService) {
-		this.movimientoCreditosService = movimientoCreditosService;
+	public void setCreditsEntryService(
+			CreditsEntryService creditsEntryService) {
+		this.creditsEntryService = creditsEntryService;
 	}*/
 	
 	public ReparticionService getReparticionService() {

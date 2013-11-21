@@ -99,7 +99,7 @@ public class OccupationalGroupDaoHibImpl extends DataAccessHibImplAbstract imple
 			}
 		});
 		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved empleo with codigo '" + codigo+ "' in " + timer.printElapsedTime());
+		//if (log.isDebugEnabled()) log.debug("successfully retrieved employment with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return list;
 	}
 	

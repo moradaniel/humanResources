@@ -27,8 +27,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/reparticiones/edit.ftl" />
 	</definition>
 
-	<definition name="reparticiones/movimientos" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/reparticiones/movimientos.ftl" />
+	<definition name="reparticiones/creditsentries" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/reparticiones/creditsentries.ftl" />
 	</definition>
 
 

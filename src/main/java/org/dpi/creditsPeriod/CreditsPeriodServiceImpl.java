@@ -133,7 +133,7 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 
 
 	@Override
-	public DateRange getDateRangeForEjercicioAnual(int year) {
+	public DateRange getDateRangeForYear(int year) {
 		Date startDate	 = null;
 		Date endDate	 = null;
 
@@ -151,7 +151,7 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 
 	@Override
 	public boolean isDateWithinEjercicioAnual(Date date, int year) {
-		DateRange dateRange =  getDateRangeForEjercicioAnual(year);
+		DateRange dateRange =  getDateRangeForYear(year);
 		return dateRange.contains(date);
 	}
 

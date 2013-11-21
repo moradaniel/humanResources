@@ -212,19 +212,19 @@ alter table EMPLEO add constraint fk_Empleo_Person foreign key (PERSONID) refere
 alter table EMPLEO add constraint fk_Empleo_Category foreign key (CATEGORYID) references CATEGORY;
 
 
-create table MOVIMIENTOCREDITOS (ID number(19,0) not null, 
+create table CREDITSENTRY (ID number(19,0) not null, 
 	CANTIDADCREDITOS number(10,0) not null, 
 	EMPLEOID number(19,0) not null, 
-	TIPOMOVIMIENTOCREDITOS varchar2(255 char) not null, 
+	CREDITS_ENTRY_TYPE varchar2(255 char) not null, 
 	OBSERVACIONES  varchar2(255 char),
 	CREDITSPERIODID number(19,0) not null,
 	GRANTED_STATUS varchar2(255 char) not null,
 	primary key (ID));
 	
-alter table MOVIMIENTOCREDITOS add constraint fk_MovimientoCreditos_Empleo 
+alter table CREDITSENTRY add constraint fk_CreditsEntry_Empleo 
 	foreign key (EMPLEOID) references EMPLEO;
 	
-CREATE SEQUENCE CREDITOS.MOVIMIENTOCREDITOS_SEQ
+CREATE SEQUENCE CREDITOS.CREDITSENTRY_SEQ
   START WITH 1
   MAXVALUE 9999999999999999999999999999
   MINVALUE 1
@@ -233,13 +233,13 @@ CREATE SEQUENCE CREDITOS.MOVIMIENTOCREDITOS_SEQ
   NOORDER;
 
 
-CREATE OR REPLACE TRIGGER CREDITOS.MOVIMIENTOCREDITOS_TRG
-	before insert ON CREDITOS.MOVIMIENTOCREDITOS for each row
+CREATE OR REPLACE TRIGGER CREDITOS.CREDITSENTRY_TRG
+	before insert ON CREDITOS.CREDITSENTRY for each row
 	WHEN (
 	new.id is null
 	      )
 	begin
-	    select CREDITOS.MOVIMIENTOCREDITOS_SEQ.nextval into :new.id from dual;
+	    select CREDITOS.CREDITSENTRY_SEQ.nextval into :new.id from dual;
 	end; 
 /	
 
@@ -533,7 +533,7 @@ ALTER TABLE CREDITOS.REPARTICION_ACCOUNT ADD (
 	end;
 	/ 
 
-alter table CREDITOS.MOVIMIENTOCREDITOS 
+alter table CREDITOS.CREDITSENTRY 
         add constraint fk_MovimientoCredito_CreditsPeriod 
         foreign key (CREDITSPERIODID) 
         references CREDITSPERIOD;

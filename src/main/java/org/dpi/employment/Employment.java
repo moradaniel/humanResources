@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,13 +6,13 @@ import java.util.Set;
 
 import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
+import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.domain.Persistent;
-import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
 
 
-public interface Empleo extends Persistent,Serializable{
+public interface Employment extends Persistent,Serializable{
 	
 
 	Person getPerson();
@@ -27,9 +27,9 @@ public interface Empleo extends Persistent,Serializable{
 
 	void setCategory(Category category);
 	
-	EmploymentStatus getEstado();
+	EmploymentStatus getStatus();
 
-	void setEstado(EmploymentStatus estado);
+	void setStatus(EmploymentStatus status);
 
 	public Date getFechaInicio();
 
@@ -39,17 +39,17 @@ public interface Empleo extends Persistent,Serializable{
 
 	public void setFechaFin(Date fechaFin);
 	
-	public Set<MovimientoCreditos> getMovimientosCreditos();
+	public Set<CreditsEntry> getCreditsEntries();
 	
-	public void setMovimientosCreditos(Set<MovimientoCreditos> movimientosCreditos);
+	public void setCreditsEntries(Set<CreditsEntry> creditsEntries);
 
-	public void addMovimientoCreditos(MovimientoCreditos movimientoCreditos);
+	public void addCreditsEntry(CreditsEntry creditsEntry);
 
 	public boolean isClosed();
 
-	Empleo getEmpleoAnterior();
+	Employment getPreviousEmployment();
 
-	void setEmpleoAnterior(Empleo empleoAnterior);
+	void setPreviousEmployment(Employment previousEmployment);
 	
 	public OccupationalGroup getOccupationalGroup();
 

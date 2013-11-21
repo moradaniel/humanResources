@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dpi.domain.Persistent;
-import org.dpi.empleo.Empleo;
+import org.dpi.employment.Employment;
 
 
 public interface Person extends Persistent,Serializable{
@@ -17,9 +17,9 @@ public interface Person extends Persistent,Serializable{
 
 	void setCuil(String cuil);
 	
-	public Set<Empleo> getEmpleos();
+	public Set<Employment> getEmployments();
 
-	public void setEmpleos(Set<Empleo> empleos);
+	public void setEmployments(Set<Employment> employments);
 
 	PersonCondition getCondition();
 	

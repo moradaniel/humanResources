@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -7,13 +7,13 @@ import java.util.Set;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
+import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.domain.PersistentAbstract;
-import org.dpi.movimientoCreditos.MovimientoCreditos;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
 import org.janux.util.JanuxToStringStyle;
 
-public class EmpleoImpl  extends PersistentAbstract implements Empleo{
+public class EmploymentImpl  extends PersistentAbstract implements Employment{
 	
 	/**
 	 * 
@@ -25,14 +25,14 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	
 	Category category;
 	
-	private Set<MovimientoCreditos> movimientosCreditos = new HashSet<MovimientoCreditos>();
+	private Set<CreditsEntry> creditsEntries = new HashSet<CreditsEntry>();
 
-	EmploymentStatus estado;
+	EmploymentStatus status;
 	
 	Date fechaInicio;
 	Date fechaFin;
 	
-	Empleo empleoAnterior;
+	Employment previousEmployment;
 	
 	OccupationalGroup occupationalGroup;
 	
@@ -91,29 +91,29 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	}
 	
 	@Override
-	public Set<MovimientoCreditos> getMovimientosCreditos() {
-		return this.movimientosCreditos;
+	public Set<CreditsEntry> getCreditsEntries() {
+		return this.creditsEntries;
 	}
 	
 	@Override
-	public void setMovimientosCreditos(Set<MovimientoCreditos> movimientosCreditos) {
-		this.movimientosCreditos = movimientosCreditos;
+	public void setCreditsEntries(Set<CreditsEntry> creditsEntries) {
+		this.creditsEntries = creditsEntries;
 		
 	}
 
 	@Override
-	public void addMovimientoCreditos(MovimientoCreditos movimientoCreditos) {
-		this.movimientosCreditos.add(movimientoCreditos);
+	public void addCreditsEntry(CreditsEntry creditsEntry) {
+		this.creditsEntries.add(creditsEntry);
 	}
 
 	@Override
-	public EmploymentStatus getEstado() {
-		return estado;
+	public EmploymentStatus getStatus() {
+		return status;
 	}
 
 	@Override
-	public void setEstado(EmploymentStatus estado) {
-		this.estado= estado;
+	public void setStatus(EmploymentStatus status) {
+		this.status= status;
 		
 	}
 
@@ -125,13 +125,13 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 	}
 
 	@Override
-	public Empleo getEmpleoAnterior() {
-		return empleoAnterior;
+	public Employment getPreviousEmployment() {
+		return previousEmployment;
 	}
 
 	@Override
-	public void setEmpleoAnterior(Empleo empleoAnterior) {
-		this.empleoAnterior = empleoAnterior;
+	public void setPreviousEmployment(Employment previousEmployment) {
+		this.previousEmployment = previousEmployment;
 	}
 	
 	@Override
@@ -152,7 +152,7 @@ public class EmpleoImpl  extends PersistentAbstract implements Empleo{
 		sb.append(super.toString());
 		
 		sb.append("category", getCategory().getCode());
-		sb.append("estado", getEstado());
+		sb.append("status", getStatus());
 
 		
 		return sb.toString();

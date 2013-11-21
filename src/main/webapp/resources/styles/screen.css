@@ -72,8 +72,8 @@ body {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 12px;
     line-height: 18px;
-    margin: 0 auto;
-    max-width: 1260px;
+    /*margin: 0 auto;*/
+    /*max-width: 1260px;*/
     min-width: 780px;
     padding: 35px 0 30px;
 }
@@ -390,6 +390,16 @@ td.checkbox-width {
 .table-header-options a, .table-header-repeat a {
     /*background: url("../images/admin/table/table_sort_arrow.gif") no-repeat scroll right center transparent;*/
     color: #FFFFFF;
+    font-family: Tahoma;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14px;
+    margin: 0 0 0 10px;
+    padding: 0 10px 0 0;
+}
+
+.table-header-repeat p {
+	color: #FFFFFF;
     font-family: Tahoma;
     font-size: 13px;
     font-weight: bold;
@@ -1438,3 +1448,22 @@ a.back-login:hover {
     top: 20px;
     /*width: 200px;*/
 }
+
+.error-text {
+	color: #D8000C;
+	background-color: #FFBABA;
+	//background-image: url('error.png');
+}
+
+/*------------------------     ANGULLARJS  ------------------------------  */
+.selected {
+	background-color: lightgreen;
+}
+
+
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 100% /*400px*/; 
+    height: 300px
+}
+/*------------------------     ANGULLARJS  ------------------------------  */

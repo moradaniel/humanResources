@@ -13,7 +13,7 @@ public interface CreditsPeriodDao extends HibernateDataAccessObject
 
 	public List<CreditsPeriod> findAll();
 	
-	public List<CreditsPeriod> find(CreditsPeriodQueryFilter empleoQueryFilter);
+	public List<CreditsPeriod> find(CreditsPeriodQueryFilter employmentQueryFilter);
 	
 	
 }

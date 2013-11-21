@@ -24,22 +24,22 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private static final String LIST_QUERY = "SELECT agentes "
-			+ "FROM AgenteImpl agentes ";
+	private static final String LIST_QUERY = "SELECT persons "
+			+ "FROM PersonImpl persons ";
 
-	private static final String LIST_QUERY_COUNT =  "SELECT count(agentes) "
-			+ "FROM AgenteImpl agentes ";
+	private static final String LIST_QUERY_COUNT =  "SELECT count(persons) "
+			+ "FROM PersonImpl persons ";
 	
 	@SuppressWarnings("unchecked")
 	public List<Person> findAll()
 	{
 		Chronometer timer = new Chronometer();
 
-		if (log.isDebugEnabled()) log.debug("attempting to find all agentes");
+		if (log.isDebugEnabled()) log.debug("attempting to find all persons");
 
-		List<Person> list = getHibernateTemplate().find("from AgenteImpl order by cuil");
+		List<Person> list = getHibernateTemplate().find("from PersonImpl order by cuil");
 
-		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " agente in " + timer.printElapsedTime());
+		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " person in " + timer.printElapsedTime());
 
 		return list;
 	}	
@@ -47,9 +47,9 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 	public Person findByCuil(String cuil){
 		Chronometer timer = new Chronometer();
 
-		if (log.isDebugEnabled()) log.debug("attempting to find Agente with cuil '" + cuil );
+		if (log.isDebugEnabled()) log.debug("attempting to find Person with cuil '" + cuil );
 
-		String queryString = "from AgenteImpl where cuil=:cuil ";
+		String queryString = "from PersonImpl where cuil=:cuil ";
 		
 		String[] paramNames = new String[1];
 		Object[] paramValues = new Object[1];
@@ -58,28 +58,28 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 		
 		List list = getHibernateTemplate().findByNamedParam(queryString, paramNames, paramValues);
 
-		Person agente = (list.size() > 0) ? (Person)list.get(0) : null;
+		Person person = (list.size() > 0) ? (Person)list.get(0) : null;
 
-		if (agente == null) {
-			log.warn("Unable to find Agente with cuil '" + cuil);
+		if (person == null) {
+			log.warn("Unable to find Person with cuil '" + cuil);
 			return null;
 		}
 
-		if (log.isDebugEnabled()) log.debug("successfully retrieved agente with cuil'" + cuil+ "' in " + timer.printElapsedTime());
+		if (log.isDebugEnabled()) log.debug("successfully retrieved person with cuil'" + cuil+ "' in " + timer.printElapsedTime());
 
-		return agente;
+		return person;
 	}
 	
 	
-	public PageList<Person> findAgentes(final QueryBind bind,
+	public PageList<Person> findPersons(final QueryBind bind,
 			   final PersonQueryFilter filter,
 			   boolean isForExcel) {
 
 		return doInHibernate(LIST_QUERY, LIST_QUERY_COUNT,
-		buildWhereClauseAgenteRequest(null, "", bind, filter), bind);
+		buildWhereClausePersonRequest(null, "", bind, filter), bind);
 	}
 	
-	private String buildWhereClauseAgenteRequest(Integer id, String KeyId, QueryBind bind, PersonQueryFilter filter) {
+	private String buildWhereClausePersonRequest(Integer id, String KeyId, QueryBind bind, PersonQueryFilter filter) {
 
 		StringBuilder query_where = new StringBuilder();
 //		 if the id is  null that means we want to retrieve all loans for all Area Manager
@@ -93,12 +93,12 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 		if(filter !=null){
 			if(StringUtils.hasText(filter.getApellidoNombre())){
 				
-				query_where.append(" AND upper(agentes.apellidoNombre) like '%").append(filter.getApellidoNombre().toUpperCase()).append("%' ");
+				query_where.append(" AND upper(persons.apellidoNombre) like '%").append(filter.getApellidoNombre().toUpperCase()).append("%' ");
 			}
 			
 			if(StringUtils.hasText(filter.getCuil())){
 				
-				query_where.append(" AND agentes.cuil like '%").append(filter.getCuil()).append("%' ");
+				query_where.append(" AND persons.cuil like '%").append(filter.getCuil()).append("%' ");
 			}
 			
 		}
@@ -151,10 +151,10 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 	}
 
 	@Override
-	public List<Person> find(final PersonQueryFilter agenteQueryFilter) {
+	public List<Person> find(final PersonQueryFilter personQueryFilter) {
 		Chronometer timer = new Chronometer();
 
-		if (log.isDebugEnabled()) log.debug("attempting to find Agente with filter '" + agenteQueryFilter.toString() + "'" );
+		if (log.isDebugEnabled()) log.debug("attempting to find Person with filter '" + personQueryFilter.toString() + "'" );
 
 		@SuppressWarnings("unchecked")
 		List<Person> list = getHibernateTemplate().executeFind(new HibernateCallback() {
@@ -162,40 +162,40 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	
 				
-				String where = " WHERE 1=1 "+buildWhereClause(agenteQueryFilter);
+				String where = " WHERE 1=1 "+buildWhereClause(personQueryFilter);
 				
-				String select = "Select distinct agente ";
+				String select = "Select distinct person ";
 				
 				StringBuffer sb = new StringBuffer();
-				sb.append(" FROM AgenteImpl agente ");
-				sb.append(" LEFT OUTER JOIN FETCH agente.empleos empleo");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.centroSector centroSector");
+				sb.append(" FROM PersonImpl person ");
+				sb.append(" LEFT OUTER JOIN FETCH person.employments employment");
+				sb.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
 				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.category ");
-				sb.append(" LEFT OUTER JOIN FETCH empleo.movimientosCreditos ");
+				sb.append(" LEFT OUTER JOIN FETCH employment.category ");
+				sb.append(" LEFT OUTER JOIN FETCH employment.creditsEntries ");
 
 				sb.append(where);
 				
-				sb.append(" ORDER BY agente.apellidoNombre asc ");
+				sb.append(" ORDER BY person.apellidoNombre asc ");
 				
 				Query q = sess.createQuery(select+sb.toString());
 				
-				if(agenteQueryFilter!=null)
+				if(personQueryFilter!=null)
 				{
-					if(agenteQueryFilter.getCuil()!=null){
-						q.setParameter("cuil",agenteQueryFilter.getCuil());
+					if(personQueryFilter.getCuil()!=null){
+						q.setParameter("cuil",personQueryFilter.getCuil());
 					}
 					
-					if(agenteQueryFilter.getAgenteId()!=null){
-						q.setLong("idAgente",agenteQueryFilter.getAgenteId());
+					if(personQueryFilter.getPersonId()!=null){
+						q.setLong("idPerson",personQueryFilter.getPersonId());
 					}
 
-					if(agenteQueryFilter.getReparticionId()!=null){
-						q.setParameter("idReparticion",agenteQueryFilter.getReparticionId());
+					if(personQueryFilter.getReparticionId()!=null){
+						q.setParameter("idReparticion",personQueryFilter.getReparticionId());
 					}
 
-					if(agenteQueryFilter.getCondicionAgente()!=null){
-						q.setParameter("condicionAgente",agenteQueryFilter.getCondicionAgente());
+					if(personQueryFilter.getPersonCondition()!=null){
+						q.setParameter("personCondition",personQueryFilter.getPersonCondition());
 					}
 
 				}
@@ -210,43 +210,43 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 			}
 		});
 		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved empleo with codigo '" + codigo+ "' in " + timer.printElapsedTime());
+		//if (log.isDebugEnabled()) log.debug("successfully retrieved employment with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return list;
 	}
 	
-	private String buildWhereClause(PersonQueryFilter agenteQueryFilter) {
+	private String buildWhereClause(PersonQueryFilter personQueryFilter) {
 		StringBuffer sb = new StringBuffer();
-		if(agenteQueryFilter!=null) {
-			String cuil = agenteQueryFilter.getCuil();
+		if(personQueryFilter!=null) {
+			String cuil = personQueryFilter.getCuil();
 			if(cuil!=null) {
-				sb.append(" AND agente.cuil = :cuil ");
+				sb.append(" AND person.cuil = :cuil ");
 			}
 			
-			Long idAgente = agenteQueryFilter.getAgenteId();
-			if(idAgente!=null) {
-				sb.append(" AND agente.id = :idAgente ");
+			Long idPerson = personQueryFilter.getPersonId();
+			if(idPerson!=null) {
+				sb.append(" AND person.id = :idPerson ");
 			}
 			
-			Long idReparticion = agenteQueryFilter.getReparticionId();
+			Long idReparticion = personQueryFilter.getReparticionId();
 			if(idReparticion!=null) {
 				sb.append(" AND centroSector.reparticion.id = :idReparticion ");
 			}
 
-			PersonCondition condicionAgente = agenteQueryFilter.getCondicionAgente();
-			if(condicionAgente!=null) {
-				sb.append(" AND agente.condicion =  :condicionAgente ");
+			PersonCondition personCondition = personQueryFilter.getPersonCondition();
+			if(personCondition!=null) {
+				sb.append(" AND person.condition =  :personCondition ");
 			}
 
-			/*if(agenteQueryFilter.getEstadoAgente()!=null){
-				switch(agenteQueryFilter.getEstadoAgente()){
-					//un agente esta activo si tiene un empleo en estado ACTIVO
-					case ACTIVO: 	sb.append(" AND  agente.id in ");
-									sb.append(" (Select agenteActivo.id " );
-									sb.append("	from AgenteImpl agenteActivo ");
-									sb.append("	LEFT OUTER JOIN agenteActivo.empleos empleo2 ");
-									sb.append(" LEFT OUTER JOIN empleo2.centroSector centroSector2");
+			/*if(personQueryFilter.getEstadoPerson()!=null){
+				switch(personQueryFilter.getEstadoPerson()){
+					//un person esta activo si tiene un employment en estado ACTIVO
+					case ACTIVO: 	sb.append(" AND  person.id in ");
+									sb.append(" (Select personActivo.id " );
+									sb.append("	from PersonImpl personActivo ");
+									sb.append("	LEFT OUTER JOIN personActivo.employments employment2 ");
+									sb.append(" LEFT OUTER JOIN employment2.centroSector centroSector2");
 									sb.append(" LEFT OUTER JOIN centroSector2.reparticion ");
-									sb.append("	WHERE empleo2.estado = '"+EstadoEmpleo.ACTIVO.name()+"'");
+									sb.append("	WHERE employment2.estado = '"+EstadoEmpleo.ACTIVO.name()+"'");
 									if(idReparticion!=null) {
 										sb.append(" AND centroSector2.reparticion.id = '").append(idReparticion).append("'");
 									}

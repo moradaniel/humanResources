@@ -10,17 +10,17 @@ import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorImpl;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
+import org.dpi.creditsEntry.CreditsEntryImpl;
+import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
-import org.dpi.empleo.Empleo;
-import org.dpi.empleo.EmpleoImpl;
-import org.dpi.empleo.EmploymentQueryFilter;
-import org.dpi.empleo.EmploymentService;
-import org.dpi.empleo.EmploymentStatus;
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
-import org.dpi.movimientoCreditos.MovimientoCreditosImpl;
-import org.dpi.movimientoCreditos.TipoMovimientoCreditos;
+import org.dpi.employment.Employment;
+import org.dpi.employment.EmploymentImpl;
+import org.dpi.employment.EmploymentQueryFilter;
+import org.dpi.employment.EmploymentService;
+import org.dpi.employment.EmploymentStatus;
 import org.dpi.person.Person;
 import org.dpi.person.PersonImpl;
 import org.dpi.person.PersonService;
@@ -288,26 +288,26 @@ public class ImportarEntidades {
 					empleoQueryFilter.setCodigoCentro(codigoCentro);
 					empleoQueryFilter.setCodigoSector(codigoSector);
 					empleoQueryFilter.setCategoryCode(categoryCode);
-					empleoQueryFilter.addEstadoEmpleo(EmploymentStatus.ACTIVO);
+					empleoQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);
 					
 					
 					
-					List<Empleo> empleos = employmentService.find(empleoQueryFilter);
+					List<Employment> empleos = employmentService.find(empleoQueryFilter);
 					
-					Empleo empleo = null;
+					Employment empleo = null;
 					if(CollectionUtils.isEmpty(empleos)){
 						//crear una entrada en empleo
-						empleo = new EmpleoImpl();
+						empleo = new EmploymentImpl();
 						empleo.setPerson(person);
 						empleo.setCentroSector(centroSector);
 						empleo.setCategory(categoria);
-						empleo.setEstado(EmploymentStatus.ACTIVO);
+						empleo.setStatus(EmploymentStatus.ACTIVO);
 						
 						String esBaja = (String)row.get("BAJA");
 						
 						if(esBaja.equalsIgnoreCase("ALTA")){ //es Carga Inicial
-							MovimientoCreditosImpl movimientoCargaInicialAgente = new MovimientoCreditosImpl();
-							movimientoCargaInicialAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.CargaInicialAgenteExistente);
+							CreditsEntryImpl movimientoCargaInicialAgente = new CreditsEntryImpl();
+							movimientoCargaInicialAgente.setCreditsEntryType(CreditsEntryType.CargaInicialAgenteExistente);
 							movimientoCargaInicialAgente.setGrantedStatus(GrantedStatus.Otorgado);
 							movimientoCargaInicialAgente.setCreditsPeriod(creditsPeriod);
 							int cantidadCreditosPorCargaInicial = this.administradorCreditosService.getCreditosPorCargaInicial(categoryCode);
@@ -315,10 +315,10 @@ public class ImportarEntidades {
 							//empleo.setFechaInicio(creditsPeriod.getStartDate());
 							
 							movimientoCargaInicialAgente.setCantidadCreditos(cantidadCreditosPorCargaInicial);
-							movimientoCargaInicialAgente.setEmpleo(empleo);
+							movimientoCargaInicialAgente.setEmployment(empleo);
 							
-							empleo.setEstado(EmploymentStatus.ACTIVO);
-							empleo.addMovimientoCreditos(movimientoCargaInicialAgente);
+							empleo.setStatus(EmploymentStatus.ACTIVO);
+							empleo.addCreditsEntry(movimientoCargaInicialAgente);
 							
 							employmentService.saveOrUpdate(empleo);
 							
@@ -380,8 +380,8 @@ public class ImportarEntidades {
 						String esBaja = (String)row.get("BAJA");
 						
 						if(esBaja.equalsIgnoreCase("ALTA")){ //es ingreso nuevo
-							MovimientoCreditosImpl movimientoIngresoAgente = new MovimientoCreditosImpl();
-							movimientoIngresoAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
+							CreditsEntryImpl movimientoIngresoAgente = new CreditsEntryImpl();
+							movimientoIngresoAgente.setTipoCreditsEntry(TipoCreditsEntry.IngresoAgente);
 							movimientoIngresoAgente.setGrantedStatus(GrantedStatus.Otorgado);
 							movimientoIngresoAgente.setCreditsPeriod(creditsPeriod);
 							
@@ -393,11 +393,11 @@ public class ImportarEntidades {
 							movimientoIngresoAgente.setEmpleo(empleo);
 							
 							empleo.setEstado(EmploymentStatus.ACTIVO);
-							empleo.addMovimientoCreditos(movimientoIngresoAgente);
+							empleo.addCreditsEntry(movimientoIngresoAgente);
 							
 						}else if(esBaja.equalsIgnoreCase("BAJA")){//es baja
-							MovimientoCreditosImpl movimientoBajaAgente = new MovimientoCreditosImpl();
-							movimientoBajaAgente.setTipoMovimientoCreditos(TipoMovimientoCreditos.BajaAgente);
+							CreditsEntryImpl movimientoBajaAgente = new CreditsEntryImpl();
+							movimientoBajaAgente.setTipoCreditsEntry(TipoCreditsEntry.BajaAgente);
 							
 							int cantidadCreditosPorBaja = this.administradorCreditosService.getCreditosPorBaja(codigoCategoria);
 							
@@ -410,7 +410,7 @@ public class ImportarEntidades {
 							empleo.setFechaFin(creditsPeriod.getStartDate());
 							empleo.setEstado(EmploymentStatus.BAJA);
 							
-							empleo.addMovimientoCreditos(movimientoBajaAgente);
+							empleo.addCreditsEntry(movimientoBajaAgente);
 							
 						}
 						

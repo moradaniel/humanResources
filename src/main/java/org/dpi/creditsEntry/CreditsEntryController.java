@@ -1,4 +1,4 @@
-package org.dpi.movimientoCreditos;
+package org.dpi.creditsEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsPeriod.CreditsPeriodService;
-import org.dpi.empleo.EmploymentQueryFilter;
-import org.dpi.empleo.EmploymentService;
-import org.dpi.movimientoCreditos.MovimientoCreditos.GrantedStatus;
+import org.dpi.employment.EmploymentQueryFilter;
+import org.dpi.employment.EmploymentService;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
 import org.janux.bus.security.Account;
@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class MovimientoCreditosController {
+public class CreditsEntryController {
 	
-	private MovimientoCreditosService movimientoCreditosService;
+	private CreditsEntryService creditsEntryService;
 	
 	private EmploymentService employmentService;
 
@@ -57,8 +57,8 @@ public class MovimientoCreditosController {
 
 
 	@Inject
-	public MovimientoCreditosController(MovimientoCreditosService movimientoCreditosService) {
-		this.movimientoCreditosService = movimientoCreditosService;
+	public CreditsEntryController(CreditsEntryService creditsEntryService) {
+		this.creditsEntryService = creditsEntryService;
 	}
 
 
@@ -76,8 +76,8 @@ public class MovimientoCreditosController {
 	}
 
 
-	public void setEmploymentService(EmploymentService empleoService) {
-		this.employmentService = empleoService;
+	public void setEmploymentService(EmploymentService employmentService) {
+		this.employmentService = employmentService;
 	}
 
 	public CategoryService getCategoryService() {
@@ -100,23 +100,23 @@ public class MovimientoCreditosController {
 	}
 	
 	
-	@RequestMapping(value = "/reparticiones/movimientos/{id}/setupFormCambiarEstadoMovimientoCreditos", method = RequestMethod.GET)
-	public String setupFormCambiarEstadoMovimientoCreditos(@PathVariable Long id, Model model){  
+	@RequestMapping(value = "/reparticiones/movimientos/{id}/setupFormCambiarEstadoCreditsEntry", method = RequestMethod.GET)
+	public String setupFormCambiarEstadoCreditsEntry(@PathVariable Long id, Model model){  
 			      
           
-		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		
-		movimientoCreditosQueryFilter.setId(id);
+		creditsEntryQueryFilter.setId(id);
 		
 		
-		List<MovimientoCreditos> movimientos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
+		List<CreditsEntry> movimientos = creditsEntryService.find(creditsEntryQueryFilter);
 
-		MovimientoCreditos movimientoCreditos = movimientos.get(0);
+		CreditsEntry creditsEntry = movimientos.get(0);
           
-		MovimientoCreditosForm movimientoCreditosForm = new MovimientoCreditosForm(movimientoCreditos);
+		CreditsEntryForm creditsEntryForm = new CreditsEntryForm(creditsEntry);
 		
 		
-		model.addAttribute("movimientoCreditosForm", movimientoCreditosForm);
+		model.addAttribute("creditsEntryForm", creditsEntryForm);
 		model.addAttribute("grantedStatuses", GrantedStatus.values());
 
         
@@ -126,25 +126,25 @@ public class MovimientoCreditosController {
 	
 	@RequestMapping(value = "/movimientos/cambiarEstadoMovimiento", method = RequestMethod.POST)
 	public String processFormCambiarEstadoMovimiento(HttpServletRequest request,
-													@ModelAttribute("movimientoCreditosForm") MovimientoCreditosForm movimientoCreditosForm,
+													@ModelAttribute("creditsEntryForm") CreditsEntryForm creditsEntryForm,
 													Model model,
 													BindingResult result) throws Exception {
 		
 
-		//retrieve the movimientoCreditos from database
-		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-		movimientoCreditosQueryFilter.setId(movimientoCreditosForm.getMovimientoCreditosId());
+		//retrieve the creditsEntry from database
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		creditsEntryQueryFilter.setId(creditsEntryForm.getCreditsEntryId());
 				
-		List<MovimientoCreditos> movimientos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
-		MovimientoCreditos movimientoCreditos = movimientos.get(0);
+		List<CreditsEntry> movimientos = creditsEntryService.find(creditsEntryQueryFilter);
+		CreditsEntry creditsEntry = movimientos.get(0);
 
           
-		movimientoCreditosService.changeGrantedStatus(movimientoCreditos, movimientoCreditosForm.getGrantedStatus());  
+		creditsEntryService.changeGrantedStatus(creditsEntry, creditsEntryForm.getGrantedStatus());  
           
         //String message = "Team was successfully edited.";  
         //modelAndView.addObject("message", message);  
 
-        String creditsPeriodName =  movimientoCreditos.getCreditsPeriod().getName();
+        String creditsPeriodName =  creditsEntry.getCreditsPeriod().getName();
 		return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodName;
     }  
 	
@@ -157,7 +157,7 @@ public class MovimientoCreditosController {
 	 */
 	@RequestMapping(value = "/reparticiones/reparticion/movimientos", method = RequestMethod.GET)
     @ResponseBody
-	public List<MovimientoCreditosDTO> getMovimientos(
+	public List<CreditsEntryDTO> getMovimientos(
 			HttpServletRequest request, 
 			HttpServletResponse response/*,
 			@PathVariable Long reparticionId, Model model*/) {
@@ -165,34 +165,34 @@ public class MovimientoCreditosController {
 		// get the current reparticion in the session
 		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
 
-		List<MovimientoCreditosDTO> movimientosCreditosDTO = new ArrayList<MovimientoCreditosDTO>();
+		List<CreditsEntryDTO> creditsEntriesDTO = new ArrayList<CreditsEntryDTO>();
 		if (reparticion != null){
 
 
-			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
+			EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+			employmentQueryFilter.setReparticionId(reparticion.getId().toString());
 
-			MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-			movimientoCreditosQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
-			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.CargaInicialAgenteExistente);
-			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.AscensoAgente);
-			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.BajaAgente);
-			movimientoCreditosQueryFilter.addTipoMovimientoCreditos(TipoMovimientoCreditos.IngresoAgente);
+			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+			creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
+			creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.CargaInicialAgenteExistente);
+			creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
+			creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.BajaAgente);
+			creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
 
-			List<MovimientoCreditos> movimientoCreditosReparticion = movimientoCreditosService.find(movimientoCreditosQueryFilter);
+			List<CreditsEntry> creditsEntryReparticion = creditsEntryService.find(creditsEntryQueryFilter);
 			
 			Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Account currenUser = (Account)accountObj;
 					
-			List<MovimientoCreditosVO> movimientoCreditosVOReparticion = movimientoCreditosService.buildMovimientoCreditosVO(movimientoCreditosReparticion,currenUser);
+			List<CreditsEntryVO> creditsEntryVOReparticion = creditsEntryService.buildCreditsEntryVO(creditsEntryReparticion,currenUser);
 			
-			for(MovimientoCreditosVO movimientoCreditosAscensoVO :movimientoCreditosVOReparticion){
-				MovimientoCreditosDTO movimientoCreditosDTO = new MovimientoCreditosDTO();
-				movimientoCreditosDTO.setName(movimientoCreditosAscensoVO.getMovimientoCreditos().getEmpleo().getPerson().getApellidoNombre());
-				movimientosCreditosDTO.add(movimientoCreditosDTO);
+			for(CreditsEntryVO creditsEntryAscensoVO :creditsEntryVOReparticion){
+				CreditsEntryDTO creditsEntryDTO = new CreditsEntryDTO();
+				creditsEntryDTO.setName(creditsEntryAscensoVO.getCreditsEntry().getEmployment().getPerson().getApellidoNombre());
+				creditsEntriesDTO.add(creditsEntryDTO);
 			}
 					
-			//model.addAttribute("movimientos", movimientoCreditosVOReparticion);
+			//model.addAttribute("movimientos", creditsEntryVOReparticion);
 			
 			//creditos disponibles
 			//long creditosDisponibles = administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
@@ -200,7 +200,7 @@ public class MovimientoCreditosController {
 			//model.addAttribute("creditosDisponibles", creditosDisponibles);
 			
 		}
-		return movimientosCreditosDTO;
+		return creditsEntriesDTO;
 	}
 	
 	
@@ -208,18 +208,18 @@ public class MovimientoCreditosController {
     @RequestMapping(value = "/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento", method = RequestMethod.POST)
     public String processCambiarMultipleEstadoMovimiento(@ModelAttribute("cambiosMultiplesEstadoMovimientosForm") CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm) {
 
-        List<MovimientoCreditos> movimientos = cambiosMultiplesEstadoMovimientosForm.getMovimientos();
+        List<CreditsEntry> movimientos = cambiosMultiplesEstadoMovimientosForm.getMovimientos();
          
-        for(MovimientoCreditos submittedMovimiento :movimientos){
+        for(CreditsEntry submittedMovimiento :movimientos){
         	if(submittedMovimiento!=null){
-        		MovimientoCreditosQueryFilter movimientoCreditosQueryFilter = new MovimientoCreditosQueryFilter();
-        		movimientoCreditosQueryFilter.setId(submittedMovimiento.getId());
-        		List<MovimientoCreditos> listMovimientoCreditos = movimientoCreditosService.find(movimientoCreditosQueryFilter);
-        		MovimientoCreditos movimientoCreditos = listMovimientoCreditos.get(0);
-        		if(movimientoCreditos.getGrantedStatus()!=submittedMovimiento.getGrantedStatus()){
-        			//movimientoCreditos.setGrantedStatus(submittedMovimiento.getGrantedStatus());
-        			//movimientoCreditosService.saveOrUpdate(movimientoCreditos);
-        			movimientoCreditosService.changeGrantedStatus(movimientoCreditos,submittedMovimiento.getGrantedStatus());
+        		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+        		creditsEntryQueryFilter.setId(submittedMovimiento.getId());
+        		List<CreditsEntry> listCreditsEntry = creditsEntryService.find(creditsEntryQueryFilter);
+        		CreditsEntry creditsEntry = listCreditsEntry.get(0);
+        		if(creditsEntry.getGrantedStatus()!=submittedMovimiento.getGrantedStatus()){
+        			//creditsEntry.setGrantedStatus(submittedMovimiento.getGrantedStatus());
+        			//creditsEntryService.saveOrUpdate(creditsEntry);
+        			creditsEntryService.changeGrantedStatus(creditsEntry,submittedMovimiento.getGrantedStatus());
         		}
         		
         	}

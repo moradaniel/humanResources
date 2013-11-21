@@ -34,8 +34,8 @@
         <mapping resource="mappings/CentroSector.hbm.xml" />
 		<mapping resource="mappings/Person.hbm.xml" />
 		<mapping resource="mappings/Category.hbm.xml" />
-		<mapping resource="mappings/MovimientoCreditos.hbm.xml" />
-		<mapping resource="mappings/Empleo.hbm.xml" />
+		<mapping resource="mappings/CreditsEntry.hbm.xml" />
+		<mapping resource="mappings/Employment.hbm.xml" />
 		<mapping resource="mappings/CreditsPeriod.hbm.xml" />
 		<mapping resource="mappings/OccupationalGroup.hbm.xml" />
         

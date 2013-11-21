@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,13 +27,13 @@ public class EmploymentQueryFilter implements Serializable {
 	private List<Long> personsIds= new ArrayList<Long>();
 
 	private String reparticionId;
-	private String empleoId;
+	private String employmentId;
 	
 	private Date fechaComienzo;
 	private Date fechaFin;
 
 	
-	List<EmploymentStatus> estadosEmpleo = new ArrayList<EmploymentStatus>();
+	List<EmploymentStatus> employmentStatuses = new ArrayList<EmploymentStatus>();
 	
 	
 
@@ -90,25 +90,25 @@ public class EmploymentQueryFilter implements Serializable {
 		this.reparticionId = reparticionId;
 	}
 	
-	public String getEmpleoId() {
-		return empleoId;
+	public String getEmploymentId() {
+		return employmentId;
 	}
-	public void setEmpleoId(String empleoId) {
-		this.empleoId = empleoId;
-	}
-	
-	public List<EmploymentStatus> getEstadosEmpleo() {
-		return estadosEmpleo;
-	}
-	public void setEstadosEmpleo(List<EmploymentStatus> estadosEmpleo) {
-		this.estadosEmpleo = estadosEmpleo;
+	public void setEmploymentId(String employmentId) {
+		this.employmentId = employmentId;
 	}
 	
-	public void addEstadoEmpleo(EmploymentStatus estadoEmpleo){
-		if(this.estadosEmpleo == null){
-			this.estadosEmpleo = new ArrayList<EmploymentStatus>();
+	public List<EmploymentStatus> getEmploymentStatuses() {
+		return employmentStatuses;
+	}
+	public void setEmploymentStatuses(List<EmploymentStatus> employmentStatuses) {
+		this.employmentStatuses = employmentStatuses;
+	}
+	
+	public void addEmploymentStatus(EmploymentStatus employmentStatus){
+		if(this.employmentStatuses == null){
+			this.employmentStatuses = new ArrayList<EmploymentStatus>();
 		}
-		this.estadosEmpleo.add(estadoEmpleo);
+		this.employmentStatuses.add(employmentStatus);
 	}
 	
 	public List<Long> getPersonsIds() {

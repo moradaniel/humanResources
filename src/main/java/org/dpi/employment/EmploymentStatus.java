@@ -1,4 +1,4 @@
-package org.dpi.empleo;
+package org.dpi.employment;
 
 public enum EmploymentStatus {
 	ACTIVO,

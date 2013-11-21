@@ -18,10 +18,10 @@
 
     
 <!-- this association is bidirectional
-    	empleo side is marked as inverse="true" so the owner of the relation is Person -->
-    <set name="empleos" cascade="save-update" lazy="true" inverse="true">
-		<key column="PERSONID" foreign-key="fk_Empleo_Person"/>
-		<one-to-many class="org.dpi.empleo.EmpleoImpl"/>
+    	employment side is marked as inverse="true" so the owner of the relation is Person -->
+    <set name="employments" cascade="save-update" lazy="true" inverse="true">
+		<key column="PERSONID" foreign-key="fk_Employment_Person"/>
+		<one-to-many class="org.dpi.employment.EmploymentImpl"/>
 	</set>
 
   </class>
