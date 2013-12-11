@@ -302,7 +302,7 @@ public class ReparticionController {
 					
 			List<CreditsEntryVO> creditsEntryVOReparticion = creditsEntryService.buildCreditsEntryVO(creditsEntryReparticion,currentUser);
 					
-			model.addAttribute("movimientos", creditsEntryVOReparticion);
+			model.addAttribute("creditsEntries", creditsEntryVOReparticion);
 			
 			//------------------ Should we build the form for editing status? -----------------------------
 			
@@ -343,11 +343,7 @@ public class ReparticionController {
 			
 			model.addAttribute("showReportGenerationButton", showReportGenerationButton);
 			
-			
-			
-			
-			
-			
+						
 		}
 		return "reparticiones/creditsentries";
 	}

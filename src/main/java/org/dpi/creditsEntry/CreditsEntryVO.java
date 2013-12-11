@@ -16,7 +16,7 @@ public class CreditsEntryVO{
 	
 		
 	boolean canAccountBorrarMovimiento = false;
-	boolean canAccountCambiarEstadoMovimiento = false;
+	boolean canAccountChangeCreditsEntryStatus = false;
 	
 	public CreditsEntryVO(){
 		super();
@@ -54,13 +54,13 @@ public class CreditsEntryVO{
 		this.canAccountBorrarMovimiento = canAccountBorrarMovimiento;
 	}
 
-	public boolean isCanAccountCambiarEstadoMovimiento() {
-		return canAccountCambiarEstadoMovimiento;
+	public boolean isCanAccountChangeCreditsEntryStatus() {
+		return canAccountChangeCreditsEntryStatus;
 	}
 
 	public void setCanAccountChangeCreditsEntryStatus(
-			boolean canAccountCambiarEstadoMovimiento) {
-		this.canAccountCambiarEstadoMovimiento = canAccountCambiarEstadoMovimiento;
+			boolean canAccountChangeCreditsEntryStatus) {
+		this.canAccountChangeCreditsEntryStatus = canAccountChangeCreditsEntryStatus;
 	}
 
 	public String getOccupationalGroup() {

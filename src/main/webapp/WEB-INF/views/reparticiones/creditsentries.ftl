@@ -78,15 +78,17 @@
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Nombre Centro</a></th>
 						<th class="table-header-repeat line-left "><a href="">Codigo Sector</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Nombre Sector</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Tramo</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Agrupamiento</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Observaciones</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
 						
 					</tr>
 				
 
-		    <#list movimientos as movimiento>
+		    <#list creditsEntries as entry>
 		        <#assign trStyle= "" >
-			   	<#if (movimiento_index % 2) == 0>
+			   	<#if (entry_index % 2) == 0>
 			   		<#assign trStyle= "alternate-row" >
 			   	</#if>	
 			   	
@@ -94,49 +96,62 @@
 		    	<#assign mostrarActionBorrarMovimiento = false />
 		    	<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
 
-			    		<#assign mostrarActionBorrarMovimiento = movimiento.canAccountBorrarMovimiento/>
+			    		<#assign mostrarActionBorrarMovimiento = entry.canAccountBorrarMovimiento/>
 	
 				</#if>
 				
 
 				<tr class="${trStyle}">
-					<td>${movimiento.creditsEntry.creditsPeriod.name}</td>
-					<td>${movimiento.creditsEntry.employment.person.apellidoNombre}</td>
-					<td>${movimiento.creditsEntry.employment.person.condition?default("")}</td>
-					<td>${movimiento.creditsEntry.creditsEntryType}</td>
+					<td>${entry.creditsEntry.creditsPeriod.name}</td>
+					<td>${entry.creditsEntry.employment.person.apellidoNombre}</td>
+					<td>${entry.creditsEntry.employment.person.condition?default("")}</td>
+					<td>${entry.creditsEntry.creditsEntryType}</td>
 					<td>
-						<#if movimiento.canAccountCambiarEstadoMovimiento>
-							<@spring.formSingleSelect "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].grantedStatus", grantedStatuses, "" />
-							<@spring.formHiddenInput "cambiosMultiplesEstadoMovimientosForm.movimientos[${movimiento_index}].id" />	
+						<#if entry.canAccountChangeCreditsEntryStatus>
+							<@spring.formSingleSelect "cambiosMultiplesEstadoMovimientosForm.movimientos[${entry_index}].grantedStatus", grantedStatuses, "" />
+							<@spring.formHiddenInput "cambiosMultiplesEstadoMovimientosForm.movimientos[${entry_index}].id" />	
 						<#else>
-							${movimiento.creditsEntry.grantedStatus}
+							${entry.creditsEntry.grantedStatus}
 						</#if>	
 					</td>
-					<td>${movimiento.creditsEntry.employment.fechaInicio!""}</td>
-					<td>${movimiento.creditsEntry.employment.fechaFin!""}</td>
-					<td>${movimiento.creditsEntry.cantidadCreditos}</td>
+					<td>${entry.creditsEntry.employment.fechaInicio!""}</td>
+					<td>${entry.creditsEntry.employment.fechaFin!""}</td>
+					<td>${entry.creditsEntry.cantidadCreditos}</td>
 					
-					<td>${movimiento.currentCategory?default("")}</td>
+					<td>${entry.currentCategory?default("")}</td>
 					
-					<td>${movimiento.proposedCategory?default("")}</td>
+					<td>${entry.proposedCategory?default("")}</td>
 					
-					<td>${movimiento.creditsEntry.employment.centroSector.codigoCentro}</td>
-					<td>${movimiento.creditsEntry.employment.centroSector.nombreCentro}</td>
-					<td>${movimiento.creditsEntry.employment.centroSector.codigoSector}</td>
-					<td>${movimiento.creditsEntry.employment.centroSector.nombreSector}</td>
-					<td>${movimiento.creditsEntry.observaciones?default("")}</td>
+					<td>${entry.creditsEntry.employment.centroSector.codigoCentro}</td>
+					<td>${entry.creditsEntry.employment.centroSector.nombreCentro}</td>
+					<td>${entry.creditsEntry.employment.centroSector.codigoSector}</td>
+					<td>${entry.creditsEntry.employment.centroSector.nombreSector}</td>
+					
+					<td>
+						<#if entry.creditsEntry.employment.occupationalGroup?exists >
+							${entry.creditsEntry.employment.occupationalGroup.name} - ${entry.creditsEntry.employment.occupationalGroup.code}
+						</#if>
+					</td>
+							
+					<td>
+						<#if entry.creditsEntry.employment.occupationalGroup?exists && entry.creditsEntry.employment.occupationalGroup.parentOccupationalGroup?exists>
+							${entry.creditsEntry.employment.occupationalGroup.parentOccupationalGroup.name} - ${entry.creditsEntry.employment.occupationalGroup.parentOccupationalGroup.code}
+						</#if>
+					</td>
+					
+					<td>${entry.creditsEntry.observaciones?default("")}</td>
 					<td>
 						<#if mostrarActionBorrarMovimiento>
-							<a href="${reparticionesUrl}/reparticion/movimientos/${movimiento.creditsEntry.id}/borrar" class="ajaxLink">Borrar Movimiento</a>
+							<a href="${reparticionesUrl}/reparticion/movimientos/${entry.creditsEntry.id}/borrar" class="ajaxLink">Borrar Movimiento</a>
 						</#if>
 						
-						<#if movimiento.canAccountCambiarEstadoMovimiento>
-							<#-- a href="${reparticionesUrl}/movimientos/${movimiento.creditsEntry.id}/setupFormCambiarEstadoMovimientoCreditos" class="ajaxLink">Cambiar Estado Movimiento</a -->
+						<#if entry.canAccountChangeCreditsEntryStatus>
+							<#-- a href="${reparticionesUrl}/movimientos/${entry.creditsEntry.id}/setupFormCambiarEstadoMovimientoCreditos" class="ajaxLink">Cambiar Estado Movimiento</a -->
 						</#if>
 					</td>
 				</tr>
 			</#list>
-			<#if !movimientos?has_content>
+			<#if !creditsEntries?has_content>
 				<tr>
 					<td colspan="5">No se encontraron movimientos</td>
 				</tr>
