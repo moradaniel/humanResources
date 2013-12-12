@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.employment.Employment;
@@ -33,17 +33,17 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	private EmploymentService employmentService;
 	
 	private final PersonService personService;
-	private AdministradorCreditosService administradorCreditosService;
+	private CreditsManagerService creditsManagerService;
 	
 
 	private ApplicationContext applicationContext;
 	
 	public CreditsEntryServiceImpl(	final CreditsEntryDao creditsEntryDao,
 											final PersonService personService,
-											final AdministradorCreditosService administradorCreditosService) {
+											final CreditsManagerService creditsManagerService) {
 		this.creditsEntryDao = creditsEntryDao;
 		this.personService = personService;
-		this.administradorCreditosService = administradorCreditosService;
+		this.creditsManagerService = creditsManagerService;
 	}
 
 	
@@ -262,7 +262,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 			Employment employmentAnterior = employmentaActualizar.getPreviousEmployment();
 			//get the category of the previous employment
 			//Obtener los creditos por ascenso para la categoria anterior y la categoria actual
-			int nuevaCantidaddeCreditos = administradorCreditosService.getCreditosPorAscenso(employmentAnterior.getPerson().getCondition(), 
+			int nuevaCantidaddeCreditos = creditsManagerService.getCreditosPorAscenso(employmentAnterior.getPerson().getCondition(), 
 																							employmentAnterior.getCategory().getCode(),
 																							employmentaActualizar.getCategory().getCode());
 			creditsEntry.setCantidadCreditos(nuevaCantidaddeCreditos);
@@ -272,14 +272,14 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		}
 	}
 	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return creditsManagerService;
 	}
 
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService = administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 	}
 	
 	@Override

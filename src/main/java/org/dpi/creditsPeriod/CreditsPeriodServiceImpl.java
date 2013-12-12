@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.person.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,8 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	
 	private final CreditsPeriodDao creditsPeriodDao;
 	
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 	
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
@@ -94,14 +94,14 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 		this.applicationContext = aApplicationContext;
 	}
 	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return creditsManagerService;
 	}
 
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService = administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 	}
 
 	public CategoryService getCategoryService() {

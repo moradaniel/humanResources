@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsEntry.CreditsEntryVO;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.EmploymentQueryFilter;
@@ -50,8 +50,8 @@ public class ReportController {
 	@Resource(name = "creditsEntryService")
 	private CreditsEntryService creditsEntryService;
 	
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 	
 	@Resource(name = "creditsPeriodService")
 	private CreditsPeriodService creditsPeriodService;
@@ -139,13 +139,13 @@ public class ReportController {
 		params.put("MOVIMIENTOS_INGRESO",  new MovimientosIngresoReportDataSource(getReportDataMovimientosIngreso(creditsEntryIngresosReparticion)));
 		
 		
-		Long creditosDisponiblesAlInicioDelPeriodo =this.administradorCreditosService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod,reparticion.getId());
+		Long creditosDisponiblesAlInicioDelPeriodo =this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod,reparticion.getId());
 		
-		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.administradorCreditosService.getCreditosPorBajasDeReparticion(currentCreditsPeriod,reparticion.getId());
+		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod,reparticion.getId());
 
-		Long creditosPorIngresosOAscensosSolicitados = this.administradorCreditosService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod, reparticion.getId());
+		Long creditosPorIngresosOAscensosSolicitados = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod, reparticion.getId());
 
-		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod,reparticion.getId());
+		Long creditosDisponibles = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod,reparticion.getId());
 	
 		
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO",creditosDisponiblesAlInicioDelPeriodo);

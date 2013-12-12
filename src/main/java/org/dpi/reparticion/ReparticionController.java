@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CambiosMultiplesEstadoMovimientosForm;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
@@ -17,6 +16,7 @@ import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryServiceImpl;
 import org.dpi.creditsEntry.CreditsEntryVO;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
@@ -101,8 +101,8 @@ public class ReparticionController {
 	private PersonService personService;
 
 
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 
 	@Resource(name = "creditsEntryService")
 	private CreditsEntryService creditsEntryService;
@@ -119,13 +119,13 @@ public class ReparticionController {
 	}
 
 
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return creditsManagerService;
 	}
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService = administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 	}
 
 	public EmploymentService getEmploymentService() {
@@ -157,46 +157,46 @@ public class ReparticionController {
 			
 			CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 			
-			Long creditosDisponiblesInicioPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod,reparticion.getId());
+			Long creditosDisponiblesInicioPeriodoActual = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod,reparticion.getId());
 			model.addAttribute("creditosDisponiblesInicioPeriodoActual", creditosDisponiblesInicioPeriodoActual);
 			
 			
-			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.administradorCreditosService.getCreditosPorBajasDeReparticion(currentCreditsPeriod,reparticion.getId());
+			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod,reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorBajaDurantePeriodoActual", creditosAcreditadosPorBajaDurantePeriodoActual);
 			
 			
 			
-			Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual = this.administradorCreditosService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod, reparticion.getId());
+			Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod, reparticion.getId());
 			
 			model.addAttribute("creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual", creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual);
 			
 
-			Long creditosPorIngresosOAscensosOtorgadosPeriodoActual = this.administradorCreditosService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod, reparticion.getId());
+			Long creditosPorIngresosOAscensosOtorgadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod, reparticion.getId());
 			
 			model.addAttribute("creditosPorIngresosOAscensosOtorgados", creditosPorIngresosOAscensosOtorgadosPeriodoActual);
 
 			
 			
 
-			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod,reparticion.getId());
+			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod,reparticion.getId());
 			model.addAttribute("creditosDisponiblesSegunSolicitadoPeriodoActual", creditosDisponiblesSegunSolicitadoPeriodoActual);
 			
-			Long creditosDisponiblesSegunOtorgadoPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod,reparticion.getId());
+			Long creditosDisponiblesSegunOtorgadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod,reparticion.getId());
 			model.addAttribute("creditosDisponiblesSegunOtorgadoPeriodoActual", creditosDisponiblesSegunOtorgadoPeriodoActual);
 			
 						
 			
 			//historicos 2012
 					
-			Long creditosAcreditadosPorCargaInicial2012 = this.administradorCreditosService.getCreditosPorCargaInicialDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod(),reparticion.getId());
+			Long creditosAcreditadosPorCargaInicial2012 = this.creditsManagerService.getCreditosPorCargaInicialDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorCargaInicial2012", creditosAcreditadosPorCargaInicial2012);
 						
 			
-			Long creditosAcreditadosPorBajas2012 = this.administradorCreditosService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod(),reparticion.getId());
+			Long creditosAcreditadosPorBajas2012 = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorBajas2012", creditosAcreditadosPorBajas2012);
 						
 			
-			Long creditosConsumidosPorIngresosOAscensosOtorgados2012 = this.administradorCreditosService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getPreviousCreditsPeriod(), reparticion.getId());
+			Long creditosConsumidosPorIngresosOAscensosOtorgados2012 = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getPreviousCreditsPeriod(), reparticion.getId());
 			
 			model.addAttribute("creditosConsumidosPorIngresosOAscensosOtorgados2012", creditosConsumidosPorIngresosOAscensosOtorgados2012);
 			
@@ -335,7 +335,7 @@ public class ReparticionController {
 			if(canGenerateReport){
 				model.addAttribute("canGenerateReport", canGenerateReport);
 				if(creditsPeriod.getStatus()==Status.Active){
-					Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.administradorCreditosService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod(),reparticion.getId());
+					Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod(),reparticion.getId());
 					showReportGenerationButton = creditosDisponiblesSegunSolicitadoPeriodoActual >=0;
 				}
 			}

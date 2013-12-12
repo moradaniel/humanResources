@@ -1,11 +1,11 @@
-package org.dpi.configuracionAsignacionCreditos;
+package org.dpi.creditsManagement;
 
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.person.PersonCondition;
 
 
-public interface AdministradorCreditosService {
+public interface CreditsManagerService {
 
 	public int getCreditosPorCargaInicial(String categoryCode);
 	

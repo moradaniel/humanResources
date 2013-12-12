@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
@@ -37,8 +37,8 @@ public class CreditsEntryController {
 	
 	private EmploymentService employmentService;
 
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
@@ -62,13 +62,13 @@ public class CreditsEntryController {
 	}
 
 
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return creditsManagerService;
 	}
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService = administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 	}
 
 	public EmploymentService getEmploymentService() {

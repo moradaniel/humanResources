@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.occupationalGroup.OccupationalGroupService;
@@ -28,8 +28,8 @@ public class EmploymentServiceImpl implements EmploymentService
 	
 	private final EmploymentDao employmentDao;
 	
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 	
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
@@ -101,14 +101,14 @@ public class EmploymentServiceImpl implements EmploymentService
 		return this.employmentDao.findInactivEmployments(employmentQueryFilter);
 	}
 	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return creditsManagerService;
 	}
 
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService = administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 	}
 
 	public CategoryService getCategoryService() {

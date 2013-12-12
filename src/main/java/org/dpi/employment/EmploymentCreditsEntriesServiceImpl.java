@@ -12,12 +12,12 @@ import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryImpl;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryType;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.person.Person;
@@ -50,8 +50,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
 	
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 	
 	
 	@Resource(name = "personService")
@@ -102,7 +102,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear un entry de tipo ascenso 
 		CreditsEntryImpl entryAscenso = new CreditsEntryImpl();
 		entryAscenso.setCreditsEntryType(CreditsEntryType.AscensoAgente);
-		int cantidadCreditosPorAscenso = administradorCreditosService.getCreditosPorAscenso(employee.getCondition(),currentEmployment.getCategory().getCode(),newCategoryCode);
+		int cantidadCreditosPorAscenso = creditsManagerService.getCreditosPorAscenso(employee.getCondition(),currentEmployment.getCategory().getCode(),newCategoryCode);
 		entryAscenso.setGrantedStatus(GrantedStatus.Solicitado);
 		entryAscenso.setCreditsPeriod(currentCreditsPeriod);
 
@@ -149,7 +149,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear un entry de tipo baja 
 		CreditsEntryImpl entryBaja = new CreditsEntryImpl();
 		entryBaja.setCreditsEntryType(CreditsEntryType.BajaAgente);
-		int cantidadCreditosPorBaja = administradorCreditosService.getCreditosPorBaja(empleo.getCategory().getCode());
+		int cantidadCreditosPorBaja = creditsManagerService.getCreditosPorBaja(empleo.getCategory().getCode());
 
 		
 		entryBaja.setCantidadCreditos(cantidadCreditosPorBaja);
@@ -204,7 +204,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		creditsEntryIngreso.setEmployment(nuevoEmpleoPropuesto);
 		nuevoEmpleoPropuesto.addCreditsEntry(creditsEntryIngreso);
 		
-		int creditosPorIngreso = administradorCreditosService.getCreditosPorIngreso(proposedCategoryCode);
+		int creditosPorIngreso = creditsManagerService.getCreditosPorIngreso(proposedCategoryCode);
 		creditsEntryIngreso.setCantidadCreditos(creditosPorIngreso);
 		
 		employmentService.save(nuevoEmpleoPropuesto);

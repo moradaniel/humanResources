@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorService;
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
@@ -33,8 +33,8 @@ public class EmploymentController {
 	@Resource(name = "employmentService")
 	private EmploymentService employmentService;
 	
-	@Resource(name = "administradorCreditosService")
-	private AdministradorCreditosService administradorCreditosService;
+	@Resource(name = "creditsManagerService")
+	private CreditsManagerService creditsManagerService;
 
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
@@ -55,13 +55,13 @@ public class EmploymentController {
 	}
 
 
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return creditsManagerService;
 	}
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService = administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 	}
 
 	public EmploymentCreditsEntriesService getEmploymentCreditsEntriesService() {

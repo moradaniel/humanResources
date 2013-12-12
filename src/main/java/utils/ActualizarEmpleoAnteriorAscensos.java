@@ -33,10 +33,7 @@ public class ActualizarEmpleoAnteriorAscensos {
 		
 	CreditsEntryService creditsEntryService;
 
-	//AdministradorCreditosService administradorCreditosService;
-	
 
-	
 	TransactionTemplate transactionTemplate;
 	
 	public static void main( String[] args )
@@ -57,8 +54,6 @@ public class ActualizarEmpleoAnteriorAscensos {
 		actualizador.setCreditsEntryService((CreditsEntryService)context.getBean("creditsEntryService"));
 		
 		
-		//actualizador.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
-		
 		actualizador.setTransactionTemplate((TransactionTemplate)context.getBean("transactionTemplate"));
 		
 		
@@ -72,19 +67,6 @@ public class ActualizarEmpleoAnteriorAscensos {
 		});
 		
     }
-
-	/*
-    public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService=administradorCreditosService;
-		
-	}
-
-	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return this.administradorCreditosService;
-	}*/
-
 	
 	/**
      * 

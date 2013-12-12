@@ -57,10 +57,10 @@
 	</bean>
 	
 	
-	<bean id="administradorCreditosService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="creditsManagerService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.configuracionAsignacionCreditos.AdministradorCreditosServiceImpl">
+			<bean class="org.dpi.creditsManagement.CreditsManagerServiceImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -198,8 +198,8 @@
 		<property name="target">
 			<bean class="org.dpi.employment.EmploymentServiceImpl">
 				<constructor-arg><ref local="employmentDao"/></constructor-arg>
-				<property name="administradorCreditosService">
-					<ref bean="administradorCreditosService" />
+				<property name="creditsManagerService">
+					<ref bean="creditsManagerService" />
 				</property>
 				<property name="categoryService">
 					<ref bean="categoryService" />
@@ -254,7 +254,7 @@
 				<constructor-arg><ref local="creditsEntryDao"/></constructor-arg>
 				<!-- >constructor-arg><ref local="employmentService"/></constructor-arg -->
 				<constructor-arg><ref local="personService"/></constructor-arg>
-				<constructor-arg><ref local="administradorCreditosService"/></constructor-arg>
+				<constructor-arg><ref local="creditsManagerService"/></constructor-arg>
 				<property name="employmentService">
 					<ref bean="employmentService" />
 				</property>
@@ -298,18 +298,6 @@
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
 			<bean class="org.dpi.employment.EmploymentCreditsEntriesServiceImpl">
-				<!-- property name="administradorCreditosService">
-					<ref bean="administradorCreditosService" />
-				</property>
-				<property name="categoryService">
-					<ref bean="categoryService" />
-				</property>
-				<property name="personService">
-					<ref bean="personService" />
-				</property>
-				<property name="centroSectorService">
-					<ref bean="centroSectorService" />
-				</property -->
 				
 			</bean>
 		</property>

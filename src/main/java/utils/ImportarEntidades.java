@@ -9,10 +9,10 @@ import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.centroSector.CentroSectorImpl;
 import org.dpi.centroSector.CentroSectorService;
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryImpl;
 import org.dpi.creditsEntry.CreditsEntryType;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
@@ -54,7 +54,7 @@ public class ImportarEntidades {
 	
 	EmploymentService employmentService;
 
-	AdministradorCreditosService administradorCreditosService;
+	CreditsManagerService creditsManagerService;
 	
 	NamedParameterJdbcTemplate dpiJdbcTemplate;
 	
@@ -82,7 +82,7 @@ public class ImportarEntidades {
 		importadorEntidades.setCategoryService((CategoryService)context.getBean("categoriaService"));
 		importadorEntidades.setEmploymentService((EmploymentService)context.getBean("employmentService"));
 		
-		importadorEntidades.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
+		importadorEntidades.setCreditsManagerService((CreditsManagerService)context.getBean("creditsManagerService"));
 		
 		importadorEntidades.setTransactionTemplate((TransactionTemplate)context.getBean("transactionTemplate"));
 		
@@ -98,15 +98,15 @@ public class ImportarEntidades {
 
     }
 
-	public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService=administradorCreditosService;
+	public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerService = creditsManagerService;
 		
 	}
 
 	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return this.administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return this.creditsManagerService;
 	}
 
 	
@@ -310,7 +310,7 @@ public class ImportarEntidades {
 							movimientoCargaInicialAgente.setCreditsEntryType(CreditsEntryType.CargaInicialAgenteExistente);
 							movimientoCargaInicialAgente.setGrantedStatus(GrantedStatus.Otorgado);
 							movimientoCargaInicialAgente.setCreditsPeriod(creditsPeriod);
-							int cantidadCreditosPorCargaInicial = this.administradorCreditosService.getCreditosPorCargaInicial(categoryCode);
+							int cantidadCreditosPorCargaInicial = this.creditsManagerService.getCreditosPorCargaInicial(categoryCode);
 							
 							//empleo.setFechaInicio(creditsPeriod.getStartDate());
 							

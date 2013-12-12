@@ -1,7 +1,7 @@
 package utils;
 
-import org.dpi.configuracionAsignacionCreditos.AdministradorCreditosService;
 import org.dpi.creditsEntry.CreditsEntryService;
+import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.employment.EmploymentService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -16,7 +16,7 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 	
 	CreditsEntryService creditsEntryService;
 
-	AdministradorCreditosService administradorCreditosService;
+	CreditsManagerService creditsManagerServiceService;
 	
 	
 	TransactionTemplate transactionTemplate;
@@ -37,7 +37,7 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 		actualizador.setCreditsEntryService((CreditsEntryService)context.getBean("creditsEntryService"));
 		
 		
-		actualizador.setAdministradorCreditosService((AdministradorCreditosService)context.getBean("administradorCreditosService"));
+		actualizador.setCreditsManagerService((CreditsManagerService)context.getBean("creditsManagerService"));
 		
 		actualizador.setTransactionTemplate((TransactionTemplate)context.getBean("transactionTemplate"));
 		
@@ -53,15 +53,15 @@ public class ActualizadorCantidadCreditosIngresosAscensos {
 		
     }
 
-    public void setAdministradorCreditosService(
-			AdministradorCreditosService administradorCreditosService) {
-		this.administradorCreditosService=administradorCreditosService;
+    public void setCreditsManagerService(
+			CreditsManagerService creditsManagerService) {
+		this.creditsManagerServiceService=creditsManagerService;
 		
 	}
 
 	
-	public AdministradorCreditosService getAdministradorCreditosService() {
-		return this.administradorCreditosService;
+	public CreditsManagerService getCreditsManagerService() {
+		return this.creditsManagerServiceService;
 	}
 
 	

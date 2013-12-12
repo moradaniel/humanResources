@@ -1,4 +1,4 @@
-package org.dpi.configuracionAsignacionCreditos;
+package org.dpi.creditsManagement;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
-public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract implements AdministradorCreditosService{
+public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract implements CreditsManagerService{
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -34,7 +34,7 @@ public class AdministradorCreditosServiceImpl extends DataAccessHibImplAbstract 
 	
 	//String MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS = "21";
 	
-	public AdministradorCreditosServiceImpl() {
+	public CreditsManagerServiceImpl() {
 		creditosPorCargaInicial.put("12", 60);
 		creditosPorCargaInicial.put("13", 60);
 		creditosPorCargaInicial.put("14", 56);
