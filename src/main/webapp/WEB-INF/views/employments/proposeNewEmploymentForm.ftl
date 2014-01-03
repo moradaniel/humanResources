@@ -1,6 +1,6 @@
 <#import "/WEB-INF/views/spring.ftl" as spring />
 
-<form id="proposeNewEmploymentForm" name="proposeNewEmploymentForm" action="${requestContext.contextPath}/empleos/proposeNewEmploymentForm" method="post">
+<form id="proposeNewEmploymentForm" name="proposeNewEmploymentForm" action="${requestContext.contextPath}/employments/proposeNewEmploymentForm" method="post">
 
 	<h1>Seleccione Categoria Propuesta</h1>
 

@@ -5,12 +5,12 @@
 	
 <tiles-definitions>
 
-	<definition name="movimientos/promotePersonForm" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/movimientos/promotePersonForm.ftl" />
+	<definition name="creditsentries/promotePersonForm" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/creditsentries/promotePersonForm.ftl" />
 	</definition>
 	
-	<definition name="movimientos/cambioEstadoMovimientoForm" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/movimientos/cambioEstadoMovimientoForm.ftl" />
+	<definition name="creditsentries/cambioEstadoMovimientoForm" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/creditsentries/cambioEstadoMovimientoForm.ftl" />
 	</definition>
 
 

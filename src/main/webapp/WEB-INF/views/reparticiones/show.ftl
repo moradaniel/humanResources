@@ -49,9 +49,9 @@
 						<td>${creditosDisponiblesSegunSolicitadoPeriodoActual?default("0")}</td>
 						<td>${creditosDisponiblesSegunOtorgadoPeriodoActual?default("0")}</td>
 						<td>						
-						<a href="showEmpleos" class="ajaxLink">Ver Agentes Activos</a>
+						<a href="showEmployments" class="ajaxLink">Ver Agentes Activos</a>
 						<br/>
-						<a href="showMovimientos/2013" class="ajaxLink">Ver Movimientos de Credito</a>
+						<a href="showCreditEntries/2013" class="ajaxLink">Ver Movimientos de Credito</a>
 						</td>
 					</tr>
 
@@ -73,7 +73,7 @@
 						<td>${creditosAcreditadosPorBajas2012?default("0")}</td>
 						<td>${creditosConsumidosPorIngresosOAscensosOtorgados2012?default("0")}</td>
 						<td>${saldoCreditosAlFinalPeriodo2012?default("0")}</td>
-						<td><a href="showMovimientos/2012" class="ajaxLink">Ver Movimientos de Credito</a></td>
+						<td><a href="showCreditEntries/2012" class="ajaxLink">Ver Movimientos de Credito</a></td>
 					</tr>
 
 				</table>

@@ -5,12 +5,12 @@
 	
 <tiles-definitions>
 
-	<definition name="empleos/altaEmpleoForm" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/empleos/altaEmpleoForm.ftl" />
+	<definition name="employments/altaEmpleoForm" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/employments/altaEmpleoForm.ftl" />
 	</definition>
 
-	<definition name="empleos/proposeNewEmploymentForm" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/empleos/proposeNewEmploymentForm.ftl" />
+	<definition name="employments/proposeNewEmploymentForm" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/employments/proposeNewEmploymentForm.ftl" />
 	</definition>
 
 	

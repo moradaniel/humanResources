@@ -101,7 +101,7 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 		
 		sb.append("creditsEntryType", getCreditsEntryType().name());
 		sb.append("grantedStatus", getGrantedStatus().name());
-		sb.append("creditos", getCantidadCreditos());
+		sb.append("credits", getCantidadCreditos());
 
 		
 		return sb.toString();

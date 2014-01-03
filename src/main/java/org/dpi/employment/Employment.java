@@ -15,21 +15,21 @@ import org.dpi.person.Person;
 public interface Employment extends Persistent,Serializable{
 	
 
-	Person getPerson();
+	public Person getPerson();
 
-	void setPerson(Person person);
+	public void setPerson(Person person);
 
-	CentroSector getCentroSector();
+	public CentroSector getCentroSector();
 
-	void setCentroSector(CentroSector centroSector);
+	public void setCentroSector(CentroSector centroSector);
 	
-	Category getCategory();
+	public Category getCategory();
 
-	void setCategory(Category category);
+	public void setCategory(Category category);
 	
-	EmploymentStatus getStatus();
+	public EmploymentStatus getStatus();
 
-	void setStatus(EmploymentStatus status);
+	public void setStatus(EmploymentStatus status);
 
 	public Date getFechaInicio();
 
@@ -47,9 +47,9 @@ public interface Employment extends Persistent,Serializable{
 
 	public boolean isClosed();
 
-	Employment getPreviousEmployment();
+	public Employment getPreviousEmployment();
 
-	void setPreviousEmployment(Employment previousEmployment);
+	public void setPreviousEmployment(Employment previousEmployment);
 	
 	public OccupationalGroup getOccupationalGroup();
 

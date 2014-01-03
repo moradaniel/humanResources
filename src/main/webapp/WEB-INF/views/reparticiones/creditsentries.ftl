@@ -18,7 +18,7 @@
 	<!-- end page-heading -->
 	
 	
-	<form id="cambioMultipleEstadoMovimientoForm" name="cambioMultipleEstadoMovimientoForm" action="${requestContext.contextPath}/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento" method="post">
+	<form id="cambioMultipleEstadoMovimientoForm" name="cambioMultipleEstadoMovimientoForm" action="${requestContext.contextPath}/reparticiones/creditsentries/processCambiarMultipleEstadoMovimiento" method="post">
 	
 	<#if canAccountChangeCreditsEntryStatusOfPeriod>
 		<input id="saveButton" name="saveButton" class="button" type="submit" value="Guardar" />
@@ -142,11 +142,11 @@
 					<td>${entry.creditsEntry.observaciones?default("")}</td>
 					<td>
 						<#if mostrarActionBorrarMovimiento>
-							<a href="${reparticionesUrl}/reparticion/movimientos/${entry.creditsEntry.id}/borrar" class="ajaxLink">Borrar Movimiento</a>
+							<a href="${reparticionesUrl}/reparticion/creditsentries/${entry.creditsEntry.id}/borrar" class="ajaxLink">Borrar Movimiento</a>
 						</#if>
 						
 						<#if entry.canAccountChangeCreditsEntryStatus>
-							<#-- a href="${reparticionesUrl}/movimientos/${entry.creditsEntry.id}/setupFormCambiarEstadoMovimientoCreditos" class="ajaxLink">Cambiar Estado Movimiento</a -->
+							<#-- a href="${reparticionesUrl}/creditsentries/${entry.creditsEntry.id}/setupFormCambiarEstadoMovimientoCreditos" class="ajaxLink">Cambiar Estado Movimiento</a -->
 						</#if>
 					</td>
 				</tr>

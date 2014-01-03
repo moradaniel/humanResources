@@ -5,7 +5,7 @@
 
 <h2>Cambio Estado Movimiento</h2>
 
-<form id="cambioEstadoMovimientoForm" name="cambioEstadoMovimientoForm" action="${requestContext.contextPath}/movimientos/cambiarEstadoMovimiento" method="post">
+<form id="cambioEstadoMovimientoForm" name="cambioEstadoMovimientoForm" action="${requestContext.contextPath}/creditsentries/cambiarEstadoMovimiento" method="post">
 
 	
 	<@spring.formHiddenInput "creditsEntryForm.creditsEntryId" />

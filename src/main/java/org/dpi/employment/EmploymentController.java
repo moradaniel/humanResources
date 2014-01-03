@@ -15,6 +15,8 @@ import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
 import org.dpi.web.response.StatusResponse;
+import org.janux.bus.security.Account;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -96,34 +98,27 @@ public class EmploymentController {
 		return "reparticiones/show";
 	}*/
 
-	@RequestMapping(value = "/empleos/{id}/baja", method = RequestMethod.GET)
-	public String baja(@PathVariable Long id, Model model) {
+	@RequestMapping(value = "/employments/{id}/deactivatePerson", method = RequestMethod.GET)
+	public String deactivate(@PathVariable Long id, Model model) {
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 		employmentQueryFilter.setEmploymentId(id.toString());
 
 		List<Employment> employments = employmentService.find(employmentQueryFilter);
 
-		Employment empleoADarDeBaja = employments.get(0);
+		Employment employmentToDeactivate = employments.get(0);
+		
+		
+		//TODO check if the user has permission to deactivate THIS employment
+		
 
+		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		employmentCreditsEntriesService.deactivate(employmentToDeactivate,currentUser);
+		
+		return "redirect:/reparticiones/reparticion/showEmployments";
 
-		employmentCreditsEntriesService.darDeBaja(empleoADarDeBaja);
-
-		Employment empleoDadoDeBaja = empleoADarDeBaja;
-
-
-		//buscar los empleos de la reparticion
-		employmentQueryFilter = new EmploymentQueryFilter();
-
-		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
-		employmentQueryFilter.setReparticionId(reparticion.getId().toString());
-
-		employments = employmentService.find(employmentQueryFilter);
-		model.addAttribute("empleos", employments);
-
-		return "redirect:/reparticiones/" + reparticion.getId();
 	}
 
-	@RequestMapping(value = "/empleos/{id}/promotePerson", method = RequestMethod.GET)
+	@RequestMapping(value = "/employments/{id}/promotePerson", method = RequestMethod.GET)
 	public String setupFormPromotePerson(
 			HttpServletRequest request, 
 			HttpServletResponse response,
@@ -143,7 +138,7 @@ public class EmploymentController {
 
 			if(currentEmployment.getCentroSector().getReparticion().getId().longValue()!=reparticion.getId().longValue()){
 
-				return "redirect:/reparticiones/reparticion/showEmpleos";
+				return "redirect:/reparticiones/reparticion/showEmployments";
 			}
 
 			model.addAttribute("currentEmployment", currentEmployment);
@@ -157,7 +152,7 @@ public class EmploymentController {
 
 
 
-	@RequestMapping(value = "/empleos/promotePerson", method = RequestMethod.POST)
+	@RequestMapping(value = "/employments/promotePerson", method = RequestMethod.POST)
 	public String promotePersonFromForm(HttpServletRequest request, Model model) throws Exception {
 
 
@@ -167,7 +162,7 @@ public class EmploymentController {
 		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
 		if (!StringUtils.hasText(proposedCategoryCode)){
-			return "redirect:/empleos/"+idCurrentEmployment+"/promotePerson";
+			return "redirect:/employments/"+idCurrentEmployment+"/promotePerson";
 		}
 
 
@@ -185,11 +180,11 @@ public class EmploymentController {
 
 		employmentCreditsEntriesService.promotePerson(currentEmployment, proposedCategoryCode);
 
-		return "redirect:/reparticiones/reparticion/showEmpleos";
+		return "redirect:/reparticiones/reparticion/showEmployments";
 	}
 
 	
-	@RequestMapping(value = "/empleos/proposeNewEmploymentForm", method = RequestMethod.POST)
+	@RequestMapping(value = "/employments/proposeNewEmploymentForm", method = RequestMethod.POST)
 	public String proposeNewEmploymentFromForm(HttpServletRequest request, Model model) throws Exception {
 
 
@@ -200,7 +195,7 @@ public class EmploymentController {
 		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
 		if (!StringUtils.hasText(centroSectorId) || !StringUtils.hasText(proposedCategoryCode)){
-			return "redirect:/empleos/proposeNewEmploymentForm";
+			return "redirect:/employments/proposeNewEmploymentForm";
 		}
 
 
@@ -212,7 +207,7 @@ public class EmploymentController {
 
 		employmentCreditsEntriesService.proposeNewEmployment(proposedCategoryCode, Long.parseLong(centroSectorId));
 
-		return "redirect:/reparticiones/reparticion/showEmpleos";
+		return "redirect:/reparticiones/reparticion/showEmployments";
 	}
 
 
@@ -220,7 +215,7 @@ public class EmploymentController {
 
 
 
-	@RequestMapping(value = "/empleos/altaEmpleoForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/employments/altaEmpleoForm", method = RequestMethod.GET)
 	public String setupFormAltaEmpleo(Model model) {
 		/*if(!model.containsAttribute("nuevoEmpleo")){
 
@@ -249,7 +244,7 @@ public class EmploymentController {
 		 */
 
 
-		/*empleoService.darDeBaja(empleoACambiarCategoria);
+		/*empleoService.deactivate(empleoACambiarCategoria);
 
 		Employment empleoDadoDeBaja = empleoACambiarCategoria;
 
@@ -262,11 +257,11 @@ public class EmploymentController {
 		empleos = empleoService.find(empleoQueryFilter);*/
 
 
-		return "empleos/altaEmpleoForm";
+		return "employments/altaEmpleoForm";
 	}
 
 	
-	@RequestMapping(value = "/empleos/proposeNewEmploymentForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/employments/proposeNewEmploymentForm", method = RequestMethod.GET)
 	public String setupFormIngresarPropuestaAgente(
 													HttpServletRequest request, 
 													HttpServletResponse response,
@@ -298,7 +293,7 @@ public class EmploymentController {
 		 */
 
 
-		/*empleoService.darDeBaja(empleoACambiarCategoria);
+		/*empleoService.deactivate(empleoACambiarCategoria);
 
 		Employment empleoDadoDeBaja = empleoACambiarCategoria;
 
@@ -317,10 +312,10 @@ public class EmploymentController {
 		
 		model.addAttribute("centroSectoresDeReparticion", centroSectoresReparticion);
 		
-		return "empleos/proposeNewEmploymentForm";
+		return "employments/proposeNewEmploymentForm";
 	}
 	
-	@RequestMapping(value="/empleos/crearEmpleo", produces="application/json", method=RequestMethod.POST)
+	@RequestMapping(value="/employments/crearEmpleo", produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody StatusResponse crearEmpleoFromForm(
 			@RequestParam String idPerson,
 			@RequestParam String idCentroSector){

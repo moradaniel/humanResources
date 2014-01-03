@@ -100,7 +100,7 @@ public class CreditsEntryController {
 	}
 	
 	
-	@RequestMapping(value = "/reparticiones/movimientos/{id}/setupFormCambiarEstadoCreditsEntry", method = RequestMethod.GET)
+	@RequestMapping(value = "/reparticiones/creditsentries/{id}/setupFormCambiarEstadoCreditsEntry", method = RequestMethod.GET)
 	public String setupFormCambiarEstadoCreditsEntry(@PathVariable Long id, Model model){  
 			      
           
@@ -124,7 +124,7 @@ public class CreditsEntryController {
     }
 	
 	
-	@RequestMapping(value = "/movimientos/cambiarEstadoMovimiento", method = RequestMethod.POST)
+	@RequestMapping(value = "/creditsentries/cambiarEstadoMovimiento", method = RequestMethod.POST)
 	public String processFormCambiarEstadoMovimiento(HttpServletRequest request,
 													@ModelAttribute("creditsEntryForm") CreditsEntryForm creditsEntryForm,
 													Model model,
@@ -145,7 +145,7 @@ public class CreditsEntryController {
         //modelAndView.addObject("message", message);  
 
         String creditsPeriodName =  creditsEntry.getCreditsPeriod().getName();
-		return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodName;
+		return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodName;
     }  
 	
 	
@@ -155,7 +155,7 @@ public class CreditsEntryController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/reparticiones/reparticion/movimientos", method = RequestMethod.GET)
+	@RequestMapping(value = "/reparticiones/reparticion/creditsentries", method = RequestMethod.GET)
     @ResponseBody
 	public List<CreditsEntryDTO> getMovimientos(
 			HttpServletRequest request, 
@@ -205,7 +205,7 @@ public class CreditsEntryController {
 	
 	
 	
-    @RequestMapping(value = "/reparticiones/movimientos/processCambiarMultipleEstadoMovimiento", method = RequestMethod.POST)
+    @RequestMapping(value = "/reparticiones/creditsentries/processCambiarMultipleEstadoMovimiento", method = RequestMethod.POST)
     public String processCambiarMultipleEstadoMovimiento(@ModelAttribute("cambiosMultiplesEstadoMovimientosForm") CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm) {
 
         List<CreditsEntry> movimientos = cambiosMultiplesEstadoMovimientosForm.getMovimientos();
@@ -226,7 +226,7 @@ public class CreditsEntryController {
 
         }
          
-        return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodService.getCurrentCreditsPeriodYear();
+        return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriodYear();
 
     }
 	

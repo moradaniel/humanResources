@@ -210,8 +210,8 @@ public class ReparticionController {
 	}
 
 
-	@RequestMapping(value = "/reparticiones/reparticion/showEmpleos", method = RequestMethod.GET)
-	public String showEmpleos(	HttpServletRequest request, 
+	@RequestMapping(value = "/reparticiones/reparticion/showEmployments", method = RequestMethod.GET)
+	public String showEmployments(	HttpServletRequest request, 
 			HttpServletResponse response,
 			Model model) {
 		// get the current reparticion in the session
@@ -252,8 +252,8 @@ public class ReparticionController {
 		return (AjaxUtils.isAjaxRequest(requestedWith)) ? "reparticiones/show" : "redirect:/reparticiones/" + reparticion.getId();
 	}
 
-	@RequestMapping(value = "/reparticiones/reparticion/showMovimientos/{creditsPeriodName}", method = RequestMethod.GET)
-	public String showMovimientos(
+	@RequestMapping(value = "/reparticiones/reparticion/showCreditEntries/{creditsPeriodName}", method = RequestMethod.GET)
+	public String showCreditEntries(
 			HttpServletRequest request, 
 			HttpServletResponse response,
 			@PathVariable Long creditsPeriodName,
@@ -350,7 +350,7 @@ public class ReparticionController {
 	
 	
 
-	@RequestMapping(value = "/reparticiones/reparticion/movimientos/{movimientoId}/borrar", method = RequestMethod.GET)
+	@RequestMapping(value = "/reparticiones/reparticion/creditsentries/{movimientoId}/borrar", method = RequestMethod.GET)
 	public String borrarMovimiento(
 			HttpServletRequest request, 
 			HttpServletResponse response,
@@ -374,7 +374,7 @@ public class ReparticionController {
 			}
 		}
 
-		return "redirect:/reparticiones/reparticion/showMovimientos/"+creditsPeriodService.getCurrentCreditsPeriodYear();
+		return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriodYear();
 
 	}
 

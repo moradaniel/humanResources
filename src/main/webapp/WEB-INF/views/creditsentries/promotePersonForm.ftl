@@ -5,7 +5,7 @@
 
 <h2>Movimiento Ascenso</h2>
 
-<form id="promotePersonForm" name="promotePersonForm" action="${requestContext.contextPath}/empleos/promotePerson" method="post">
+<form id="promotePersonForm" name="promotePersonForm" action="${requestContext.contextPath}/employments/promotePerson" method="post">
 
 
 	<input type="hidden" name="idCurrentEmployment" value="${currentEmployment.id?default('')}"/>

@@ -160,7 +160,7 @@
 				//$("#crearEmpleoForm").submit();
 				
 				$.ajax({
-				  url: '${requestContext.contextPath}/empleos/crearEmpleo',
+				  url: '${requestContext.contextPath}/employments/crearEmpleo',
 				  type: 'post',
 				  data: 'idAgente='+idAgenteSeleccionado+'&idCentroSector='+idCentroSectorSeleccionado,
 				  success: function(data){
