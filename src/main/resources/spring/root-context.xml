@@ -11,14 +11,10 @@
 		
 	<import resource="security-local.xml" />
 		
-	<!-- Configures shared data layer -->
-	<!-- import resource="data.xml" /-->
-	
 	<import resource="DatabaseContext.xml" />
 	
 	<import resource="DPIContext.xml" />
 	
-	<!-- import resource="flow.xml" / -->
 	
 	
 </beans>

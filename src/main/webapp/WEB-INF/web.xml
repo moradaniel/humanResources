@@ -10,7 +10,7 @@
 			classpath:/spring/root-context.xml
 			classpath:GenericDaoContext.xml
 			classpath:SecurityContextGeneric.xml
-			/WEB-INF/admin-servlet.xml
+			/WEB-INF/controllers.xml
 		</param-value>
 	</context-param>
 	
@@ -74,6 +74,8 @@
 
 	<!-- Handles all requests into the application -->
 	<servlet>
+		<!-- Spring automatically searches for admin-servlet.xml and initializes the Spring web context.-->
+		<!-- Do not include admin-servlet.xml in contextConfigLocation (Spring root context) -->
 		<servlet-name>admin</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<!-- init-param>
@@ -87,22 +89,7 @@
 		<servlet-name>admin</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-        <!-- Automáticamente inicializa el contexto spring con el formato servlet-name=nombre-servlet.xml -->
-        <servlet-name>prueba</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <!-- 
-        La alternativa de inicialización de spring MVC es mediante un init-param como se describe
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/prueba-servlet.xml</param-value>
-        </init-param>-->
-    </servlet>
-	 <servlet-mapping>
-        <servlet-name>prueba</servlet-name>
-        <url-pattern>*.do</url-pattern>
-    </servlet-mapping>
+
 	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

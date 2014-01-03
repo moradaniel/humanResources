@@ -18,7 +18,5 @@
 	
 	<import resource="DPIContext.xml" />
 	
-	<!-- import resource="flow.xml" / -->
-	
 	
 </beans>
