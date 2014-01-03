@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.tiles.locale.impl.DefaultLocaleResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
@@ -16,6 +18,8 @@ public class TilesLocaleInterceptor extends HandlerInterceptorAdapter
 {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	@Autowired
+	private LocaleResolver localeResolver;
 
 	public TilesLocaleInterceptor()
 	{
@@ -28,8 +32,9 @@ public class TilesLocaleInterceptor extends HandlerInterceptorAdapter
 		 if(SecurityContextHolder.getContext().getAuthentication()!=null){
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			if(request.getSession()!=null && request.getSession().getAttribute(DefaultLocaleResolver.LOCALE_KEY)==null){
-				request.getSession().setAttribute(DefaultLocaleResolver.LOCALE_KEY, new Locale("es","AR"));
+			if(request.getSession()!=null){
+				Locale theUserLocale = localeResolver.resolveLocale(request);
+				request.getSession().setAttribute(DefaultLocaleResolver.LOCALE_KEY, theUserLocale);
 			}
 			
 		 }
