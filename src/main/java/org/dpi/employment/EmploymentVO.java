@@ -8,6 +8,8 @@ public class EmploymentVO{
 	Employment employment =  new EmploymentImpl();
 	
 	boolean canAccountPromotePerson = false;
+	
+	boolean canAccountDeactivatePerson = false;
 		
 	public EmploymentVO(){
 		super();
@@ -29,5 +31,14 @@ public class EmploymentVO{
 	public void setCanAccountPromotePerson(boolean canAccountPromotePerson) {
 		this.canAccountPromotePerson = canAccountPromotePerson;
 	}
+	
+	public boolean isCanAccountDeactivatePerson() {
+		return canAccountDeactivatePerson;
+	}
+
+	public void setCanAccountDeactivatePerson(boolean canAccountDeactivatePerson) {
+		this.canAccountDeactivatePerson = canAccountDeactivatePerson;
+	}	
+
 
 }

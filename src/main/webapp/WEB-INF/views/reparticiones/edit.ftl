@@ -8,7 +8,7 @@
 	<p>No se encontraron Agentes. Por favor cambie el criterio de busqueda.</p>
 <#else>
 
-	<#assign empleosUrl= requestContext.contextPath+"/empleos">
+	<#assign empleosUrl= requestContext.contextPath+"/employments">
 
 		<!--  start page-heading -->
 	<div id="page-heading">
@@ -33,7 +33,7 @@
 				<p class="buttoniseUs">
 					<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
 						<#if canAccountProposeNewEmployment>
-							<a href="${requestContext.contextPath}/empleos/proposeNewEmploymentForm">Ingresar Agente</a>
+							<a href="${requestContext.contextPath}/employments/proposeNewEmploymentForm">Ingresar Agente</a>
 						</#if>
 					</#if>
 				</p>
@@ -46,6 +46,7 @@
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Apellido y Nombre</a>	</th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">CUIL</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Condicion Agente</a>	</th>
 						<th class="table-header-repeat line-left "><a href="">Categoria</a></th>
 						<th class="table-header-repeat line-left "><a href="">Tramo</a></th>
@@ -67,6 +68,7 @@
 				    
 				    	<tr class="${trStyle}">
 							<td>${activeEmployment.employment.person.apellidoNombre}</td>
+							<td>${activeEmployment.employment.person.cuil}</td>
 							<td>${activeEmployment.employment.person.condicion?default("")}</td>
 							<td>${activeEmployment.employment.category.code}</td>
 							
@@ -99,8 +101,10 @@
 									</#if>
 								</#if>
 							</#if>
-								<#--	&nbsp;&nbsp;&nbsp;
-								<a href="${empleosUrl}/${empleo.id}/baja" class="ajaxLink">Baja</a> -->
+								<#--	&nbsp;&nbsp;&nbsp; -->
+								<#if activeEmployment.canAccountDeactivatePerson >
+									<a href="${empleosUrl}/${activeEmployment.employment.id}/deactivatePerson" class="ajaxLink">Dar de Baja</a>
+								</#if>
 							
 							</td>
 						</tr>

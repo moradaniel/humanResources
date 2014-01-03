@@ -151,6 +151,8 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 		
 		sb.append(super.toString());
 		
+		sb.append("person", person.toString());
+		
 		sb.append("category", getCategory().getCode());
 		sb.append("status", getStatus());
 

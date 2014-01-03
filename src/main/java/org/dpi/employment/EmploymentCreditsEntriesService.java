@@ -13,9 +13,9 @@ import org.springframework.context.ApplicationContextAware;
  */
 public interface EmploymentCreditsEntriesService extends ApplicationContextAware
 {
-	public void promotePerson(Employment empleo, String newCategoryCode);
+	public void promotePerson(Employment employment, String newCategoryCode);
 	
-	public void darDeBaja(Employment empleo);
+	public void deactivate(Employment employment, Account currentUser);
 	
 	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId);
 

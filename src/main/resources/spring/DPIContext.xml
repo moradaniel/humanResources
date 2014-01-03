@@ -308,7 +308,7 @@
 				<prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
-				<prop key="darDeBaja">PROPAGATION_REQUIRED</prop>
+				<prop key="deactivate">PROPAGATION_REQUIRED</prop>
 				<prop key="promotePerson">PROPAGATION_REQUIRED</prop>
 				<prop key="proposeNewEmployment">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
-	"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
-	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+              "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 	
 <tiles-definitions>
 	
-	<definition name="home" extends="standardLayout">
-		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+	<!-- definition name="home" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/home.ftl" />
+	</definition -->
+	
+	<definition name="login" extends="standardLayout" templateType="freemarker">
+		<put-attribute name="body" value="/WEB-INF/views/login.ftl" />
 	</definition>
 		
 </tiles-definitions>
