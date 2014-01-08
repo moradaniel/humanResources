@@ -26,8 +26,6 @@ public interface CreditsPeriodService extends ApplicationContextAware
 	
 	public boolean isDateWithinEjercicioAnual(Date date, int year);
 	
-	public int getCurrentCreditsPeriodYear();
-	
 	public List<CreditsPeriod> find(CreditsPeriodQueryFilter creditsPeriodQueryFilter);
 
 	public void delete(CreditsPeriod employment);

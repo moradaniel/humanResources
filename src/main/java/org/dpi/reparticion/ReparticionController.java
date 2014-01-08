@@ -266,7 +266,7 @@ public class ReparticionController {
 		if (reparticion != null){
 			
 			//by default use current period
-			long currentPeriodName = creditsPeriodService.getCurrentCreditsPeriodYear();
+			long currentPeriodName = Long.parseLong(creditsPeriodService.getCurrentCreditsPeriod().getName());
 			
 			if(creditsPeriodName!=null){
 					if(creditsPeriodName<2012){
@@ -374,7 +374,7 @@ public class ReparticionController {
 			}
 		}
 
-		return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriodYear();
+		return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriod().getName();
 
 	}
 

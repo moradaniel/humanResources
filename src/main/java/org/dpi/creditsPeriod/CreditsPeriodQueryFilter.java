@@ -1,6 +1,7 @@
 package org.dpi.creditsPeriod;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CreditsPeriodQueryFilter implements Serializable {
 	private Date startDate;
 	private Date endDate;
 	
-	List<CreditsPeriod.Status> statuses;
+	List<CreditsPeriod.Status> statuses = new ArrayList<CreditsPeriod.Status>();
 	
 	public String getCreditsPeriodId() {
 		return creditsPeriodId;

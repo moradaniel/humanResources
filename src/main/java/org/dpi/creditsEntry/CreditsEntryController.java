@@ -226,7 +226,7 @@ public class CreditsEntryController {
 
         }
          
-        return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriodYear();
+        return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriod().getName();
 
     }
 	

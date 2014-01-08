@@ -3,7 +3,6 @@ package org.dpi.creditsPeriod;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import javax.annotation.Resource;
 import org.dpi.category.CategoryService;
 import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsManagement.CreditsManagerService;
+import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.person.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,18 +157,11 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 
 
 	@Override
-	public int getCurrentCreditsPeriodYear() {
-		final Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		return c.get(Calendar.YEAR);
-	}
-	
-	@Override
 	public CreditsPeriod getCurrentCreditsPeriod(){
 		CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
-		creditsPeriodQueryFilter.setName("2013");//TODO get year from current date or better the ACTIVE period
-		
-		//obtener periodo actual
+		creditsPeriodQueryFilter.addStatus(Status.Active);
+						
+		//get current period
 		List<CreditsPeriod> currentCreditsPeriods = find(creditsPeriodQueryFilter);
 		CreditsPeriod currentCreditsPeriod = currentCreditsPeriods.get(0);
 		return currentCreditsPeriod;
