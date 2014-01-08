@@ -145,7 +145,7 @@ public class EmploymentController {
 			model.addAttribute("availableCategoriesForPromotion", employmentService.getAvailableCategoriesForPromotion(currentEmployment));
 
 		}
-		return "movimientos/promotePersonForm";
+		return "creditsentries/promotePersonForm";
 	}
 
 

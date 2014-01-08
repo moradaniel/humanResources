@@ -120,7 +120,7 @@ public class CreditsEntryController {
 		model.addAttribute("grantedStatuses", GrantedStatus.values());
 
         
-        return "movimientos/cambioEstadoMovimientoForm";
+        return "creditsentries/cambioEstadoMovimientoForm";
     }
 	
 	
