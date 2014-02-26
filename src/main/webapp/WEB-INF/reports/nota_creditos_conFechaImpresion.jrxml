@@ -103,17 +103,19 @@ Ministro/Secretario de Estado de
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="135" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
 								<textFieldExpression><![CDATA[$F{PERSON_APELLIDO_NOMBRE}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="65" uuid="0234c2f5-b7dc-4208-bbb6-7eac620e5870">
+					<jr:column width="75" uuid="0234c2f5-b7dc-4208-bbb6-7eac620e5870">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="65" height="30" uuid="cb36bacf-7f0d-4ee8-9ba6-c50711290a6e"/>
+								<reportElement x="0" y="0" width="75" height="30" uuid="cb36bacf-7f0d-4ee8-9ba6-c50711290a6e"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="12"/>
 								</textElement>
@@ -121,8 +123,8 @@ Ministro/Secretario de Estado de
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="65" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="75" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
 								<textFieldExpression><![CDATA[$F{PERSON_CUIL}]]></textFieldExpression>
 							</textField>
@@ -139,7 +141,7 @@ Ministro/Secretario de Estado de
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
+							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 								<reportElement mode="Transparent" x="0" y="0" width="56" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
 								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
@@ -161,7 +163,7 @@ Ministro/Secretario de Estado de
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="57" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
 								<textFieldExpression><![CDATA[$F{EMPLOYMENT_PROPOSED_CATEGORY}]]></textFieldExpression>
@@ -188,7 +190,7 @@ Ministro/Secretario de Estado de
 						</jr:columnHeader>
 						<jr:columnFooter height="30" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="96" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2">
 									<pen lineWidth="0.0"/>
@@ -201,10 +203,10 @@ Ministro/Secretario de Estado de
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="108" uuid="fff59276-7237-4436-b2ff-c22e35e51183">
+					<jr:column width="90" uuid="fff59276-7237-4436-b2ff-c22e35e51183">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="108" height="30" uuid="37c33e13-840e-4a95-9fe0-9ecfda2a0fa9"/>
+								<reportElement x="0" y="0" width="90" height="30" uuid="37c33e13-840e-4a95-9fe0-9ecfda2a0fa9"/>
 								<box>
 									<pen lineWidth="0.0"/>
 									<topPen lineWidth="0.0"/>
@@ -220,8 +222,8 @@ Ministro/Secretario de Estado de
 						</jr:columnHeader>
 						<jr:columnFooter height="30" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="108" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="90" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2">
 									<pen lineWidth="0.0"/>
 									<topPen lineWidth="0.0"/>
