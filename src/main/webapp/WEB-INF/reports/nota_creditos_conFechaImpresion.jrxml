@@ -110,10 +110,10 @@ Ministro/Secretario de Estado de
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="55" uuid="0234c2f5-b7dc-4208-bbb6-7eac620e5870">
+					<jr:column width="65" uuid="0234c2f5-b7dc-4208-bbb6-7eac620e5870">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="55" height="30" uuid="cb36bacf-7f0d-4ee8-9ba6-c50711290a6e"/>
+								<reportElement x="0" y="0" width="65" height="30" uuid="cb36bacf-7f0d-4ee8-9ba6-c50711290a6e"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="12"/>
 								</textElement>
@@ -122,7 +122,7 @@ Ministro/Secretario de Estado de
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="55" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
+								<reportElement x="0" y="0" width="65" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2"/>
 								<textFieldExpression><![CDATA[$F{PERSON_CUIL}]]></textFieldExpression>
 							</textField>
