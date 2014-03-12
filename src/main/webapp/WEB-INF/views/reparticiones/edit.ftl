@@ -4,6 +4,17 @@
 
 
 <div id="employmentResults">
+
+	<div id="table-actions">
+		<p class="buttoniseUs">
+			<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
+				<#if canAccountProposeNewEmployment>
+					<a href="${requestContext.contextPath}/employments/proposeNewEmploymentForm">Ingresar Agente</a>
+				</#if>
+			</#if>
+		</p>
+	</div>
+			
 <#if !activeEmployments?has_content>
 	<p>No se encontraron Agentes. Por favor cambie el criterio de busqueda.</p>
 <#else>
@@ -29,16 +40,7 @@
 		<td>
 		<!--  start content-table-inner ...................................................................... START -->
 		<div id="content-table-inner">
-			<div id="table-actions">
-				<p class="buttoniseUs">
-					<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
-						<#if canAccountProposeNewEmployment>
-							<a href="${requestContext.contextPath}/employments/proposeNewEmploymentForm">Ingresar Agente</a>
-						</#if>
-					</#if>
-				</p>
-			</div>	
-		
+	
 			<!--  start table-content  -->
 			<div id="table-content">
 			
