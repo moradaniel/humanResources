@@ -1,0 +1,36 @@
+package org.dpi.employment;
+
+public class EmploymentCreditsEntriesServiceResult {
+
+    //private PendingOrder pendingOrder;
+
+	private int statusCode;
+
+    private Employment employment;
+
+	public EmploymentCreditsEntriesServiceResult(int result, PendingOrder pendingOrder) {
+		this.statusCode = result;
+        this.pendingOrder = pendingOrder;
+	}
+
+	public EmploymentCreditsEntriesServiceResult(int result, Order order) {
+	    this.statusCode = result;
+	    this.employment = order;
+    }
+
+    public PendingOrder getPendingOrder() {
+		return pendingOrder;
+	}
+
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+    public boolean isSuccess() {
+        return statusCode == PlaceOrderStatusCodes.OK;
+    }
+
+    public Order getOrder() {
+        return employment;
+    }
+}

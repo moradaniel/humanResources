@@ -11,6 +11,8 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 
+import org.dpi.web.reporting.parameters.AbstractReportParameters.OutputFormat;
+
 
 	//@Service
 	public class ExporterService {
@@ -20,12 +22,12 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 		public static final String EXTENSION_TYPE_EXCEL = "xls";
 		public static final String EXTENSION_TYPE_PDF = "pdf";
 
-		public HttpServletResponse export(String type, 
+		public HttpServletResponse export(OutputFormat outputFormatType, 
 				JasperPrint jp, 
 				HttpServletResponse response,
 				ByteArrayOutputStream baos) {
 
-			if (type.equalsIgnoreCase(EXTENSION_TYPE_EXCEL)) {
+			if (outputFormatType.equals(OutputFormat.XLS)) {
 				// Export to output stream
 				exportXls(jp, baos);
 
@@ -41,7 +43,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 				return response;
 			}
 
-			if (type.equalsIgnoreCase(EXTENSION_TYPE_PDF)) {
+			if (outputFormatType.equals(OutputFormat.PDF)) {
 				// Export to output stream
 				exportPdf(jp, baos);
 
@@ -58,7 +60,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 			} 
 
-			throw new RuntimeException("No type set for type " + type);
+			throw new RuntimeException("No type set for type " + outputFormatType);
 		}
 
 		public void exportXls(JasperPrint jp, ByteArrayOutputStream baos) {

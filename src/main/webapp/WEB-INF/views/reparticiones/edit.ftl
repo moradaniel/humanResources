@@ -70,7 +70,7 @@
 				    
 				    	<tr class="${trStyle}">
 							<td>${activeEmployment.employment.person.apellidoNombre}</td>
-							<td>${activeEmployment.employment.person.cuil}</td>
+							<td>${activeEmployment.employment.person.cuil?default("")}</td>
 							<td>${activeEmployment.employment.person.condicion?default("")}</td>
 							<td>${activeEmployment.employment.category.code}</td>
 							

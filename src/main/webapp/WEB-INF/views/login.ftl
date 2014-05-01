@@ -1,9 +1,10 @@
 <#import "/WEB-INF/views/spring.ftl" as spring />
 
 <br>
+<div style="margin-left: 80px">
 <form action="${requestContext.contextPath}/j_spring_security_check" method="POST">
 	<table>
-		<tr><td>Nombre Usuario:</td><td><input style="width:150px" type='text' name='j_username' value=''></td></tr>
+		<tr><td>Nombre Usuario:</td><td><input style="width:150px" type='text' name='j_username' value='' autofocus></td></tr>
 		<tr><td>Password:</td><td><input style="width:150px" type='password' name='j_password'></td></tr>
 		<!-- <tr><td><input type="checkbox" name="_spring_security_remember_me"></td><td>Don't ask for my password for two weeks</td></tr> -->
 		<tr align="right">
@@ -20,4 +21,4 @@
 		</span>
 	</div>
 <form>
-
+</div>

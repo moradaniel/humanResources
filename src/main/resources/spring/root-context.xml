@@ -4,7 +4,14 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-		
+
+	<!--  <context:component-scan> can also do what <context:annotation-config> does 
+		but <context:component-scan> also scans packages to find and register beans within the application context. -->
+	<context:component-scan base-package="org.dpi" />
+			
+	<!-- is used to activate annotations in beans already registered in the application context (no matter if they were defined with XML or by package scanning) -->
+	<context:annotation-config/>
+			
 	<!-- Root Context: defines shared resources accessible to all other web components -->
 	
 	<import resource="ApplicationContext.xml" />

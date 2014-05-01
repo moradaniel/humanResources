@@ -15,5 +15,5 @@ public interface CreditsPeriodDao extends HibernateDataAccessObject
 	
 	public List<CreditsPeriod> find(CreditsPeriodQueryFilter employmentQueryFilter);
 	
-	
+	public CreditsPeriod findById(Long id);
 }

@@ -42,15 +42,23 @@
 			<div id="table-actions">
 				<#if (showReportGenerationButton)>
 					<p class="buttoniseUs">
-						<a href="${requestContext.contextPath}/reports/buildSetupPage">Generar Reporte</a>
+						<a href="${requestContext.contextPath}/reports/reportSetup">Generar Reporte</a>
 					</p>
 				<#else>
-					<#if canGenerateReport?exists>
+					<#if hasPermissionToGenerateReport?exists>
 						<div id="message-red">
+						
 							<table border="0" width="100%" cellpadding="0" cellspacing="0">
 								<tr>
-									<td class="red-left">No se puede generar el reporte de creditos teniendo saldo negativo o de periodos cerrados.</td>
+									<td class="red-left"><@spring.message "msg.cannotGenerateReport" /></td>
 								</tr>
+								
+								<#list notAllowedReasons as reason>
+									<tr>
+										<td class="red-left"><@spring.message ("msg."+reason) /></td>
+									</tr>
+								</#list>
+								
 							</table>
 						</div>
 					</#if>	

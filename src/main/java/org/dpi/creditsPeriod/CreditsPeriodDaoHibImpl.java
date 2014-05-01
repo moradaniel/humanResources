@@ -113,5 +113,25 @@ public class CreditsPeriodDaoHibImpl extends DataAccessHibImplAbstract implement
 	}
 	
 
+	@Override
+	public CreditsPeriod findById(Long id) {
+		Chronometer timer = new Chronometer();
+
+		if (log.isDebugEnabled()) log.debug("attempting to find CreditsPeriod with id: '" + id + "'");
+
+		List list = getHibernateTemplate().find("from CreditsPeriodImpl where id=?", id);
+
+		CreditsPeriod creditsPeriod = (list.size() > 0) ? (CreditsPeriod)list.get(0) : null;
+
+		if (creditsPeriod == null) {
+			log.warn("Unable to find CreditsPeriod with id: '" + id + "'");
+			return null;
+		}
+
+		if (log.isDebugEnabled()) log.debug("successfully retrieved CreditsPeriod with id: '" + id + "' in " + timer.printElapsedTime());
+
+		return creditsPeriod;
+	}
+
 	
 }

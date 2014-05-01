@@ -6,13 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSectorService;
-import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
-import org.dpi.person.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -31,18 +25,6 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	
 	private final CreditsPeriodDao creditsPeriodDao;
 	
-	@Resource(name = "creditsManagerService")
-	private CreditsManagerService creditsManagerService;
-	
-	@Resource(name = "categoryService")
-	private CategoryService categoryService;
-	
-	@Resource(name = "personService")
-	private PersonService personService;
-	
-	@Resource(name = "centroSectorService")
-	private CentroSectorService centroSectorService;
-	
 
 	private ApplicationContext applicationContext;
 	
@@ -50,6 +32,9 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 		this.creditsPeriodDao = creditsPeriodDao;
 	}
 
+	public CreditsPeriod findById(Long id){
+		return creditsPeriodDao.findById(id);
+	}
 	
 	public List<CreditsPeriod> find(CreditsPeriodQueryFilter creditsPeriodQueryFilter){
 		
@@ -92,43 +77,6 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 	public void setApplicationContext(final ApplicationContext aApplicationContext) throws BeansException
 	{
 		this.applicationContext = aApplicationContext;
-	}
-	
-	public CreditsManagerService getCreditsManagerService() {
-		return creditsManagerService;
-	}
-
-
-	public void setCreditsManagerService(
-			CreditsManagerService creditsManagerService) {
-		this.creditsManagerService = creditsManagerService;
-	}
-
-	public CategoryService getCategoryService() {
-		return categoryService;
-	}
-
-
-	public void setCategoryService(CategoryService categoryService) {
-		this.categoryService = categoryService;
-	}
-	
-	public PersonService getPersonService() {
-		return personService;
-	}
-
-
-	public void setPersonService(PersonService personService) {
-		this.personService = personService;
-	}
-
-	public CentroSectorService getCentroSectorService() {
-		return centroSectorService;
-	}
-
-
-	public void setCentroSectorService(CentroSectorService centroSectorService) {
-		this.centroSectorService = centroSectorService;
 	}
 
 

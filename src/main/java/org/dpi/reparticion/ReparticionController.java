@@ -18,7 +18,6 @@ import org.dpi.creditsEntry.CreditsEntryServiceImpl;
 import org.dpi.creditsEntry.CreditsEntryVO;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
-import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.Employment;
@@ -33,11 +32,13 @@ import org.dpi.security.AccountSettings;
 import org.dpi.security.UserAccessService;
 import org.dpi.security.UserSettingsFactory;
 import org.dpi.security.UserSettingsFactoryImpl;
+import org.dpi.web.reporting.CanGenerateReportResult;
+import org.dpi.web.reporting.ReportService;
+import org.dpi.web.reporting.ReportServiceImpl.ManagementReports;
 import org.janux.bus.persistence.EntityNotFoundException;
 import org.janux.bus.security.Account;
 import org.janux.bus.security.AccountImpl;
 import org.janux.bus.security.AccountService;
-import org.janux.bus.security.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.samples.travel.AjaxUtils;
@@ -112,6 +113,10 @@ public class ReparticionController {
 
 	@Resource(name = "accountSettingsFactory")
 	private UserSettingsFactory settingsFactory;	
+	
+	@Resource(name = "reportService")
+	private ReportService reportService;
+
 
 	@Inject
 	public ReparticionController(ReparticionService reparticionService) {
@@ -157,46 +162,46 @@ public class ReparticionController {
 			
 			CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 			
-			Long creditosDisponiblesInicioPeriodoActual = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod,reparticion.getId());
+			Long creditosDisponiblesInicioPeriodoActual = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(),reparticion.getId());
 			model.addAttribute("creditosDisponiblesInicioPeriodoActual", creditosDisponiblesInicioPeriodoActual);
 			
 			
-			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod,reparticion.getId());
+			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorBajaDurantePeriodoActual", creditosAcreditadosPorBajaDurantePeriodoActual);
 			
 			
 			
-			Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod, reparticion.getId());
+			Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), reparticion.getId());
 			
 			model.addAttribute("creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual", creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual);
 			
 
-			Long creditosPorIngresosOAscensosOtorgadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod, reparticion.getId());
+			Long creditosPorIngresosOAscensosOtorgadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getId(), reparticion.getId());
 			
 			model.addAttribute("creditosPorIngresosOAscensosOtorgados", creditosPorIngresosOAscensosOtorgadosPeriodoActual);
 
 			
 			
 
-			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod,reparticion.getId());
+			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod.getId(),reparticion.getId());
 			model.addAttribute("creditosDisponiblesSegunSolicitadoPeriodoActual", creditosDisponiblesSegunSolicitadoPeriodoActual);
 			
-			Long creditosDisponiblesSegunOtorgadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod,reparticion.getId());
+			Long creditosDisponiblesSegunOtorgadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod.getId(),reparticion.getId());
 			model.addAttribute("creditosDisponiblesSegunOtorgadoPeriodoActual", creditosDisponiblesSegunOtorgadoPeriodoActual);
 			
 						
 			
 			//historicos 2012
 					
-			Long creditosAcreditadosPorCargaInicial2012 = this.creditsManagerService.getCreditosPorCargaInicialDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod(),reparticion.getId());
+			Long creditosAcreditadosPorCargaInicial2012 = this.creditsManagerService.getCreditosPorCargaInicialDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod().getId(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorCargaInicial2012", creditosAcreditadosPorCargaInicial2012);
 						
 			
-			Long creditosAcreditadosPorBajas2012 = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod(),reparticion.getId());
+			Long creditosAcreditadosPorBajas2012 = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod().getId(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorBajas2012", creditosAcreditadosPorBajas2012);
 						
 			
-			Long creditosConsumidosPorIngresosOAscensosOtorgados2012 = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getPreviousCreditsPeriod(), reparticion.getId());
+			Long creditosConsumidosPorIngresosOAscensosOtorgados2012 = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getPreviousCreditsPeriod().getId(), reparticion.getId());
 			
 			model.addAttribute("creditosConsumidosPorIngresosOAscensosOtorgados2012", creditosConsumidosPorIngresosOAscensosOtorgados2012);
 			
@@ -320,24 +325,21 @@ public class ReparticionController {
 			
 			//------------------ Should we show the report generation button? -----------------------------			
 			
+			CanGenerateReportResult canGenerateReportResult = reportService.canGenerateReport(ManagementReports.Employee_Additions_Promotions_Report.name(), currentUser, reparticion.getId());
+			
 			
 			boolean showReportGenerationButton = false;
 			boolean canGenerateReport = false;
-			//TODO create a permission by report generation
-			for(Role role : currentUser.getRoles()){
-				if(role.getName().equals("RESPONSABLE_REPARTICION")){
-					canGenerateReport = true;
-					break;
-				}	
-
-			}
+						
+			boolean hasPermissionToGenerateReport = canGenerateReportResult.hasPermissions();
+			model.addAttribute("hasPermissionToGenerateReport", hasPermissionToGenerateReport);
+			
+			canGenerateReport = canGenerateReportResult.canGenerateReport();
 			
 			if(canGenerateReport){
-				model.addAttribute("canGenerateReport", canGenerateReport);
-				if(creditsPeriod.getStatus()==Status.Active){
-					Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod(),reparticion.getId());
-					showReportGenerationButton = creditosDisponiblesSegunSolicitadoPeriodoActual >=0;
-				}
+				showReportGenerationButton=true;
+			}else {
+				model.addAttribute("notAllowedReasons", canGenerateReportResult.getReasonCodes());
 			}
 			
 			

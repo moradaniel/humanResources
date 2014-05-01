@@ -13,13 +13,19 @@
 		<org.springsecurity-version>3.1.4.RELEASE</org.springsecurity-version>
 		<org.slf4j-version>1.7.5</org.slf4j-version>
 		<commons-lang-version>2.6</commons-lang-version>
+		<commons-dbcp-version>1.4</commons-dbcp-version>
+
+
 		<jackson.version>1.9.12</jackson.version>
 		<janux-version>0.4.01-SNAPSHOT</janux-version>
 
 		<hibernate-version>3.6.8.Final</hibernate-version>
-		
+
 		<tiles-version>2.2.2</tiles-version>
-		
+
+		<hsqldb-version>2.3.1</hsqldb-version>
+
+
 		<!-- Embedded Tomcat 7 -->
 		<tomcat.version>7.0.42</tomcat.version>
 
@@ -180,20 +186,28 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-		<!-- Database -->
+		<!-- Embedded Database for in-memory testing -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>1.8.0.10</version>
+			<version>${hsqldb-version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons-dbcp-version}</version>
+		</dependency>
+
+
 		<!-- Servlet -->
-		<!-- dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency-->
+		<!-- dependency> 
+			<groupId>javax.servlet</groupId> 
+			<artifactId>servlet-api</artifactId> 
+			<version>2.5</version> 
+			<scope>provided</scope> 
+		</dependency -->
+		
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
@@ -316,12 +330,7 @@
 			<artifactId>joda-time</artifactId>
 			<version>1.6</version>
 		</dependency>
-		<!-- dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time-jsptags</artifactId>
-			<version>1.0.2</version>
-			<scope>runtime</scope>
-		</dependency -->
+
 		<!-- Test -->
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -329,12 +338,25 @@
 			<version>2.5.2</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
+			<version>4.11</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>hamcrest-core</artifactId>
+					<groupId>org.hamcrest</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -348,23 +370,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!-- dependency>
-			<groupId>org.springframework.webflow</groupId>
-			<artifactId>spring-webflow</artifactId>
-			<version>2.3.0.RELEASE</version>
-			<exclusions>
-				< Exclude Commons Logging in favor of SLF4j >
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency -->
-
-		<!-- dependency> <groupId>org.jboss.el</groupId> <artifactId>com.springsource.org.jboss.el</artifactId> 
-			<version>2.0.0.GA</version> </dependency -->
-
 
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -395,24 +400,24 @@
 			<groupId>janux</groupId>
 			<artifactId>janux-bus</artifactId>
 			<version>${janux-version}</version>
-			
+
 			<exclusions>
-		        <exclusion>
-		            <groupId>asm</groupId>
-		            <artifactId>asm</artifactId>
-		        </exclusion>
-		        <exclusion>
-		            <groupId>asm</groupId>
-		            <artifactId>asm-attrs</artifactId>
-		        </exclusion>
 				<exclusion>
-		            <groupId>cglib</groupId>
-		            <artifactId>cglib</artifactId>
-		        </exclusion>
-		        
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm-attrs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>cglib</groupId>
+					<artifactId>cglib</artifactId>
+				</exclusion>
+
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>janux</groupId>
 			<artifactId>janux-biz</artifactId>
@@ -424,42 +429,42 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.6.10</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 			<version>1.5.0</version>
 		</dependency>
-		
-		<!-- Jasper Reports-->
-		
+
+		<!-- Jasper Reports -->
+
 		<dependency>
-	    	<groupId>net.sf.jasperreports</groupId>
-	    	<artifactId>jasperreports</artifactId>
-	    	<version>5.5.0</version>
-	    	<type>jar</type>
-	    	<scope>compile</scope>
-	    	<exclusions>
-	    		<exclusion>
-	    			<artifactId>commons-collections</artifactId>
-	    			<groupId>commons-collections</groupId>
-	    		</exclusion>
-	    		<exclusion>
-	    			<artifactId>commons-beanutils</artifactId>
-	    			<groupId>commons-beanutils</groupId>
-	    		</exclusion>
-	    		<exclusion>
-	    			<artifactId>commons-digester</artifactId>
-	    			<groupId>commons-digester</groupId>
-	    		</exclusion>
-	    		<exclusion>
-	    			<artifactId>commons-logging</artifactId>
-	    			<groupId>commons-logging</groupId>
-	    		</exclusion>
-	    	</exclusions>
-    	</dependency>
-		
-		
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>5.5.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-collections</artifactId>
+					<groupId>commons-collections</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-beanutils</artifactId>
+					<groupId>commons-beanutils</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-digester</artifactId>
+					<groupId>commons-digester</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
 		<!-- Begin Embedded Tomcat dependencies -->
 
 		<dependency>
@@ -500,26 +505,24 @@
 		</dependency>
 
 		<!-- End Embedded Tomcat dependencies -->
-		
+
 	</dependencies>
-	
+
 	<dependencyManagement>
-	    <dependencies>
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-aop</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-core</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>
-	        <!-- etc 
-	           enumerate all Spring sub-projects here that spring-security includes 
-	          -->
-	
-	    </dependencies>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<!-- etc enumerate all Spring sub-projects here that spring-security includes -->
+
+		</dependencies>
 	</dependencyManagement>
 
 
@@ -570,11 +573,8 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<!-- excludes>
-					<exclude>**/log4j.xml</exclude>
-					<exclude>**/ApplicationContext.properties</exclude>
-
-				</excludes -->
+				<!-- excludes> <exclude>**/log4j.xml</exclude> <exclude>**/ApplicationContext.properties</exclude> 
+					</excludes -->
 			</resource>
 
 			<resource>
@@ -649,7 +649,7 @@
 				<configuration>
 					<junitArtifactName>junit:junit</junitArtifactName>
 					<excludes>
-						<exclude>**/*_Roo_*</exclude>
+						<!-- exclude>**/*_Roo_*</exclude -->
 					</excludes>
 				</configuration>
 			</plugin>
@@ -660,37 +660,37 @@
 			</plugin>
 
 			<plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>hibernate3-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <configuration>
-                        <components>
-                            <component>
-                                <name>hbm2ddl</name>
-                                <outputDirectory>src/resources/main/sql/hbm2ddl</outputDirectory>
-                            </component>
-                        </components>
-                        <componentProperties>
-                            <configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
-                            <propertyfile>src/main/resources/database.properties</propertyfile>
-                            <outputfilename>hbm2ddl.sql</outputfilename>
-                            <drop>false</drop>
-                            <create>true</create>
-                            <export>false</export>
-                            <jdk5>true</jdk5>
-                            <format>true</format>
-                        </componentProperties>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>hbm2ddl</id>
-                            <phase>process-classes</phase>
-                            <goals>
-                                <goal>hbm2ddl</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                   <dependencies>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<components>
+						<component>
+							<name>hbm2ddl</name>
+							<outputDirectory>src/resources/main/sql/hbm2ddl</outputDirectory>
+						</component>
+					</components>
+					<componentProperties>
+						<configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
+						<propertyfile>src/main/resources/database.properties</propertyfile>
+						<outputfilename>hbm2ddl.sql</outputfilename>
+						<drop>false</drop>
+						<create>true</create>
+						<export>false</export>
+						<jdk5>true</jdk5>
+						<format>true</format>
+					</componentProperties>
+				</configuration>
+				<executions>
+					<execution>
+						<id>hbm2ddl</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>hbm2ddl</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
 					<dependency>
 						<groupId>com.oracle</groupId>
 						<artifactId>oracle</artifactId>
@@ -698,7 +698,7 @@
 						<scope>runtime</scope>
 					</dependency>
 				</dependencies>
-                </plugin>
+			</plugin>
 		</plugins>
 	</build>
 </project>

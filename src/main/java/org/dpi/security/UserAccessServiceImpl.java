@@ -28,6 +28,9 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.CollectionUtils;
 
+//
+//import org.springframework.security.core.context.SecurityContextHolder;
+
 public class UserAccessServiceImpl implements UserAccessService
 {
 	private Log log = LogFactory.getLog(this.getClass());
@@ -106,38 +109,61 @@ public class UserAccessServiceImpl implements UserAccessService
 	{
 		final JdbcTemplate template = new JdbcTemplate(datasource);
 
-		// this is the query to lookup the list of associated hotels for the given account
-		final String sHotelQuery = " select h.id, h.nombre " +
-		                           " from REPARTICION_ACCOUNT ha " +
-		                           " inner join REPARTICION h on h.id = ha.REPARTICIONID " +
-		                           " inner join sec_account a on a.id = ha.accountId " +
-		                           " where a.name = ? ";
-			
-		final int[] types = { Types.VARCHAR };
-		final Object[] args = { aAccountName };
-		final List results = template.queryForList(sHotelQuery, args, types);
+		Set<ReparticionAdminInfo> reparticionList=new HashSet();
 		
-		
-		Set<ReparticionAdminInfo> reparticionList = this.getReparticionList(results,comp,false);
-		
-		
-		// if has no hotels assigned, check if has permission to access all hotels 
-		if(CollectionUtils.isEmpty(reparticionList)){
-			Account account = accountService.loadAccountByName(aAccountName);
-			if(account.hasPermissions("VIEW_ALL_REPARTICIONES", "READ")){
-				List<ReparticionSearchInfo> reparticionSearchInfos = new ArrayList<ReparticionSearchInfo>();
+		String sHotelQuery = "  " ;
 				
-				reparticionSearchInfos = reparticionService.findAllReparticiones();
-				for(ReparticionSearchInfo reparticionSearchInfo: reparticionSearchInfos)
-				{
-					ReparticionAdminInfo info = new ReparticionAdminInfo(reparticionSearchInfo.getReparticionId(),reparticionSearchInfo.getReparticionName());
-					//info.setStatus(reparticionSearchInfo.getHotelStatus());
-					reparticionList.add(info);
+		Account account = accountService.loadAccountByName(aAccountName);
+		
+		for(Role role : account.getRoles())
+			{
+				if(role.getName().equals("RESPONSABLE_REPARTICION"))
+					{
+						 sHotelQuery = " select h.id, h.nombre " +
+			                          " from REPARTICION_ACCOUNT ha " +
+			                          " inner join REPARTICION h on h.id = ha.REPARTICIONID " +
+			                          " inner join sec_account a on a.id = ha.accountId " +
+			                          " where a.name = ? ";
+						 
+						final int[] types = { Types.VARCHAR };
+						final Object[] args = { aAccountName };
+						final List results = template.queryForList(sHotelQuery, args, types);
+							
+						reparticionList = this.getReparticionList(results,comp,false);
+				
+					}
+					
+				if(role.getName().equals("DIRECTIVO"))
+					{
+						sHotelQuery = "Select h.id, h.nombre " +
+								"From reparticion h " +
+								"where REGEXP_LIKE (h.code, (select reverse(cast((cast(reverse(code) as number)) as varchar2(30))) as patron from REPARTICION_ACCOUNT ha " +
+								"inner join REPARTICION r on r.id = ha.REPARTICIONID " +
+								"inner join sec_account a on a.id = ha.accountId " +
+								"where a.name = ?))" ;
+						final int[] types = { Types.VARCHAR };
+						final Object[] args = { aAccountName };
+						final List results = template.queryForList(sHotelQuery, args, types);
+								
+						reparticionList = this.getReparticionList(results,comp,false);
+						
+					}
+						
+				if(role.getName().equals("SUPERVISOR_REPARTICIONES"))
+					{
+						List<ReparticionSearchInfo> reparticionSearchInfos = new ArrayList<ReparticionSearchInfo>();
+						
+						reparticionSearchInfos = reparticionService.findAllReparticiones();
+						for(ReparticionSearchInfo reparticionSearchInfo: reparticionSearchInfos)
+							{
+								ReparticionAdminInfo info = new ReparticionAdminInfo(reparticionSearchInfo.getReparticionId(),reparticionSearchInfo.getReparticionName());
+								//info.setStatus(reparticionSearchInfo.getHotelStatus());
+								reparticionList.add(info);
+							}
+					}
+						
 				}
-				
-			}
-		}
-		
+
 		return reparticionList;
 	}
 

@@ -44,6 +44,10 @@ public class HomeController {
 			if(role.getName().equals("SUPERVISOR_REPARTICIONES")){
 				return "redirect:reparticiones/reparticion/showCreditos";
 			}	
+			
+			if(role.getName().equals("DIRECTIVO")){
+				return "redirect:reparticiones/reparticion/showCreditos";
+			}
 
 			if(role.getName().equals("SYS_ADMIN")){
 				return "redirect:reparticiones/reparticion/showCreditos";

@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
@@ -21,6 +22,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.dpi.web.reporting.jasper.ExporterService;
+import org.dpi.web.reporting.parameters.AbstractReportParameters;
+import org.dpi.web.reporting.parameters.EmployeeAdditionsPromotionsReportParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,7 @@ public class DownloadService {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public static final String TEMPLATE = "/WEB-INF/reports/nota_creditos_conFechaImpresion.jrxml";
+	public static final String TEMPLATE_FOLDER = "/WEB-INF/reports/";
 	
 	
 	@Autowired
@@ -45,21 +48,43 @@ public class DownloadService {
 
 	@Resource(name = "exporterService")
 	private ExporterService exporter;
+		
+	
+	@Resource(name = "employeeAdditionsPromotionsReportReportService")
+	private EmployeeAdditionsPromotionsReportReportService employeeAdditionsPromotionsReportReportService;
 
-	public void download(String type, HashMap<String, Object> params,HttpServletResponse response) {
+	public void download(AbstractReportParameters reportParams,HttpServletResponse response) {
 
 		try {
+			
+			
+			Map<String, Object> reportParamMap = new HashMap<String, Object>();
+			
+						
+			
 			// 1. Add report parameters
 			
-			params.put("Title", "Reporte_Creditos");
+			reportParamMap.put("Title", "Report");
 
 			// 2.  Retrieve template
 
 			//InputStream reportStream = this.getClass().getResourceAsStream(TEMPLATE);
 			
-			InputStream reportStream = servletContext.getResourceAsStream(TEMPLATE) ;
+			InputStream reportStream = servletContext.getResourceAsStream(TEMPLATE_FOLDER+reportParams.getTemplateFileName()) ;
 			
 			//InputStream reportStream = this.getClass().getResourceAsStream(TEMPLATE);
+			
+			Map<String, Object> recordsMap = null;
+			
+			if (reportParams instanceof EmployeeAdditionsPromotionsReportParameters)
+			{
+				recordsMap =	employeeAdditionsPromotionsReportReportService.getReportData((EmployeeAdditionsPromotionsReportParameters) reportParams);
+				
+			}
+			
+			for (Map.Entry<String, Object> entry : recordsMap.entrySet()) {
+				reportParamMap.put(entry.getKey(), entry.getValue());
+			}
 
 			// 3. Convert template to JasperDesign
 			JasperDesign jd = JRXmlLoader.load(reportStream);
@@ -68,17 +93,19 @@ public class DownloadService {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			Locale locale = new Locale("es", "AR");
-			params.put(JRParameter.REPORT_LOCALE, locale);
+			reportParamMap.put(JRParameter.REPORT_LOCALE, locale);
 			
 			// 5. Create the JasperPrint object
 			// Make sure to pass the JasperReport, report parameters, and data source
-			JasperPrint jp = JasperFillManager.fillReport(jr, params, new JREmptyDataSource());
+			JasperPrint jp = JasperFillManager.fillReport(jr, reportParamMap, new JREmptyDataSource());
 
 			// 6. Create an output byte stream where data will be written
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 			// 7. Export report
-			exporter.export(type, jp, response, baos);
+			exporter.export(reportParams.getOutputFormat(), jp, response, baos);
+			
+
 
 			// 8. Write to reponse stream
 			write(response, baos);

@@ -62,10 +62,10 @@
 		]
 	},
 
-	{ "label":"Reports",
+	{ "label":"Reportes",
 		"doDisplay":account?exists && account.hasPermissions("Reports", "READ"),
 		"subNav": [
-			{ "URL":"report/ReportSetup", "label":"Management Reports","requiresReparticion":true,"doDisplay":true },
+			{ "URL":"reports/reportSetup", "label":"Reportes Administrativos","requiresReparticion":true,"doDisplay":true },
 			{ "URL":"reportadmin/ReportAdminSetup","label":"Administration Reports","requiresReparticion":true,
 				"doDisplay":account?exists && account.hasPermissions("ADMINISTRATION_REPORTS", "READ")},
 			<#--{ "URL":"report/resSearch",   "label":"Reservation Production","requiresReparticion":true,"doDisplay":true }, -->

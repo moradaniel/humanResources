@@ -4,11 +4,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryDaoHibImpl;
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.person.PersonCondition;
 import org.hibernate.HibernateException;
@@ -34,6 +37,10 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 	
 	//String MAX_CATEGORIA_PARA_PROFESIONALES_SIN_CONSUMO_DE_CREDITOS = "21";
 	
+	@Resource(name = "creditsPeriodService")
+	private CreditsPeriodService creditsPeriodService;
+	
+
 	public CreditsManagerServiceImpl() {
 		creditosPorCargaInicial.put("12", 60);
 		creditosPorCargaInicial.put("13", 60);
@@ -234,7 +241,7 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public 	Long getCreditosPorCargaInicialDeReparticion(final CreditsPeriod creditsPeriod,final long reparticionId){
+	public 	Long getCreditosPorCargaInicialDeReparticion(final Long creditsPeriodId,final long reparticionId){
 		return (Long) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess)
 				throws HibernateException, SQLException  {
@@ -251,7 +258,7 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 						" INNER JOIN employment.person person "+
 						" where reparticion.id='"+reparticionId+"'" +
 						" AND entry.creditsEntryType = '"+CreditsEntryType.CargaInicialAgenteExistente.name()+"'"+
-						" AND entry.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
+						" AND entry.creditsPeriod.id = '"+creditsPeriodId+"'";
 				
 				Query query = sess.createQuery(queryStr);
 			
@@ -269,7 +276,7 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public 	Long getCreditosPorBajasDeReparticion(final CreditsPeriod creditsPeriod, final long reparticionId){
+	public 	Long getCreditosPorBajasDeReparticion(final Long creditsPeriodId, final long reparticionId){
 		return (Long) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess)
 				throws HibernateException, SQLException  {
@@ -285,7 +292,7 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 						" INNER JOIN centroSector.reparticion reparticion "+
 						" where reparticion.id='"+reparticionId+"'" +
 						" AND entry.creditsEntryType = '"+CreditsEntryType.BajaAgente.name()+"'"+
-						" AND entry.creditsPeriod.id = '"+creditsPeriod.getId()+"'";
+						" AND entry.creditsPeriod.id = '"+creditsPeriodId+"'";
 				Query query = sess.createQuery(queryStr);
 			
 				Long totalAmount = (Long) query.uniqueResult();
@@ -342,13 +349,13 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Long getCreditosDisponiblesSegunSolicitado(CreditsPeriod creditsPeriod,final long reparticionId){
+	public Long getCreditosDisponiblesSegunSolicitado(Long creditsPeriodId,final long reparticionId){
 
-		Long creditosDisponiblesAlInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriod,reparticionId);
+		Long creditosDisponiblesAlInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,reparticionId);
 		
-		Long creditosAcreditadosPorBajasDelPeriodo = getCreditosPorBajasDeReparticion(creditsPeriod,reparticionId);
+		Long creditosAcreditadosPorBajasDelPeriodo = getCreditosPorBajasDeReparticion(creditsPeriodId,reparticionId);
 		
-		Long totalPorIngresosOAscensosSegunSolicitado = this.getCreditosPorIngresosOAscensosSolicitados(creditsPeriod, reparticionId);
+		Long totalPorIngresosOAscensosSegunSolicitado = this.getCreditosPorIngresosOAscensosSolicitados(creditsPeriodId, reparticionId);
 		
 		return creditosDisponiblesAlInicioPeriodo + creditosAcreditadosPorBajasDelPeriodo -totalPorIngresosOAscensosSegunSolicitado;
 		
@@ -356,13 +363,13 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Long getCreditosDisponiblesSegunOtorgado(CreditsPeriod creditsPeriod, final long reparticionId){
+	public Long getCreditosDisponiblesSegunOtorgado(Long creditsPeriodId, final long reparticionId){
 		
-		Long creditosDisponiblesAlInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriod,reparticionId);
+		Long creditosDisponiblesAlInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,reparticionId);
 		
-		Long creditosAcreditadosPorBajasDelPeriodo = getCreditosPorBajasDeReparticion(creditsPeriod,reparticionId);
+		Long creditosAcreditadosPorBajasDelPeriodo = getCreditosPorBajasDeReparticion(creditsPeriodId,reparticionId);
 		
-		Long totalPorIngresosOAscensosSegunOtorgado = this.getCreditosPorIngresosOAscensosOtorgados(creditsPeriod, reparticionId);
+		Long totalPorIngresosOAscensosSegunOtorgado = this.getCreditosPorIngresosOAscensosOtorgados(creditsPeriodId, reparticionId);
 		
 		return creditosDisponiblesAlInicioPeriodo + creditosAcreditadosPorBajasDelPeriodo - totalPorIngresosOAscensosSegunOtorgado;
 		
@@ -370,13 +377,13 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 
 
 	@Override
-	public Long getCreditosPorIngresosOAscensosSolicitados(	CreditsPeriod creditsPeriod, Long reparticionId) {
+	public Long getCreditosPorIngresosOAscensosSolicitados(Long creditsPeriodId, Long reparticionId) {
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 		employmentQueryFilter.setReparticionId(String.valueOf(reparticionId));
 		
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
-		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
+		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
 		
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
@@ -387,13 +394,13 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 	
 	@Override
 	public Long getCreditosPorIngresosOAscensosOtorgados(
-			CreditsPeriod creditsPeriod, Long reparticionId) {
+			 Long creditsPeriodId, Long reparticionId) {
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 		employmentQueryFilter.setReparticionId(String.valueOf(reparticionId));
 	
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
-		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
+		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
 		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
@@ -402,8 +409,9 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 
 
 	@Override
-	public Long getCreditosDisponiblesAlInicioPeriodo(
-			CreditsPeriod creditsPeriod, Long reparticionId) {
+	public Long getCreditosDisponiblesAlInicioPeriodo(Long creditsPeriodId, Long reparticionId) {
+		
+		CreditsPeriod creditsPeriod = creditsPeriodService.findById(creditsPeriodId);
 		
 		//If period does not have previous period return 0
 		if(creditsPeriod.getPreviousCreditsPeriod()==null){
@@ -413,16 +421,23 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 		//get previous period
 		CreditsPeriod previousPeriod = creditsPeriod.getPreviousCreditsPeriod();
 
-		Long totalPorCargaInicial = this.getCreditosPorCargaInicialDeReparticion(previousPeriod,reparticionId);
+		Long totalPorCargaInicial = this.getCreditosPorCargaInicialDeReparticion(previousPeriod.getId(),reparticionId);
 		
-		Long totalPorBajas = this.getCreditosPorBajasDeReparticion(previousPeriod,reparticionId);
+		Long totalPorBajas = this.getCreditosPorBajasDeReparticion(previousPeriod.getId(),reparticionId);
 		
-		Long totalcreditosDisponiblesSegunOtorgadoPeriodoActual = this.getCreditosPorIngresosOAscensosOtorgados(previousPeriod,reparticionId);
+		Long totalcreditosDisponiblesSegunOtorgadoPeriodoActual = this.getCreditosPorIngresosOAscensosOtorgados(previousPeriod.getId(),reparticionId);
 		
 		return totalPorCargaInicial+totalPorBajas-totalcreditosDisponiblesSegunOtorgadoPeriodoActual;
 	}
 
 	
+	public CreditsPeriodService getCreditsPeriodService() {
+		return creditsPeriodService;
+	}
 
+
+	public void setCreditsPeriodService(CreditsPeriodService creditsPeriodService) {
+		this.creditsPeriodService = creditsPeriodService;
+	}
 
 }
