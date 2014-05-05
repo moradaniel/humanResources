@@ -155,6 +155,49 @@
 		</tx:advice>
 
 	</beans>
+	
+	
+	<beans profile="prod">
+		<!-- The following are abstract database/hibernate 'template' abstract 
+			beans containing commonly used configuration parameters. The abstract beans 
+			can be inherited using the 'parent' bean attribute to instantiate concrete 
+			beans. The properties of concrete beans can be overwritten to instantiate 
+			specific data source and hibernate session factories. -->
+
+
+		<!-- Template Hibernate Session Factory; override with proper datasource 
+			and set list of Hibernate mapping files -->
+		<bean id="oracleHibSessionFactory"
+			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
+			abstract="true">
+			<property name="dataSource" ref="SET_IN_CHILD_BEAN" />
+			<property name="mappingResources" ref="SET_IN_CHILD_BEAN" />
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+					<prop key="hibernate.statement_cache.size">100</prop>
+					<prop key="hibernate.query.substitutions">yes 'Y', no 'N'</prop>
+					<prop key="hibernate.use_outer_join">true</prop>
+					<prop key="hibernate.jdbc.batch_size">2000</prop>
+					<prop key="show_sql">true</prop>
+					<!-- this has to be set as a system property and cannot be set here -->
+					<!-- <prop key="hibernate.cglib.use_reflection_optimizer">false</prop> -->
+				</props>
+			</property>
+		</bean>
+		
+				<!-- a default transaction attribute advice that specifies that all methods 
+			support transactions; create more specific transaction attributes in individual 
+			context files as appropriate -->
+		<tx:advice id="txAllPropagationSupport" transaction-manager="transactionManager">
+			<tx:attributes>
+				<!-- methods run in a transaction if one already exists, but they don’t 
+					need to run within a transaction. -->
+				<tx:method name="*" propagation="SUPPORTS" />
+			</tx:attributes>
+		</tx:advice>
+
+	</beans>
 
 	<beans profile="test">
 		<!-- The following are abstract database/hibernate 'template' abstract 
