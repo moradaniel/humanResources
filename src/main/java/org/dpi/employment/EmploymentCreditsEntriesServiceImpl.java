@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.CollectionUtils;
 
 
 
@@ -80,7 +81,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		Person employee = currentEmployment.getPerson();
 		List<Long> employeeIds = new ArrayList<Long>();
 		employeeIds.add(employee.getId());
-		Set<Long>resultEmployeeIds = creditsEntryService.haveMovimientosSolicitados(employeeIds, currentEmployment.getCentroSector().getReparticion().getId(), currentCreditsPeriod.getId());
+		Set<Long>resultEmployeeIds = creditsEntryService.havePendingEntries(employeeIds, currentEmployment.getCentroSector().getReparticion().getId(), currentCreditsPeriod.getId());
 		
 		if(resultEmployeeIds.contains(employee.getId())){
 			return;
@@ -92,7 +93,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		newEmployment.setCategory(newCategory);
 		newEmployment.setCentroSector(currentEmployment.getCentroSector());
 		newEmployment.setOccupationalGroup(currentEmployment.getOccupationalGroup());
-		newEmployment.setFechaInicio(new Date());
+		newEmployment.setStartDate(new Date());
 		newEmployment.setStatus(EmploymentStatus.PENDIENTE);
 		
 		
@@ -128,26 +129,32 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 	
 	@Override
-	public void deactivate(Employment employment, Account currentUser) {
+	public void deactivate(Employment employment, Account account) {
 		
-		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" attempting to deactivate:"+employment.toString());/*+ entry.getId()+
-					" Type:"+entry.getTipoCreditsEntry().name()+
-					" Agent name:"+ entry.getEmpleo().getAgente().getApellidoNombre()+
-					" from status: "+entry.getGrantedStatus().name() + " to "+newEstado.name());*/	
+		if(account!=null){
+			log.info("================ user:"+account.getName()+" attempting to deactivate:"+employment.toString());	
 		}	
+		
+		
+		//check user has permission to deactivate employments
+		
+		if(!canAccountDeactivateEmployments(account)) {
+			throw new RuntimeException("Account '"+account.getName()+ "' has no permission to deactivate employments ");
+					
+		}
 		
 		
 		//employment endDate is the current creditsEntry startdDate
 		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
-		employment.setFechaFin(currentCreditsPeriod.getStartDate());
-		employment.setStatus(EmploymentStatus.BAJA);
+		//employment.setEndDate(currentCreditsPeriod.getStartDate());
+		//employment.setStatus(EmploymentStatus.BAJA);
 		
 		//create an entry of type DEACTIVATION 
 		CreditsEntryImpl deactivationEntry = new CreditsEntryImpl();
 		deactivationEntry.setCreditsPeriod(currentCreditsPeriod);
-		deactivationEntry.setGrantedStatus(GrantedStatus.Otorgado);
+		deactivationEntry.setGrantedStatus(GrantedStatus.Solicitado);
 		deactivationEntry.setCreditsEntryType(CreditsEntryType.BajaAgente);
+		
 		int cantidadCreditosPorBaja = creditsManagerService.getCreditosPorBaja(employment.getCategory().getCode());
 
 		
@@ -162,8 +169,73 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//save creditsEntry and employment
 		employmentService.saveOrUpdate(employment);
 		
-		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" Successfully performed: person deactivated - "+employment.toString()
+		if(account!=null){
+			log.info("================ user:"+account.getName()+" Successfully performed: employment deactivated - "+employment.toString()
+					/*" centrosector: "+centroSector.toString()+
+					" Employee :"+ nuevoAgentePropuesto.toString()+
+					" creditsEntry: "+creditsEntryIngreso.toString()*/);	
+		}
+		
+	}
+	
+	@Override
+	public void undoDeactivation(Employment employment, Account account) {
+		
+		if(account!=null){
+			log.info("================ user:"+account.getName()+" attempting to UNDO deactivation:"+employment.toString());	
+		}	
+		
+		
+		//check user has permission to undo deactivate employments
+		
+		if(!canAccountDeactivateEmployments(account)) {
+			throw new RuntimeException("Account '"+account.getName()+ "' has no permission to undo deactivation employments ");
+					
+		}
+		
+		if(!canAccountUndoDeactivationEmployments(account,employment)) {
+			throw new RuntimeException("Employment '"+employment.toString()+ "' deactivation can not be undone ");
+					
+		}
+		
+		CreditsEntry undoableDeactivationCreditEntry = this.getUndoableCreditEntry(employment, CreditsEntryType.BajaAgente);
+		
+		if(undoableDeactivationCreditEntry!=null) {
+			creditsEntryService.delete(undoableDeactivationCreditEntry);
+		}
+	
+		
+		
+		
+		/*
+		
+		//employment endDate is the current creditsEntry startdDate
+		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+		//employment.setEndDate(currentCreditsPeriod.getStartDate());
+		//employment.setStatus(EmploymentStatus.BAJA);
+		
+		//create an entry of type DEACTIVATION 
+		CreditsEntryImpl deactivationEntry = new CreditsEntryImpl();
+		deactivationEntry.setCreditsPeriod(currentCreditsPeriod);
+		deactivationEntry.setGrantedStatus(GrantedStatus.Solicitado);
+		deactivationEntry.setCreditsEntryType(CreditsEntryType.BajaAgente);
+		
+		int cantidadCreditosPorBaja = creditsManagerService.getCreditosPorBaja(employment.getCategory().getCode());
+
+		
+		deactivationEntry.setCantidadCreditos(cantidadCreditosPorBaja);
+		
+		
+		//setear empleo a entry  y agregar entry a empleo
+		employment.addCreditsEntry(deactivationEntry);
+		
+		deactivationEntry.setEmployment(employment);
+		
+		//save creditsEntry and employment
+		employmentService.saveOrUpdate(employment);*/
+		
+		if(account!=null){
+			log.info("================ user:"+account.getName()+" Successfully performed: employment UNDO deactivation - "+employment.toString()
 					/*" centrosector: "+centroSector.toString()+
 					" Employee :"+ nuevoAgentePropuesto.toString()+
 					" creditsEntry: "+creditsEntryIngreso.toString()*/);	
@@ -176,30 +248,30 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId) {
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" attempting to ingresar propuesta agente:");/*+ entry.getId()+
+			log.info("================ user:"+currentUser.getName()+" attempting to add proposed employee:");/*+ entry.getId()+
 					" Type:"+entry.getTipoCreditsEntry().name()+
 					" Agent name:"+ entry.getEmpleo().getAgente().getApellidoNombre()+
 					" from status: "+entry.getGrantedStatus().name() + " to "+newEstado.name());*/	
 		}
 		
-		// crear agente nn
-		Person nuevoAgentePropuesto = createPendingAgent();
+		// create employee nn
+		Person newProposedPerson = createPendingPerson();
 		
-		personService.save(nuevoAgentePropuesto);
+		personService.save(newProposedPerson);
 		
-		//crear empleo
-		Employment nuevoEmpleoPropuesto = new EmploymentImpl();
-		nuevoEmpleoPropuesto.setPerson(nuevoAgentePropuesto);
+		//create employment
+		Employment newProposedEmployee = new EmploymentImpl();
+		newProposedEmployee.setPerson(newProposedPerson);
 		//set proposed category to the employment
-		nuevoEmpleoPropuesto.setCategory(categoryService.findByCode(proposedCategoryCode));
+		newProposedEmployee.setCategory(categoryService.findByCode(proposedCategoryCode));
 		//al empleo ponerlo en status pendiente
-		nuevoEmpleoPropuesto.setStatus(EmploymentStatus.PENDIENTE);
+		newProposedEmployee.setStatus(EmploymentStatus.PENDIENTE);
 		
-		nuevoEmpleoPropuesto.setFechaInicio(new Date());
+		newProposedEmployee.setStartDate(new Date());
 		
 		//buscar centro sector
 		CentroSector centroSector = centroSectorService.findById(centroSectorId);
-		nuevoEmpleoPropuesto.setCentroSector(centroSector);
+		newProposedEmployee.setCentroSector(centroSector);
 		
 		//Crear entry de ingreso
 		CreditsEntry creditsEntryIngreso = new CreditsEntryImpl();
@@ -207,29 +279,29 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		creditsEntryIngreso.setGrantedStatus(GrantedStatus.Solicitado);
 		creditsEntryIngreso.setCreditsPeriod(creditsPeriodService.getCurrentCreditsPeriod());
 		
-		creditsEntryIngreso.setEmployment(nuevoEmpleoPropuesto);
-		nuevoEmpleoPropuesto.addCreditsEntry(creditsEntryIngreso);
+		creditsEntryIngreso.setEmployment(newProposedEmployee);
+		newProposedEmployee.addCreditsEntry(creditsEntryIngreso);
 		
 		int creditosPorIngreso = creditsManagerService.getCreditosPorIngreso(proposedCategoryCode);
 		creditsEntryIngreso.setCantidadCreditos(creditosPorIngreso);
 		
-		employmentService.save(nuevoEmpleoPropuesto);
+		employmentService.save(newProposedEmployee);
 		
 		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" Successfully performed: ingresar propuesta agente - "+
+			log.info("================ user:"+currentUser.getName()+" Successfully performed: add proposed employee - "+
 					" centrosector: "+centroSector.toString()+
-					" Employee :"+ nuevoAgentePropuesto.toString()+
+					" Employee :"+ newProposedPerson.toString()+
 					" creditsEntry: "+creditsEntryIngreso.toString());	
 		}
 		
 	}
 	
 	
-	private Person createPendingAgent(){
-		PersonImpl newAgente = new PersonImpl();
-		newAgente.setApellidoNombre("Ingreso Nuevo Propuesto");
-		newAgente.setCuil("");
-		return newAgente;
+	private Person createPendingPerson(){
+		PersonImpl newPerson = new PersonImpl();
+		newPerson.setApellidoNombre("Ingreso Nuevo Propuesto");
+		newPerson.setCuil("");
+		return newPerson;
 	}
 	
 	
@@ -241,34 +313,51 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 
 	@Override
-	public List<EmploymentVO> buildEmploymentsVO(List<Employment> activeEmployments, Long reparticionId,
-			Account currenUser) {
+	public List<EmploymentVO> buildEmploymentsVO(List<Employment> employments, Long reparticionId,
+			Account currentUser) {
 		
 		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 		
 		List<Long> posiblesAgentesIds = new ArrayList<Long>();
-		for(Employment employment:activeEmployments){
+		for(Employment employment:employments){
 			posiblesAgentesIds.add(employment.getPerson().getId());
 		}
 		
 		Set<Long> personsIds = new HashSet<Long>();
 		
-		//haveMovimientosSolicitados is a heavy task so we check if it is really needed
-		if(	canAccountPromotePerson(currenUser) ||
-			canAccountDeactivatePerson(currenUser)){
-			personsIds = creditsEntryService.haveMovimientosSolicitados(posiblesAgentesIds, reparticionId, currentCreditsPeriod.getId());
+		//havePendingEntries is a heavy task so we check if it is really needed
+		if(	canAccountPromotePerson(currentUser) ||
+			canAccountDeactivateEmployments(currentUser) ||
+			canAccountDeactivateEmployments(currentUser)){
+			personsIds = creditsEntryService.havePendingEntries(posiblesAgentesIds, reparticionId, currentCreditsPeriod.getId());
 		}
 		
 		List<EmploymentVO> employmentsVO = new ArrayList<EmploymentVO>();
-		for(Employment employment:activeEmployments){
+		for(Employment employment:employments){
 			EmploymentVO employmentVO = new EmploymentVO();
 			employmentVO.setEmployment(employment);
 			
+			if(personsIds.contains(employment.getPerson().getId())) {
+				employmentVO.addNote("Tiene movimientos pendientes de otorgar.");
+			}
+			
+			if(hasPendingDeactivationEntry(employment)) {
+				employmentVO.addNote("Baja pendiente de otorgar.");
+			}
+			
 			//a person can not be promoted if has pending promotions
-			employmentVO.setCanAccountPromotePerson(canAccountPromotePerson(currenUser) && !personsIds.contains(employment.getPerson().getId()));
+			employmentVO.setCanBePromoted(employment.getStatus()==EmploymentStatus.ACTIVO && canAccountPromotePerson(currentUser) && !personsIds.contains(employment.getPerson().getId()));
 			
 			//a person can not be deactivated if has pending promotions
-			employmentVO.setCanAccountDeactivatePerson(canAccountDeactivatePerson(currenUser) && !personsIds.contains(employment.getPerson().getId()));
+			//a person can not be deactivated if has pending deactivation entry in REQUESTED status in current period
+			employmentVO.setCanBeDeactivated(employment.getStatus()==EmploymentStatus.ACTIVO 
+											&& canAccountDeactivateEmployments(currentUser) 
+											&& !personsIds.contains(employment.getPerson().getId())
+											&& !hasPendingDeactivationEntry(employment));
+			
+			employmentVO.setCanPersonBeModified(canAccountModifyPerson(currentUser));
+			
+			employmentVO.setCanUndoDeactivation(canAccountUndoDeactivationEmployments(currentUser,employment));
 
 			employmentsVO.add(employmentVO);
 		}
@@ -277,6 +366,65 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		return employmentsVO;
 	}
 	
+	
+	
+	private boolean hasPendingDeactivationEntry(Employment employment/*,CreditsPeriod period*/) {
+		/*for(CreditsEntry entry : employment.getCreditsEntries()) {
+			if(entry.getCreditsEntryType()==CreditsEntryType.BajaAgente
+				&& entry.getGrantedStatus()==GrantedStatus.Solicitado
+				&& entry.getCreditsPeriod().getName().equalsIgnoreCase(period.getName())) {
+					return true;
+				}
+		}*/
+		
+		CreditsEntry undoableDectivationEntry = getUndoableCreditEntry(employment,CreditsEntryType.BajaAgente);
+		if(undoableDectivationEntry==null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
+	public boolean canAccountUndoDeactivationEmployments(Account account, Employment employment) {
+		
+		if(!canAccountDeactivateEmployments(account)) {
+			return false;
+		}
+		
+		if(!hasPendingDeactivationEntry(employment)) {
+			return false;
+		}
+
+
+		return true;
+	}
+	
+	
+	public CreditsEntry getUndoableCreditEntry(Employment employment, CreditsEntryType creditsEntryType) {
+
+		CreditsEntry undoableCreditEntry = null;
+
+		//only creditsENtry in current period can be undone
+		Set<CreditsEntry> deactivationEntriesSet = employment.getCreditsEntries(creditsPeriodService.getCurrentCreditsPeriod(), creditsEntryType);
+
+		if(CollectionUtils.isEmpty(deactivationEntriesSet)) {
+			//if empty nothing to undo
+			undoableCreditEntry = null;
+		}else {
+
+			for (CreditsEntry entry : deactivationEntriesSet) {
+				if(entry.getGrantedStatus()==GrantedStatus.Solicitado) {
+					undoableCreditEntry = entry;
+				}
+			}
+		}
+
+		return undoableCreditEntry;
+
+
+	}
+
 	public static boolean canAccountPromotePerson(Account account) {
 		
 		if(account.hasPermissions("Manage_MovimientoCreditos", "CREATE")){
@@ -287,13 +435,22 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	
 	
 	
-	public static boolean canAccountDeactivatePerson(Account account) {
+	public static boolean canAccountDeactivateEmployments(Account account) {
 		
 		if(account.hasPermissions("Manage_Employments", "DEACTIVATE")){
 			return true;
 		}
 		return false;
 	}
+	
+	public static boolean canAccountModifyPerson(Account account) {
+		
+		if(account.hasPermissions("Manage_Employments", "UPDATE")){
+			return true;
+		}
+		return false;
+	}
+	
 	
 	public static boolean canAccountProposeNewEmployment(Account account) {
 		
