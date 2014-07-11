@@ -16,7 +16,6 @@
 		<commons-dbcp-version>1.4</commons-dbcp-version>
 
 
-		<jackson.version>1.9.12</jackson.version>
 		<janux-version>0.4.01-SNAPSHOT</janux-version>
 
 		<hibernate-version>3.6.8.Final</hibernate-version>
@@ -25,6 +24,7 @@
 
 		<hsqldb-version>2.3.1</hsqldb-version>
 
+		<jackson.databind-version>2.2.3</jackson.databind-version>
 
 		<!-- Embedded Tomcat 7 -->
 		<tomcat.version>7.0.42</tomcat.version>
@@ -377,25 +377,13 @@
 			<version>${commons-lang-version}</version>
 		</dependency>
 
-		<!-- Data Mapper package is a high-performance data binding package built 
-			on Jackson JSON processor -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>${jackson.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- Jackson is a high-performance JSON processor (parser, generator) -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>${jackson.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.databind-version}</version>
+        </dependency>
+        
 		<dependency>
 			<groupId>janux</groupId>
 			<artifactId>janux-bus</artifactId>
