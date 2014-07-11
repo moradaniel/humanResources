@@ -81,7 +81,8 @@ even if Tomcat is running under a 64-bit JVM.
 2014 - July
  
  - Organized AngularJS code into scalable folders. Grouped files by feature.
- - Added AngularJS Growl notifications. Feedback about operation results.
+ - Added AngularJS validator for verifying the employee CUIL in the form
+ - Added AngularJS Growl notifications. Feedback about operations results.
  - Replaced underscore.js by lodash.js
  - Backend: Added Spring MVC GlobalControllerExceptionHandler
  - Backend: Ordering by employee name, case insensitive.
