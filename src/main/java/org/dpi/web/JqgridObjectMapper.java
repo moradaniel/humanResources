@@ -1,6 +1,8 @@
 package org.dpi.web;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 /**
  * Maps a jQgrid JSON query to a {@link JqgridFilter} instance

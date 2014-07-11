@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 /**
- * @author kirlen
  *
  * Encapsulate a user's settings. Statically define all valid user setting definitions.
  * Settings may be of various types; clients must know this type when requesting a particular setting.
@@ -60,7 +59,7 @@ public class UserSettingsFactoryImpl implements UserSettingsFactory
 	public static final String INVENTORY_VIEW_DAYS    = "ui.inventory.viewDays";
 	public static final String EXPAND_INVENTORY_ROOMS = "ui.inventory.showExpanded.roomTypes";
 	public static final String EXPAND_INVENTORY_RATES = "ui.inventory.showExpanded.ratePlans";
-	public static final String LAST_HOTEL	          = "ui.misc.lastHotel";
+	public static final String LAST_DEPARTMENT	      = "ui.misc.lastDepartment";
 	public static final String ASSURE_HOTEL_SETUP	  = "ui.admin.assure.df.hotelSetup";
 
 
@@ -76,7 +75,7 @@ public class UserSettingsFactoryImpl implements UserSettingsFactory
 	
 	private static UserSettingDefinition miscSettings[] =
 	{
-		new UserSettingDefinition(LAST_HOTEL                 ,UserSettingDefinition.STRING     ,  null  ,true ,UserSettingRoleImpl.BASIC    ,"Last Hotel"),	
+		new UserSettingDefinition(LAST_DEPARTMENT                 ,UserSettingDefinition.STRING     ,  null  ,true ,UserSettingRoleImpl.BASIC    ,"Last Department"),	
 	};
 	
 	private static UserSettingDefinition adminSettings[] =

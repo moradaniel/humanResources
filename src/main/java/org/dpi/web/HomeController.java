@@ -37,16 +37,20 @@ public class HomeController {
 		Account account = accountService.loadAccountByName(januxUserDetailsAccount.getName());
 
 		for(Role role : account.getRoles()){
-			if(role.getName().equals("RESPONSABLE_REPARTICION")){
+			if(role.getName().equals("DEPARTMENT_RESPONSIBLE")){
 				return "redirect:reparticiones/reparticion/showCreditos";
 			}	
 
-			if(role.getName().equals("SUPERVISOR_REPARTICIONES")){
+			if(role.getName().equals("DEPARTMENTS_SUPERVISOR")){
 				return "redirect:reparticiones/reparticion/showCreditos";
 			}	
 			
-			if(role.getName().equals("DIRECTIVO")){
+			if(role.getName().equals("SUBTREE_SUPERVISOR")){
 				return "redirect:reparticiones/reparticion/showCreditos";
+			}
+			
+			if(role.getName().equals("HR_MANAGER")){
+				return "redirect:reparticiones/reparticion/showEmployments";
 			}
 
 			if(role.getName().equals("SYS_ADMIN")){
@@ -55,7 +59,7 @@ public class HomeController {
 			}
 		}
 
-		return "reparticiones";
+		return "redirect:reparticiones/reparticion/showCreditos";
 	}
 
 

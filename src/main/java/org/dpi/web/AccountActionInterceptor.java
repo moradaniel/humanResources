@@ -126,7 +126,8 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 					rolesNames.add(role.getName());
 				}
 				
-				modelAndView.addObject(getRolesKey(), StringUtils.collectionToCommaDelimitedString(rolesNames));
+				//modelAndView.addObject(getRolesKey(), StringUtils.collectionToCommaDelimitedString(rolesNames));
+				modelAndView.addObject(getRolesKey(), rolesNames);
 				
 				if (log.isDebugEnabled())
 				{

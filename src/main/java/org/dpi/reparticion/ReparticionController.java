@@ -15,6 +15,7 @@ import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryServiceImpl;
+import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsEntry.CreditsEntryVO;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
@@ -165,10 +166,10 @@ public class ReparticionController {
 			Long creditosDisponiblesInicioPeriodoActual = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(),reparticion.getId());
 			model.addAttribute("creditosDisponiblesInicioPeriodoActual", creditosDisponiblesInicioPeriodoActual);
 			
-			
-			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(),reparticion.getId());
+		
+			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(), reparticion.getId());
+
 			model.addAttribute("creditosAcreditadosPorBajaDurantePeriodoActual", creditosAcreditadosPorBajaDurantePeriodoActual);
-			
 			
 			
 			Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), reparticion.getId());
@@ -196,10 +197,10 @@ public class ReparticionController {
 			Long creditosAcreditadosPorCargaInicial2012 = this.creditsManagerService.getCreditosPorCargaInicialDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod().getId(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorCargaInicial2012", creditosAcreditadosPorCargaInicial2012);
 						
-			
+				
 			Long creditosAcreditadosPorBajas2012 = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod().getId(),reparticion.getId());
 			model.addAttribute("creditosAcreditadosPorBajas2012", creditosAcreditadosPorBajas2012);
-						
+				
 			
 			Long creditosConsumidosPorIngresosOAscensosOtorgados2012 = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getPreviousCreditsPeriod().getId(), reparticion.getId());
 			
@@ -224,6 +225,7 @@ public class ReparticionController {
 
 		if (reparticion != null){
 			
+			/*
 			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
 			empleoQueryFilter.setReparticionId(String.valueOf(reparticion.getId()));
 			empleoQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);
@@ -235,7 +237,7 @@ public class ReparticionController {
 			Account currenUser = (Account)accountObj;
 			List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(activeEmployments,reparticion.getId(),currenUser);
 			
-			model.addAttribute("activeEmployments", employmentsVO);
+			model.addAttribute("activeEmployments", employmentsVO);*/
 			
 			
 			Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -339,6 +341,7 @@ public class ReparticionController {
 			if(canGenerateReport){
 				showReportGenerationButton=true;
 			}else {
+				showReportGenerationButton=false;
 				model.addAttribute("notAllowedReasons", canGenerateReportResult.getReasonCodes());
 			}
 			
@@ -369,10 +372,10 @@ public class ReparticionController {
 			empleoFilter.setReparticionId(reparticion.getId().toString());
 			creditsEntryQueryFilter.setEmploymentQueryFilter(empleoFilter);
 
-			CreditsEntry movimiento = creditsEntryService.find(creditsEntryQueryFilter).get(0);
+			CreditsEntry entry = creditsEntryService.find(creditsEntryQueryFilter).get(0);
 
-			if(movimiento!=null){
-				creditsEntryService.delete(movimiento);	
+			if(entry!=null){
+				creditsEntryService.delete(entry);	
 			}
 		}
 
@@ -429,8 +432,8 @@ public class ReparticionController {
 		checkAccess = checkAccess || (reparticionId == null); // first time in
 
 		if(reparticionId == null){
-			if(StringUtils.hasText(settings.getLastHotel())){
-				reparticionId = Long.parseLong(settings.getLastHotel());	
+			if(StringUtils.hasText(settings.getLastDepartment())){
+				reparticionId = Long.parseLong(settings.getLastDepartment());	
 			}
 		}
 
@@ -461,7 +464,7 @@ public class ReparticionController {
 				if (!hasAccess)
 				{
 					reparticion = null;
-					settings.setLastHotel(null);
+					settings.setLastDepartment(null);
 					log.warn("Account: '" + account.getName() + "' attempting to access page without authorization");
 				}
 			}
@@ -518,7 +521,7 @@ public class ReparticionController {
 
 				AccountSettings accountSettings = (AccountSettings)settingsFactory.getSettingsForAccount(account);
 
-				accountSettings.setLastHotel(String.valueOf(id));
+				accountSettings.setLastDepartment(String.valueOf(id));
 
 				accountService.saveOrUpdateAccount((AccountImpl)account);
 				request.getSession().setAttribute(KEY_CURRENT_REPARTICION_ID, reparticion.getId());

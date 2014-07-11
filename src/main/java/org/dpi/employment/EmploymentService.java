@@ -23,7 +23,6 @@ public interface EmploymentService extends ApplicationContextAware
 
 	public Employment findById(Long id);
 	
-	public List<Employment> findInactiveEmployments(final EmploymentQueryFilter employmentQueryFilter);
 	
 	public void delete(Employment employment);
 		

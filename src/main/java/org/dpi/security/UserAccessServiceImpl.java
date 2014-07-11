@@ -117,7 +117,7 @@ public class UserAccessServiceImpl implements UserAccessService
 		
 		for(Role role : account.getRoles())
 			{
-				if(role.getName().equals("RESPONSABLE_REPARTICION"))
+				if(role.getName().equals("DEPARTMENT_RESPONSIBLE") || role.getName().equals("HR_MANAGER") )
 					{
 						 sHotelQuery = " select h.id, h.nombre " +
 			                          " from REPARTICION_ACCOUNT ha " +
@@ -133,7 +133,7 @@ public class UserAccessServiceImpl implements UserAccessService
 				
 					}
 					
-				if(role.getName().equals("DIRECTIVO"))
+				if(role.getName().equals("SUBTREE_SUPERVISOR"))
 					{
 						sHotelQuery = "Select h.id, h.nombre " +
 								"From reparticion h " +
@@ -149,7 +149,7 @@ public class UserAccessServiceImpl implements UserAccessService
 						
 					}
 						
-				if(role.getName().equals("SUPERVISOR_REPARTICIONES"))
+				if(role.getName().equals("DEPARTMENTS_SUPERVISOR"))
 					{
 						List<ReparticionSearchInfo> reparticionSearchInfos = new ArrayList<ReparticionSearchInfo>();
 						

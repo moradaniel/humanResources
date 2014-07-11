@@ -36,7 +36,7 @@ public class ReparticionSearchController {
 	public void search(SearchCriteria searchCriteria) {
 	}
 
-	@RequestMapping(value = "/reparticiones", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/reparticiones", method = RequestMethod.GET)
 	public String list(SearchCriteria criteria, Model model) {
 
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,6 +48,6 @@ public class ReparticionSearchController {
 		}
 		return "redirect:/home";
 
-	}
+	}*/
 
 }

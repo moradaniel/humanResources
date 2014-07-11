@@ -24,7 +24,6 @@ import org.janux.bus.security.Account;
 
 
 /**
- * @author kirlen
  *
  * Encapsulate a user's settings. Statically define all valid user setting definitions.
  * Settings may be of various types; clients must know this type when requesting a particular setting.
@@ -53,14 +52,14 @@ public class AccountSettings extends AccountBasedUserSettings
 		return this.getBooleanSetting(UserSettingsFactoryImpl.EXPAND_INVENTORY_RATES);
 	}
 	
-	public String getLastHotel()
+	public String getLastDepartment()
 	{
-		return this.getStringSetting(UserSettingsFactoryImpl.LAST_HOTEL);
+		return this.getStringSetting(UserSettingsFactoryImpl.LAST_DEPARTMENT);
 	}
 	
-	public void setLastHotel(String hotelCode)
+	public void setLastDepartment(String departmentCode)
 	{
-		this.setStringSetting(UserSettingsFactoryImpl.LAST_HOTEL,hotelCode);
+		this.setStringSetting(UserSettingsFactoryImpl.LAST_DEPARTMENT,departmentCode);
 	}
 	
 	public boolean getAssureHotelSetup()

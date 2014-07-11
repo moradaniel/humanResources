@@ -107,4 +107,56 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 		return sb.toString();
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + cantidadCreditos;
+		result = prime
+				* result
+				+ ((creditsEntryType == null) ? 0 : creditsEntryType.hashCode());
+		result = prime * result
+				+ ((creditsPeriod == null) ? 0 : creditsPeriod.hashCode());
+		result = prime * result
+				+ ((employment == null) ? 0 : employment.hashCode());
+		result = prime * result
+				+ ((grantedStatus == null) ? 0 : grantedStatus.hashCode());
+		result = prime * result
+				+ ((observaciones == null) ? 0 : observaciones.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CreditsEntryImpl other = (CreditsEntryImpl) obj;
+		if (cantidadCreditos != other.cantidadCreditos)
+			return false;
+		if (creditsEntryType != other.creditsEntryType)
+			return false;
+		if (creditsPeriod == null) {
+			if (other.creditsPeriod != null)
+				return false;
+		} else if (!creditsPeriod.equals(other.creditsPeriod))
+			return false;
+		if (employment == null) {
+			if (other.employment != null)
+				return false;
+		} else if (!employment.equals(other.employment))
+			return false;
+		if (grantedStatus != other.grantedStatus)
+			return false;
+		if (observaciones == null) {
+			if (other.observaciones != null)
+				return false;
+		} else if (!observaciones.equals(other.observaciones))
+			return false;
+		return true;
+	}
 }

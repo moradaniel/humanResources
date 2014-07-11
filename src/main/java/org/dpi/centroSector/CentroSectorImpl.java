@@ -6,6 +6,9 @@ import org.dpi.reparticion.Reparticion;
 import org.janux.util.JanuxToStringStyle;
 
 public class CentroSectorImpl  extends PersistentAbstract implements CentroSector{
+
+	private static final long serialVersionUID = 1L;
+	
 	String codigoCentro;
 	String codigoSector;
 	String nombreCentro;

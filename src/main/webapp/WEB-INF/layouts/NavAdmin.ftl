@@ -7,7 +7,7 @@
 </#function>
 
 <#assign systemSubNav= [
-	 { "URL":"reparticiones",      "label":"Reparticiones",            "requiresReparticion":false, "doDisplay":account?exists && account.hasPermissions("Manage_Reparticiones", "UPDATE") }
+	 { "URL":"reparticiones",      "label":"Reparticiones",            "requiresReparticion":false, "doDisplay":account?exists && account.hasPermissions("Manage_Reparticiones", "READ") }
 	 <#-- { "URL":"reparticiones",      "label":"Reparticiones",            "requiresReparticion":false, "doDisplay":true } -->
 	 
 	 
@@ -48,7 +48,7 @@
 		"doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "READ"),
 		"subNav": [
 			{ "URL":"reparticiones/reparticion/showCreditos",   "label":"Resumen Creditos",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") },
-			{ "URL":"reparticiones/reparticion/showEmployments",   "label":"Agentes Activos",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") },
+			{ "URL":"reparticiones/reparticion/showEmployments",   "label":"Agentes",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Manage_Employments", "READ") },
 			{ "URL":"reparticiones/reparticion/showCreditEntries/2013",   "label":"Movimientos de Credito",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") }
 		]
 	},

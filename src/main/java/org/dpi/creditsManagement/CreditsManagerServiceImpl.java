@@ -2,6 +2,8 @@ package org.dpi.creditsManagement;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -13,6 +15,7 @@ import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.EmploymentQueryFilter;
+import org.dpi.employment.EmploymentStatus;
 import org.dpi.person.PersonCondition;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -22,6 +25,10 @@ import org.janux.util.Chronometer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import freemarker.core.ReturnInstruction.Return;
 
 public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract implements CreditsManagerService{
 
@@ -242,6 +249,16 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 	@SuppressWarnings("unchecked")
 	@Override
 	public 	Long getCreditosPorCargaInicialDeReparticion(final Long creditsPeriodId,final long reparticionId){
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
+		employmentQueryFilter.setReparticionId(String.valueOf(reparticionId));
+		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.CargaInicialAgenteExistente);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
+		return 	getCreditsEntriesSum(creditsEntryQueryFilter);
+		
+		/*
 		return (Long) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess)
 				throws HibernateException, SQLException  {
@@ -271,40 +288,129 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 				}
 				return totalAmount;
 			}
-		});
+		});*/
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public 	Long getCreditosPorBajasDeReparticion(final Long creditsPeriodId, final long reparticionId){
+	public Long getCreditosPorBajasDeReparticion(final Long creditsPeriodId,final long reparticionId) {
+
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
+		employmentQueryFilter.setReparticionId(String.valueOf(reparticionId));
+		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.BajaAgente);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
+		return 	getCreditsEntriesSum(creditsEntryQueryFilter);
+	}	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public 	Long getCreditsEntriesSum(final CreditsEntryQueryFilter creditsEntryQueryFilter){
 		return (Long) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess)
 				throws HibernateException, SQLException  {
 				
 				Chronometer timer = new Chronometer();
 
-				if (log.isDebugEnabled()) log.debug("attempting to find Reparticion with id: '" + reparticionId + "'");
+				if (log.isDebugEnabled()) log.debug("attempting to calculate credits for Reparticion with id: '" + creditsEntryQueryFilter.getEmploymentQueryFilter().getReparticionId() + "'");
 
-				String queryStr = "select sum(entry.cantidadCreditos) " +
-						" from CreditsEntryImpl entry " +
-						" INNER JOIN entry.employment employment " +
-						" INNER JOIN employment.centroSector centroSector " +
-						" INNER JOIN centroSector.reparticion reparticion "+
-						" where reparticion.id='"+reparticionId+"'" +
-						" AND entry.creditsEntryType = '"+CreditsEntryType.BajaAgente.name()+"'"+
-						" AND entry.creditsPeriod.id = '"+creditsPeriodId+"'";
-				Query query = sess.createQuery(queryStr);
+				StringBuffer sb = new StringBuffer();
+				sb.append(" select sum(entry.cantidadCreditos) ")
+				.append(" from CreditsEntryImpl entry ")
+				.append(" INNER JOIN entry.employment employment " )
+				.append(" INNER JOIN employment.centroSector centroSector " )
+				.append(" INNER JOIN centroSector.reparticion reparticion ");
+				
+				String where = " WHERE 1=1 "+buildWhereClause(creditsEntryQueryFilter);
+				
+				sb.append(where);
+				
+						/*" where reparticion.id = :reparticionId " +
+						" AND entry.creditsEntryType IN (:creditsTypes) "+
+						" AND entry.grantedStatus IN (:grantedStatuses) "+
+						" AND entry.creditsPeriod.id = :creditsPeriod ";*/
+				Query query = sess.createQuery(sb.toString());
+				
+				setNamedParameters(query,creditsEntryQueryFilter);
 			
 				Long totalAmount = (Long) query.uniqueResult();
 				
+
 				
-				if (log.isDebugEnabled()) log.debug("successfully retrieved reparticion with id: '" + reparticionId + "' in " + timer.printElapsedTime());
+				if (log.isDebugEnabled()) log.debug("successfully calculated credits for Reparticion with id: '" + creditsEntryQueryFilter.getEmploymentQueryFilter().getReparticionId() + "' in " + timer.printElapsedTime());
 				if(totalAmount==null){
 					totalAmount=new Long(0);
 				}
 				return totalAmount;
 			}
 		});
+	}
+	
+	
+	private String buildWhereClause(CreditsEntryQueryFilter creditsEntryQueryFilter) {
+		StringBuffer sb = new StringBuffer();
+		
+		if(creditsEntryQueryFilter!=null) {
+			EmploymentQueryFilter employmentQueryFilter = creditsEntryQueryFilter.getEmploymentQueryFilter();
+			if(employmentQueryFilter!=null) {
+				
+				String idReparticion = employmentQueryFilter.getReparticionId();
+				if(StringUtils.hasText(idReparticion)) {
+					sb.append(" AND reparticion.id = :idReparticion ");
+				}
+			}
+			
+			if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsEntryTypes())) {
+				sb.append(" AND entry.creditsEntryType IN ( :creditsEntryTypes ) ");
+			}
+			
+			if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getGrantedStatuses())) {
+				sb.append(" AND entry.grantedStatus IN (:grantedStatuses) ");
+			}
+			
+			
+			if(creditsEntryQueryFilter.getIdCreditsPeriod()!=null && creditsEntryQueryFilter.getIdCreditsPeriod()>0) {
+				sb.append(" AND entry.creditsPeriod.id = :creditsPeriod ");
+			}
+						
+			
+
+		}
+		return sb.toString();
+	}
+	
+	
+	public void setNamedParameters(Query query,		CreditsEntryQueryFilter creditsEntryQueryFilter) {
+		
+		if(creditsEntryQueryFilter!=null) {
+			EmploymentQueryFilter employmentQueryFilter = creditsEntryQueryFilter.getEmploymentQueryFilter();
+			if(employmentQueryFilter!=null) {
+				
+				String idReparticion = employmentQueryFilter.getReparticionId();
+				if(StringUtils.hasText(idReparticion)) {
+					query.setString("idReparticion", idReparticion);
+				}
+			}
+			
+			if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsEntryTypes())) {
+				query.setParameterList("creditsEntryTypes", creditsEntryQueryFilter.getCreditsEntryTypes());
+			}
+			
+			if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getGrantedStatuses())) {
+				query.setParameterList("grantedStatuses", creditsEntryQueryFilter.getGrantedStatuses());
+			}
+			
+			
+			if(creditsEntryQueryFilter.getIdCreditsPeriod()!=null && creditsEntryQueryFilter.getIdCreditsPeriod()>0) {
+				query.setLong("creditsPeriod", creditsEntryQueryFilter.getIdCreditsPeriod());
+			}
+						
+			
+
+		}
+	
 	}
 	
 	@SuppressWarnings("unchecked")

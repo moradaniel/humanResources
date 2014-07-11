@@ -41,11 +41,12 @@
 		<!-- boton reporte de creditos -->
 			<div id="table-actions">
 				<#if (showReportGenerationButton)>
-					<p class="buttoniseUs">
-						<a href="${requestContext.contextPath}/reports/reportSetup">Generar Reporte</a>
-					</p>
+					<!-- p class="buttoniseUs" -->
+						<a href="${requestContext.contextPath}/reports/reportSetup" class="btn btn-default btn-xs" role="button">Generar Reporte</a>
+
+					<!-- /p -->
 				<#else>
-					<#if hasPermissionToGenerateReport?exists>
+					<#if notAllowedReasons?has_content>
 						<div id="message-red">
 						
 							<table border="0" width="100%" cellpadding="0" cellspacing="0">
@@ -101,12 +102,12 @@
 			   	</#if>	
 			   	
 			   	
-		    	<#assign mostrarActionBorrarMovimiento = false />
-		    	<#if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account)>
+		    	<#-- assign mostrarActionBorrarMovimiento = false / -->
+		    	<#-- if creditosUtils.canIngresarAscenderBorrarMovimientoPorUsuario(account) -->
 
-			    		<#assign mostrarActionBorrarMovimiento = entry.canAccountBorrarMovimiento/>
+			    		<#assign mostrarActionBorrarMovimiento = entry.canBeDeleted />
 	
-				</#if>
+				<#-- /if -->
 				
 
 				<tr class="${trStyle}">
@@ -122,8 +123,8 @@
 							${entry.creditsEntry.grantedStatus}
 						</#if>	
 					</td>
-					<td>${entry.creditsEntry.employment.fechaInicio!""}</td>
-					<td>${entry.creditsEntry.employment.fechaFin!""}</td>
+					<td>${entry.creditsEntry.employment.startDate!""}</td>
+					<td>${entry.creditsEntry.employment.endDate!""}</td>
 					<td>${entry.creditsEntry.cantidadCreditos}</td>
 					
 					<td>${entry.currentCategory?default("")}</td>
@@ -194,11 +195,11 @@
 </p>
 </div>
 
-<script>
+<#-- script>
 	$(function() {
 		$("input:submit, a, button", ".buttoniseUs").button();
 	});
-</script>
+</script -->
 
 <script>
 	$(function() {

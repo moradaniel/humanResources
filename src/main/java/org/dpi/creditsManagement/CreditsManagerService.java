@@ -16,7 +16,9 @@ public interface CreditsManagerService {
 	
 	public Long getCreditosPorCargaInicialDeReparticion(final Long creditsPeriodId, final long reparticionId);
 	
-	public Long getCreditosPorBajasDeReparticion(Long creditsPeriodId, final long reparticionId);
+	public Long getCreditosPorBajasDeReparticion(final Long creditsPeriodId,final long reparticionId);
+	
+	public Long getCreditsEntriesSum(CreditsEntryQueryFilter creditsEntryQueryFilter);
 
 	public Long getCreditosPorIngresosOAscensosSolicitados(Long creditsPeriodId, Long reparticionId);
 	

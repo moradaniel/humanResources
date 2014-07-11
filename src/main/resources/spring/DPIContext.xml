@@ -251,13 +251,6 @@
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
 			<bean class="org.dpi.creditsEntry.CreditsEntryServiceImpl">
-				<constructor-arg><ref local="creditsEntryDao"/></constructor-arg>
-				<!-- >constructor-arg><ref local="employmentService"/></constructor-arg -->
-				<constructor-arg><ref local="personService"/></constructor-arg>
-				<constructor-arg><ref local="creditsManagerService"/></constructor-arg>
-				<property name="employmentService">
-					<ref bean="employmentService" />
-				</property>
 			</bean>
 		</property>
 		<property name="transactionAttributes">

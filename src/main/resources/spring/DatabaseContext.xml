@@ -30,7 +30,7 @@
 
 	<!-- DataSource for the master database; the jdbc url is set as an override 
 		in a ApplicationContext.properties in the classpath -->
-	<bean id="dpiDataSource" parent="oraclePooledDataSource">
+	<bean id="dpiDataSource" parent="pooledDataSource">
 		<property name="driverClass" value="OVERRIDE" />
 		<property name="jdbcUrl" value="OVERRIDE" />
 		<property name="user" value="OVERRIDE" />
@@ -56,7 +56,7 @@
 		<property name="prepareConnection" value="true" />
 	</bean>
 
-	<bean id="hibernateSessionFactory" parent="oracleHibSessionFactory">
+	<bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory">
 		<property name="dataSource">
 			<ref bean="dpiDataSource" />
 		</property>
@@ -66,7 +66,7 @@
 	<!-- Abstract DataSource that stores common values among the various datasources; 
 		concrete data sources should use the 'parent' attribute to extend from this 
 		bean -->
-	<bean id="oraclePooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	<bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close" abstract="true">
 		<property name="jdbcUrl" value="SET_IN_CHILD_BEAN" />
 		<property name="user" value="SET_IN_CHILD_BEAN" />
@@ -124,7 +124,7 @@
 
 		<!-- Template Hibernate Session Factory; override with proper datasource 
 			and set list of Hibernate mapping files -->
-		<bean id="oracleHibSessionFactory"
+		<bean id="abstractHibernateSessionFactory"
 			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
 			abstract="true">
 			<property name="dataSource" ref="SET_IN_CHILD_BEAN" />
@@ -167,7 +167,7 @@
 
 		<!-- Template Hibernate Session Factory; override with proper datasource 
 			and set list of Hibernate mapping files -->
-		<bean id="oracleHibSessionFactory"
+		<bean id="abstractHibernateSessionFactory"
 			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
 			abstract="true">
 			<property name="dataSource" ref="SET_IN_CHILD_BEAN" />
@@ -217,7 +217,7 @@
 
 		<!-- Template Hibernate Session Factory; override with proper datasource 
 			and set list of Hibernate mapping files -->
-		<bean id="oracleHibSessionFactory"
+		<bean id="abstractHibernateSessionFactory"
 			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
 			abstract="true">
 			<property name="dataSource" ref="SET_IN_CHILD_BEAN" />

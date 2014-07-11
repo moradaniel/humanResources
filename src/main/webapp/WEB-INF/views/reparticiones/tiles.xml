@@ -15,9 +15,9 @@
 		</put-attribute>
 	</definition -->
 
-	<definition name="reparticiones/list" extends="standardLayout" templateType="freemarker">
+	<!-- definition name="reparticiones/list" extends="standardLayout" templateType="freemarker">
 		<put-attribute name="body" value="/WEB-INF/views/reparticiones/list.ftl" />
-	</definition>
+	</definition -->
 
 	<definition name="reparticiones/show" extends="standardLayout" templateType="freemarker">
 		<put-attribute name="body" value="/WEB-INF/views/reparticiones/show.ftl" />

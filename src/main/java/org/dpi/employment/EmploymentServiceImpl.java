@@ -94,12 +94,6 @@ public class EmploymentServiceImpl implements EmploymentService
 	{
 		this.applicationContext = aApplicationContext;
 	}
-
-	public List<Employment> findInactiveEmployments(final EmploymentQueryFilter employmentQueryFilter){
-		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.INACTIVO);
-		
-		return this.employmentDao.findInactivEmployments(employmentQueryFilter);
-	}
 	
 	public CreditsManagerService getCreditsManagerService() {
 		return creditsManagerService;
@@ -128,7 +122,7 @@ public class EmploymentServiceImpl implements EmploymentService
 		employmentQueryFilter.setReparticionId(employment.getCentroSector().getReparticion().getId().toString());
 		
 		employmentQueryFilter.setEmploymentStatuses( CollectionUtils.arrayToList(EmploymentStatus.values()));
-		employmentQueryFilter.setFechaFin(employment.getFechaInicio());
+		employmentQueryFilter.setEndDate(employment.getStartDate());
 
 		return this.employmentDao.findPreviousEmployment(employmentQueryFilter);
 	}

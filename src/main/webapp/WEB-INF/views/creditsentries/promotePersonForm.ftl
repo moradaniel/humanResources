@@ -1,7 +1,5 @@
 <#import "/WEB-INF/views/spring.ftl" as spring />
-<script type="text/javascript">
 
-</script>
 
 <h2>Movimiento Ascenso</h2>
 
@@ -71,7 +69,7 @@
 
  
 
-<script>
+<script type="text/javascript">
 	$(function() {
 		$(document).ready(function() { 
 			Utils.blockUIonClick($('#saveButton'));

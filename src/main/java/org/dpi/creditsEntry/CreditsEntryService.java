@@ -25,6 +25,6 @@ public interface CreditsEntryService extends ApplicationContextAware
 	
 	public void changeGrantedStatus(CreditsEntry movimiento, GrantedStatus newEstado);
 	
-	public Set<Long> haveMovimientosSolicitados(List<Long> personsIds, Long idReparticion,Long idCreditsPeriod);
+	public Set<Long> havePendingEntries(List<Long> personsIds, Long idReparticion,Long idCreditsPeriod);
 		
 }
