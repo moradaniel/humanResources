@@ -69,7 +69,7 @@ public class CreditsEntryDaoHibImpl extends DataAccessHibImplAbstract implements
 				sb.append(where);
 				
 				sb.append(" ORDER BY employment.person.apellidoNombre asc, ");
-				sb.append(" employment.fechaInicio desc ");
+				sb.append(" employment.startDate desc ");
 				
 				Query q = sess.createQuery(select+sb.toString());
 				

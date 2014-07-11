@@ -5,9 +5,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
+import org.apache.catalina.User;
+import org.apache.catalina.startup.Tomcat.ExistingStandardWrapper;
+import org.dpi.category.CategoryService;
+import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentQueryFilter;
@@ -28,22 +35,26 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private final CreditsEntryDao creditsEntryDao;
+	@Resource(name = "creditsEntryDao")
+	private CreditsEntryDao creditsEntryDao;
 
+	@Resource(name = "employmentService")
 	private EmploymentService employmentService;
 	
-	private final PersonService personService;
+	@Resource(name = "personService")
+	private PersonService personService;
+	
+	@Resource(name = "creditsManagerService")
 	private CreditsManagerService creditsManagerService;
+	
+	@Resource(name = "creditsPeriodService")
+	private CreditsPeriodService creditsPeriodService;
 	
 
 	private ApplicationContext applicationContext;
 	
-	public CreditsEntryServiceImpl(	final CreditsEntryDao creditsEntryDao,
-											final PersonService personService,
-											final CreditsManagerService creditsManagerService) {
-		this.creditsEntryDao = creditsEntryDao;
-		this.personService = personService;
-		this.creditsManagerService = creditsManagerService;
+	public CreditsEntryServiceImpl() {
+
 	}
 
 	
@@ -58,45 +69,62 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		creditsEntryDao.saveOrUpdate(entry);
 	}
 
-	public void delete(final CreditsEntry entry)
+	public void delete(CreditsEntry entry)
 	{
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" attempting to delete creditsEntry: "+entry.toString());/*+ entry.getId()+
-					" Type:"+entry.getTipoMovimientoCreditos().name()+
-					" Agent name:"+ entry.getEmpleo().getPerson().getApellidoNombre()+
-					" from status: "+entry.getGrantedStatus().name() + " to "+newEstado.name());*/	
+		if(currentUser==null){
+			throw new RuntimeException("User must exist to delete an entry");
 		}
 		
+		log.info("================ user:"+currentUser.getName()+" attempting to delete creditsEntry: "+entry.toString());
+
+
 		if(entry.getCreditsEntryType().equals(CreditsEntryType.BajaAgente)){
-			entry.getEmployment().setFechaFin(null);
-			entry.getEmployment().setStatus(EmploymentStatus.ACTIVO);
 			
-			employmentService.saveOrUpdate(entry.getEmployment());
+			EmploymentQueryFilter filter = new EmploymentQueryFilter();
+			filter.setEmploymentId(String.valueOf(entry.getEmployment().getId()));
+			Employment employment = employmentService.find(filter).get(0);
+			
+			employment.setEndDate(null);
+			employment.setStatus(EmploymentStatus.ACTIVO);
+			
+
+			for(CreditsEntry anEntry :employment.getCreditsEntries() ) {
+				if(anEntry.getId().longValue()==entry.getId().longValue()) {
+					entry = anEntry;
+					employment.getCreditsEntries().remove(anEntry);
+					break;
+				}
+			}
+			
 			creditsEntryDao.delete(entry);
+			
+			employmentService.saveOrUpdate(employment);
+			
+			
 		}else
-		if(entry.getCreditsEntryType().equals(CreditsEntryType.AscensoAgente)){
-			
-			//borrar entry 
-			Employment employmentPendiente = entry.getEmployment();
-			creditsEntryDao.delete(entry);
-			//borrar employment pendiente
-			employmentService.delete(employmentPendiente);
-		}else
-		
-		if(entry.getCreditsEntryType().equals(CreditsEntryType.IngresoAgente)){
-			
-			Person personToBeDeleted = entry.getEmployment().getPerson();
-			
-			employmentService.delete(entry.getEmployment());
-			
-			personService.delete(personToBeDeleted);
-					
-		}
-		
-		if(currentUser!=null){
-			log.info("================ user:"+currentUser.getName()+" Successfully performed: delete creditsEntry - "+ entry.toString());	
-		}
+			if(entry.getCreditsEntryType().equals(CreditsEntryType.AscensoAgente)){
+
+				//delete entry 
+				Employment employmentPendiente = entry.getEmployment();
+				creditsEntryDao.delete(entry);
+				//delete pending employment
+				employmentService.delete(employmentPendiente);
+			}else
+
+				if(entry.getCreditsEntryType().equals(CreditsEntryType.IngresoAgente)){
+
+					Person personToBeDeleted = entry.getEmployment().getPerson();
+
+					employmentService.delete(entry.getEmployment());
+
+					personService.delete(personToBeDeleted);
+
+				}
+
+
+		log.info("================ user:"+currentUser.getName()+" Successfully performed: delete creditsEntry - "+ entry.toString());	
+
 
 	}
 
@@ -138,7 +166,8 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 				}
 			}
 			
-			creditsEntryVO.setCanAccountBorrarMovimiento(canCreditsEntryBeDeletedByAccount(creditsEntry,account));
+			creditsEntryVO.setCanBeDeleted(canCreditsEntryBeDeletedByAccount(creditsEntry,account));
+			
 			creditsEntryVO.setCanAccountChangeCreditsEntryStatus(canAccountChangeCreditsEntryStatus(creditsEntry,account));
 			
 			creditsEntriesVO.add(creditsEntryVO);
@@ -161,7 +190,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		}else
 
 		 if(creditsEntry.getCreditsEntryType()== CreditsEntryType.BajaAgente){
-			 return false;
+			 return true;
 		 }else
 		 if(creditsEntry.getCreditsEntryType()== CreditsEntryType.CargaInicialAgenteExistente){
 			 return false;
@@ -216,6 +245,10 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		
 				
 		if(isCreditsEntryClosed(creditsEntry)){
+			return false;
+		}
+		
+		if(creditsEntry.getGrantedStatus()==GrantedStatus.Otorgado) {
 			return false;
 		}
 		
@@ -283,21 +316,21 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	}
 	
 	@Override
-	public void changeGrantedStatus(CreditsEntry entry, GrantedStatus newEstado){
+	public void changeGrantedStatus(CreditsEntry entry, GrantedStatus newStatus){
 		
 
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
 			log.info("user:"+currentUser.getName()+" attempting to change granted status of entry:"+ entry.getId()+
 					" Type:"+entry.getCreditsEntryType().name()+
-					" Agent name:"+ entry.getEmployment().getPerson().getApellidoNombre()+
-					" from status: "+entry.getGrantedStatus().name() + " to "+newEstado.name());	
+					" Person name:"+ entry.getEmployment().getPerson().getApellidoNombre()+
+					" from status: "+entry.getGrantedStatus().name() + " to "+newStatus.name());	
 		}	
 		
 		if(entry.getCreditsEntryType()==CreditsEntryType.AscensoAgente){
 		
 			if(entry.getGrantedStatus()==GrantedStatus.Solicitado){
-				if(newEstado==GrantedStatus.Otorgado){
+				if(newStatus==GrantedStatus.Otorgado){
 					Employment employmentActual = entry.getEmployment();
 					
 					employmentActual = employmentService.findById(employmentActual.getId());
@@ -315,7 +348,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 				
 			}else{
 					if(entry.getGrantedStatus()==GrantedStatus.Otorgado){
-						if(newEstado==GrantedStatus.Solicitado){
+						if(newStatus==GrantedStatus.Solicitado){
 							Employment employmentActual = entry.getEmployment();
 							
 							employmentActual = employmentService.findById(employmentActual.getId());
@@ -337,7 +370,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		}else 
 			if(entry.getCreditsEntryType()==CreditsEntryType.IngresoAgente){
 				if(entry.getGrantedStatus()==GrantedStatus.Solicitado){
-					if(newEstado==GrantedStatus.Otorgado){
+					if(newStatus==GrantedStatus.Otorgado){
 						Employment employment = entry.getEmployment();
 						
 						employment = employmentService.findById(employment.getId());
@@ -347,7 +380,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 					}
 				}else
 					if(entry.getGrantedStatus()==GrantedStatus.Otorgado){
-						if(newEstado==GrantedStatus.Solicitado){
+						if(newStatus==GrantedStatus.Solicitado){
 							Employment employment = entry.getEmployment();
 							
 							employment = employmentService.findById(employment.getId());
@@ -357,21 +390,47 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 						}
 					}
 
-			}
+			}else 
+				if(entry.getCreditsEntryType()==CreditsEntryType.BajaAgente){
+					if(entry.getGrantedStatus()==GrantedStatus.Solicitado){
+						if(newStatus==GrantedStatus.Otorgado){
+							Employment employment = entry.getEmployment();
+							
+							employment = employmentService.findById(employment.getId());
+							
+							employment.setStatus(EmploymentStatus.BAJA);
+							employment.setEndDate(creditsPeriodService.getCurrentCreditsPeriod().getStartDate());
+							employmentService.saveOrUpdate(employment);
+						}
+					}else
+						if(entry.getGrantedStatus()==GrantedStatus.Otorgado){
+							if(newStatus==GrantedStatus.Solicitado){
+								Employment employment = entry.getEmployment();
+								
+								employment = employmentService.findById(employment.getId());
+								
+								employment.setStatus(EmploymentStatus.ACTIVO);
+								employment.setEndDate(null);
+								employmentService.saveOrUpdate(employment);
+							}
+						}
+				}
+				
 		
-		entry.setGrantedStatus(newEstado);
+		entry.setGrantedStatus(newStatus);
 		creditsEntryDao.saveOrUpdate(entry);
 		
 	}
 
 	
 	@Override
-	public Set<Long> haveMovimientosSolicitados(List<Long> agentesIds, Long idReparticion,Long idCreditsPeriod) {
+	public Set<Long> havePendingEntries(List<Long> personIds, Long idReparticion,Long idCreditsPeriod) {
 		
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 		employmentQueryFilter.setReparticionId(String.valueOf(idReparticion));
-		employmentQueryFilter.setPersonsIds(agentesIds);
+		employmentQueryFilter.setPersonsIds(personIds);
 		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.PENDIENTE);
+		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);//an employment can be active with requested deactivation
 		
 		
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
@@ -381,10 +440,10 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
 		
 		
-		List<CreditsEntry> entriesSolicitados = this.find(creditsEntryQueryFilter);
+		List<CreditsEntry> entriesRequested = this.find(creditsEntryQueryFilter);
 
 		Set<Long> resultPersonsIds = new HashSet<Long>();
-		for(CreditsEntry creditsEntry : entriesSolicitados){
+		for(CreditsEntry creditsEntry : entriesRequested){
 			resultPersonsIds.add(creditsEntry.getEmployment().getPerson().getId());
 		}
 		

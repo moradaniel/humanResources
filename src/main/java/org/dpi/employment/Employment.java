@@ -7,6 +7,8 @@ import java.util.Set;
 import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.creditsEntry.CreditsEntry;
+import org.dpi.creditsEntry.CreditsEntryType;
+import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.Persistent;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
@@ -31,15 +33,17 @@ public interface Employment extends Persistent,Serializable{
 
 	public void setStatus(EmploymentStatus status);
 
-	public Date getFechaInicio();
+	public Date getStartDate();
 
-	public void setFechaInicio(Date fechaInicio);
+	public void setStartDate(Date startDate);
 
-	public Date getFechaFin();
+	public Date getEndDate();
 
-	public void setFechaFin(Date fechaFin);
+	public void setEndDate(Date endDate);
 	
 	public Set<CreditsEntry> getCreditsEntries();
+	
+	public Set<CreditsEntry> getCreditsEntries(CreditsPeriod period, CreditsEntryType... creditsEntryTypes);
 	
 	public void setCreditsEntries(Set<CreditsEntry> creditsEntries);
 

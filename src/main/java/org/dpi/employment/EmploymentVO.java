@@ -1,5 +1,10 @@
 package org.dpi.employment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+
 
 
 public class EmploymentVO{
@@ -7,10 +12,16 @@ public class EmploymentVO{
 
 	Employment employment =  new EmploymentImpl();
 	
-	boolean canAccountPromotePerson = false;
+	List<String> notes = new ArrayList<String>();
 	
-	boolean canAccountDeactivatePerson = false;
-		
+	boolean canBePromoted = false;
+	
+	boolean canBeDeactivated = false;
+	
+	boolean canUndoDeactivation = false;
+	
+	boolean canPersonBeModified = false;
+
 	public EmploymentVO(){
 		super();
 	}
@@ -24,21 +35,50 @@ public class EmploymentVO{
 	}
 
 	
-	public boolean isCanAccountPromotePerson() {
-		return canAccountPromotePerson;
+	public boolean isCanBePromoted() {
+		return canBePromoted;
 	}
 
-	public void setCanAccountPromotePerson(boolean canAccountPromotePerson) {
-		this.canAccountPromotePerson = canAccountPromotePerson;
+	public void setCanBePromoted(boolean canBePromoted) {
+		this.canBePromoted = canBePromoted;
 	}
 	
-	public boolean isCanAccountDeactivatePerson() {
-		return canAccountDeactivatePerson;
+	public boolean isCanBeDeactivated() {
+		return canBeDeactivated;
 	}
 
-	public void setCanAccountDeactivatePerson(boolean canAccountDeactivatePerson) {
-		this.canAccountDeactivatePerson = canAccountDeactivatePerson;
+	public void setCanBeDeactivated(boolean canBeDeactivated) {
+		this.canBeDeactivated = canBeDeactivated;
 	}	
+	
+	public boolean isCanUndoDeactivation() {
+		return canUndoDeactivation;
+	}
+
+	public void setCanUndoDeactivation(boolean canUndoDeactivation) {
+		this.canUndoDeactivation = canUndoDeactivation;
+	}
+		
+	public boolean isCanPersonBeModified() {
+		return canPersonBeModified;
+	}
+
+	public void setCanPersonBeModified(boolean canPersonBeModified) {
+		this.canPersonBeModified = canPersonBeModified;
+	}
+	
+	public void addNote(String note){
+		this.notes.add(note);
+	}
+	
+	public List<String> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<String> notes) {
+		this.notes = notes;
+	}
+
 
 
 }

@@ -28,7 +28,7 @@
 			name="employment"
 			class="org.dpi.employment.EmploymentImpl"
 			column="EMPLOYMENTID"
-			not-null="false"
+			not-null="true"
 			lazy="proxy"
 			cascade="none"
 			foreign-key="fk_CreditsEntry_Employment"

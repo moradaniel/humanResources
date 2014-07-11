@@ -13,8 +13,8 @@
           </generator>  
         </id> 
         
-	<property name="fechaInicio" column="FECHAINICIO" type="timestamp"/> 
-	<property name="fechaFin" column="FECHAFIN" type="timestamp"/>
+	<property name="startDate" column="STARTDATE" type="timestamp"/> 
+	<property name="endDate" column="ENDDATE" type="timestamp"/>
 
 	<property name="status" column="STATUS" type="org.dpi.persistence.EmploymentStatusEnumUserType"/>
    
@@ -46,9 +46,9 @@
 	</one-to-one --> 
 	
 	    <!-- this association is bidirectional
-    	movimientocreditos side is marked as inverse="true" so the owner of the relation is Employment-->
-    <set name="creditsEntries" cascade="all" lazy="true" inverse="true">
-		<key column="EMPLOYMENTID" foreign-key="fk_CreditsEntry_Employment"/>
+    	creditsEntries side is marked as inverse="true" so the owner of the relation is Employment-->
+    <set name="creditsEntries" cascade="all-delete-orphan" lazy="true" inverse="true">
+		<key column="EMPLOYMENTID" foreign-key="fk_CreditsEntry_Employment" />
 		<one-to-many class="org.dpi.creditsEntry.CreditsEntryImpl"/>
 	</set>
 	

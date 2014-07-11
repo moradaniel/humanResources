@@ -15,7 +15,7 @@ public class CreditsEntryVO{
 	String parentOccupationalGroup;
 	
 		
-	boolean canAccountBorrarMovimiento = false;
+	boolean canBeDeleted = false;
 	boolean canAccountChangeCreditsEntryStatus = false;
 	
 	public CreditsEntryVO(){
@@ -46,12 +46,12 @@ public class CreditsEntryVO{
 		this.proposedCategory = proposedCategory;
 	}
 	
-	public boolean isCanAccountBorrarMovimiento() {
-		return canAccountBorrarMovimiento;
+	public boolean isCanBeDeleted() {
+		return canBeDeleted;
 	}
 
-	public void setCanAccountBorrarMovimiento(boolean canAccountBorrarMovimiento) {
-		this.canAccountBorrarMovimiento = canAccountBorrarMovimiento;
+	public void setCanBeDeleted(boolean canBeDeleted) {
+		this.canBeDeleted = canBeDeleted;
 	}
 
 	public boolean isCanAccountChangeCreditsEntryStatus() {

@@ -29,8 +29,9 @@ public class EmploymentQueryFilter implements Serializable {
 	private String reparticionId;
 	private String employmentId;
 	
-	private Date fechaComienzo;
-	private Date fechaFin;
+	private Date startDate;
+
+	private Date endDate;
 
 	
 	List<EmploymentStatus> employmentStatuses = new ArrayList<EmploymentStatus>();
@@ -61,18 +62,7 @@ public class EmploymentQueryFilter implements Serializable {
 	public void setCodigoSector(String codigoSector) {
 		this.codigoSector = codigoSector;
 	}
-	public Date getFechaComienzo() {
-		return fechaComienzo;
-	}
-	public void setFechaComienzo(Date fechaComienzo) {
-		this.fechaComienzo = fechaComienzo;
-	}
-	public Date getFechaFin() {
-		return fechaFin;
-	}
-	public void setFechaFin(Date fechaFin) {
-		this.fechaFin = fechaFin;
-	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -123,5 +113,19 @@ public class EmploymentQueryFilter implements Serializable {
 		this.personsIds.add(personId);
 	}
 	
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	
 }

@@ -8,10 +8,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.category.Category;
 import org.dpi.centroSector.CentroSector;
 import org.dpi.creditsEntry.CreditsEntry;
+import org.dpi.creditsEntry.CreditsEntryType;
+import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
 import org.janux.util.JanuxToStringStyle;
+
+
 
 public class EmploymentImpl  extends PersistentAbstract implements Employment{
 	
@@ -29,8 +33,8 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 
 	EmploymentStatus status;
 	
-	Date fechaInicio;
-	Date fechaFin;
+	Date startDate;
+	Date endDate;
 	
 	Employment previousEmployment;
 	
@@ -60,23 +64,25 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 	}
 	
 	@Override
-	public Date getFechaInicio() {
-		return fechaInicio;
+	// @JsonSerialize(using=DateSerializer.class)
+	public Date getStartDate() {
+		return startDate;
 	}
 
 	@Override
-	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
 	@Override
-	public Date getFechaFin() {
-		return fechaFin;
+	// @JsonSerialize(using=DateSerializer.class)
+	public Date getEndDate() {
+		return endDate;
 	}
 
 	@Override
-	public void setFechaFin(Date fechaFin) {
-		this.fechaFin = fechaFin;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	
@@ -119,7 +125,7 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 
 	@Override
 	public boolean isClosed() {
-		if (this.fechaFin == null)
+		if (this.endDate == null)
 			return false;
 		return true;
 	}
@@ -142,6 +148,28 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 	@Override
 	public void setOccupationalGroup(OccupationalGroup occupationalGroup) {
 		this.occupationalGroup = occupationalGroup;
+	}
+	
+	@Override
+	public Set<CreditsEntry> getCreditsEntries(CreditsPeriod period, CreditsEntryType... creditsEntryTypes){
+		HashSet<CreditsEntry> foundCreditsEntries = new HashSet<CreditsEntry>();
+		
+		Set<CreditsEntryType> creditsEntryTypesSet = new HashSet<CreditsEntryType>();
+		for (CreditsEntryType creditsEntryType : creditsEntryTypes) {
+			creditsEntryTypesSet.add(creditsEntryType);
+		}
+		
+		for(CreditsEntry entry:creditsEntries) {
+			if(creditsEntryTypesSet.contains(entry.getCreditsEntryType()) 
+				 && 	entry.getCreditsPeriod().getId().longValue()==period.getId().longValue()
+					
+					) {
+				
+				foundCreditsEntries.add(entry);
+			}
+		}
+		return foundCreditsEntries;
+		
 	}
 	
 	@Override
