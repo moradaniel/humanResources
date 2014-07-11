@@ -1,0 +1,66 @@
+
+      <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Modificar Empleo</h4>
+        </div>
+        <div class="modal-body">
+	         <form name="employmentForm" class="form-horizontal" role="form" novalidate><!-- novalidate disables external validations -->
+				  <fieldset>
+				    <div class='modal-body'>
+				   
+						<div class="form-group">
+					    	<label for="apellidoNombre" class="col-sm-2 control-label">Apellido y Nombre</label>
+					    	<div class="col-sm-10">
+						    	<input type='text' size="50" id="apellidoNombre" name="apellidoNombre" ng-model="employmentToEdit.person.apellidoNombre" required/>
+						    	<span class="error" ng-show="employmentForm.apellidoNombre.$error.required">
+									Obligatorio Apellido y Nombre
+								</span>
+							</div>
+				      	</div>							
+						<div class="form-group">
+							<label for="cuil" class="col-sm-2 control-label">CUIL</label>
+							<div class="col-sm-10">
+					                <input type="text" placeholder=""
+					                	ng-model="employmentToEdit.person.cuil" id="cuil" name="cuil" cuil-validate required />
+					           
+					            <span class="error" ng-show="employmentForm.cuil.$error.required">
+									Obligatorio CUIL
+								</span>
+								<br/>
+								<span class="error" ng-show="employmentForm.cuil.$error.cuilValidate">
+									CUIL No Valido
+								</span>
+							</div>
+				      	</div>
+				      <!-- label>Short Name</label>
+				      <input type='text' ng-model="employment.shortname"/>
+				      <label>Phone Number</label>
+				      <input type='text' ng-model="employment.phonenumber"/>
+				      <label>State</label>
+				      <select ng-model="employment.state" ng-options="opt for opt in opts"></select>
+				      <label>Options</label>
+				      <div ng-repeat="vo in employment.voteoptions">
+				              <input type='text' ng-model="vo.name"/>
+				              <i class="icon-trash" ng-click='removeVoteOption(vo)'></i>
+				      </div -->
+				    </div>
+				    <!-- div class='modal-footer'>
+				      <a class="btn" ng-click='addVoteOption()'>Add Option</a>
+				      <button type='submit' class="btn btn-danger" data-dismiss="modal" ng-click="delete()">Delete</button>
+				      <button type='submit' class="btn btn-primary" data-dismiss="modal" ng-click="save()">Save</button>
+				    </div -->
+				  </fieldset >
+			</form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <!-- remove data-dismiss="modal" the dialog should be closed in the save method -->
+
+          <button ng-disabled="employmentForm.$invalid" type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveEmployment()">Guardar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    
+    

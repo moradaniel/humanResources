@@ -1270,7 +1270,7 @@ span.ui-radio-state-checked-hover {
 
 
 label {
-    color: red;
+   /* color: red; */
     line-height: 20px;
 }
 

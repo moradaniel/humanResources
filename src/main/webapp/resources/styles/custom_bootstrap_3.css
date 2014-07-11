@@ -1,0 +1,21 @@
+/*--- BEGIN  custom bootstrap 3 alert size -----------------*/
+.alert {
+    margin-bottom: 0px;
+    padding: 0px;
+} 
+
+.alert-panel-body {
+    padding: 2px;
+    height: 50px;
+    overflow-y: auto; 
+    overflow-x: hidden;
+}
+
+/* begin form validation */
+.ng-invalid { background-color: lightpink; }
+/*.ng-valid { background-color: lightgreen; }*/
+span.error { color: red; font-weight: bold; }
+
+/* end form validation */
+
+/*--- END custom bootstrap 3 alert size -----------------*/

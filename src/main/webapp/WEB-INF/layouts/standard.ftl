@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"> -->
 <!DOCTYPE html>
 
-<html>
+<html ng-app="hrangularspring">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Sistema de Creditos</title>
@@ -15,7 +15,17 @@
 	<link rel="stylesheet" media="all" type="text/css" href="${requestContext.contextPath}/resources/styles/pro_dropline_ie.css" />
 	<![endif]-->
 	
-	<#-- script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/jquery/1.4/jquery.js"></script -->
+	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/css/bootstrap.min.css">
+	
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/css/bootstrap-theme.min.css">
+	
+	<!-- Override bootstrap (loaded after bootstrap css files) -->
+	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/custom_bootstrap_3.css">
+	
+	<link rel="stylesheet" href="${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-growl-2/build/angular-growl.css">
+	
+	
 		
 	<link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jquery-ui/1.8.18/smoothness/jquery-ui-1.8.18.custom.css'/>
 	<link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/ui.jqgrid-4.3.1.css'/>
@@ -24,7 +34,7 @@
 	<#-- link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/css/style.css'/ -->
 	
 	
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery//1.10/jquery-1.10.2.min.js'/></script>
+	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.10/jquery-1.10.2.min.js'/></script>
 	
 	<#-- script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.6/jquery-1.6.4.min.js'/></script -->
 	
@@ -38,25 +48,9 @@
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/utils/utils.js'/></script>
 	
 	
-	<#-- script type='text/javascript' src='${requestContext.contextPath}/resources/js/angular/1.0.7/angular.min.js'/></script>
-  	<script type='text/javascript' src='${requestContext.contextPath}/resources/js/angular/controllers.js'/></script -->
 
+	
 
-	<script type="text/javascript">
-
-		
-		function onSelect(selectBox,currPath)
-		{
-			var selectedCode = selectBox.value;
-			
-			if(selectedCode!==currentSelectedValue){
-				var url = "${requestContext.contextPath}/reparticiones/select?reparticionId=" + selectedCode + "&currPath=" + currPath;
-
-				window.location = url;
-			}
-		}
-
-	</script>
 		
 </head>
 <body>
@@ -81,13 +75,22 @@
 			<#if account?exists>
 				<div style="float:right;">
 					<div id="loggedInAs">
-						<strong>Usuario: </strong>${account.name} <strong>Rol: </strong>${roles}
+						<strong>Usuario: </strong>${account.name} <strong>Rol: </strong>
+						<#assign isFirstRole=true>
+						<#list roles as role >
+						<#if isFirstRole>
+							<#assign isFirstRole=false>
+						<#else>
+							,
+						</#if>
+							<@spring.message ("msg.roles."+role) />
+						</#list>
 					</div>
 					
-					<div id="div_reparticionSearch">
+					<div id="div_reparticionSearch" >
 						<span class="searchDropDown">Reparticion: </span>
 						<#--span class="searchDropDown">Property: </span-->
-						<select id="reparticionCode" name="reparticionCode" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
+						<select style="color:black;" id="reparticionCode" name="reparticionCode" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
 	
 							<#if myReparticiones?exists >
 								<option value="" >-- Seleccione Reparticion --</option>
@@ -105,33 +108,22 @@
 								</#list>
 							</#if>
 						</select>
+						
+					    <!-- select id="makeListBox" 
+  						    ng-model="make.selected" 
+      						ng-options="make.id as make.name for make in makes"
+      						ng-change="makeChanged(make.selected)"
+      						class="form-control  input-sm"
+      						>
+  						</select -->
+  						
+  						<!-- span>{{SessionService.getCurrentDepartment().id}} - {{SessionService.getCurrentDepartment().name}}</span -->
+  						
 					</div>
 				</div>
 			</#if>
 	
-	<!--  start top-search -->
-	<#-- div id="top-search">
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-		<td><input type="text" value="Search" onblur="if (this.value=='') { this.value='Search'; }" onfocus="if (this.value=='Search') { this.value=''; }" class="top-search-inp" /></td>
-		<td>
-		<select  class="styledselect">
-			<option value=""> All</option>
-			<option value=""> Products</option>
-			<option value=""> Categories</option>
-			<option value="">Clients</option>
-			<option value="">News</option>
-		</select> 
-		</td>
-		<td>
-		<input type="image" src="${requestContext.contextPath}/resources/images/admin/shared/top_search_btn.gif"  />
-		</td>
-		</tr>
-		</table>
-	</div -->
-	
 
-	
 	
  	<!--  end top-search -->
  	<div class="clear"></div>
@@ -325,8 +317,26 @@
 <!-- start content-outer ........................................................................................................................START -->
 <div id="content-outer">
 
+<!-- ----------------------------------------------           BEGIN           Notifications ----------------------------------------------------------------- -->
+<div growl></div>
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <!--div class="panel-heading">Estado</div -->
+  <div class="panel-body alert-panel-body">
+    <div mc-messages></div>
+  </div>
+</div>
+<!-- ----------------------------------------------           END           Notifications ----------------------------------------------------------------- -->
+
+<!-- div style="overflow: scroll; height: 80px;" >
+	<div mc-messages></div>
+</div -->
+
 <!-- start content -->
 <div id="content">
+
+
 
 	<!-- here is where the main content goes. -->
 		<#if reparticion?exists || !nav.currPageRequiresReparticion >
@@ -356,6 +366,26 @@
 </div>
 <!-- end footer -->
 
+	
+
+	
+	
+
+	<script type="text/javascript">
+
+		
+		function onSelect(selectBox,currPath)
+		{
+			var selectedCode = selectBox.value;
+			
+			if(selectedCode!==currentSelectedDepartmentId){
+				var url = "${requestContext.contextPath}/reparticiones/select?reparticionId=" + selectedCode + "&currPath=" + currPath;
+
+				window.location = url;
+			}
+		}
+
+	</script>
 
 <script type="text/javascript">
 		
@@ -380,7 +410,9 @@
 		});
 		
 		
-		var currentSelectedValue;
+		var currentSelectedDepartmentId;
+		
+		var prefixContextPath = '${requestContext.contextPath}';
 		
 		$(function() {
 			
@@ -404,7 +436,7 @@
 			}*/
 			
 			//we store the current selected reparticion for comparing in the onSelect function
-			currentSelectedValue=$("#reparticionCode").val();
+			currentSelectedDepartmentId=$("#reparticionCode").val();
 			
 					
 			
@@ -416,5 +448,34 @@
 		});
 
 	</script>
+	
+
+	<script type="text/javascript" src="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/lodash.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-resource.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-route.js'/></script>
+		
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ng-table-0.3.1/ng-table.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/restangular/restangular.js'/></script>
+		
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-growl-2/build/angular-growl.js'/></script>		
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/message-center/message-center.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/notifications.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/session.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/rest.api.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments.js'/></script>
+			
+	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/app.js"/></script>
+		
+	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/common/directives/directives.js"/></script>
+
+		
 </body>
 </html>
