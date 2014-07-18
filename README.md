@@ -80,6 +80,7 @@ even if Tomcat is running under a 64-bit JVM.
 
 2014 - July
  
+ - Refactored employment editor as an Angular directive, in order to be a reusable web component
  - Organized AngularJS code into scalable folders. Grouped files by feature.
  - Added AngularJS validator for verifying the employee CUIL in the form
  - Added AngularJS Growl notifications. Feedback about operations results.
