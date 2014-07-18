@@ -29,26 +29,17 @@
 		
 	<link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jquery-ui/1.8.18/smoothness/jquery-ui-1.8.18.custom.css'/>
 	<link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/ui.jqgrid-4.3.1.css'/>
-	
-	
-	<#-- link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/css/style.css'/ -->
-	
+
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.10/jquery-1.10.2.min.js'/></script>
 	
-	<#-- script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.6/jquery-1.6.4.min.js'/></script -->
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jquery-ui/1.8.18/smoothness/jquery-ui-1.8.18.custom.min.js'/></script>
 	
-	<#-- >script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/grid.locale-en-4.3.1.js'/></script>
-	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/jquery.jqGrid.min.4.3.1.js'/></script -->
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/blockUI/2.64/jquery.blockUI.js'/></script>
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/utils/utils.js'/></script>
-	
-	
-
 	
 
 		
@@ -469,6 +460,8 @@
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/notifications.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/session.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/rest.api.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employment-editor.js'/></script>
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments.js'/></script>
 			

@@ -127,14 +127,19 @@
 		
 		</span>
 		
-		<button ng-if="employmentVO.canPersonBeModified" role='button' class="btn btn-default btn-xs" ng-click="editEmployment(employmentVO.employment)" data-toggle="modal" href="#editModal">Modificar</button>
-							
+		<#noparse>
+		<button ng-if="employmentVO.canPersonBeModified" role='button' class="btn btn-default btn-xs" ng-click="editEmployment(employmentVO.employment)" data-toggle="modal" href="#{{handler}}">Modificar</button>
+		</#noparse>
+		
 		<a ng-if="employmentVO.canBeDeactivated" ng-href="/creditos/employments/{{employmentVO.employment.id}}/deactivatePerson" class="btn btn-default btn-xs" role="button">Dar de Baja</a>
 		<a ng-if="employmentVO.canUndoDeactivation" ng-href="/creditos/employments/{{employmentVO.employment.id}}/undoDeactivatePerson" class="btn btn-default btn-xs" role="button">Deshacer Baja</a>
 	</td>
 
   </tr>
   </tbody>
+  		  <div modal-employment-editor handler="handler" employment="employmentToEdit" callback="fetchResult">
+    		<h1>Content</h1>
+  		  </div>
 </table>
 <div ng-show="employmentsCount == 0">
   <h3>No se encontraron empleos con este criterio de busqueda</h3>
@@ -147,39 +152,7 @@
 
 <#--     --------------------- Angularjs                        -------------------             -->
 
-<!-- div class="modal hide fade"  tabindex="-1" ng-include="'/creditos/resources/templates/employment-detail.html'" id="editModal" role='dialog'></div -->
 
-<!-- ng-include="'/creditos/resources/templates/employment-detail.html'" -->
-  
-  <div class="modal fade" ng-include="'/creditos/resources/javascript/app/admin/employments/employment-detail.html'" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
- 	 <!-- template will be includede here -->
-  </div><!-- /.modal -->
-  	 
-  	 
-
-<!-- Button trigger modal 
-  <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">Launch demo modal</a>
-  
-
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Modal title</h4>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div -->
 
 
 <#--

@@ -28,7 +28,8 @@
 	as = angular.module('hrangularspring', ['ngRoute',
 	                                        'ngResource',
 	                                        'lodash',
-	                                        'admin-employments']);
+	                                        'admin-employments',
+	                                        'admin-employment-edit']);
 
 	as.config(['$routeProvider'/*, '$httpProvider'*/, function($routeProvider/*, $httpProvider*/) {
 

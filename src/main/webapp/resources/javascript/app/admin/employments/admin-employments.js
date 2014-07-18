@@ -3,19 +3,20 @@
 (function () {
 
 	var module = angular.module('admin-employments', [
-	                                  'services.rest.api',
-	                                  'services.notifications',
-	                                  'services.session'
-	                                ])
+	                                                  'admin-employment-edit',
+	                                                  'services.rest.api',
+	                                                  'services.notifications',
+	                                                  'services.session'
+	                                                  ]);
 
 
 	module.controller('GridCtrl', ["$scope", "$rootScope", "api",
-	                           "SessionService","LogNotificationService",function ($scope, $rootScope, api, SessionService,LogNotificationService) {
+	                               "SessionService","LogNotificationService",function ($scope, $rootScope, api, SessionService,LogNotificationService) {
 		$scope.SessionService = SessionService;
 		$scope.totalPages = 0;
 		$scope.employmentsCount = 0;
 		$scope.headers = [
-		                  
+
 		                  {
 		                	  title: 'Apellido y Nombre',
 		                	  value: 'apellidoNombre'
@@ -183,22 +184,9 @@
 			else {
 				$scope.newEmployment = false;
 				$scope.employmentToEdit= angular.copy(employment);
+
+
 			}
-		};
-
-
-		$scope.saveEmployment = function() {
-			return api.employments.save($scope.employmentToEdit).then(function (response) {
-
-
-				$scope.fetchResult();
-				LogNotificationService.log('success',"Los cambios a:    "+$scope.employmentToEdit.person.apellidoNombre+"     fueron guardados");
-
-			}, function (reasonError) {
-
-				LogNotificationService.log('error',"Error!");
-
-			});
 		};
 
 	}]);
