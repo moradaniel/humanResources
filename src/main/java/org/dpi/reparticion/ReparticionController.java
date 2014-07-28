@@ -1,5 +1,6 @@
 package org.dpi.reparticion;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,24 +16,22 @@ import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryServiceImpl;
-import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsEntry.CreditsEntryVO;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
-import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentCreditsEntriesService;
 import org.dpi.employment.EmploymentCreditsEntriesServiceImpl;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
-import org.dpi.employment.EmploymentStatus;
-import org.dpi.employment.EmploymentVO;
 import org.dpi.person.PersonService;
 import org.dpi.security.AccountSettings;
 import org.dpi.security.UserAccessService;
 import org.dpi.security.UserSettingsFactory;
 import org.dpi.security.UserSettingsFactoryImpl;
+import org.dpi.stats.HistoricPeriodSummaryData;
+import org.dpi.stats.PeriodSummaryData;
 import org.dpi.web.reporting.CanGenerateReportResult;
 import org.dpi.web.reporting.ReportService;
 import org.dpi.web.reporting.ReportServiceImpl.ManagementReports;
@@ -161,55 +160,19 @@ public class ReparticionController {
 				model.addAttribute(PARAM_REPARTICION_ID, reparticion.getId());
 			}
 			
-			CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
-			
-			Long creditosDisponiblesInicioPeriodoActual = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(),reparticion.getId());
-			model.addAttribute("creditosDisponiblesInicioPeriodoActual", creditosDisponiblesInicioPeriodoActual);
-			
-		
-			Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(), reparticion.getId());
-
-			model.addAttribute("creditosAcreditadosPorBajaDurantePeriodoActual", creditosAcreditadosPorBajaDurantePeriodoActual);
-			
-			
-			Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), reparticion.getId());
-			
-			model.addAttribute("creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual", creditosConsumidosPorIngresosOAscensosSolicitadosPeriodoActual);
-			
-
-			Long creditosPorIngresosOAscensosOtorgadosPeriodoActual = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getId(), reparticion.getId());
-			
-			model.addAttribute("creditosPorIngresosOAscensosOtorgados", creditosPorIngresosOAscensosOtorgadosPeriodoActual);
-
-			
-			
-
-			Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod.getId(),reparticion.getId());
-			model.addAttribute("creditosDisponiblesSegunSolicitadoPeriodoActual", creditosDisponiblesSegunSolicitadoPeriodoActual);
-			
-			Long creditosDisponiblesSegunOtorgadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod.getId(),reparticion.getId());
-			model.addAttribute("creditosDisponiblesSegunOtorgadoPeriodoActual", creditosDisponiblesSegunOtorgadoPeriodoActual);
-			
-						
-			
-			//historicos 2012
+			//build current year
+			PeriodSummaryData currentPeriodSummaryData = buildCurrentPeriodSummaryData(reparticion);
 					
-			Long creditosAcreditadosPorCargaInicial2012 = this.creditsManagerService.getCreditosPorCargaInicialDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod().getId(),reparticion.getId());
-			model.addAttribute("creditosAcreditadosPorCargaInicial2012", creditosAcreditadosPorCargaInicial2012);
-						
-				
-			Long creditosAcreditadosPorBajas2012 = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getPreviousCreditsPeriod().getId(),reparticion.getId());
-			model.addAttribute("creditosAcreditadosPorBajas2012", creditosAcreditadosPorBajas2012);
-				
-			
-			Long creditosConsumidosPorIngresosOAscensosOtorgados2012 = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getPreviousCreditsPeriod().getId(), reparticion.getId());
-			
-			model.addAttribute("creditosConsumidosPorIngresosOAscensosOtorgados2012", creditosConsumidosPorIngresosOAscensosOtorgados2012);
+			model.addAttribute("currentPeriodSummaryData", currentPeriodSummaryData);
 			
 			
-			Long saldoCreditosAlFinalPeriodo2012 = creditosAcreditadosPorCargaInicial2012+creditosAcreditadosPorBajas2012-creditosConsumidosPorIngresosOAscensosOtorgados2012;
+			//build historic periods
+
+			List<HistoricPeriodSummaryData> historicPeriodsSummaryData = buildHistoricPeriodsSummaryData(reparticion);
 			
-			model.addAttribute("saldoCreditosAlFinalPeriodo2012", saldoCreditosAlFinalPeriodo2012);
+			model.addAttribute("historicPeriodsSummaryData", historicPeriodsSummaryData);
+			
+
 
 		}
 		return "reparticiones/show";
@@ -534,6 +497,101 @@ public class ReparticionController {
 		}
 
 		return ok;
+	}
+	
+
+	PeriodSummaryData buildCurrentPeriodSummaryData(Reparticion reparticion){
+		
+		//--------------------- current year
+		
+		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+		
+		PeriodSummaryData currentPeriodSummaryData = new PeriodSummaryData();
+		currentPeriodSummaryData.setYear(currentCreditsPeriod.getName());
+		
+		
+		Long creditosDisponiblesInicioPeriodo = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(),reparticion.getId());
+		currentPeriodSummaryData.setCreditosDisponiblesInicioPeriodo(creditosDisponiblesInicioPeriodo);
+
+	
+		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(), reparticion.getId());
+
+		currentPeriodSummaryData.setCreditosAcreditadosPorBajaDurantePeriodo(creditosAcreditadosPorBajaDurantePeriodoActual);
+		
+		
+		Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), reparticion.getId());
+		
+		currentPeriodSummaryData.setCreditosConsumidosPorIngresosOAscensosSolicitadosPeriodo(creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo);
+		
+
+		Long creditosPorIngresosOAscensosOtorgadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getId(), reparticion.getId());
+		
+		currentPeriodSummaryData.setCreditosPorIngresosOAscensosOtorgadosPeriodo(creditosPorIngresosOAscensosOtorgadosPeriodo);
+
+				
+
+		Long creditosDisponiblesSegunSolicitadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod.getId(),reparticion.getId());
+		currentPeriodSummaryData.setCreditosDisponiblesSegunSolicitadoPeriodo(creditosDisponiblesSegunSolicitadoPeriodo);
+		
+		Long creditosDisponiblesSegunOtorgadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod.getId(),reparticion.getId());
+		currentPeriodSummaryData.setCreditosDisponiblesSegunOtorgadoPeriodo(creditosDisponiblesSegunOtorgadoPeriodo);
+		
+		return currentPeriodSummaryData;
+					
+	}
+	
+	List<HistoricPeriodSummaryData> buildHistoricPeriodsSummaryData(Reparticion reparticion){
+		
+		List<HistoricPeriodSummaryData> historicPeriodsSummaryData = new ArrayList<HistoricPeriodSummaryData>();
+		
+		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+		
+		
+		CreditsPeriod previousCreditsPeriod = currentCreditsPeriod.getPreviousCreditsPeriod();
+		
+		while(previousCreditsPeriod!=null) {
+			HistoricPeriodSummaryData historicPeriodSummaryData = new HistoricPeriodSummaryData();
+			historicPeriodSummaryData.setYear(previousCreditsPeriod.getName());
+			
+			Long creditosAcreditadosPorCargaInicial = this.creditsManagerService.getCreditosPorCargaInicialDeReparticion(previousCreditsPeriod.getId(),reparticion.getId());
+			historicPeriodSummaryData.setCreditosAcreditadosPorCargaInicial(creditosAcreditadosPorCargaInicial);
+			
+			
+			Long creditosDisponiblesInicioPeriodo = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(previousCreditsPeriod.getId(),reparticion.getId());
+			historicPeriodSummaryData.setCreditosDisponiblesInicioPeriodo(creditosDisponiblesInicioPeriodo);
+						
+				
+			Long creditosAcreditadosPorBajas = this.creditsManagerService.getCreditosPorBajasDeReparticion(previousCreditsPeriod.getId(),reparticion.getId());
+			historicPeriodSummaryData.setCreditosAcreditadosPorBajas(creditosAcreditadosPorBajas);
+				
+			
+			Long creditosConsumidosPorIngresosOAscensosOtorgados = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(previousCreditsPeriod.getId(), reparticion.getId());
+			
+			historicPeriodSummaryData.setCreditosConsumidosPorIngresosOAscensosOtorgados(creditosConsumidosPorIngresosOAscensosOtorgados);
+			
+			
+			Long saldoCreditosAlFinalPeriodo = creditosAcreditadosPorCargaInicial+creditosDisponiblesInicioPeriodo+creditosAcreditadosPorBajas-creditosConsumidosPorIngresosOAscensosOtorgados;
+			
+			historicPeriodSummaryData.setSaldoCreditosAlFinalPeriodo(saldoCreditosAlFinalPeriodo);
+			
+			
+			historicPeriodsSummaryData.add(historicPeriodSummaryData);
+			
+			
+			CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+			creditsPeriodQueryFilter.setName(previousCreditsPeriod.getName());
+							
+			List<CreditsPeriod> creditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
+			if(creditsPeriods!=null) {
+				previousCreditsPeriod = creditsPeriods.get(0);
+			}
+			
+			previousCreditsPeriod = previousCreditsPeriod.getPreviousCreditsPeriod();
+			
+		}
+		
+		return historicPeriodsSummaryData;
+
 	}
 
 

@@ -5,20 +5,6 @@
 	
 <tiles-definitions>
 
-	<!-- definition name="reparticiones/main" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body">
-			<definition template="/WEB-INF/views/reparticiones/main.ftl" templateType="freemarker">
-				<put-attribute name="search" value="/WEB-INF/views/reparticiones/search.ftl" />
-				<put-attribute name="list" value="/WEB-INF/views/reparticiones/list.ftl" />
-				<put-attribute name="detail" value="/WEB-INF/views/reparticiones/show.ftl" />
-			</definition>
-		</put-attribute>
-	</definition -->
-
-	<!-- definition name="reparticiones/list" extends="standardLayout" templateType="freemarker">
-		<put-attribute name="body" value="/WEB-INF/views/reparticiones/list.ftl" />
-	</definition -->
-
 	<definition name="reparticiones/show" extends="standardLayout" templateType="freemarker">
 		<put-attribute name="body" value="/WEB-INF/views/reparticiones/show.ftl" />
 	</definition>

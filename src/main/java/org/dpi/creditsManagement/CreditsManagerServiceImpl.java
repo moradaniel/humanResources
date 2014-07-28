@@ -2,8 +2,6 @@ package org.dpi.creditsManagement;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,7 +13,6 @@ import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.EmploymentQueryFilter;
-import org.dpi.employment.EmploymentStatus;
 import org.dpi.person.PersonCondition;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -27,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import freemarker.core.ReturnInstruction.Return;
 
 public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract implements CreditsManagerService{
 
@@ -533,7 +528,12 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
 		
 		Long totalcreditosDisponiblesSegunOtorgadoPeriodoActual = this.getCreditosPorIngresosOAscensosOtorgados(previousPeriod.getId(),reparticionId);
 		
-		return totalPorCargaInicial+totalPorBajas-totalcreditosDisponiblesSegunOtorgadoPeriodoActual;
+		long creditosDisponiblesAlInicioPeriodoActual = totalPorCargaInicial+totalPorBajas-totalcreditosDisponiblesSegunOtorgadoPeriodoActual;
+		
+		long creditosDisponiblesAlInicioPeriodoAnterior = getCreditosDisponiblesAlInicioPeriodo(previousPeriod.getId(), reparticionId);
+		
+		return creditosDisponiblesAlInicioPeriodoAnterior + creditosDisponiblesAlInicioPeriodoActual;
+		
 	}
 
 	
