@@ -86,6 +86,7 @@ even if Tomcat is running under a 64-bit JVM.
  - Added AngularJS Growl notifications. Feedback about operations results.
  - Replaced underscore.js by lodash.js
  - Backend: Added Spring MVC GlobalControllerExceptionHandler
+ - Backend:Calculating credits period balance for departments recursively
  - Backend: Ordering by employee name, case insensitive.
 
 2014 - June
