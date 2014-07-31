@@ -190,7 +190,7 @@ Ministro/Secretario de Estado de
 						</jr:columnHeader>
 						<jr:columnFooter height="30" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="96" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2">
 									<pen lineWidth="0.0"/>
@@ -222,7 +222,7 @@ Ministro/Secretario de Estado de
 						</jr:columnHeader>
 						<jr:columnFooter height="30" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="90" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
 								<box leftPadding="2" rightPadding="2">
 									<pen lineWidth="0.0"/>
