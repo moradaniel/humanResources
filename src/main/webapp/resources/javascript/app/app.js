@@ -29,6 +29,7 @@
 	                                        'ngResource',
 	                                        'lodash',
 	                                        'admin-employments',
+	                                        /*'admin-employments2',*/
 	                                        'admin-employment-edit']);
 
 	as.config(['$routeProvider'/*, '$httpProvider'*/, function($routeProvider/*, $httpProvider*/) {

@@ -19,6 +19,7 @@ import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.person.PersonService;
 import org.dpi.reparticion.Reparticion;
 import org.dpi.reparticion.ReparticionController;
+import org.dpi.util.PageList;
 import org.dpi.web.response.StatusResponse;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
@@ -119,9 +120,9 @@ public class EmploymentController {
 	@RequestMapping(value = "/employments/{id}/deactivatePerson", method = RequestMethod.GET)
 	public String deactivate(@PathVariable Long id, Model model) {
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setEmploymentId(id.toString());
+		employmentQueryFilter.setEmploymentId(id);
 
-		List<Employment> employments = employmentService.find(employmentQueryFilter);
+		List<Employment> employments = employmentService.findEmployments(employmentQueryFilter);
 
 		Employment employmentToDeactivate = employments.get(0);
 
@@ -141,9 +142,9 @@ public class EmploymentController {
 	@RequestMapping(value = "/employments/{id}/undoDeactivatePerson", method = RequestMethod.GET)
 	public String undoDeactivation(@PathVariable Long id, Model model) {
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setEmploymentId(id.toString());
+		employmentQueryFilter.setEmploymentId(id);
 
-		List<Employment> employments = employmentService.find(employmentQueryFilter);
+		List<Employment> employments = employmentService.findEmployments(employmentQueryFilter);
 
 		Employment employmentToUndoDeactivation = employments.get(0);
 
@@ -171,9 +172,9 @@ public class EmploymentController {
 		if (reparticion != null){
 
 			EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-			employmentQueryFilter.setEmploymentId(id.toString());
+			employmentQueryFilter.setEmploymentId(id);
 
-			List<Employment> employments = employmentService.find(employmentQueryFilter);
+			List<Employment> employments = employmentService.findEmployments(employmentQueryFilter);
 
 			Employment currentEmployment = employments.get(0);
 
@@ -213,9 +214,9 @@ public class EmploymentController {
 		}*/
 
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setEmploymentId(idCurrentEmployment.toString());
+		empleoQueryFilter.setEmploymentId(Long.parseLong(idCurrentEmployment));
 
-		List<Employment> empleos = employmentService.find(empleoQueryFilter);
+		List<Employment> empleos = employmentService.findEmployments(empleoQueryFilter);
 
 		Employment currentEmployment = empleos.get(0);
 
@@ -406,11 +407,21 @@ public class EmploymentController {
 
 	@RequestMapping(value = "/rest/reparticiones/{reparticionId}/employments", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getAllEmployees(@PathVariable String reparticionId,
+	public ResponseEntity<String> employmentsSearch(@PathVariable String reparticionId,
 
+			//@RequestParam(value="apellidoNombre", required=false) String apellidoNombre,
+			//@RequestParam(value="cuil", required=false) String cuil,
+			@RequestParam(value="employmentstatus", required=false) String employmentstatus,
+			//@RequestParam(value="page", required=false) Integer page,//pageNumber requested
+			@RequestParam(value="pageNumber", required=false) Integer page,//pageNumber requested
+			//@RequestParam(value="count", required=false) Integer pageSize,//number of rows requested (pagesize)
+			@RequestParam(value="pageSize", required=false) Integer pageSize,//number of rows requested (pagesize)
+			//@RequestParam(value="filter[apellidoNombre]", required=false) String apellidoNombre,
 			@RequestParam(value="apellidoNombre", required=false) String apellidoNombre,
+			//@RequestParam(value="filter[cuil]", required=false) String cuil,
 			@RequestParam(value="cuil", required=false) String cuil,
-			@RequestParam(value="employmentstatus", required=false) String employmentstatus
+			@RequestParam(value="sidx", required=false) String sidx,
+			@RequestParam(value="sord", required=false) String sord
 
 			//@RequestParam(value="page", required=false) Integer page,//pageNumber requested
 			//@RequestParam(value="rows", required=false) Integer rows,//number of rows requested (pagesize)
@@ -418,11 +429,11 @@ public class EmploymentController {
 			//@RequestParam(value="sord", required=false) String sord) 
 
 			) throws JsonProcessingException {
-		log.info("Start getAllEmployees.");		
+		log.info("Started employments paginated search");		
 
 
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setReparticionId(reparticionId);
+		employmentQueryFilter.setReparticionId(Long.parseLong(reparticionId));
 
 
 		if(StringUtils.hasText(apellidoNombre)) {
@@ -436,10 +447,13 @@ public class EmploymentController {
 		if(StringUtils.hasText(employmentstatus)) {
 			employmentQueryFilter.addEmploymentStatus(EmploymentStatus.valueOf(employmentstatus));
 		}
+		
+		employmentQueryFilter.setPageSize(pageSize);
+		employmentQueryFilter.setPage(page-1);
 
-
-
-		List<Employment> employments = employmentService.find(employmentQueryFilter);
+		PageList<Employment> employments = employmentService.findEmployments(employmentQueryFilter);
+		
+		//List<Employment> employments = employmentService.find(employmentQueryFilter);
 
 
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -450,7 +464,7 @@ public class EmploymentController {
 
 		ObjectMapper mapper = new CustomObjectMapper();
 
-		long total = employmentsVO.size();
+		long total = employments.getTotalItems();
 
 
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -501,11 +515,11 @@ public class EmploymentController {
     	
     	//retrieve the existing employments
     	EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-    	employmentQueryFilter.setReparticionId(reparticionId);
-    	employmentQueryFilter.setEmploymentId(String.valueOf(employment.getId()));
+    	employmentQueryFilter.setReparticionId(Long.parseLong(reparticionId));
+    	employmentQueryFilter.setEmploymentId(employment.getId());
     	
     	//TODO check if the employment exists
-    	Employment existingEmployment = employmentService.find(employmentQueryFilter).get(0);
+    	Employment existingEmployment = employmentService.findEmployments(employmentQueryFilter).get(0);
     			
     	//set the desired attributes
     	existingEmployment.getPerson().setApellidoNombre(employment.getPerson().getApellidoNombre());

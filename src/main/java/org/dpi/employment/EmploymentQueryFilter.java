@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.dpi.util.query.AbstractQueryFilter;
+
 
 /**
  * DAO implementation agnostic class that can hold commons constraints to be used
@@ -14,7 +16,7 @@ import java.util.List;
  * 
  *
  */
-public class EmploymentQueryFilter implements Serializable {
+public class EmploymentQueryFilter extends AbstractQueryFilter implements Serializable {
 	
 
 	private static final long serialVersionUID = 1L;
@@ -26,8 +28,8 @@ public class EmploymentQueryFilter implements Serializable {
 	private String categoryCode;
 	private List<Long> personsIds= new ArrayList<Long>();
 
-	private String reparticionId;
-	private String employmentId;
+	private Long reparticionId;
+	private Long employmentId;
 	
 	private Date startDate;
 
@@ -73,17 +75,17 @@ public class EmploymentQueryFilter implements Serializable {
 		this.categoryCode = categoryCode;
 	}
 	
-	public String getReparticionId() {
+	public Long getReparticionId() {
 		return reparticionId;
 	}
-	public void setReparticionId(String reparticionId) {
+	public void setReparticionId(Long reparticionId) {
 		this.reparticionId = reparticionId;
 	}
 	
-	public String getEmploymentId() {
+	public Long getEmploymentId() {
 		return employmentId;
 	}
-	public void setEmploymentId(String employmentId) {
+	public void setEmploymentId(Long employmentId) {
 		this.employmentId = employmentId;
 	}
 	
@@ -127,5 +129,15 @@ public class EmploymentQueryFilter implements Serializable {
 		this.endDate = endDate;
 	}
 
-	
+	@Override
+	public void reset() {
+		/*role = null;
+		fromDate = null;
+		toDate = null;
+		activeLoanEncharges = null;
+		consultancyType = null;	
+		posId = null;
+		acId = null;
+		amId = null;*/
+	}
 }

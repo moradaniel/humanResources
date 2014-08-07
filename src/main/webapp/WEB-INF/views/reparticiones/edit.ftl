@@ -53,7 +53,8 @@
 <!-- h1>Reparticion:  {{SessionService.getCurrentDepartment().name}}</h1 -->
 <!-- input type="text" name="input" ng-model="SessionService.getCurrentDepartment().name" size="100" -->
 
-<h3>Se encontraron ({{employmentsCount}}) empleo/s</h3>
+<h3>Se encontraron ({{employmentsCount}}) empleo/s. Pagina {{filterCriteria.pageNumber}} de {{totalPages}}</h3>
+
 <table class="table table-hover table-condensed">
   <thead>
     <tr>
@@ -145,9 +146,38 @@
   <h3>No se encontraron empleos con este criterio de busqueda</h3>
 </div>
 <div ng-show="totalPages > 1" class="align-center">
-  <pagination num-pages="totalPages" current-page="filterCriteria.pageNumber" max-size="10" class="" boundary-links="true"
-            on-select-page="selectPage(page)"></pagination>
+            
+  <pagination ng-model="filterCriteria.pageNumber" 
+  			  ng-change="selectPage()" 
+  			  total-items="employmentsCount" 
+  			  num-pages="totalPages" 
+  			  max-size="10" 
+  			  direction-links="true" 
+  			  boundary-links="true"
+  			  rotate="false" 
+  			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+  			  
+  </pagination>
 </div>
+
+
+<!-- pagination ng-model="current" ng-change="changed()" ...></pagination>
+
+
+<pagination page="current" on-select-page="changed(page)" ...></pagination -->
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 <#--     --------------------- Angularjs                        -------------------             -->

@@ -1,15 +1,13 @@
 package org.dpi.employment;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.dpi.util.PageList;
+import org.dpi.util.query.QueryBind.OrderDirection;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -18,7 +16,7 @@ import org.springframework.util.StringUtils;
  * persistent storage
  *
  */
-public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements EmploymentDao
+public class EmploymentDaoHibImpl extends BaseDAOHibernate implements EmploymentDao
 {
 	@SuppressWarnings("unchecked")
 	public List<Employment> findAll()
@@ -34,7 +32,7 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 		return list;
 	}	
 	
-	
+	/*
 	@SuppressWarnings( "unchecked" )
 	public List<Employment> find(final EmploymentQueryFilter employmentQueryFilter){
 		Chronometer timer = new Chronometer();
@@ -74,12 +72,7 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 				
 				setNamedParameters(query,employmentQueryFilter);
 				
-				
-				/*q.setParameter("franchising", franchising);
-				if (bind != null) {
-					q.setMaxResults(bind.getCountToLastElement());
-					q.setFirstResult(bind.getFirstElement());
-				}*/				
+		
 				List<Employment> list = query.list();
 				return list;
 			}
@@ -89,8 +82,165 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 		
 		//if (log.isDebugEnabled()) log.debug("successfully retrieved employment with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return list;
-	}
+	}*/
 	
+    public PageList<Employment> findEmployments(final EmploymentQueryFilter employmentQueryFilter) {
+
+        List<String> wheres = new ArrayList<String>();
+        List<String> paramNames = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
+        
+		StringBuffer queryBuilder = new StringBuffer();
+		queryBuilder.append(" FROM EmploymentImpl employment ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.person person");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.category ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.creditsEntries creditsEntries");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH creditsEntries.creditsPeriod ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.occupationalGroup occupationalGroup");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH occupationalGroup.minimumCategory minimumCategory ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH occupationalGroup.maximumCategory maximumCategory ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH parentOccupationalGroup.minimumCategory parentOccupationalGroupMinimumCategory ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH parentOccupationalGroup.maximumCategory parentOccupationalGroupMaximumCategory ");
+		
+		//String wheres = " WHERE 1=1 "+buildWhereClause(employmentQueryFilter);
+
+		buildWhereClause2(employmentQueryFilter,wheres,paramNames,values);
+		
+
+        String queryWithoutOrdering = wheres.isEmpty() ? queryBuilder.toString() : queryBuilder.append(" WHERE ").append(
+                org.dpi.util.StringUtils.getStringsSeparatedBy(" AND ", wheres)).toString();
+
+        String queryWithOrdering = queryWithoutOrdering;
+        if (employmentQueryFilter != null && employmentQueryFilter.getOrderBy() != null) {
+        	queryWithOrdering += " ORDER BY BY LOWER(" + employmentQueryFilter.getOrderBy() + ")"
+                    + (employmentQueryFilter.getOrderDirection().equals(OrderDirection.DESCENDING) ? " DESC " : " ASC ");
+        } else {
+        	queryWithOrdering += " ORDER BY LOWER(person.apellidoNombre) ASC ";
+        }
+        
+        
+
+        return new PageList<Employment>(
+                findByNamedParam(" Select distinct employment  " + queryWithOrdering, paramNames, values, employmentQueryFilter != null ? employmentQueryFilter
+                        .getStartIndex() : null, employmentQueryFilter != null ? employmentQueryFilter.getMaxResults() : null), countByNamedParam(
+                " SELECT count(distinct employment) " + queryWithoutOrdering, paramNames, values));
+
+
+    }
+	
+	private void buildWhereClause2(EmploymentQueryFilter employmentQueryFilter,
+			List<String> wheres, List<String> paramNames, List<Object> values) {
+		if (employmentQueryFilter != null) {
+			
+			String cuil = employmentQueryFilter.getCuil();
+			if(StringUtils.hasText(cuil)) {
+				wheres.add("  person.cuil like :cuil ");
+				paramNames.add("cuil");
+				values.add("%"+employmentQueryFilter.getCuil()+"%");
+			}
+			
+			
+			
+			String apellidoNombre = employmentQueryFilter.getApellidoNombre();
+			if(StringUtils.hasText(apellidoNombre)) {
+		
+				wheres.add("  upper(person.apellidoNombre) like :apellidoNombre ");
+				paramNames.add("apellidoNombre");
+				values.add("%"+employmentQueryFilter.getApellidoNombre().toUpperCase()+"%");
+			}
+			
+			
+			Long idReparticion = employmentQueryFilter.getReparticionId();
+			if(idReparticion!=null) {
+
+				
+				wheres.add("  centroSector.reparticion.id = :idReparticion ");
+				paramNames.add("idReparticion");
+				values.add(employmentQueryFilter.getReparticionId());
+			}
+			
+			String codigoCentro = employmentQueryFilter.getCodigoCentro();
+			if(StringUtils.hasText(codigoCentro)) {
+				
+				wheres.add(" employment.centroSector.codigoCentro = :codigoCentro ");
+				paramNames.add("codigoCentro");
+				values.add(employmentQueryFilter.getCodigoCentro());
+			}
+
+			String codigoSector = employmentQueryFilter.getCodigoSector();
+			if(StringUtils.hasText(codigoSector)) {
+
+				wheres.add("  employment.centroSector.codigoSector = :codigoSector ");
+				paramNames.add("codigoSector");
+				values.add(employmentQueryFilter.getCodigoSector());
+
+			}
+			
+			
+
+			
+			String categoryCode = employmentQueryFilter.getCategoryCode();
+			if(StringUtils.hasText(categoryCode)) {
+				wheres.add("  employment.category.code = :categoryCode ");
+				paramNames.add("categoryCode");
+				values.add(categoryCode);
+			}
+			
+			
+			List<Long> personsIds = employmentQueryFilter.getPersonsIds();
+			if(!CollectionUtils.isEmpty(personsIds)){
+				/*if(personsIds.size()==1) {
+					sb.append(" AND person.id = :personId ");
+				}else{
+					sb.append(" AND person.id IN ( :personsIds ) ");
+				}*/
+				
+				wheres.add("  person.id IN ( :personsIds )  ");
+				paramNames.add("personsIds");
+				values.add(personsIds);
+				
+			}
+
+			Long idEmployment = employmentQueryFilter.getEmploymentId();
+			if(idEmployment!=null) {
+				
+				wheres.add("  employment.id = :idEmployment ");
+				paramNames.add("idEmployment");
+				values.add(idEmployment);
+			}
+			
+			
+			if(!CollectionUtils.isEmpty(employmentQueryFilter.getEmploymentStatuses())){
+				StringBuilder sb = new StringBuilder();
+
+				sb.append(" (");
+				
+				int statusIndex = 1;
+				for (Iterator iterator = employmentQueryFilter.getEmploymentStatuses().iterator(); iterator.hasNext();) {
+					EmploymentStatus employmentStatus = (EmploymentStatus) iterator.next();
+					sb.append(" employment.status = :employmentStatus"+statusIndex);
+					
+					paramNames.add("employmentStatus"+statusIndex);
+					values.add(employmentStatus);
+					
+					if(iterator.hasNext()){
+						sb.append(" OR ");
+					}
+					statusIndex++;
+				}
+				sb.append(" ) ");	
+				
+				wheres.add(sb.toString());
+					
+			}
+			            
+		}
+	}
+
+/*
 	private String buildWhereClause(EmploymentQueryFilter employmentQueryFilter) {
 		StringBuffer sb = new StringBuffer();
 		if(employmentQueryFilter!=null) {
@@ -131,13 +281,13 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 				
 			}
 			
-			String idReparticion = employmentQueryFilter.getReparticionId();
-			if(StringUtils.hasText(idReparticion)) {
+			Long idReparticion = employmentQueryFilter.getReparticionId();
+			if(idReparticion!=null) {
 				sb.append(" AND centroSector.reparticion.id = :idReparticion ");
 			}
 
-			String idEmployment = employmentQueryFilter.getEmploymentId();
-			if(StringUtils.hasText(idEmployment)) {
+			Long idEmployment = employmentQueryFilter.getEmploymentId();
+			if(idEmployment!=null) {
 				sb.append(" AND employment.id = :idEmployment ");
 			}
 			
@@ -158,10 +308,10 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 
 		}
 		return sb.toString();
-	}
+	}*/
 	
 	
-	public void setNamedParameters(Query query,
+	/*public void setNamedParameters(Query query,
 			EmploymentQueryFilter employmentQueryFilter) {
 		if(employmentQueryFilter!=null) {
 			String cuil = employmentQueryFilter.getCuil();
@@ -199,9 +349,9 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 				
 			}
 			
-			String idReparticion = employmentQueryFilter.getReparticionId();
-			if(StringUtils.hasText(idReparticion)) {
-				query.setString("idReparticion", idReparticion);
+			Long idReparticion = employmentQueryFilter.getReparticionId();
+			if(idReparticion!=null) {
+				query.setLong("idReparticion", idReparticion);
 			}
 
 			String idEmployment = employmentQueryFilter.getEmploymentId();
@@ -224,93 +374,11 @@ public class EmploymentDaoHibImpl extends DataAccessHibImplAbstract implements E
 		}
 
 		
-	}
+	}*/
 	
-	@SuppressWarnings( "unchecked" )
-	public List<Employment> findInactivEmployments(final EmploymentQueryFilter employmentQueryFilter){
-		if (log.isDebugEnabled()) log.debug("attempting to find Employment anterior a ascenso: movimiento Id: '" +/* movimentoAscenso.getId() + */"'" );
-
-		List<Employment> list = getHibernateTemplate().executeFind(new HibernateCallback() {
-			
-			public Object doInHibernate(Session sess)
-					throws HibernateException, SQLException  {	
-				
-				String select = "Select employment ";
-				
-				StringBuffer sb = new StringBuffer();
-				sb.append(" FROM EmploymentImpl employment ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.agente ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
-				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.category ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.creditsEntries ");
-
-
-				String where = " WHERE 1=1 "+buildWhereClause(employmentQueryFilter);
-				sb.append(where);
-				sb.append(" ORDER BY employment.endDate desc");
-				
-				Query q = sess.createQuery(select+sb.toString());
-				/*q.setParameter("franchising", franchising);
-				if (bind != null) {
-					q.setMaxResults(bind.getCountToLastElement());
-					q.setFirstResult(bind.getFirstElement());
-				}*/			
-				List<Employment> list = q.list();
-				return list;
-			}
-		});
-		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved employment with codigo '" + codigo+ "' in " + timer.printElapsedTime());
-		return list;
-	}
-
 
 	
-	@SuppressWarnings( "unchecked" )
-	public Employment findPreviousEmployment(final EmploymentQueryFilter employmentQueryFilter) {
-		if (log.isDebugEnabled()) log.debug("attempting to find Employment anterior a ascenso: movimiento Id: '" +/* movimentoAscenso.getId() + */"'" );
 
-		List<Employment> list = getHibernateTemplate().executeFind(new HibernateCallback() {
-			
-			public Object doInHibernate(Session sess)
-					throws HibernateException, SQLException  {	
-				
-				String select = "Select employment ";
-				
-				StringBuffer sb = new StringBuffer();
-				sb.append(" FROM EmploymentImpl employment ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.agente ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
-				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.category ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.creditsEntries ");
-
-
-				String where = " WHERE 1=1 "+ buildWhereClause(employmentQueryFilter);
-				sb.append(where);
-				sb.append(" AND employment.endDate <= :endDate ");
-				sb.append(" ORDER BY employment.endDate desc");
-				
-				Query q = sess.createQuery(select+sb.toString());
-				
-				q.setTimestamp("endDate", employmentQueryFilter.getEndDate());
-				
-				/*q.setParameter("franchising", franchising);
-				if (bind != null) {
-					q.setMaxResults(bind.getCountToLastElement());
-					q.setFirstResult(bind.getFirstElement());
-				}*/			
-				List<Employment> list = q.list();
-				return list;
-			}
-		});
-		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved employment with codigo '" + codigo+ "' in " + timer.printElapsedTime());
-		return (list.size() > 0) ? (Employment)list.get(0) : null;
-
-	}
-	
 	
 	@Override
 	public Employment findById(Long id) {

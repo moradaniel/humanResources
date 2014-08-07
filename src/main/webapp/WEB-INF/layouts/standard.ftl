@@ -446,6 +446,11 @@
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/lodash.js'/></script>
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular.js'/></script>
+	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/i18n/angular-locale_es-ar.js'/></script -->
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.0.min.js'/></script>
+	
+	
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-resource.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-route.js'/></script>
@@ -464,6 +469,8 @@
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employment-editor.js'/></script>
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments.js'/></script>
+	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments2.js'/></script -->
+	
 			
 	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/app.js"/></script>
 		

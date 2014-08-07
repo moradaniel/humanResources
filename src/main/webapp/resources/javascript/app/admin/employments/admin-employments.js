@@ -2,7 +2,7 @@
 
 (function () {
 
-	var module = angular.module('admin-employments', [
+	var module = angular.module('admin-employments', ['ui.bootstrap',
 	                                                  'admin-employment-edit',
 	                                                  'services.rest.api',
 	                                                  'services.notifications',
@@ -80,8 +80,10 @@
 		$scope.fetchEmploymentStatuses = function () {
 			return api.employmentstatuses.search($scope.employmentStatusesCriteria).then(function (response) {
 				$scope.employmentstatuses = response.data;
+				
+				
 				//$scope.customers = data.Customers;
-				//$scope.totalPages = data.TotalPages;
+				//$scope.totalPages = meta.total/;
 				//$scope.customersCount = data.TotalItems;
 			}, function () {
 				$scope.employmentstatuses = response.data;
@@ -120,6 +122,7 @@
 		//default criteria that will be sent to the server
 		$scope.filterCriteria = {
 				pageNumber: 1,
+				pageSize: 10,
 				sortDir: 'asc',
 				sortedBy: 'id',
 				employmentstatus:'ACTIVO' //by default retrieve active employments
@@ -130,8 +133,10 @@
 			return api.employments.search($scope.filterCriteria).then(function (response) {
 				$scope.employmentsVOs = response.data;
 				var meta = response.data.meta;
-				$scope.totalPages = meta.TotalPages;
+				$scope.totalPages = Math.ceil(meta.total/$scope.filterCriteria.pageSize);//round up to next integer
+				
 				$scope.employmentsCount = meta.total;
+				
 			}, function () {
 				$scope.employments = [];
 				$scope.totalPages = 0;
@@ -140,8 +145,12 @@
 		};
 
 		//called when navigate to another page in the pagination
-		$scope.selectPage = function (page) {
-			$scope.filterCriteria.pageNumber = page;
+		$scope.selectPage = function () {
+			//$scope.filterCriteria.pageNumber = page;
+			if($scope.filterCriteria.pageNumber <= 0 ){
+				$scope.filterCriteria.pageNumber = 1;
+			}
+						
 			$scope.fetchResult();
 		};
 
@@ -156,6 +165,10 @@
 
 		//call back function that we passed to our custom directive sortBy, will be called when clicking on any field to sort
 		$scope.onSort = function (sortedBy, sortDir) {
+			/*
+			 * sorting is disabled until implemented in the server
+			 *
+			
 			$scope.filterCriteria.sortDir = sortDir;
 			$scope.filterCriteria.sortedBy = sortedBy;
 			$scope.filterCriteria.pageNumber = 1;
@@ -163,10 +176,12 @@
 				//The request fires correctly but sometimes the ui doesn't update, that's a fix
 				$scope.filterCriteria.pageNumber = 1;
 			});
+			
+			*/
 		};
 
 		//manually select a page to trigger an ajax request to populate the grid on page load
-		$scope.selectPage(1);
+		$scope.selectPage();
 
 
 		$scope.getCurrentDepartment = function() {

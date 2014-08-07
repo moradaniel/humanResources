@@ -3,6 +3,7 @@ package org.dpi.employment;
 import java.util.List;
 
 import org.dpi.category.Category;
+import org.dpi.util.PageList;
 import org.springframework.context.ApplicationContextAware;
 
 
@@ -13,16 +14,13 @@ import org.springframework.context.ApplicationContextAware;
  */
 public interface EmploymentService extends ApplicationContextAware
 {
-	/**
-	 * Returns a possibly lightweight representation of the corresponding Employment, which may not
-	 * contain all associated objects, or <code>null</code> if the Employment is not found.
-	 *
-	 * @param code a business code that uniquely identifies this Employment
-	 */
-	public List<Employment> find(EmploymentQueryFilter employmentQueryFilter);
 
-	public Employment findById(Long id);
 	
+	//public List<Employment> find(EmploymentQueryFilter employmentQueryFilter);
+	
+	public PageList<Employment> findEmployments(final EmploymentQueryFilter employmentQueryFilter);
+	
+	public Employment findById(Long id);
 	
 	public void delete(Employment employment);
 		
@@ -32,8 +30,6 @@ public interface EmploymentService extends ApplicationContextAware
 	
 	public EmploymentDao getEmploymentDao();
 
-	//Deprecated
-	public Employment findPreviousEmployment(Employment employment);
 
 	public List<Category> getAvailableCategoriesForPromotion(Employment currentEmployment);
 

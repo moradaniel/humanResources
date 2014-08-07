@@ -13,11 +13,11 @@ import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.person.PersonService;
+import org.dpi.util.PageList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.util.CollectionUtils;
 
 
 
@@ -54,9 +54,15 @@ public class EmploymentServiceImpl implements EmploymentService
 	}
 
 	
-	public List<Employment> find(EmploymentQueryFilter employmentQueryFilter){
+	/*public List<Employment> find(EmploymentQueryFilter employmentQueryFilter){
 		
 		return employmentDao.find(employmentQueryFilter);
+	}*/
+	
+	
+	public PageList<Employment> findEmployments(EmploymentQueryFilter employmentQueryFilter){
+		
+		return employmentDao.findEmployments(employmentQueryFilter);
 	}
 
 	public Employment findById(Long id){
@@ -115,17 +121,6 @@ public class EmploymentServiceImpl implements EmploymentService
 	}
 
 
-	@Override
-	public Employment findPreviousEmployment(Employment employment){
-		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setCuil(employment.getPerson().getCuil());
-		employmentQueryFilter.setReparticionId(employment.getCentroSector().getReparticion().getId().toString());
-		
-		employmentQueryFilter.setEmploymentStatuses( CollectionUtils.arrayToList(EmploymentStatus.values()));
-		employmentQueryFilter.setEndDate(employment.getStartDate());
-
-		return this.employmentDao.findPreviousEmployment(employmentQueryFilter);
-	}
 	
 	
 	public List<Category> getAvailableCategoriesForPromotion(Employment employment){

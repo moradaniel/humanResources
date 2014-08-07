@@ -292,7 +292,7 @@ public class ImportarEntidades {
 					
 					
 					
-					List<Employment> empleos = employmentService.find(empleoQueryFilter);
+					List<Employment> empleos = employmentService.findEmployments(empleoQueryFilter);
 					
 					Employment empleo = null;
 					if(CollectionUtils.isEmpty(empleos)){

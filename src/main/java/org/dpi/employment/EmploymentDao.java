@@ -2,6 +2,7 @@ package org.dpi.employment;
 
 import java.util.List;
 
+import org.dpi.util.PageList;
 import org.janux.bus.persistence.HibernateDataAccessObject;
 
 /**
@@ -15,10 +16,9 @@ public interface EmploymentDao extends HibernateDataAccessObject
 
 	public List<Employment> findAll();
 	
-	public List<Employment> find(EmploymentQueryFilter employmentQueryFilter);
+	//public List<Employment> find(EmploymentQueryFilter employmentQueryFilter);
 	
-	public List<Employment> findInactivEmployments(final EmploymentQueryFilter employmentQueryFilter);
-	
-	public Employment findPreviousEmployment(EmploymentQueryFilter employmentQueryFilter);
+	public PageList<Employment> findEmployments(final EmploymentQueryFilter employmentQueryFilter);
+
 	
 }
