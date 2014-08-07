@@ -49,8 +49,7 @@ public class CreditsEntryDaoHibImpl extends DataAccessHibImplAbstract implements
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	
 				
-				String where = " WHERE 1=1 "+buildWhereClause(creditsEntryQueryFilter);
-				
+							
 				String select = "Select entry ";
 				
 				StringBuffer sb = new StringBuffer();
@@ -66,6 +65,8 @@ public class CreditsEntryDaoHibImpl extends DataAccessHibImplAbstract implements
 				sb.append(" LEFT OUTER JOIN FETCH employment.occupationalGroup occupationalGroup");
 				sb.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup");
 
+				String where = " WHERE 1=1 "+buildWhereClause(creditsEntryQueryFilter);
+				
 				sb.append(where);
 				
 				sb.append(" ORDER BY employment.person.apellidoNombre asc, ");
@@ -153,12 +154,12 @@ public class CreditsEntryDaoHibImpl extends DataAccessHibImplAbstract implements
 				sb.append(" AND employment.category.code = '").append(categoryCode).append("'");
 			}
 			
-			String idReparticion = employmentQueryFilter.getReparticionId();
+			Long idReparticion = employmentQueryFilter.getReparticionId();
 			if(idReparticion!=null) {
-				sb.append(" AND centroSector.reparticion.id = '").append(idReparticion).append("'");
+				sb.append(" AND centroSector.reparticion.id = ").append(idReparticion).append(" ");
 			}
 
-			String idEmpleo = employmentQueryFilter.getEmploymentId();
+			Long idEmpleo = employmentQueryFilter.getEmploymentId();
 			if(idEmpleo!=null) {
 				sb.append(" AND employment.id = '").append(idEmpleo).append("'");
 			}

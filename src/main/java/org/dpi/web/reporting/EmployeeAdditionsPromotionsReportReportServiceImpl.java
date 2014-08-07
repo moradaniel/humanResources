@@ -54,7 +54,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 
 		//get movimientos de ascenso
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setReparticionId( String.valueOf(reparticionId));
+		empleoQueryFilter.setReparticionId(reparticionId);
 		//todos los status
 		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
@@ -74,7 +74,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		
 		//get movimientos de Ingreso
 		empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setReparticionId(String.valueOf(reparticionId));
+		empleoQueryFilter.setReparticionId(reparticionId);
 		//todos los estados
 		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		creditsEntryQueryFilter = new CreditsEntryQueryFilter();

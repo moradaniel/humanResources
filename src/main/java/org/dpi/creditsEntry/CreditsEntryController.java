@@ -170,7 +170,7 @@ public class CreditsEntryController {
 
 
 			EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-			employmentQueryFilter.setReparticionId(reparticion.getId().toString());
+			employmentQueryFilter.setReparticionId(reparticion.getId());
 
 			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 			creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);

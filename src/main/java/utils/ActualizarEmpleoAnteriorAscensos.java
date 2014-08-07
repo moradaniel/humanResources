@@ -82,10 +82,10 @@ public class ActualizarEmpleoAnteriorAscensos {
 		for(CreditsEntry movimientoAscenso: movimientosAscenso){
 			//buscar el empleo anterior al empleo del movimiento de ascenso
 			Employment empleoDelAscenso = movimientoAscenso.getEmployment();
-			Employment empleoAnteriorDelAscenso = employmentService.findPreviousEmployment(empleoDelAscenso);
+			//Employment empleoAnteriorDelAscenso = employmentService.findPreviousEmployment(empleoDelAscenso);
 			
 			//al empleo del movimiento de ascenso setearle el empleo anterior
-			empleoDelAscenso.setPreviousEmployment(empleoAnteriorDelAscenso);
+			//empleoDelAscenso.setPreviousEmployment(empleoAnteriorDelAscenso);
 			
 			//guardar empleo del ascenso
 			employmentService.saveOrUpdate(empleoDelAscenso);

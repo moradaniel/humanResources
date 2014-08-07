@@ -7,15 +7,11 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.apache.catalina.User;
-import org.apache.catalina.startup.Tomcat.ExistingStandardWrapper;
-import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
-import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.creditsPeriod.CreditsPeriod.Status;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
@@ -82,8 +78,8 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		if(entry.getCreditsEntryType().equals(CreditsEntryType.BajaAgente)){
 			
 			EmploymentQueryFilter filter = new EmploymentQueryFilter();
-			filter.setEmploymentId(String.valueOf(entry.getEmployment().getId()));
-			Employment employment = employmentService.find(filter).get(0);
+			filter.setEmploymentId(entry.getEmployment().getId());
+			Employment employment = employmentService.findEmployments(filter).get(0);
 			
 			employment.setEndDate(null);
 			employment.setStatus(EmploymentStatus.ACTIVO);
@@ -427,7 +423,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	public Set<Long> havePendingEntries(List<Long> personIds, Long idReparticion,Long idCreditsPeriod) {
 		
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setReparticionId(String.valueOf(idReparticion));
+		employmentQueryFilter.setReparticionId(idReparticion);
 		employmentQueryFilter.setPersonsIds(personIds);
 		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.PENDIENTE);
 		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);//an employment can be active with requested deactivation
