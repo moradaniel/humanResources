@@ -78,24 +78,29 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
+2014 - August
+ 
+ - Added pagination in the front-end using **Bootstrap UI pagination** and in the backend for searching employments
+ - Added first version of business requirement: Handle retention of credits by department.
+
 2014 - July
  
- - Refactored employment editor as an Angular directive, in order to be a reusable web component
+ - Refactored employment editor as an **Angular directive**, in order to be a **reusable web component**
  - Organized AngularJS code into scalable folders. Grouped files by feature.
- - Added AngularJS validator for verifying the employee CUIL in the form
- - Added AngularJS Growl notifications. Feedback about operations results.
+ - Added **AngularJS validator** for verifying the employee CUIL in the form
+ - Added **AngularJS Growl notifications**. Feedback about operations results.
  - Replaced underscore.js by lodash.js
- - Backend: Added Spring MVC GlobalControllerExceptionHandler
+ - Backend: Added Spring MVC **GlobalControllerExceptionHandler**
  - Backend: Calculating credits period balance for departments recursively
  - Backend: Ordering by employee name, case insensitive.
 
 2014 - June
 
- - Added REST API to retrieve employments of a department
- - Using Restangular to call server REST API 
- - JSON support: migrated Jackson from Codehaus to Fasterxml
- - Started migration to AngularJS. Showing the grid of employments
- - Introduced Boostrap CSS Framework
+ - Added **REST API** to retrieve employments of a department
+ - Using **Restangular** to call server REST API 
+ - **JSON support**: migrated Jackson from Codehaus to Fasterxml
+ - Started migration to **AngularJS**. Showing the grid of employments
+ - Introduced **Boostrap CSS Framework**
  
 2014 - May
 
@@ -107,13 +112,6 @@ even if Tomcat is running under a 64-bit JVM.
  - Added reporting functionality
  - Added i18n support
 
-
-## Pending tasks
-
-- Add Unit Tests and Integration Tests
-- Make it SinglePage Application (Angularjs) 
-
-- Implement module "Leaves Management" This module is intended to manage the leaves of the employees.
 
 
 ## Credits
