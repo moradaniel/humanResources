@@ -18,6 +18,8 @@ public interface CreditsManagerService {
 	
 	public Long getCreditosPorBajasDeReparticion(final Long creditsPeriodId,final long reparticionId);
 	
+	public Long getRetainedCreditsByDepartment(final Long creditsPeriodId,final long reparticionId);
+		
 	public Long getCreditsEntriesSum(CreditsEntryQueryFilter creditsEntryQueryFilter);
 
 	public Long getCreditosPorIngresosOAscensosSolicitados(Long creditsPeriodId, Long reparticionId);
@@ -31,6 +33,10 @@ public interface CreditsManagerService {
 	public Long getTotalCreditos(final CreditsEntryQueryFilter creditsEntryQueryFilter);
 
 	public Long getCreditosDisponiblesAlInicioPeriodo(Long creditsPeriodId, Long reparticionId);
+	
+	/*this is for considering retentions*/
+	public Long getTotalCreditosDisponiblesAlInicioPeriodo(Long creditsPeriodId, long reparticionId);
+	
 	
 
 }

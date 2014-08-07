@@ -35,6 +35,8 @@
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo Disponible al Inicio de ${currentPeriodSummaryData.year}</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Acreditados Por Bajas durante ${currentPeriodSummaryData.year}</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Retenidos durante ${currentPeriodSummaryData.year}</a></th>
+						<th class="table-header-repeat line-left minwidth-1"><a href="">Total Creditos Disponibles al Inicio de ${currentPeriodSummaryData.year}</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos(Solicitados) durante ${currentPeriodSummaryData.year}</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos(Otorgados) durante ${currentPeriodSummaryData.year}</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Solicitado durante ${currentPeriodSummaryData.year}</a></th>
@@ -45,6 +47,8 @@
 					<tr>
 						<td>${currentPeriodSummaryData.creditosDisponiblesInicioPeriodo?default("0")}</td>
 						<td>${currentPeriodSummaryData.creditosAcreditadosPorBajaDurantePeriodo?default("0")}</td>
+						<td>${currentPeriodSummaryData.retainedCredits?default("0")}</td>
+						<td>${currentPeriodSummaryData.totalAvailableCredits?default("0")}</td>
 						<td>${currentPeriodSummaryData.creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo?default("0")}</td>
 						<td>${currentPeriodSummaryData.creditosPorIngresosOAscensosOtorgadosPeriodo?default("0")}</td>
 						<td>${currentPeriodSummaryData.creditosDisponiblesSegunSolicitadoPeriodo?default("0")}</td>
@@ -68,6 +72,7 @@
 							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos por Carga Inicial ${historicPeriodSummaryData.year}</a></th>
 							<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo Disponible al Inicio de ${historicPeriodSummaryData.year}</a></th>
 							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Acreditados Por Bajas durante ${historicPeriodSummaryData.year}</a></th>
+							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Retenidos durante ${historicPeriodSummaryData.year}</a></th>
 							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos Otorgados ${historicPeriodSummaryData.year}</a></th>
 							<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo de Creditos al Final del Periodo ${historicPeriodSummaryData.year}</a></th>
 							<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
@@ -77,6 +82,7 @@
 							<td>${historicPeriodSummaryData.creditosAcreditadosPorCargaInicial?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosDisponiblesInicioPeriodo?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosAcreditadosPorBajas?default("0")}</td>
+							<td>${historicPeriodSummaryData.retainedCredits?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosConsumidosPorIngresosOAscensosOtorgados?default("0")}</td>
 							<td>${historicPeriodSummaryData.saldoCreditosAlFinalPeriodo?default("0")}</td>
 							<td><a href="showCreditEntries/${historicPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a></td>

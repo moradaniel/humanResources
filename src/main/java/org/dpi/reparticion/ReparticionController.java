@@ -253,7 +253,7 @@ public class ReparticionController {
 
 
 			EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-			empleoQueryFilter.setReparticionId(reparticion.getId().toString());
+			empleoQueryFilter.setReparticionId(reparticion.getId());
 
 			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 			creditsEntryQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
@@ -332,7 +332,7 @@ public class ReparticionController {
 			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 			creditsEntryQueryFilter.setId(movimientoId);
 			EmploymentQueryFilter empleoFilter = new EmploymentQueryFilter();
-			empleoFilter.setReparticionId(reparticion.getId().toString());
+			empleoFilter.setReparticionId(reparticion.getId());
 			creditsEntryQueryFilter.setEmploymentQueryFilter(empleoFilter);
 
 			CreditsEntry entry = creditsEntryService.find(creditsEntryQueryFilter).get(0);
@@ -345,11 +345,6 @@ public class ReparticionController {
 		return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriod().getName();
 
 	}
-
-	/*@ExceptionHandler(MissingServletRequestParameterException.class)
-	public String handleMyException(Exception  exception) {
-		return "yourErrorViewName";
-	}*/
 
 
 	public CreditsEntryService getCreditsEntryService() {
@@ -517,6 +512,18 @@ public class ReparticionController {
 		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(), reparticion.getId());
 
 		currentPeriodSummaryData.setCreditosAcreditadosPorBajaDurantePeriodo(creditosAcreditadosPorBajaDurantePeriodoActual);
+		
+		
+		Long currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), reparticion.getId());
+
+		currentPeriodSummaryData.setRetainedCredits(currentPeriodRetainedCredits);
+		
+		
+		Long currentPeriodTotalAvailableCredits = this.creditsManagerService.getTotalCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(), reparticion.getId());
+		
+
+        currentPeriodSummaryData.setTotalAvailableCredits(currentPeriodTotalAvailableCredits);
+		
 		
 		
 		Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), reparticion.getId());
