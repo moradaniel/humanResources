@@ -100,7 +100,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		//crear un entry de tipo ascenso 
 		CreditsEntryImpl entryAscenso = new CreditsEntryImpl();
 		entryAscenso.setCreditsEntryType(CreditsEntryType.AscensoAgente);
-		int cantidadCreditosPorAscenso = creditsManagerService.getCreditosPorAscenso(employee.getCondition(),currentEmployment.getCategory().getCode(),newCategoryCode);
+		int cantidadCreditosPorAscenso = creditsManagerService.getCreditosPorAscenso(currentEmployment.getCategory().getCode(),newCategoryCode);
 		entryAscenso.setGrantedStatus(GrantedStatus.Solicitado);
 		entryAscenso.setCreditsPeriod(currentCreditsPeriod);
 

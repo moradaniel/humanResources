@@ -9,7 +9,7 @@ import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +19,7 @@ import org.springframework.util.CollectionUtils;
  * persistent storage
  *
  */
-public class CreditsPeriodDaoHibImpl extends DataAccessHibImplAbstract implements CreditsPeriodDao
+public class CreditsPeriodDaoHibImpl extends BaseDAOHibernate implements CreditsPeriodDao
 {
 	@SuppressWarnings("unchecked")
 	public List<CreditsPeriod> findAll()

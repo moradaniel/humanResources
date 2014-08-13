@@ -8,7 +8,7 @@ import org.dpi.util.query.QueryBind;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
  * persistent storage
  *
  */
-public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements PersonDao
+public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -194,9 +194,6 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 						q.setParameter("idReparticion",personQueryFilter.getReparticionId());
 					}
 
-					if(personQueryFilter.getPersonCondition()!=null){
-						q.setParameter("personCondition",personQueryFilter.getPersonCondition());
-					}
 
 				}
 
@@ -232,10 +229,6 @@ public class PersonDaoHibImpl extends DataAccessHibImplAbstract implements Perso
 				sb.append(" AND centroSector.reparticion.id = :idReparticion ");
 			}
 
-			PersonCondition personCondition = personQueryFilter.getPersonCondition();
-			if(personCondition!=null) {
-				sb.append(" AND person.condition =  :personCondition ");
-			}
 
 			/*if(personQueryFilter.getEstadoPerson()!=null){
 				switch(personQueryFilter.getEstadoPerson()){

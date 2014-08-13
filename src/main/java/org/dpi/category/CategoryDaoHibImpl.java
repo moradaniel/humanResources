@@ -2,7 +2,7 @@ package org.dpi.category;
 
 import java.util.List;
 
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 
 /**
@@ -10,7 +10,7 @@ import org.janux.util.Chronometer;
  * persistent storage
  *
  */
-public class CategoryDaoHibImpl extends DataAccessHibImplAbstract implements CategoryDao
+public class CategoryDaoHibImpl extends BaseDAOHibernate implements CategoryDao
 {
 	@SuppressWarnings("unchecked")
 	public List<Category> findAll()

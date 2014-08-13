@@ -9,7 +9,7 @@ import org.dpi.util.query.QueryBind;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.StringUtils;
@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
  * persistent storage
  *
  */
-public class CentroSectorDaoHibImpl extends DataAccessHibImplAbstract implements CentroSectorDao
+public class CentroSectorDaoHibImpl extends BaseDAOHibernate implements CentroSectorDao
 {
 	
 	private static final String LIST_QUERY = "SELECT centroSectores "

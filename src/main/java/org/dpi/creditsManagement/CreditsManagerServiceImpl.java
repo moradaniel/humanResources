@@ -13,18 +13,17 @@ import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.employment.EmploymentQueryFilter;
-import org.dpi.person.PersonCondition;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
 
-public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract implements CreditsManagerService{
+public class CreditsManagerServiceImpl extends BaseDAOHibernate implements CreditsManagerService{
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -221,7 +220,7 @@ public class CreditsManagerServiceImpl extends DataAccessHibImplAbstract impleme
     }
 
 
-    public int getCreditosPorAscenso(PersonCondition personCondition, String currentCategoryCode, String newCategoryCode){
+    public int getCreditosPorAscenso(String currentCategoryCode, String newCategoryCode){
         Integer creditos = 0;
         creditos = this.creditosPorAscenso.get(currentCategoryCode).get(newCategoryCode);	
 

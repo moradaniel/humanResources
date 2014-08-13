@@ -413,9 +413,9 @@ public class EmploymentController {
 			//@RequestParam(value="cuil", required=false) String cuil,
 			@RequestParam(value="employmentstatus", required=false) String employmentstatus,
 			//@RequestParam(value="page", required=false) Integer page,//pageNumber requested
-			@RequestParam(value="pageNumber", required=false) Integer page,//pageNumber requested
+			@RequestParam(value="pageNumber", required=false, defaultValue = "1") Integer page,//pageNumber requested
 			//@RequestParam(value="count", required=false) Integer pageSize,//number of rows requested (pagesize)
-			@RequestParam(value="pageSize", required=false) Integer pageSize,//number of rows requested (pagesize)
+			@RequestParam(value="pageSize", required=false, defaultValue = "10") Integer pageSize,//number of rows requested (pagesize)
 			//@RequestParam(value="filter[apellidoNombre]", required=false) String apellidoNombre,
 			@RequestParam(value="apellidoNombre", required=false) String apellidoNombre,
 			//@RequestParam(value="filter[cuil]", required=false) String cuil,
@@ -431,6 +431,9 @@ public class EmploymentController {
 			) throws JsonProcessingException {
 		log.info("Started employments paginated search");		
 
+		/*if(true) {
+		    throw new JsonGenerationException("errorrrrrrrrrrr");
+		}*/
 
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 		employmentQueryFilter.setReparticionId(Long.parseLong(reparticionId));
@@ -473,6 +476,7 @@ public class EmploymentController {
 		Map<String, Object> responseMap = new ResponseMap<EmploymentVO>().mapOK(employmentsVO,total);
 
 		String serializedResponse = mapper.writeValueAsString(responseMap);
+
 
 		return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
 

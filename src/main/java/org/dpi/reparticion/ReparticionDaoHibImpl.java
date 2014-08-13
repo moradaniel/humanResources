@@ -10,7 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.samples.travel.SearchCriteria;
@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
  * persistent storage
  *
  */
-public class ReparticionDaoHibImpl extends DataAccessHibImplAbstract implements ReparticionDao
+public class ReparticionDaoHibImpl extends BaseDAOHibernate implements ReparticionDao
 {
 	@SuppressWarnings("unchecked")
 	public List<Reparticion> findAll()

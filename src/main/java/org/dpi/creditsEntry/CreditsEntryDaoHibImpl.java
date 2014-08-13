@@ -10,7 +10,7 @@ import org.dpi.employment.EmploymentStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.janux.bus.persistence.DataAccessHibImplAbstract;
+import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
  * persistent storage
  *
  */
-public class CreditsEntryDaoHibImpl extends DataAccessHibImplAbstract implements CreditsEntryDao
+public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsEntryDao
 {
 	@SuppressWarnings("unchecked")
 	public List<CreditsEntry> findAll()

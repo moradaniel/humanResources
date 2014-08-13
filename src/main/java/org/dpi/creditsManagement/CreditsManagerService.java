@@ -1,7 +1,6 @@
 package org.dpi.creditsManagement;
 
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
-import org.dpi.person.PersonCondition;
 
 
 public interface CreditsManagerService {
@@ -10,7 +9,7 @@ public interface CreditsManagerService {
 	
 	public int getCreditosPorBaja(String categoryCode);
 	
-	public int getCreditosPorAscenso(PersonCondition personCondition, String currentCategoryCode, String newCategoryCode);
+	public int getCreditosPorAscenso(String currentCategoryCode, String newCategoryCode);
 	
 	public int getCreditosPorIngreso(String categoryCode);
 	

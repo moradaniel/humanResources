@@ -217,8 +217,6 @@ public class CreditsEntryController {
         		List<CreditsEntry> listCreditsEntry = creditsEntryService.find(creditsEntryQueryFilter);
         		CreditsEntry creditsEntry = listCreditsEntry.get(0);
         		if(creditsEntry.getGrantedStatus()!=submittedMovimiento.getGrantedStatus()){
-        			//creditsEntry.setGrantedStatus(submittedMovimiento.getGrantedStatus());
-        			//creditsEntryService.saveOrUpdate(creditsEntry);
         			creditsEntryService.changeGrantedStatus(creditsEntry,submittedMovimiento.getGrantedStatus());
         		}
         		

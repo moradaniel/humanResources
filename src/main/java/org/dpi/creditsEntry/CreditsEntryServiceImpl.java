@@ -181,7 +181,9 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 			CreditsEntry creditsEntry) {
 		
 		//only creditsEntries of Active periods can be changed 
-		if(creditsEntry.getCreditsPeriod().getStatus()!=CreditsPeriod.Status.Active){
+		if(creditsEntry.getCreditsPeriod().getStatus()==CreditsPeriod.Status.Closed){
+		    //if the period is closed then check if the employmnet has subsequent entries
+		    
 			return false;
 		}else
 
@@ -291,9 +293,8 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 			Employment employmentAnterior = employmentaActualizar.getPreviousEmployment();
 			//get the category of the previous employment
 			//Obtener los creditos por ascenso para la categoria anterior y la categoria actual
-			int nuevaCantidaddeCreditos = creditsManagerService.getCreditosPorAscenso(employmentAnterior.getPerson().getCondition(), 
-																							employmentAnterior.getCategory().getCode(),
-																							employmentaActualizar.getCategory().getCode());
+			int nuevaCantidaddeCreditos = creditsManagerService.getCreditosPorAscenso(employmentAnterior.getCategory().getCode(),
+																						employmentaActualizar.getCategory().getCode());
 			creditsEntry.setCantidadCreditos(nuevaCantidaddeCreditos);
 			this.saveOrUpdate(creditsEntry);
 			
