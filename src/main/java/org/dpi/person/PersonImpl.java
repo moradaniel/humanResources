@@ -16,7 +16,7 @@ public class PersonImpl  extends PersistentAbstract implements Person{
 	
 	String cuil;
 	String apellidoNombre;
-	PersonCondition condition;
+
 	private Set<Employment> employments = new HashSet<Employment>();
 
 	public String getCuil() {
@@ -35,16 +35,6 @@ public class PersonImpl  extends PersistentAbstract implements Person{
 		this.apellidoNombre = apellidoNombre;
 	}
 
-	@Override
-	public PersonCondition getCondition() {
-		return condition;
-	}
-
-	@Override
-	public void setCondition(PersonCondition personCondition) {
-		condition = personCondition;
-		
-	}
 
 	public Set<Employment> getEmployments() {
 		return employments;

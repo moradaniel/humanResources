@@ -21,10 +21,5 @@ public interface Person extends Persistent,Serializable{
 
 	public void setEmployments(Set<Employment> employments);
 
-	PersonCondition getCondition();
-	
-	void setCondition(PersonCondition personCondition);
-
-	
 		
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentCreditsEntriesService;
 import org.dpi.person.Person;
-import org.dpi.person.PersonCondition;
 import org.dpi.person.PersonQueryFilter;
 import org.dpi.person.PersonService;
 import org.dpi.reparticion.ReparticionSearchInfo;
@@ -85,7 +84,7 @@ public class ActualizarAgentesProfesionales {
 			PersonQueryFilter agenteQueryFilter = new PersonQueryFilter();
 			agenteQueryFilter.setReparticionId(reparticionSearchInfo.getReparticionId());
 			//agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
-			agenteQueryFilter.setPersonCondition(PersonCondition.Profesional);
+			//agenteQueryFilter.setPersonCondition(PersonCondition.Profesional);
 			
 			List<Person> agentes = this.personService.find(agenteQueryFilter);
 			totalAgentesProfesionalesActivos +=agentes.size();

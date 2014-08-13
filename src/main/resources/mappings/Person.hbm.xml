@@ -14,7 +14,6 @@
         
     <property name="apellidoNombre" column="APELLIDONOMBRE" type="string"/> 
     <property name="cuil" column="CUIL" type="string"/>
-    <property name="condition" column="CONDITION" type="org.dpi.persistence.PersonConditionEnumUserType"/>
 
     
 <!-- this association is bidirectional

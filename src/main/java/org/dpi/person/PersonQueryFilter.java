@@ -18,7 +18,7 @@ public class PersonQueryFilter implements Serializable {
 	private String apellidoNombre;
 	private String cuil;
 	private Long personId;
-	private PersonCondition personCondition;
+
 
 
 	private Long reparticionId;
@@ -50,13 +50,6 @@ public class PersonQueryFilter implements Serializable {
 	public void setPersonId(Long personId) {
 		this.personId = personId;
 	}
-	
-	public PersonCondition getPersonCondition() {
-		return personCondition;
-	}
-	
-	public void setPersonCondition(PersonCondition personCondition) {
-		this.personCondition = personCondition;
-	}
+
 
 }
