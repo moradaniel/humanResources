@@ -15,7 +15,7 @@ public interface ReportService
 
 	public AbstractReportParameters getNewReportParameters(ReportDescriptor descriptor);
 	
-	public CanGenerateReportResult canGenerateReport(String reportCode, Account account, Long reparticionId);
+	public CanGenerateReportResult canGenerateReport(String reportCode, Account account, Long departmentId);
 
 	//void runReport(final AbstractReportParameters aReportParameters,ReportFormatter formatter);
 	

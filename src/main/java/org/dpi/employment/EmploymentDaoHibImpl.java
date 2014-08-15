@@ -51,8 +51,8 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 				StringBuffer sb = new StringBuffer();
 				sb.append(" FROM EmploymentImpl employment ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.person person");
-				sb.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
-				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
+				sb.append(" LEFT OUTER JOIN FETCH employment.subDepartment subDepartment");
+				sb.append(" LEFT OUTER JOIN FETCH subDepartment.department ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.category ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.creditsEntries creditsEntries");
 				sb.append(" LEFT OUTER JOIN FETCH creditsEntries.creditsPeriod ");
@@ -93,8 +93,8 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 		StringBuffer queryBuilder = new StringBuffer();
 		queryBuilder.append(" FROM EmploymentImpl employment ");
 		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.person person");
-		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
-		queryBuilder.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.subDepartment subDepartment");
+		queryBuilder.append(" LEFT OUTER JOIN FETCH subDepartment.department ");
 		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.category ");
 		queryBuilder.append(" LEFT OUTER JOIN FETCH employment.creditsEntries creditsEntries");
 		queryBuilder.append(" LEFT OUTER JOIN FETCH creditsEntries.creditsPeriod ");
@@ -153,19 +153,19 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 			}
 			
 			
-			Long idReparticion = employmentQueryFilter.getReparticionId();
-			if(idReparticion!=null) {
+			Long idDepartment = employmentQueryFilter.getDepartmentId();
+			if(idDepartment!=null) {
 
 				
-				wheres.add("  centroSector.reparticion.id = :idReparticion ");
-				paramNames.add("idReparticion");
-				values.add(employmentQueryFilter.getReparticionId());
+				wheres.add("  subDepartment.department.id = :idDepartment ");
+				paramNames.add("idDepartment");
+				values.add(employmentQueryFilter.getDepartmentId());
 			}
 			
 			String codigoCentro = employmentQueryFilter.getCodigoCentro();
 			if(StringUtils.hasText(codigoCentro)) {
 				
-				wheres.add(" employment.centroSector.codigoCentro = :codigoCentro ");
+				wheres.add(" employment.subDepartment.codigoCentro = :codigoCentro ");
 				paramNames.add("codigoCentro");
 				values.add(employmentQueryFilter.getCodigoCentro());
 			}
@@ -173,7 +173,7 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 			String codigoSector = employmentQueryFilter.getCodigoSector();
 			if(StringUtils.hasText(codigoSector)) {
 
-				wheres.add("  employment.centroSector.codigoSector = :codigoSector ");
+				wheres.add("  employment.subDepartment.codigoSector = :codigoSector ");
 				paramNames.add("codigoSector");
 				values.add(employmentQueryFilter.getCodigoSector());
 
@@ -258,12 +258,12 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 			
 			String codigoCentro = employmentQueryFilter.getCodigoCentro();
 			if(StringUtils.hasText(codigoCentro)) {
-				sb.append(" AND employment.centroSector.codigoCentro = :codigoCentro ");
+				sb.append(" AND employment.subDepartment.codigoCentro = :codigoCentro ");
 			}
 
 			String codigoSector = employmentQueryFilter.getCodigoSector();
 			if(StringUtils.hasText(codigoSector)) {
-				sb.append(" AND employment.centroSector.codigoSector = :codigoSector ");
+				sb.append(" AND employment.subDepartment.codigoSector = :codigoSector ");
 			}
 			
 			String categoryCode = employmentQueryFilter.getCategoryCode();
@@ -281,9 +281,9 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 				
 			}
 			
-			Long idReparticion = employmentQueryFilter.getReparticionId();
-			if(idReparticion!=null) {
-				sb.append(" AND centroSector.reparticion.id = :idReparticion ");
+			Long idDepartment = employmentQueryFilter.getDepartmentId();
+			if(idDepartment!=null) {
+				sb.append(" AND subDepartment.department.id = :idDepartment ");
 			}
 
 			Long idEmployment = employmentQueryFilter.getEmploymentId();
@@ -349,9 +349,9 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 				
 			}
 			
-			Long idReparticion = employmentQueryFilter.getReparticionId();
-			if(idReparticion!=null) {
-				query.setLong("idReparticion", idReparticion);
+			Long idDepartment = employmentQueryFilter.getDepartmentId();
+			if(idDepartment!=null) {
+				query.setLong("idDepartment", idDepartment);
 			}
 
 			String idEmployment = employmentQueryFilter.getEmploymentId();

@@ -3,13 +3,13 @@ package utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dpi.department.DepartmentSearchInfo;
+import org.dpi.department.DepartmentService;
 import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentCreditsEntriesService;
 import org.dpi.person.Person;
 import org.dpi.person.PersonQueryFilter;
 import org.dpi.person.PersonService;
-import org.dpi.reparticion.ReparticionSearchInfo;
-import org.dpi.reparticion.ReparticionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -23,7 +23,7 @@ public class ActualizarAgentesProfesionales {
 	
 	Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
-	ReparticionService reparticionService;
+	DepartmentService departmentService;
 	
 	PersonService personService;
 	
@@ -46,7 +46,7 @@ public class ActualizarAgentesProfesionales {
 
 		final ActualizarAgentesProfesionales actualizador = new ActualizarAgentesProfesionales();
 		
-		actualizador.setReparticionService((ReparticionService)context.getBean("reparticionService"));
+		actualizador.setDepartmentService((DepartmentService)context.getBean("departmentService"));
 		actualizador.setAgenteService((PersonService)context.getBean("agenteService"));
 		
 		actualizador.setEmploymentCreditsEntriesService((EmploymentCreditsEntriesService)context.getBean("employmentCreditsEntriesService"));
@@ -74,15 +74,15 @@ public class ActualizarAgentesProfesionales {
 		int totalAgentesProfesionalesActivos = 0;
 		int totalAgentesProfesionalesActivosAscendidosAutomaticamente = 0;
 		
-		//obtener todas las reparticiones
+		//obtener todas las departments
 		
-		List<ReparticionSearchInfo> reparticionSearchInfos = new ArrayList<ReparticionSearchInfo>();
-		reparticionSearchInfos = reparticionService.findAllReparticiones();
-		for(ReparticionSearchInfo reparticionSearchInfo: reparticionSearchInfos)
+		List<DepartmentSearchInfo> departmentSearchInfos = new ArrayList<DepartmentSearchInfo>();
+		departmentSearchInfos = departmentService.findAllDepartments();
+		for(DepartmentSearchInfo departmentSearchInfo: departmentSearchInfos)
 		{
-			//por cada reparticion obtener los agentes activos y profesionales
+			//por cada department obtener los agentes activos y profesionales
 			PersonQueryFilter agenteQueryFilter = new PersonQueryFilter();
-			agenteQueryFilter.setReparticionId(reparticionSearchInfo.getReparticionId());
+			agenteQueryFilter.setDepartmentId(departmentSearchInfo.getDepartmentId());
 			//agenteQueryFilter.setEstadoAgente(EstadoAgente.ACTIVO);
 			//agenteQueryFilter.setPersonCondition(PersonCondition.Profesional);
 			
@@ -136,12 +136,12 @@ public class ActualizarAgentesProfesionales {
 		this.creditsEntryService = creditsEntryService;
 	}*/
 	
-	public ReparticionService getReparticionService() {
-		return reparticionService;
+	public DepartmentService getDepartmentService() {
+		return departmentService;
 	}
 
-	public void setReparticionService(ReparticionService reparticionService) {
-		this.reparticionService = reparticionService;
+	public void setDepartmentService(DepartmentService departmentService) {
+		this.departmentService = departmentService;
 	}
 
 	public PersonService getAgenteService() {

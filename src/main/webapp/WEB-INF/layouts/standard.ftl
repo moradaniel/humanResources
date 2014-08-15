@@ -78,24 +78,23 @@
 						</#list>
 					</div>
 					
-					<div id="div_reparticionSearch" >
+					<div id="div_departmentSearch" >
 						<span class="searchDropDown">Reparticion: </span>
-						<#--span class="searchDropDown">Property: </span-->
-						<select style="color:black;" id="reparticionCode" name="reparticionCode" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
+						<select style="color:black;" id="departmentId" name="departmentId" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
 	
-							<#if myReparticiones?exists >
+							<#if myDepartments?exists >
 								<option value="" >-- Seleccione Reparticion --</option>
-								<#list myReparticiones?sort_by("nombre") as aReparticion>
+								<#list myDepartments?sort_by("name") as aDepartment>
 									<#assign selected="">
-									<#if reparticion?exists && (reparticion.id == aReparticion.id)>
+									<#if currentDepartment?exists && (currentDepartment.id == aDepartment.id)>
 										<#assign selected="selected">
 									</#if>
 									
-									<#assign nombreReparticion = aReparticion.nombre >
-									<#if (nombreReparticion?length >70) >
-										<#assign nombreReparticion = nombreReparticion?substring(0,70) >
+									<#assign departmentName = aDepartment.name >
+									<#if (departmentName?length >70) >
+										<#assign departmentName = departmentName?substring(0,70) >
 									</#if>
-									<option value="${aReparticion.id}" ${selected?default("")} >${nombreReparticion?html}</option>
+									<option value="${aDepartment.id}" ${selected?default("")} >${departmentName?html}</option>
 								</#list>
 							</#if>
 						</select>
@@ -330,7 +329,7 @@
 
 
 	<!-- here is where the main content goes. -->
-		<#if reparticion?exists || !nav.currPageRequiresReparticion >
+		<#if currentDepartment?exists || !nav.currPageRequiresDepartment >
 			<@tiles.insertAttribute name="body" />
 		<#else>
 			Por favor seleccione Reparticion
@@ -370,7 +369,7 @@
 			var selectedCode = selectBox.value;
 			
 			if(selectedCode!==currentSelectedDepartmentId){
-				var url = "${requestContext.contextPath}/reparticiones/select?reparticionId=" + selectedCode + "&currPath=" + currPath;
+				var url = "${requestContext.contextPath}/departments/select?departmentId=" + selectedCode + "&currPath=" + currPath;
 
 				window.location = url;
 			}
@@ -407,16 +406,16 @@
 		
 		$(function() {
 			
-			//if the user has access to only one reparticion and it is not yet selected, then auto-select it
-			if( $("#reparticionCode option").length == 2 && ($("#reparticionCode option:eq(1)").prop('selected')!==true)){
-				$("#reparticionCode option:eq(1)").prop("selected","selected");
-				onSelect($("#reparticionCode option:selected").get(0),'${currentURL?default('')}');
+			//if the user has access to only one department and it is not yet selected, then auto-select it
+			if( $("#departmentId option").length == 2 && ($("#departmentId option:eq(1)").prop('selected')!==true)){
+				$("#departmentId option:eq(1)").prop("selected","selected");
+				onSelect($("#departmentId option:selected").get(0),'${currentURL?default('')}');
 			}
 			
 			//AddIncSearch does not work for ie<8 or firefox < 3.6
 			/*if(browserLessThanIE8()==false && browserLessThanGecko1_9_2()==false){
-				//add search capability to reparticion combo
-				$("#reparticionCode").AddIncSearch(
+				//add search capability to department combo
+				$("#departmentId").AddIncSearch(
 						{
 					        maxListSize: 200,
 					        maxMultiMatch: 150,
@@ -426,12 +425,12 @@
 						);
 			}*/
 			
-			//we store the current selected reparticion for comparing in the onSelect function
-			currentSelectedDepartmentId=$("#reparticionCode").val();
+			//we store the current selected department for comparing in the onSelect function
+			currentSelectedDepartmentId=$("#departmentId").val();
 			
 					
 			
-			$('#reparticionCode').bind('change', function() {
+			$('#departmentId').bind('change', function() {
 				onSelect(this,'${currentURL?default('')}');
 			});
 			

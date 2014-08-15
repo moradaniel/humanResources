@@ -26,10 +26,10 @@
 		not-null="true"/>
 		
 	<many-to-one 
-		name="centroSector"
-		class="org.dpi.centroSector.CentroSectorImpl"
- 		column="CENTROSECTORID" 
-		foreign-key="fk_Employment_CentroSector"
+		name="subDepartment"
+		class="org.dpi.subDepartment.SubDepartmentImpl"
+ 		column="SUBDEPARTMENTID" 
+		foreign-key="fk_Employment_SubDepartment"
 		not-null="true"/>
 
 	<many-to-one 

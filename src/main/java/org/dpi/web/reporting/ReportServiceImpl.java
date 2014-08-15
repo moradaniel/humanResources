@@ -106,7 +106,7 @@ public class ReportServiceImpl implements ReportService
 	}
 
 	
-	public CanGenerateReportResult canGenerateReport(String reportCode, Account account, Long reparticionId) {
+	public CanGenerateReportResult canGenerateReport(String reportCode, Account account, Long departmentId) {
 	
 		CanGenerateReportResult canGenerateReportResult = new CanGenerateReportResult();
 		
@@ -117,7 +117,7 @@ public class ReportServiceImpl implements ReportService
 			if(creditsPeriodService.getCurrentCreditsPeriod().getStatus()!=Status.Active){
 				canGenerateReportResult.addReasonCode(ReasonCodes.closedCreditsPeriod.name());
 			}else {
-				Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod().getId(),reparticionId);
+				Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod().getId(),departmentId);
 				if(creditosDisponiblesSegunSolicitadoPeriodoActual < 0) {
 					canGenerateReportResult.addReasonCode(ReasonCodes.negativeBalance.name());
 				}

@@ -97,8 +97,8 @@
 		class="org.springframework.beans.factory.config.ListFactoryBean">
 		<property name="sourceList">
 			<list>
-				<value>/mappings/Reparticion.hbm.xml</value>
-				<value>/mappings/CentroSector.hbm.xml</value>
+				<value>/mappings/Department.hbm.xml</value>
+				<value>/mappings/SubDepartment.hbm.xml</value>
 				<value>/mappings/Person.hbm.xml</value>
 				<value>/mappings/Category.hbm.xml</value>
 				<value>/mappings/Employment.hbm.xml</value>

@@ -89,7 +89,7 @@
 
 		//--------Lista de Centro Sectores	-----------------------------------------------------------------------------------
 		$("#gridCentroSectores").jqGrid({
-		   	url:'${requestContext.contextPath}/centroSectores/search',
+		   	url:'${requestContext.contextPath}/subDepartments/search',
 			datatype: 'json',
 			mtype: 'GET',
 		   	colNames:['Id', 'Codigo Centro', 'Nombre Centro', 'Codigo Sector', 'Nombre Sector'],
@@ -166,18 +166,18 @@
 				  success: function(data){
 				        var usernameCount = data;
 				        /*if(1 == usernameCount){
-						            $(‘#penewuser’).next(‘.error’).css(‘display’, ‘inline’);
+						            $(ï¿½#penewuserï¿½).next(ï¿½.errorï¿½).css(ï¿½displayï¿½, ï¿½inlineï¿½);
 				        } else {
-				            $(‘#penewuser’).next(‘.error’).css(‘display’, ‘none’);
+				            $(ï¿½#penewuserï¿½).next(ï¿½.errorï¿½).css(ï¿½displayï¿½, ï¿½noneï¿½);
 				        }*/
 				    },
 				  error: function(data){
 				        alert("Error al conectar con el servidor. Posiblemente su sesion ha expirado, por favor vuelva a conectarse");
 				        window.location='${requestContext.contextPath}';
 				        /*if(1 == usernameCount){
-						            $(‘#penewuser’).next(‘.error’).css(‘display’, ‘inline’);
+						            $(ï¿½#penewuserï¿½).next(ï¿½.errorï¿½).css(ï¿½displayï¿½, ï¿½inlineï¿½);
 				        } else {
-				            $(‘#penewuser’).next(‘.error’).css(‘display’, ‘none’);
+				            $(ï¿½#penewuserï¿½).next(ï¿½.errorï¿½).css(ï¿½displayï¿½, ï¿½noneï¿½);
 				        }*/
 				    },
 				  dataType: 'json'

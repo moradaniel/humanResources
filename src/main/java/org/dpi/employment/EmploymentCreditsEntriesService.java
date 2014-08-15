@@ -19,7 +19,7 @@ public interface EmploymentCreditsEntriesService extends ApplicationContextAware
 	
 	public void undoDeactivation(Employment employment, Account currentUser);
 	
-	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId);
+	public void proposeNewEmployment(String proposedCategoryCode,Long subDepartmentId);
 
-	public List<EmploymentVO> buildEmploymentsVO(List<Employment> activeEmployments, Long reparticionId, Account currenUser);
+	public List<EmploymentVO> buildEmploymentsVO(List<Employment> activeEmployments, Long departmentId, Account currenUser);
 }

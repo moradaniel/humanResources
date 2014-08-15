@@ -18,9 +18,9 @@ import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpi.reparticion.ReparticionAdminInfo;
-import org.dpi.reparticion.ReparticionSearchInfo;
-import org.dpi.reparticion.ReparticionService;
+import org.dpi.department.DepartmentAdminInfo;
+import org.dpi.department.DepartmentSearchInfo;
+import org.dpi.department.DepartmentService;
 import org.janux.bus.security.Account;
 import org.janux.bus.security.AccountService;
 import org.janux.bus.security.Role;
@@ -38,7 +38,7 @@ public class UserAccessServiceImpl implements UserAccessService
 	/** the datasource */
 	private DataSource datasource;
 	
-	private ReparticionService reparticionService;
+	private DepartmentService departmentService;
 	
 	private AccountService accountService;
 	
@@ -61,18 +61,18 @@ public class UserAccessServiceImpl implements UserAccessService
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Set<ReparticionAdminInfo> getReparticionList(List queryResults,Comparator<ReparticionAdminInfo> comp,boolean getAccounts)
+	private Set<DepartmentAdminInfo> getDepartmentList(List queryResults,Comparator<DepartmentAdminInfo> comp,boolean getAccounts)
 	{
-		Set<ReparticionAdminInfo> hotelList = (comp != null) ? new TreeSet<ReparticionAdminInfo>(comp) : new HashSet<ReparticionAdminInfo>();
+		Set<DepartmentAdminInfo> departmentList = (comp != null) ? new TreeSet<DepartmentAdminInfo>(comp) : new HashSet<DepartmentAdminInfo>();
 
 		for (Object rowObj : queryResults)
 		{
 			final Map<String, Object> rowMap = (Map<String, Object>) rowObj;
 			final BigDecimal id = (BigDecimal) rowMap.get("id");
-			final String nombre = (String) rowMap.get("nombre");
+			final String name = (String) rowMap.get("name");
 			//final String status = (String ) rowMap.get("status");
 
-			ReparticionAdminInfo info = new ReparticionAdminInfo(new Long(id.longValue()),nombre);
+			DepartmentAdminInfo info = new DepartmentAdminInfo(new Long(id.longValue()),name);
 
 			/*if (StringUtils.hasText(status))
 			{
@@ -81,18 +81,18 @@ public class UserAccessServiceImpl implements UserAccessService
 			
 			if (getAccounts)
 			{
-				Set<String> reparticionUsers = this.getAccountsForReparticion(id.longValue());
-				info.setUsers(reparticionUsers);
+				Set<String> departmentUsers = this.getAccountsForDepartment(id.longValue());
+				info.setUsers(departmentUsers);
 			}
 			
-			hotelList.add(info);
+			departmentList.add(info);
 		}
 
-		return hotelList;
+		return departmentList;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Set<ReparticionAdminInfo> getGlobalHotelList(Comparator<ReparticionAdminInfo> comp,boolean getAccounts)
+	public Set<DepartmentAdminInfo> getGlobalHotelList(Comparator<DepartmentAdminInfo> comp,boolean getAccounts)
 	{
 		final JdbcTemplate template = new JdbcTemplate(datasource);
 
@@ -101,15 +101,15 @@ public class UserAccessServiceImpl implements UserAccessService
 		
 		final List results = template.queryForList(sHotelQuery);
 		
-		return this.getReparticionList(results,comp,getAccounts);
+		return this.getDepartmentList(results,comp,getAccounts);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Set<ReparticionAdminInfo> getReparticionListForAccount(final String aAccountName,Comparator<ReparticionAdminInfo> comp)
+	public Set<DepartmentAdminInfo> getDepartmentListForAccount(final String aAccountName,Comparator<DepartmentAdminInfo> comp)
 	{
 		final JdbcTemplate template = new JdbcTemplate(datasource);
 
-		Set<ReparticionAdminInfo> reparticionList=new HashSet();
+		Set<DepartmentAdminInfo> departmentList=new HashSet();
 		
 		String sHotelQuery = "  " ;
 				
@@ -119,9 +119,9 @@ public class UserAccessServiceImpl implements UserAccessService
 			{
 				if(role.getName().equals("DEPARTMENT_RESPONSIBLE") || role.getName().equals("HR_MANAGER") )
 					{
-						 sHotelQuery = " select h.id, h.nombre " +
-			                          " from REPARTICION_ACCOUNT ha " +
-			                          " inner join REPARTICION h on h.id = ha.REPARTICIONID " +
+						 sHotelQuery = " select h.id, h.name " +
+			                          " from DEPARTMENT_ACCOUNT ha " +
+			                          " inner join DEPARTMENT h on h.id = ha.DEPARTMENTID " +
 			                          " inner join sec_account a on a.id = ha.accountId " +
 			                          " where a.name = ? ";
 						 
@@ -129,84 +129,84 @@ public class UserAccessServiceImpl implements UserAccessService
 						final Object[] args = { aAccountName };
 						final List results = template.queryForList(sHotelQuery, args, types);
 							
-						reparticionList = this.getReparticionList(results,comp,false);
+						departmentList = this.getDepartmentList(results,comp,false);
 				
 					}
 					
 				if(role.getName().equals("SUBTREE_SUPERVISOR"))
 					{
 						sHotelQuery = "Select h.id, h.nombre " +
-								"From reparticion h " +
-								"where REGEXP_LIKE (h.code, (select reverse(cast((cast(reverse(code) as number)) as varchar2(30))) as patron from REPARTICION_ACCOUNT ha " +
-								"inner join REPARTICION r on r.id = ha.REPARTICIONID " +
+								"From department h " +
+								"where REGEXP_LIKE (h.code, (select reverse(cast((cast(reverse(code) as number)) as varchar2(30))) as patron from DEPARTMENT_ACCOUNT ha " +
+								"inner join DEPARTMENT r on r.id = ha.DEPARTMENTID " +
 								"inner join sec_account a on a.id = ha.accountId " +
 								"where a.name = ?))" ;
 						final int[] types = { Types.VARCHAR };
 						final Object[] args = { aAccountName };
 						final List results = template.queryForList(sHotelQuery, args, types);
 								
-						reparticionList = this.getReparticionList(results,comp,false);
+						departmentList = this.getDepartmentList(results,comp,false);
 						
 					}
 						
 				if(role.getName().equals("DEPARTMENTS_SUPERVISOR"))
 					{
-						List<ReparticionSearchInfo> reparticionSearchInfos = new ArrayList<ReparticionSearchInfo>();
+						List<DepartmentSearchInfo> departmentSearchInfos = new ArrayList<DepartmentSearchInfo>();
 						
-						reparticionSearchInfos = reparticionService.findAllReparticiones();
-						for(ReparticionSearchInfo reparticionSearchInfo: reparticionSearchInfos)
+						departmentSearchInfos = departmentService.findAllDepartments();
+						for(DepartmentSearchInfo departmentSearchInfo: departmentSearchInfos)
 							{
-								ReparticionAdminInfo info = new ReparticionAdminInfo(reparticionSearchInfo.getReparticionId(),reparticionSearchInfo.getReparticionName());
-								//info.setStatus(reparticionSearchInfo.getHotelStatus());
-								reparticionList.add(info);
+								DepartmentAdminInfo info = new DepartmentAdminInfo(departmentSearchInfo.getDepartmentId(),departmentSearchInfo.getDepartmentName());
+								//info.setStatus(departmentSearchInfo.getHotelStatus());
+								departmentList.add(info);
 							}
 					}
 						
 				}
 
-		return reparticionList;
+		return departmentList;
 	}
 
 	// FIXME: add a test
-	public boolean hasAccessToReparticion(final Account anAccount, final Long reparticionId) 
+	public boolean hasAccessToDepartment(final Account anAccount, final Long departmentId) 
 	{
 		if (anAccount == null) {
-			String msg = "Cannot check access of account to reparticion with null account";
+			String msg = "Cannot check access of account to department with null account";
 			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
-		if (reparticionId == null) {
-			String msg = "Cannot check access account to reparticion with null reparticion id";
+		if (departmentId == null) {
+			String msg = "Cannot check access account to department with null department id";
 			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
 		if (log.isDebugEnabled()) {
-			log.debug("Checking if user: '" + anAccount.getName() + " has access to reparticion: '" + reparticionId + "' ...");
+			log.debug("Checking if user: '" + anAccount.getName() + " has access to department: '" + departmentId + "' ...");
 		}
 
-		if (anAccount.hasPermissions("VIEW_ALL_REPARTICIONES", "READ") ) {
+		if (anAccount.hasPermissions("VIEW_ALL_DEPARTMENTS", "READ") ) {
 			return true;
 		}
 
 		final JdbcTemplate template = new JdbcTemplate(datasource);
 
-		final String sReparticionQuery = " select r.id " +
-						" from reparticion_account ra " +
-				        " inner join reparticion r on r.id = ra.reparticionId " +
+		final String sDepartmentQuery = " select r.id " +
+						" from department_account ra " +
+				        " inner join department r on r.id = ra.departmentId " +
 				        " inner join sec_account a on a.id = ra.accountId " +
 				        " where a.name = ? and r.id = ?";
 		
 		final Object[] args = new Object[2];
 		args[0] = anAccount.getName();
-		args[1] = reparticionId;
+		args[1] = departmentId;
 		
 		final int[] argType = new int[2];  
 		argType[0] = java.sql.Types.VARCHAR;
 		argType[1] = java.sql.Types.DECIMAL;
 	
-		final List results = template.queryForList(sReparticionQuery, args, argType);
+		final List results = template.queryForList(sDepartmentQuery, args, argType);
 
 		if(results!=null && results.size()>0){
 			return true;
@@ -218,16 +218,16 @@ public class UserAccessServiceImpl implements UserAccessService
 
 	// FIXME add a test!!!
 	@SuppressWarnings("unchecked")
-	public boolean hasAccessToReparticion(final String aAccountName,final Long aReparticionId)
+	public boolean hasAccessToDepartment(final String aAccountName,final Long aDepartmentId)
 	{
 		if (aAccountName == null) {
-			String msg = "Cannot check access of account to reparticion with null account name";
+			String msg = "Cannot check access of account to department with null account name";
 			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
-		if (aReparticionId == null) {
-			String msg = "Cannot check access account to reparticion with null reparticion code";
+		if (aDepartmentId == null) {
+			String msg = "Cannot check access account to department with null department code";
 			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -238,12 +238,12 @@ public class UserAccessServiceImpl implements UserAccessService
 			return true;
 		}
 
-		return this.hasAccessToReparticion(account, aReparticionId);
+		return this.hasAccessToDepartment(account, aDepartmentId);
 	}
 
 	
 	@SuppressWarnings("unchecked")
-	public Set<String> getAccountsForReparticion(final Long reparticionId)
+	public Set<String> getAccountsForDepartment(final Long departmentId)
 	{
 		final JdbcTemplate template = new JdbcTemplate(datasource);
 
@@ -266,7 +266,7 @@ public class UserAccessServiceImpl implements UserAccessService
 									" sec_permission_bit.name = 'READ' ";
 			
 		final int[] types = { Types.VARCHAR };
-		final Object[] args = { reparticionId };
+		final Object[] args = { departmentId };
 		final List results = template.queryForList(sHotelQuery, args, types);
 
 		Set<String> accountNames = new HashSet<String>();
@@ -408,9 +408,9 @@ public class UserAccessServiceImpl implements UserAccessService
 		// and that the combo box will actually restrict the list
 		if (account.hasPermissions("VIEW_ALL_HOTELS", "READ")) 
 		{
-			List<ReparticionSearchInfo> hotelSearchInfos = new ArrayList<ReparticionSearchInfo>();
+			List<DepartmentSearchInfo> hotelSearchInfos = new ArrayList<DepartmentSearchInfo>();
 			
-			hotelSearchInfos = reparticionService.findAllReparticiones();
+			hotelSearchInfos = departmentService.findAllDepartments();
 			
 			if(CollectionUtils.isEmpty(aHotelCodes) || aHotelCodes.size()==hotelSearchInfos.size()){
 				//If CollectionUtils.isEmpty(aHotelCodes) then the user cleaned up his selected hotels subset, so he will see all hotels
@@ -580,12 +580,12 @@ public class UserAccessServiceImpl implements UserAccessService
 		return portfolioManagerAccounts;
 	}
 	
-	public ReparticionService getReparticionService() {
-		return reparticionService;
+	public DepartmentService getDepartmentService() {
+		return departmentService;
 	}
 
-	public void setReparticionService(ReparticionService reparticionService) {
-		this.reparticionService = reparticionService;
+	public void setDepartmentService(DepartmentService departmentService) {
+		this.departmentService = departmentService;
 	}
 	
 	public AccountService getAccountService() {

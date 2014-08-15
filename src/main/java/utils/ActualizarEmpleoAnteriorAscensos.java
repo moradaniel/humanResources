@@ -6,10 +6,10 @@ import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryType;
+import org.dpi.department.DepartmentService;
 import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentService;
 import org.dpi.person.PersonService;
-import org.dpi.reparticion.ReparticionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -23,7 +23,7 @@ public class ActualizarEmpleoAnteriorAscensos {
 	
 	Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
-	ReparticionService reparticionService;
+	DepartmentService reparticionService;
 	
 	PersonService agenteService;
 	

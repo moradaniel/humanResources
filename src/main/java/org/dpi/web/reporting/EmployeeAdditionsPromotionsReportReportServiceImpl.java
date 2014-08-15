@@ -44,7 +44,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		long creditsPeriodId = employeeAdditionsPromotionsReportParameters.getCreditsPeriodIds().iterator().next();
 		
 				
-		long reparticionId = employeeAdditionsPromotionsReportParameters.getReparticionIds().iterator().next();
+		long departmentId = employeeAdditionsPromotionsReportParameters.getDepartmentIds().iterator().next();
 
 		// Call DownloadService to do the actual report processing
 		//downloadService.downloadPdf(response);
@@ -54,7 +54,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 
 		//get movimientos de ascenso
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setReparticionId(reparticionId);
+		empleoQueryFilter.setDepartmentId(departmentId);
 		//todos los status
 		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
@@ -62,19 +62,19 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
 		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
 
-		List<CreditsEntry> creditsEntryReparticion = creditsEntryService.find(creditsEntryQueryFilter);
+		List<CreditsEntry> creditsEntryDepartment = creditsEntryService.find(creditsEntryQueryFilter);
 
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Account currenUser = (Account)accountObj;
-		List<CreditsEntryVO> creditsEntriesAscensosReparticionVO = creditsEntryService.buildCreditsEntryVO(creditsEntryReparticion,currenUser);
+		List<CreditsEntryVO> creditsEntriesAscensosDepartmentVO = creditsEntryService.buildCreditsEntryVO(creditsEntryDepartment,currenUser);
 		
 			
 		
-		params.put("MOVIMIENTOS_ASCENSO",  new MovimientosAscensoReportDataSource(getReportDataMovimientosAscenso(creditsEntriesAscensosReparticionVO)));
+		params.put("MOVIMIENTOS_ASCENSO",  new MovimientosAscensoReportDataSource(getReportDataMovimientosAscenso(creditsEntriesAscensosDepartmentVO)));
 		
 		//get movimientos de Ingreso
 		empleoQueryFilter = new EmploymentQueryFilter();
-		empleoQueryFilter.setReparticionId(reparticionId);
+		empleoQueryFilter.setDepartmentId(departmentId);
 		//todos los estados
 		//empleoQueryFilter.setEstadosEmpleo(CollectionUtils.arrayToList(EstadoEmpleo.values()));
 		creditsEntryQueryFilter = new CreditsEntryQueryFilter();
@@ -83,25 +83,25 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
 		creditsEntryQueryFilter.setHasCredits(true);
 		
-		List<CreditsEntry> creditsEntryIngresosReparticion = creditsEntryService.find(creditsEntryQueryFilter);
+		List<CreditsEntry> creditsEntryIngresosDepartment = creditsEntryService.find(creditsEntryQueryFilter);
 
 		int cantidadMovimientosIngreso = 0;
-		if(!CollectionUtils.isEmpty(creditsEntryIngresosReparticion)){
-			cantidadMovimientosIngreso=creditsEntryIngresosReparticion.size();
+		if(!CollectionUtils.isEmpty(creditsEntryIngresosDepartment)){
+			cantidadMovimientosIngreso=creditsEntryIngresosDepartment.size();
 		}
 		
 		params.put("CANTIDAD_MOVIMIENTOS_INGRESO",  cantidadMovimientosIngreso);
 		
-		params.put("MOVIMIENTOS_INGRESO",  new MovimientosIngresoReportDataSource(getReportDataMovimientosIngreso(creditsEntryIngresosReparticion)));
+		params.put("MOVIMIENTOS_INGRESO",  new MovimientosIngresoReportDataSource(getReportDataMovimientosIngreso(creditsEntryIngresosDepartment)));
 		
 		
-		Long creditosDisponiblesAlInicioDelPeriodo =this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,reparticionId);
+		Long creditosDisponiblesAlInicioDelPeriodo =this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
 		
-		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(creditsPeriodId,reparticionId);
+		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(creditsPeriodId,departmentId);
 
-		Long creditosPorIngresosOAscensosSolicitados = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(creditsPeriodId, reparticionId);
+		Long creditosPorIngresosOAscensosSolicitados = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(creditsPeriodId, departmentId);
 
-		Long creditosDisponibles = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodId,reparticionId);
+		Long creditosDisponibles = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodId,departmentId);
 	
 		
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO",creditosDisponiblesAlInicioDelPeriodo);
@@ -118,17 +118,17 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 	
 	
     
-	private List<GenericReportRecord> getReportDataMovimientosAscenso(List<CreditsEntryVO> creditsEntriesAscensosReparticionVO) {
+	private List<GenericReportRecord> getReportDataMovimientosAscenso(List<CreditsEntryVO> creditsEntriesAscensosDepartmentVO) {
 
 		final List<GenericReportRecord> records = new ArrayList<GenericReportRecord>();
-		for(CreditsEntryVO creditsEntryAscensosReparticionVO:creditsEntriesAscensosReparticionVO){
+		for(CreditsEntryVO creditsEntryAscensosDepartmentVO:creditsEntriesAscensosDepartmentVO){
 			GenericReportRecord record = new GenericReportRecord();
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.PERSON_APELLIDO_NOMBRE.name(),creditsEntryAscensosReparticionVO.getCreditsEntry().getEmployment().getPerson().getApellidoNombre());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.PERSON_CUIL.name(),creditsEntryAscensosReparticionVO.getCreditsEntry().getEmployment().getPerson().getCuil());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_CURRENT_CATEGORY.name(),creditsEntryAscensosReparticionVO.getCurrentCategory());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PROPOSED_CATEGORY.name(),creditsEntryAscensosReparticionVO.getProposedCategory());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosReparticionVO.getOccupationalGroup());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosReparticionVO.getParentOccupationalGroup());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.PERSON_APELLIDO_NOMBRE.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getEmployment().getPerson().getApellidoNombre());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.PERSON_CUIL.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getEmployment().getPerson().getCuil());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_CURRENT_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getCurrentCategory());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PROPOSED_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getProposedCategory());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getOccupationalGroup());
+			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getParentOccupationalGroup());
 			records.add(record);
 		}
 		
@@ -136,10 +136,10 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 	}
 	
 	
-	private List<GenericReportRecord> getReportDataMovimientosIngreso(List<CreditsEntry> creditsEntryIngresosReparticion) {
+	private List<GenericReportRecord> getReportDataMovimientosIngreso(List<CreditsEntry> creditsEntryIngresosDepartment) {
 
 		final List<GenericReportRecord> records = new ArrayList<GenericReportRecord>();
-		for(CreditsEntry creditsEntryIngreso:creditsEntryIngresosReparticion){
+		for(CreditsEntry creditsEntryIngreso:creditsEntryIngresosDepartment){
 			GenericReportRecord record = new GenericReportRecord();
 			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.PERSON_NUEVO_PERFIL.name(),"");
 			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),"");

@@ -39,10 +39,6 @@
 <div id="reportSetup">
 
 
-	<!--  start page-heading -->
-	<!-- div id="page-heading">
-		<h1>Reporte Creditos de Reparticion:  ${reparticion.nombre}</h1>
-	</div -->
 	
 	<form id="setupReportForm" name="setupReportForm" 
 			action="${requestContext.contextPath}/reports/runReport" 

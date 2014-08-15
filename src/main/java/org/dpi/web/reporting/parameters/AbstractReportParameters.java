@@ -22,7 +22,7 @@ public abstract class AbstractReportParameters
     //** specifies the desired report output format */
     private OutputFormat outputFormat;
     
-	private Set<Long> reparticionIds = new HashSet<Long>();
+	private Set<Long> departmentIds = new HashSet<Long>();
 	
 	private Set<Long> creditsPeriodIds = new HashSet<Long>();
 		
@@ -58,21 +58,21 @@ public abstract class AbstractReportParameters
 
 
 
-	public Set<Long> getReparticionIds() {
-		return reparticionIds;
+	public Set<Long> getDepartmentIds() {
+		return departmentIds;
 	}
 
 
-	public void setReparticionIds(Set<Long> reparticionIds) {
-		this.reparticionIds = reparticionIds;
+	public void setDepartmentIds(Set<Long> departmentIds) {
+		this.departmentIds = departmentIds;
 	}
 	
 	public void addCreditsPeriod(Long creditsPeriodId) {
 		this.creditsPeriodIds.add(creditsPeriodId);
 	}
 
-	public void addReparticion(Long reparticionId) {
-		this.reparticionIds.add(reparticionId);
+	public void addDepartment(Long departmentId) {
+		this.departmentIds.add(departmentId);
 	}
 
 }

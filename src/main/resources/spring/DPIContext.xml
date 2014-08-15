@@ -17,11 +17,11 @@
 	 ****************************************************************************
 	-->
 	<!-- the Service Facade -->
-	<bean id="reparticionService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="departmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.reparticion.ReparticionServiceImpl">
-				<constructor-arg><ref local="reparticionDao"/></constructor-arg>
+			<bean class="org.dpi.department.DepartmentServiceImpl">
+				<constructor-arg><ref local="departmentDao"/></constructor-arg>
 			</bean>
 		</property>
 		<property name="transactionAttributes">
@@ -37,10 +37,10 @@
 	</bean>
 
 	<!-- the Service DAO on which the Facade relies -->
-	<bean id="reparticionDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="departmentDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.reparticion.ReparticionDaoHibImpl">
+			<bean class="org.dpi.department.DepartmentDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -76,11 +76,11 @@
 		</property>
 	</bean>
 	
-	<bean id="centroSectorService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="subDepartmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.centroSector.CentroSectorServiceImpl">
-				<constructor-arg><ref local="centroSectorDao"/></constructor-arg>
+			<bean class="org.dpi.subDepartment.SubDepartmentServiceImpl">
+				<constructor-arg><ref local="subDepartmentDao"/></constructor-arg>
 			</bean>
 		</property>
 		<property name="transactionAttributes">
@@ -96,10 +96,10 @@
 	</bean>
 
 	<!-- the Service DAO on which the Facade relies -->
-	<bean id="centroSectorDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="subDepartmentDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
 		<property name="target">
-			<bean class="org.dpi.centroSector.CentroSectorDaoHibImpl">
+			<bean class="org.dpi.subDepartment.SubDepartmentDaoHibImpl">
 				<property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
 			</bean>
 		</property>
@@ -207,8 +207,8 @@
 				<property name="personService">
 					<ref bean="personService" />
 				</property>
-				<property name="centroSectorService">
-					<ref bean="centroSectorService" />
+				<property name="subDepartmentService">
+					<ref bean="subDepartmentService" />
 				</property>
 				
 			</bean>
@@ -426,8 +426,8 @@
 		<property name="dataSource">
 			<ref bean="dpiDataSource"/>
 		</property>
-		<property name="reparticionService">
-			<ref bean="reparticionService"/>
+		<property name="departmentService">
+			<ref bean="departmentService"/>
 		</property>
 		<property name="accountService">
 			<ref bean="accountServiceGeneric"/>

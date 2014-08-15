@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSector;
-import org.dpi.centroSector.CentroSectorService;
 import org.dpi.common.CustomObjectMapper;
 import org.dpi.common.ResponseMap;
 import org.dpi.creditsManagement.CreditsManagerService;
+import org.dpi.department.Department;
+import org.dpi.department.DepartmentController;
 import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.person.PersonService;
-import org.dpi.reparticion.Reparticion;
-import org.dpi.reparticion.ReparticionController;
+import org.dpi.subDepartment.SubDepartment;
+import org.dpi.subDepartment.SubDepartmentService;
 import org.dpi.util.PageList;
 import org.dpi.web.response.StatusResponse;
 import org.janux.bus.security.Account;
@@ -64,8 +64,8 @@ public class EmploymentController {
 
 
 
-	@Resource(name = "centroSectorService")
-	private CentroSectorService centroSectorService;
+	@Resource(name = "subDepartmentService")
+	private SubDepartmentService subDepartmentService;
 
 	@Resource(name = "personService")
 	private PersonService personService;
@@ -107,14 +107,14 @@ public class EmploymentController {
 
 	/*@ModelAttribute
 	public Reparticion addReparticion(@PathVariable Long id) {
-		return (id != null) ? reparticionService.findById(id) : null;
+		return (id != null) ? departmentService.findById(id) : null;
 	}*/
 
-	/*@RequestMapping(value = "/reparticiones/{id}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/departments/{id}", method = RequestMethod.GET)
 	public String show(@PathVariable Long id, Model model) {
 		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponibles(id);
 		model.addAttribute("creditosDisponibles", creditosDisponibles);
-		return "reparticiones/show";
+		return "departments/show";
 	}*/
 
 	@RequestMapping(value = "/employments/{id}/deactivatePerson", method = RequestMethod.GET)
@@ -133,7 +133,7 @@ public class EmploymentController {
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		employmentCreditsEntriesService.deactivate(employmentToDeactivate,currentUser);
 
-		return "redirect:/reparticiones/reparticion/showEmployments";
+		return "redirect:/departments/department/showEmployments";
 
 	}
 	
@@ -155,7 +155,7 @@ public class EmploymentController {
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		employmentCreditsEntriesService.undoDeactivation(employmentToUndoDeactivation,currentUser);
 
-		return "redirect:/reparticiones/reparticion/showEmployments";
+		return "redirect:/departments/department/showEmployments";
 
 	}
 	
@@ -167,9 +167,9 @@ public class EmploymentController {
 			@PathVariable Long id, Model model) {
 
 
-		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
+		final Department department = DepartmentController.getCurrentDepartment(request);
 
-		if (reparticion != null){
+		if (department != null){
 
 			EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 			employmentQueryFilter.setEmploymentId(id);
@@ -178,9 +178,9 @@ public class EmploymentController {
 
 			Employment currentEmployment = employments.get(0);
 
-			if(currentEmployment.getCentroSector().getReparticion().getId().longValue()!=reparticion.getId().longValue()){
+			if(currentEmployment.getSubDepartment().getDepartment().getId().longValue()!=department.getId().longValue()){
 
-				return "redirect:/reparticiones/reparticion/showEmployments";
+				return "redirect:/departments/department/showEmployments";
 			}
 
 			model.addAttribute("currentEmployment", currentEmployment);
@@ -222,7 +222,7 @@ public class EmploymentController {
 
 		employmentCreditsEntriesService.promotePerson(currentEmployment, proposedCategoryCode);
 
-		return "redirect:/reparticiones/reparticion/showEmployments";
+		return "redirect:/departments/department/showEmployments";
 	}
 
 
@@ -233,10 +233,10 @@ public class EmploymentController {
 
 		//String idEmpleoActual = ServletRequestUtils.getStringParameter(request, "idEmpleoActual");
 
-		String centroSectorId = ServletRequestUtils.getStringParameter(request, "centroSectorId");
+		String subDepartmentId = ServletRequestUtils.getStringParameter(request, "subDepartmentId");
 		String proposedCategoryCode = ServletRequestUtils.getStringParameter(request, "proposedCategoryCode");
 
-		if (!StringUtils.hasText(centroSectorId) || !StringUtils.hasText(proposedCategoryCode)){
+		if (!StringUtils.hasText(subDepartmentId) || !StringUtils.hasText(proposedCategoryCode)){
 			return "redirect:/employments/proposeNewEmploymentForm";
 		}
 
@@ -247,9 +247,9 @@ public class EmploymentController {
 		}*/
 
 
-		employmentCreditsEntriesService.proposeNewEmployment(proposedCategoryCode, Long.parseLong(centroSectorId));
+		employmentCreditsEntriesService.proposeNewEmployment(proposedCategoryCode, Long.parseLong(subDepartmentId));
 
-		return "redirect:/reparticiones/reparticion/showEmployments";
+		return "redirect:/departments/department/showEmployments";
 	}
 
 
@@ -290,11 +290,11 @@ public class EmploymentController {
 
 		Employment empleoDadoDeBaja = empleoACambiarCategoria;
 
-		//buscar los empleos de la reparticion
+		//buscar los empleos de la department
 		empleoQueryFilter = new EmploymentQueryFilter();
 
-		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
-		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
+		Reparticion department = empleoDadoDeBaja.getCentroSector().getReparticion();
+		empleoQueryFilter.setReparticionId(department.getId().toString());
 
 		empleos = empleoService.find(empleoQueryFilter);*/
 
@@ -339,20 +339,20 @@ public class EmploymentController {
 
 		Employment empleoDadoDeBaja = empleoACambiarCategoria;
 
-		//buscar los empleos de la reparticion
+		//buscar los empleos de la department
 		empleoQueryFilter = new EmploymentQueryFilter();
 
-		Reparticion reparticion = empleoDadoDeBaja.getCentroSector().getReparticion();
-		empleoQueryFilter.setReparticionId(reparticion.getId().toString());
+		Reparticion department = empleoDadoDeBaja.getCentroSector().getReparticion();
+		empleoQueryFilter.setReparticionId(department.getId().toString());
 
 		empleos = empleoService.find(empleoQueryFilter);*/
 
-		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
+		final Department department = DepartmentController.getCurrentDepartment(request);
 
 
-		List<CentroSector> centroSectoresReparticion = centroSectorService.findCentroSectores(reparticion);
+		List<SubDepartment> subDepartmentsOfDepartment = subDepartmentService.findSubDepartments(department);
 
-		model.addAttribute("centroSectoresDeReparticion", centroSectoresReparticion);
+		model.addAttribute("subDepartmentsOfDepartment", subDepartmentsOfDepartment);
 
 		return "employments/proposeNewEmploymentForm";
 	}
@@ -378,36 +378,36 @@ public class EmploymentController {
 	}
 
 
-	public CentroSectorService getCentroSectorService() {
-		return centroSectorService;
+	public SubDepartmentService getSubDepartmentService() {
+		return subDepartmentService;
 	}
 
 
-	public void setCentroSectorService(CentroSectorService centroSectorService) {
-		this.centroSectorService = centroSectorService;
+	public void setSubDepartmentService(SubDepartmentService subDepartmentService) {
+		this.subDepartmentService = subDepartmentService;
 	}
 
-	/*@RequestMapping(value = "/reparticiones/{id}", method = RequestMethod.POST)
-	public String edit(ReparticionImpl reparticion, BindingResult result,
+	/*@RequestMapping(value = "/departments/{id}", method = RequestMethod.POST)
+	public String edit(ReparticionImpl department, BindingResult result,
 			@RequestHeader(value = "X-Requested-With", required = false) String requestedWith) {
 		if (result.hasErrors()) {
-			return "reparticiones/edit";
+			return "departments/edit";
 		}
-		reparticionService.saveOrUpdate(reparticion);
-		return (AjaxUtils.isAjaxRequest(requestedWith)) ? "reparticiones/show" : "redirect:/reparticiones/" + reparticion.getId();
+		departmentService.saveOrUpdate(department);
+		return (AjaxUtils.isAjaxRequest(requestedWith)) ? "departments/show" : "redirect:/departments/" + department.getId();
 	}*/
 
 
 	/**
 	 * get all employments of a department
-	 * @param reparticionId
+	 * @param departmentId
 	 * @return
 	 * @throws JsonProcessingException 
 	 */
 
-	@RequestMapping(value = "/rest/reparticiones/{reparticionId}/employments", method = RequestMethod.GET,
+	@RequestMapping(value = "/rest/departments/{departmentId}/employments", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> employmentsSearch(@PathVariable String reparticionId,
+	public ResponseEntity<String> employmentsSearch(@PathVariable String departmentId,
 
 			//@RequestParam(value="apellidoNombre", required=false) String apellidoNombre,
 			//@RequestParam(value="cuil", required=false) String cuil,
@@ -436,7 +436,7 @@ public class EmploymentController {
 		}*/
 
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setReparticionId(Long.parseLong(reparticionId));
+		employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));
 
 
 		if(StringUtils.hasText(apellidoNombre)) {
@@ -461,7 +461,7 @@ public class EmploymentController {
 
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Account currenUser = (Account)accountObj;
-		List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(employments,Long.parseLong(reparticionId),currenUser);
+		List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(employments,Long.parseLong(departmentId),currenUser);
 
 
 
@@ -508,8 +508,8 @@ public class EmploymentController {
 	}
 	
 	
-    @RequestMapping(value = "/rest/reparticiones/{reparticionId}/employments", method = RequestMethod.POST)
-    public ResponseEntity<String> saveEmployment(@PathVariable String reparticionId,@RequestBody EmploymentImpl employment) throws JsonProcessingException{
+    @RequestMapping(value = "/rest/departments/{departmentId}/employments", method = RequestMethod.POST)
+    public ResponseEntity<String> saveEmployment(@PathVariable String departmentId,@RequestBody EmploymentImpl employment) throws JsonProcessingException{
     	
     	/*if(true) {
     		throw new RuntimeException("Error de prueba");
@@ -519,7 +519,7 @@ public class EmploymentController {
     	
     	//retrieve the existing employments
     	EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-    	employmentQueryFilter.setReparticionId(Long.parseLong(reparticionId));
+    	employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));
     	employmentQueryFilter.setEmploymentId(employment.getId());
     	
     	//TODO check if the employment exists

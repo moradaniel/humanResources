@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.Set;
 
 import org.dpi.category.Category;
-import org.dpi.centroSector.CentroSector;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.Persistent;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
+import org.dpi.subDepartment.SubDepartment;
 
 
 public interface Employment extends Persistent,Serializable{
@@ -21,9 +21,9 @@ public interface Employment extends Persistent,Serializable{
 
 	public void setPerson(Person person);
 
-	public CentroSector getCentroSector();
+	public SubDepartment getSubDepartment();
 
-	public void setCentroSector(CentroSector centroSector);
+	public void setSubDepartment(SubDepartment subDepartment);
 	
 	public Category getCategory();
 

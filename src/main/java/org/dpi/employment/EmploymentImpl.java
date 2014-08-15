@@ -6,13 +6,13 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.category.Category;
-import org.dpi.centroSector.CentroSector;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
+import org.dpi.subDepartment.SubDepartment;
 import org.janux.util.JanuxToStringStyle;
 
 
@@ -25,7 +25,7 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 	private static final long serialVersionUID = 1L;
 	
 	Person person;
-	CentroSector centroSector;
+	SubDepartment subDepartment;
 	
 	Category category;
 	
@@ -53,13 +53,13 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 	}
 	
 	@Override
-	public CentroSector getCentroSector() {
-		return this.centroSector;
+	public SubDepartment getSubDepartment() {
+		return this.subDepartment;
 	}
 
 	@Override
-	public void setCentroSector(CentroSector centroSector) {
-		this.centroSector=centroSector;
+	public void setSubDepartment(SubDepartment subDepartment) {
+		this.subDepartment=subDepartment;
 		
 	}
 	

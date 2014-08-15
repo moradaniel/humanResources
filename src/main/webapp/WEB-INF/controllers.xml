@@ -55,7 +55,7 @@
 		
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/> 
-			<ref bean="reparticionActionInterceptor"/>
+			<ref bean="departmentActionInterceptor"/>
 		</mvc:interceptor> 
 		
 	</mvc:interceptors>
@@ -68,8 +68,8 @@
 	
 	<bean id="tilesLocaleInterceptor" class="org.dpi.web.TilesLocaleInterceptor" />
 	
-	<bean id="reparticionActionInterceptor" class="org.dpi.web.ReparticionActionInterceptor">
-		<constructor-arg><ref bean="reparticionService"/></constructor-arg>
+	<bean id="departmentActionInterceptor" class="org.dpi.web.DepartmentActionInterceptor">
+		<constructor-arg><ref bean="departmentService"/></constructor-arg>
 		<constructor-arg><ref bean="userAccessService"/></constructor-arg>
 	</bean>
 	

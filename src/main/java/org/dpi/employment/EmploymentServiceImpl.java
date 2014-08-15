@@ -7,12 +7,12 @@ import javax.annotation.Resource;
 
 import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.person.PersonService;
+import org.dpi.subDepartment.SubDepartmentService;
 import org.dpi.util.PageList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +41,8 @@ public class EmploymentServiceImpl implements EmploymentService
 	@Resource(name = "personService")
 	private PersonService personService;
 	
-	@Resource(name = "centroSectorService")
-	private CentroSectorService centroSectorService;
+	@Resource(name = "subDepartmentService")
+	private SubDepartmentService subDepartmentService;
 	
 	@Resource(name = "creditsPeriodService")
 	private CreditsPeriodService creditsPeriodService;
@@ -164,13 +164,13 @@ public class EmploymentServiceImpl implements EmploymentService
 	
 
 	
-	public CentroSectorService getCentroSectorService() {
-		return centroSectorService;
+	public SubDepartmentService getSubDepartmentService() {
+		return subDepartmentService;
 	}
 
 
-	public void setCentroSectorService(CentroSectorService centroSectorService) {
-		this.centroSectorService = centroSectorService;
+	public void setSubDepartmentService(SubDepartmentService subDepartmentService) {
+		this.subDepartmentService = subDepartmentService;
 	}
 
 	

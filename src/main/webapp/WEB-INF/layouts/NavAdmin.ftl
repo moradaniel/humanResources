@@ -7,7 +7,7 @@
 </#function>
 
 <#assign systemSubNav= [
-	 { "URL":"reparticiones",      "label":"Reparticiones",            "requiresReparticion":false, "doDisplay":account?exists && account.hasPermissions("Manage_Reparticiones", "READ") }
+	 { "URL":"departments",      "label":"Reparticiones",            "requiresDepartment":false, "doDisplay":account?exists && account.hasPermissions("Manage_Departments", "READ") }
 	 <#-- { "URL":"reparticiones",      "label":"Reparticiones",            "requiresReparticion":false, "doDisplay":true } -->
 	 
 	 
@@ -34,42 +34,42 @@
 	{ "label":"Updates",
 		"doDisplay":account?exists && account.hasPermissions("Inventory_Management", "READ"),
 		"subNav": [
-			{ "URL":"dailyupdate/inv/",   "label":"Inventory Overview","requiresReparticion":true, "doDisplay":true },
-			{ "URL":"hotel/rateholders/", "label":"Source Management", "requiresReparticion":true,
+			{ "URL":"dailyupdate/inv/",   "label":"Inventory Overview","requiresDepartment":true, "doDisplay":true },
+			{ "URL":"hotel/rateholders/", "label":"Source Management", "requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("Source_Management", "UPDATE")
 			},
-			{ "URL":"admin/import/getImportForm", "label":"Import", "requiresReparticion":true,
+			{ "URL":"admin/import/getImportForm", "label":"Import", "requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("Inventory_Management", "UPDATE")
 			}
 		]
 	},
 
 	{ "label":"Reparticion",
-		"doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "READ"),
+		"doDisplay":account?exists && account.hasPermissions("Department_Info", "READ"),
 		"subNav": [
-			{ "URL":"reparticiones/reparticion/showCreditos",   "label":"Resumen Creditos",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") },
-			{ "URL":"reparticiones/reparticion/showEmployments",   "label":"Agentes",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Manage_Employments", "READ") },
-			{ "URL":"reparticiones/reparticion/showCreditEntries/2014",   "label":"Movimientos de Credito",         "requiresReparticion":true, "doDisplay":account?exists && account.hasPermissions("Reparticion_Info", "UPDATE") }
+			{ "URL":"departments/department/showCredits",   "label":"Resumen Creditos",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") },
+			{ "URL":"departments/department/showEmployments",   "label":"Agentes",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Manage_Employments", "READ") },
+			{ "URL":"departments/department/showCreditEntries/2014",   "label":"Movimientos de Credito",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") }
 		]
 	},
 
 	{ "label":"Rooms/Rates",
 		"doDisplay":account?exists && account.hasPermissions("Rooms_Rates", "UPDATE"),
 		"subNav": [
-			{ "URL":"hotel/rateplans/", "label":"Manage Rates","requiresReparticion":true, "doDisplay":true },
-			{ "URL":"hotel/roomtypes/", "label":"Manage Rooms","requiresReparticion":true, "doDisplay":true },
-			{ "URL":"hotel/addons/",    "label":"Manage Add Ons","requiresReparticion":true, "doDisplay":true }
+			{ "URL":"hotel/rateplans/", "label":"Manage Rates","requiresDepartment":true, "doDisplay":true },
+			{ "URL":"hotel/roomtypes/", "label":"Manage Rooms","requiresDepartment":true, "doDisplay":true },
+			{ "URL":"hotel/addons/",    "label":"Manage Add Ons","requiresDepartment":true, "doDisplay":true }
 		]
 	},
 
 	{ "label":"Reportes",
 		"doDisplay":account?exists && account.hasPermissions("Reports", "READ"),
 		"subNav": [
-			{ "URL":"reports/reportSetup", "label":"Reportes Administrativos","requiresReparticion":true,"doDisplay":true },
-			{ "URL":"reportadmin/ReportAdminSetup","label":"Administration Reports","requiresReparticion":true,
+			{ "URL":"reports/reportSetup", "label":"Reportes Administrativos","requiresDepartment":true,"doDisplay":true },
+			{ "URL":"reportadmin/ReportAdminSetup","label":"Administration Reports","requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("ADMINISTRATION_REPORTS", "READ")},
-			<#--{ "URL":"report/resSearch",   "label":"Reservation Production","requiresReparticion":true,"doDisplay":true }, -->
-			{ "URL":"admin/export/getExportForm", "label":"Export", "requiresReparticion":true,
+			<#--{ "URL":"report/resSearch",   "label":"Reservation Production","requiresDepartment":true,"doDisplay":true }, -->
+			{ "URL":"admin/export/getExportForm", "label":"Export", "requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("Export_Res_Data", "READ")
 			}
 		]
@@ -85,33 +85,33 @@
 				|| account.hasPermissions("Call_Wrap", "READ")
 				),
 		"subNav": [
-			{ "URL":"bookadmin/Find",        "label":"Reservations",    "requiresReparticion":true,
+			{ "URL":"bookadmin/Find",        "label":"Reservations",    "requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("Search_Reservations", "READ")
 			},
-			{ "URL":"admin/iata",       "label":"Travel Agencies", "requiresReparticion":false,
+			{ "URL":"admin/iata",       "label":"Travel Agencies", "requiresDepartment":false,
 				"doDisplay":account?exists && account.hasPermissions("TRAVEL_AGENCY", "READ")
 			},
-			{ "URL":"bookadmin/QueueSearch", "label":"Error Queue",     "requiresReparticion":true,
+			{ "URL":"bookadmin/QueueSearch", "label":"Error Queue",     "requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("Search_Error_Queue", "READ")
 			},
-			{ "URL":"admin/audit/prices","label":"Price Log",      "requiresReparticion":true,
+			{ "URL":"admin/audit/prices","label":"Price Log",      "requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("Search_Prices", "READ")
 			},
-			{ "URL":"bookadmin/call",        "label":"Wrap Call",       "requiresReparticion":false,
+			{ "URL":"bookadmin/call",        "label":"Wrap Call",       "requiresDepartment":false,
 				"doDisplay":account?exists && account.hasPermissions("Call_Wrap", "READ")
 			}
 		]
 	}<#--,
 
 	{ "label":"Administracion",
-		"doDisplay":account?exists && account.hasPermissions("Manage_Reparticiones", "UPDATE"),
+		"doDisplay":account?exists && account.hasPermissions("Manage_Departments", "UPDATE"),
 		"subNav": systemSubNav
 	}-->
 
 ] >
 
 
-<#assign currPageRequiresReparticion=false >
+<#assign currPageRequiresDepartment=false >
 <#assign subNavLinks = [] >
 <#assign tabNum = -1 >
 <#assign subNum = -1 >
@@ -127,7 +127,7 @@
 				<#assign tabNum = navLink_index >
 				<#assign subNum = subNav_index >
 				<#assign subNavLinks = navLink.subNav >
-				<#assign currPageRequiresReparticion=subNav.requiresReparticion >
+				<#assign currPageRequiresDepartment=subNav.requiresDepartment >
 				<#break>
 			</#if>
 		</#list>

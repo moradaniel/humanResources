@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.dpi.reparticion.ReparticionAdminInfo;
+import org.dpi.department.DepartmentAdminInfo;
 import org.janux.bus.security.Account;
 
 
@@ -18,22 +18,22 @@ public interface UserAccessService
 	 */
 	Set<String> getHotelCodes(final String aAccountName);
 
-	Set<String> getAccountsForReparticion(final Long reparticionId);
+	Set<String> getAccountsForDepartment(final Long departmentId);
 	
 	/**
 	 * This method retrieves a list of all the hotels that are linked to a specific account
 	 * @param aAccountName the account to lookup links for
 	 * @param comp optional Comparator
-	 * @return a set of ReparticionAdminInfo objects
+	 * @return a set of DepartmentAdminInfo objects
 	 */
-	Set<ReparticionAdminInfo> getReparticionListForAccount(final String aAccountName,Comparator<ReparticionAdminInfo> comp);
+	Set<DepartmentAdminInfo> getDepartmentListForAccount(final String aAccountName,Comparator<DepartmentAdminInfo> comp);
 
 	/**
 	 * This method retrieves a list of all the hotels
 	 * @param comp optional Comparator
 	 * @return a set of HotelMiniInfo objects
 	 */
-	Set<ReparticionAdminInfo> getGlobalHotelList(Comparator<ReparticionAdminInfo> comp,boolean getAccounts);
+	Set<DepartmentAdminInfo> getGlobalHotelList(Comparator<DepartmentAdminInfo> comp,boolean getAccounts);
 
 	/**
 	 * This method clears all the user/hotel links for a specific account
@@ -74,7 +74,7 @@ public interface UserAccessService
 	 * @return whether the user has access to the given hotel or not
 	 * @throws IllegalArgumentException if the parameters are null
 	 */
-	public boolean hasAccessToReparticion(final String aAccountName,final Long aReparticionId);
+	public boolean hasAccessToDepartment(final String aAccountName,final Long aDepartmentId);
 	
 	/**
 	 * Check if a logged user has access to a given hotel; assumes that the Account's Role and
@@ -86,7 +86,7 @@ public interface UserAccessService
 	 * @return whether the user has access to the given hotel or not
 	 * @throws IllegalArgumentException if the parameters are null
 	 */
-	public boolean hasAccessToReparticion(final Account anAccount, final Long aHotelCode);
+	public boolean hasAccessToDepartment(final Account anAccount, final Long aDepartmentCode);
 	
 	public List<Account>findPortfolioManagers();
 }

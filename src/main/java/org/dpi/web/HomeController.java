@@ -38,28 +38,28 @@ public class HomeController {
 
 		for(Role role : account.getRoles()){
 			if(role.getName().equals("DEPARTMENT_RESPONSIBLE")){
-				return "redirect:reparticiones/reparticion/showCreditos";
+				return "redirect:departments/department/showCredits";
 			}	
 
 			if(role.getName().equals("DEPARTMENTS_SUPERVISOR")){
-				return "redirect:reparticiones/reparticion/showCreditos";
+				return "redirect:departments/department/showCredits";
 			}	
 			
 			if(role.getName().equals("SUBTREE_SUPERVISOR")){
-				return "redirect:reparticiones/reparticion/showCreditos";
+				return "redirect:departments/department/showCredits";
 			}
 			
 			if(role.getName().equals("HR_MANAGER")){
-				return "redirect:reparticiones/reparticion/showEmployments";
+				return "redirect:departments/department/showEmployments";
 			}
 
 			if(role.getName().equals("SYS_ADMIN")){
-				return "redirect:reparticiones/reparticion/showCreditos";
+				return "redirect:departments/department/showCredits";
 
 			}
 		}
 
-		return "redirect:reparticiones/reparticion/showCreditos";
+		return "redirect:departments/department/showCredits";
 	}
 
 

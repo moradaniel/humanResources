@@ -30,8 +30,8 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">validate</property>
 
-        <mapping resource="mappings/Reparticion.hbm.xml" />
-        <mapping resource="mappings/CentroSector.hbm.xml" />
+        <mapping resource="mappings/Department.hbm.xml" />
+        <mapping resource="mappings/SubDepartment.hbm.xml" />
 		<mapping resource="mappings/Person.hbm.xml" />
 		<mapping resource="mappings/Category.hbm.xml" />
 		<mapping resource="mappings/CreditsEntry.hbm.xml" />

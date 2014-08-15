@@ -10,8 +10,6 @@ import javax.annotation.Resource;
 
 import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSector;
-import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryImpl;
@@ -23,6 +21,8 @@ import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.person.Person;
 import org.dpi.person.PersonImpl;
 import org.dpi.person.PersonService;
+import org.dpi.subDepartment.SubDepartment;
+import org.dpi.subDepartment.SubDepartmentService;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +58,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	@Resource(name = "personService")
 	private PersonService personService;
 	
-	@Resource(name = "centroSectorService")
-	private CentroSectorService centroSectorService;
+	@Resource(name = "subDepartmentService")
+	private SubDepartmentService subDepartmentService;
 	
 	private ApplicationContext applicationContext;
 	
@@ -81,7 +81,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		Person employee = currentEmployment.getPerson();
 		List<Long> employeeIds = new ArrayList<Long>();
 		employeeIds.add(employee.getId());
-		Set<Long>resultEmployeeIds = creditsEntryService.havePendingEntries(employeeIds, currentEmployment.getCentroSector().getReparticion().getId(), currentCreditsPeriod.getId());
+		Set<Long>resultEmployeeIds = creditsEntryService.havePendingEntries(employeeIds, currentEmployment.getSubDepartment().getDepartment().getId(), currentCreditsPeriod.getId());
 		
 		if(resultEmployeeIds.contains(employee.getId())){
 			return;
@@ -91,7 +91,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		Employment newEmployment = new EmploymentImpl();
 		newEmployment.setPerson(currentEmployment.getPerson());
 		newEmployment.setCategory(newCategory);
-		newEmployment.setCentroSector(currentEmployment.getCentroSector());
+		newEmployment.setSubDepartment(currentEmployment.getSubDepartment());
 		newEmployment.setOccupationalGroup(currentEmployment.getOccupationalGroup());
 		newEmployment.setStartDate(new Date());
 		newEmployment.setStatus(EmploymentStatus.PENDIENTE);
@@ -122,7 +122,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" Successfully performed: promote person - "+
-					" centrosector: "+newEmployment.getCentroSector().toString()+
+					" subDepartment: "+newEmployment.getSubDepartment().toString()+
 					" Employee :"+ newEmployment.getPerson().toString()+
 					" creditsEntry: "+entryAscenso.toString());	
 		}
@@ -171,7 +171,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		if(account!=null){
 			log.info("================ user:"+account.getName()+" Successfully performed: employment deactivated - "+employment.toString()
-					/*" centrosector: "+centroSector.toString()+
+					/*" subDepartment: "+subDepartment.toString()+
 					" Employee :"+ nuevoAgentePropuesto.toString()+
 					" creditsEntry: "+creditsEntryIngreso.toString()*/);	
 		}
@@ -236,7 +236,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		if(account!=null){
 			log.info("================ user:"+account.getName()+" Successfully performed: employment UNDO deactivation - "+employment.toString()
-					/*" centrosector: "+centroSector.toString()+
+					/*" subDepartment: "+subDepartment.toString()+
 					" Employee :"+ nuevoAgentePropuesto.toString()+
 					" creditsEntry: "+creditsEntryIngreso.toString()*/);	
 		}
@@ -245,7 +245,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	
 	
 	@Override
-	public void proposeNewEmployment(String proposedCategoryCode,Long centroSectorId) {
+	public void proposeNewEmployment(String proposedCategoryCode,Long subDepartmentId) {
 		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" attempting to add proposed employee:");/*+ entry.getId()+
@@ -269,9 +269,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		newProposedEmployee.setStartDate(new Date());
 		
-		//buscar centro sector
-		CentroSector centroSector = centroSectorService.findById(centroSectorId);
-		newProposedEmployee.setCentroSector(centroSector);
+		SubDepartment subDepartment = subDepartmentService.findById(subDepartmentId);
+		newProposedEmployee.setSubDepartment(subDepartment);
 		
 		//Crear entry de ingreso
 		CreditsEntry creditsEntryIngreso = new CreditsEntryImpl();
@@ -289,7 +288,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		
 		if(currentUser!=null){
 			log.info("================ user:"+currentUser.getName()+" Successfully performed: add proposed employee - "+
-					" centrosector: "+centroSector.toString()+
+					" subDepartment: "+subDepartment.toString()+
 					" Employee :"+ newProposedPerson.toString()+
 					" creditsEntry: "+creditsEntryIngreso.toString());	
 		}
@@ -313,7 +312,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 
 	@Override
-	public List<EmploymentVO> buildEmploymentsVO(List<Employment> employments, Long reparticionId,
+	public List<EmploymentVO> buildEmploymentsVO(List<Employment> employments, Long departmentId,
 			Account currentUser) {
 		
 		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
@@ -329,7 +328,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		if(	canAccountPromotePerson(currentUser) ||
 			canAccountDeactivateEmployments(currentUser) ||
 			canAccountDeactivateEmployments(currentUser)){
-			personsIds = creditsEntryService.havePendingEntries(posiblesAgentesIds, reparticionId, currentCreditsPeriod.getId());
+			personsIds = creditsEntryService.havePendingEntries(posiblesAgentesIds, departmentId, currentCreditsPeriod.getId());
 		}
 		
 		List<EmploymentVO> employmentsVO = new ArrayList<EmploymentVO>();

@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
-import org.dpi.reparticion.Reparticion;
-import org.dpi.reparticion.ReparticionController;
+import org.dpi.department.Department;
+import org.dpi.department.DepartmentController;
 import org.dpi.web.reporting.parameters.AbstractReportParameters;
 import org.dpi.web.reporting.parameters.AbstractReportParameters.OutputFormat;
 import org.dpi.web.reporting.parameters.CreditsEntriesReportParameters;
@@ -108,8 +108,8 @@ public class ReportController {
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Account currenUser = (Account)accountObj;
 		// get the current reparticion in the session
-		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
-		CanGenerateReportResult canGenerateReportResult = reportService.canGenerateReport(userParams.getReportCode(), currenUser, reparticion.getId());
+		final Department department = DepartmentController.getCurrentDepartment(request);
+		CanGenerateReportResult canGenerateReportResult = reportService.canGenerateReport(userParams.getReportCode(), currenUser, department.getId());
 		
 		if(canGenerateReportResult.canGenerateReport()==false) {
 			//TODO return the reason codes
@@ -166,8 +166,8 @@ public class ReportController {
 		employeeAdditionsPromotionsReportParameters.setOutputFormat(OutputFormat.PDF);
 
 		// get the current reparticion in the session
-		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
-		employeeAdditionsPromotionsReportParameters.addReparticion(reparticion.getId());
+		final Department department = DepartmentController.getCurrentDepartment(request);
+		employeeAdditionsPromotionsReportParameters.addDepartment(department.getId());
 
 		employeeAdditionsPromotionsReportParameters.addCreditsPeriod(creditsPeriodService.getCurrentCreditsPeriod().getId());
 

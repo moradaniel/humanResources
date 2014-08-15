@@ -25,7 +25,7 @@ public class EmploymentSerializer extends JsonSerializer<EmploymentImpl> {
         jgen.writeStringField("status",value.getStatus().name());
         jgen.writeObjectField("person",value.getPerson());
         jgen.writeObjectField("category",value.getCategory());
-        jgen.writeObjectField("centroSector",value.getCentroSector());
+        jgen.writeObjectField("subDepartment",value.getSubDepartment());
         jgen.writeObjectField("occupationalGroup",value.getOccupationalGroup());
         
         

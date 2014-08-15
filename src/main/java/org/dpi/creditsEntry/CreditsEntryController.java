@@ -9,14 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
+import org.dpi.department.Department;
+import org.dpi.department.DepartmentController;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
-import org.dpi.reparticion.Reparticion;
-import org.dpi.reparticion.ReparticionController;
+import org.dpi.subDepartment.SubDepartmentService;
 import org.janux.bus.security.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -43,8 +43,8 @@ public class CreditsEntryController {
 	@Resource(name = "categoryService")
 	private CategoryService categoryService;
 	
-	@Resource(name = "centroSectorService")
-	private CentroSectorService centroSectorService;
+	@Resource(name = "subDepartmentService")
+	private SubDepartmentService subDepartmentService;
 	
 	
 	@Resource(name = "creditsPeriodService")
@@ -90,17 +90,17 @@ public class CreditsEntryController {
 	}
 
 
-	public CentroSectorService getCentroSectorService() {
-		return centroSectorService;
+	public SubDepartmentService getSubDepartmentService() {
+		return subDepartmentService;
 	}
 
 
-	public void setCentroSectorService(CentroSectorService centroSectorService) {
-		this.centroSectorService = centroSectorService;
+	public void setSubDepartmentService(SubDepartmentService subDepartmentService) {
+		this.subDepartmentService = subDepartmentService;
 	}
 	
 	
-	@RequestMapping(value = "/reparticiones/creditsentries/{id}/setupFormCambiarEstadoCreditsEntry", method = RequestMethod.GET)
+	@RequestMapping(value = "/departments/creditsentries/{id}/setupFormCambiarEstadoCreditsEntry", method = RequestMethod.GET)
 	public String setupFormCambiarEstadoCreditsEntry(@PathVariable Long id, Model model){  
 			      
           
@@ -145,7 +145,7 @@ public class CreditsEntryController {
         //modelAndView.addObject("message", message);  
 
         String creditsPeriodName =  creditsEntry.getCreditsPeriod().getName();
-		return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodName;
+		return "redirect:/departments/department/showCreditEntries/"+creditsPeriodName;
     }  
 	
 	
@@ -155,22 +155,22 @@ public class CreditsEntryController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/reparticiones/reparticion/creditsentries", method = RequestMethod.GET)
+	@RequestMapping(value = "/departments/department/creditsentries", method = RequestMethod.GET)
     @ResponseBody
 	public List<CreditsEntryDTO> getMovimientos(
 			HttpServletRequest request, 
 			HttpServletResponse response/*,
-			@PathVariable Long reparticionId, Model model*/) {
+			@PathVariable Long departmentId, Model model*/) {
 
-		// get the current reparticion in the session
-		final Reparticion reparticion = ReparticionController.getCurrentReparticion(request);
+		// get the current department in the session
+		final Department department = DepartmentController.getCurrentDepartment(request);
 
 		List<CreditsEntryDTO> creditsEntriesDTO = new ArrayList<CreditsEntryDTO>();
-		if (reparticion != null){
+		if (department != null){
 
 
 			EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-			employmentQueryFilter.setReparticionId(reparticion.getId());
+			employmentQueryFilter.setDepartmentId(department.getId());
 
 			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 			creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
@@ -195,7 +195,7 @@ public class CreditsEntryController {
 			//model.addAttribute("movimientos", creditsEntryVOReparticion);
 			
 			//creditos disponibles
-			//long creditosDisponibles = administradorCreditosService.getCreditosDisponiblesSegunSolicitado(reparticion.getId());
+			//long creditosDisponibles = administradorCreditosService.getCreditosDisponiblesSegunSolicitado(department.getId());
 			
 			//model.addAttribute("creditosDisponibles", creditosDisponibles);
 			
@@ -205,7 +205,7 @@ public class CreditsEntryController {
 	
 	
 	
-    @RequestMapping(value = "/reparticiones/creditsentries/processCambiarMultipleEstadoMovimiento", method = RequestMethod.POST)
+    @RequestMapping(value = "/departments/creditsentries/processCambiarMultipleEstadoMovimiento", method = RequestMethod.POST)
     public String processCambiarMultipleEstadoMovimiento(@ModelAttribute("cambiosMultiplesEstadoMovimientosForm") CambiosMultiplesEstadoMovimientosForm cambiosMultiplesEstadoMovimientosForm) {
 
         List<CreditsEntry> movimientos = cambiosMultiplesEstadoMovimientosForm.getMovimientos();
@@ -224,7 +224,7 @@ public class CreditsEntryController {
 
         }
          
-        return "redirect:/reparticiones/reparticion/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriod().getName();
+        return "redirect:/departments/department/showCreditEntries/"+creditsPeriodService.getCurrentCreditsPeriod().getName();
 
     }
 	

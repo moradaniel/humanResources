@@ -21,7 +21,7 @@ public class PersonQueryFilter implements Serializable {
 
 
 
-	private Long reparticionId;
+	private Long departmentId;
 	
 
 	public String getApellidoNombre() {
@@ -37,11 +37,11 @@ public class PersonQueryFilter implements Serializable {
 		this.cuil = cuil;
 	}
 
-	public Long getReparticionId() {
-		return reparticionId;
+	public Long getDepartmentId() {
+		return departmentId;
 	}
-	public void setReparticionId(Long reparticionId) {
-		this.reparticionId = reparticionId;
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
 	}
 	
 	public Long getPersonId() {

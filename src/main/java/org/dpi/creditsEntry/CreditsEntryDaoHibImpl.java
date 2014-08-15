@@ -56,8 +56,8 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 				sb.append(" FROM CreditsEntryImpl entry ");
 				sb.append(" LEFT OUTER JOIN FETCH entry.employment employment");
 				sb.append(" LEFT OUTER JOIN FETCH employment.person person ");
-				sb.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
-				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
+				sb.append(" LEFT OUTER JOIN FETCH employment.subDepartment subDepartment");
+				sb.append(" LEFT OUTER JOIN FETCH subDepartment.department ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.category ");
 				sb.append(" LEFT OUTER JOIN FETCH entry.creditsPeriod creditsPeriod ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.previousEmployment previousEmployment");
@@ -141,12 +141,12 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 			
 			String codigoCentro = employmentQueryFilter.getCodigoCentro();
 			if(codigoCentro!=null) {
-				sb.append(" AND employment.centroSector.codigoCentro = '").append(codigoCentro).append("'");
+				sb.append(" AND employment.subDepartment.codigoCentro = '").append(codigoCentro).append("'");
 			}
 
 			String codigoSector = employmentQueryFilter.getCodigoSector();
 			if(codigoSector!=null) {
-				sb.append(" AND employment.centroSector.codigoSector = '").append(codigoSector).append("'");
+				sb.append(" AND employment.subDepartment.codigoSector = '").append(codigoSector).append("'");
 			}
 			
 			String categoryCode = employmentQueryFilter.getCategoryCode();
@@ -154,9 +154,9 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 				sb.append(" AND employment.category.code = '").append(categoryCode).append("'");
 			}
 			
-			Long idReparticion = employmentQueryFilter.getReparticionId();
-			if(idReparticion!=null) {
-				sb.append(" AND centroSector.reparticion.id = ").append(idReparticion).append(" ");
+			Long departmentId = employmentQueryFilter.getDepartmentId();
+			if(departmentId!=null) {
+				sb.append(" AND subDepartment.department.id = ").append(departmentId).append(" ");
 			}
 
 			Long idEmpleo = employmentQueryFilter.getEmploymentId();

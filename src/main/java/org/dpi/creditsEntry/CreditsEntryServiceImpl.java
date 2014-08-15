@@ -421,10 +421,10 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 
 	
 	@Override
-	public Set<Long> havePendingEntries(List<Long> personIds, Long idReparticion,Long idCreditsPeriod) {
+	public Set<Long> havePendingEntries(List<Long> personIds, Long departmentId,Long idCreditsPeriod) {
 		
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setReparticionId(idReparticion);
+		employmentQueryFilter.setDepartmentId(departmentId);
 		employmentQueryFilter.setPersonsIds(personIds);
 		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.PENDIENTE);
 		employmentQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);//an employment can be active with requested deactivation

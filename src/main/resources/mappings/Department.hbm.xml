@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+       "-//Hibernate/Hibernate Mapping DTD//EN"
+       "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="org.dpi.department.DepartmentImpl"    table="DEPARTMENT">
+
+    <id name="id" column="ID" type="long">
+          <generator class="sequence">
+				<param name="sequence">DEPARTMENT_SEQ</param>
+          </generator>
+        </id> 
+        
+    <property name="code" column="CODE" type="string"/>
+    <property name="name" column="NAME" type="string"/> 
+    
+    <!-- this association is bidirectional
+    	subDepartment side is marked as inverse="true" so the owner of the relation is Department-->
+    <set name="subDepartments" cascade="save-update" lazy="true" inverse="true">
+		<key column="DEPARTMENTID" foreign-key="fk_DepartmentSubDepartment"/>
+		<one-to-many class="org.dpi.subDepartment.SubDepartmentImpl"/>
+	</set>
+
+  </class>
+</hibernate-mapping>

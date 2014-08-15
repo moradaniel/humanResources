@@ -28,12 +28,12 @@
 	
 
 						<#--span class="searchDropDown">Property: </span-->
-						<select id="centroSectorId" name="centroSectorId" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
+						<select id="subDepartmentId" name="subDepartmentId" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
 	
 
 								<option value="" >-- Seleccione Centro Sector --</option>
-								<#list centroSectoresDeReparticion as centroSector>
-									<option value="${centroSector.id}" >${centroSector.codigoCentro?html} ${centroSector.nombreCentro?html} ${centroSector.codigoSector?html} ${centroSector.nombreSector?html}</option>
+								<#list subDepartmentsOfDepartment as subDepartment>
+									<option value="${subDepartment.id}" >${subDepartment.codigoCentro?html} ${subDepartment.nombreCentro?html} ${subDepartment.codigoSector?html} ${subDepartment.nombreSector?html}</option>
 								</#list>
 
 						</select>

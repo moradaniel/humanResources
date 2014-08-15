@@ -6,9 +6,6 @@ import java.util.Map;
 import org.dpi.category.Category;
 import org.dpi.category.CategoryImpl;
 import org.dpi.category.CategoryService;
-import org.dpi.centroSector.CentroSector;
-import org.dpi.centroSector.CentroSectorImpl;
-import org.dpi.centroSector.CentroSectorService;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryImpl;
 import org.dpi.creditsEntry.CreditsEntryType;
@@ -16,6 +13,9 @@ import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
+import org.dpi.department.Department;
+import org.dpi.department.DepartmentImpl;
+import org.dpi.department.DepartmentService;
 import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentImpl;
 import org.dpi.employment.EmploymentQueryFilter;
@@ -24,9 +24,9 @@ import org.dpi.employment.EmploymentStatus;
 import org.dpi.person.Person;
 import org.dpi.person.PersonImpl;
 import org.dpi.person.PersonService;
-import org.dpi.reparticion.Reparticion;
-import org.dpi.reparticion.ReparticionImpl;
-import org.dpi.reparticion.ReparticionService;
+import org.dpi.subDepartment.SubDepartment;
+import org.dpi.subDepartment.SubDepartmentImpl;
+import org.dpi.subDepartment.SubDepartmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -44,9 +44,9 @@ public class ImportarEntidades {
 	
 	CreditsPeriodService creditsPeriodService;
 	
-	ReparticionService reparticionService;
+	DepartmentService departmentService;
 	
-	CentroSectorService centroSectorService;
+	SubDepartmentService subDepartmentService;
 	
 	PersonService personService;
 	
@@ -76,8 +76,8 @@ public class ImportarEntidades {
 		importadorEntidades.setCreditsPeriodService((CreditsPeriodService)context.getBean("creditsPeriodService"));
 		
 		
-		importadorEntidades.setReparticionService((ReparticionService)context.getBean("reparticionService"));
-		importadorEntidades.setCentroSectorService((CentroSectorService)context.getBean("centroSectorService"));
+		importadorEntidades.setDepartmentService((DepartmentService)context.getBean("dpartmentService"));
+		importadorEntidades.setSubDepartmentService((SubDepartmentService)context.getBean("subDepartmentService"));
 		importadorEntidades.setAgenteService((PersonService)context.getBean("agenteService"));
 		importadorEntidades.setCategoryService((CategoryService)context.getBean("categoriaService"));
 		importadorEntidades.setEmploymentService((EmploymentService)context.getBean("employmentService"));
@@ -143,24 +143,24 @@ public class ImportarEntidades {
 		String nombreReparticion = (String)row.get("REPARTICION");
 		if(nombreReparticion!=null){
 			nombreReparticion = nombreReparticion.trim();
-			Reparticion reparticion = reparticionService.findByNombre(nombreReparticion);
+			Department reparticion = departmentService.findByName(nombreReparticion);
 			if(reparticion!=null){
 				String codigoCentro = (String)row.get("CENTRO");
 				String codigoSector = (String)row.get("SECTOR");
 				if(codigoCentro!=null && codigoSector!=null){
 					
-					CentroSector centroSector = centroSectorService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
-					if(centroSector==null){
-						//si no existe el centroSector todavia, crearlo
+				    SubDepartment subDepartment = subDepartmentService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
+					if(subDepartment==null){
+						//si no existe el subDepartment todavia, crearlo
 						if(codigoCentro!=null && codigoSector!=null){
-								centroSector = new CentroSectorImpl();
+								subDepartment = new SubDepartmentImpl();
 								String nombreCentro = (String)row.get("NOMBRECENTRO");
 								String nombreSector = (String)row.get("NOMBRESECTOR");
-								centroSector.setCodigoCentro(codigoCentro);
-								centroSector.setCodigoSector(codigoSector);
-								centroSector.setNombreCentro(nombreCentro);
-								centroSector.setNombreSector(nombreSector);
-								sLog.info("Created new centroSector: centro: " + codigoCentro+ 
+								subDepartment.setCodigoCentro(codigoCentro);
+								subDepartment.setCodigoSector(codigoSector);
+								subDepartment.setNombreCentro(nombreCentro);
+								subDepartment.setNombreSector(nombreSector);
+								sLog.info("Created new subDepartment: centro: " + codigoCentro+ 
 															" nombreCentro: "+	nombreCentro+
 															" sector: "+	codigoSector+ 
 															" nombreSector"+nombreSector);
@@ -168,16 +168,16 @@ public class ImportarEntidades {
 						
 					}
 					
-					reparticion.addCentroSector(centroSector);
-					centroSector.setReparticion(reparticion);
-					centroSectorService.saveOrUpdate(centroSector);
-					reparticionService.saveOrUpdate(reparticion);
+					reparticion.addSubDepartment(subDepartment);
+					subDepartment.setDepartment(reparticion);
+					subDepartmentService.saveOrUpdate(subDepartment);
+					departmentService.saveOrUpdate(reparticion);
 					
-					sLog.info("Created relation between centro: " + centroSector.getCodigoCentro()+ 
-							" nombreCentro: "+	centroSector.getNombreCentro()+
-							" sector: "+	centroSector.getCodigoSector()+ 
-							" nombreSector"+centroSector.getNombreSector()+
-							" and reparticion "+ reparticion.getId()+ ": " +reparticion.getNombre() );
+					sLog.info("Created relation between centro: " + subDepartment.getCodigoCentro()+ 
+							" nombreCentro: "+	subDepartment.getNombreCentro()+
+							" sector: "+	subDepartment.getCodigoSector()+ 
+							" nombreSector"+subDepartment.getNombreSector()+
+							" and reparticion "+ reparticion.getId()+ ": " +reparticion.getName() );
 
 				}
 			}
@@ -189,41 +189,41 @@ public class ImportarEntidades {
 		String nombreReparticion = (String)row.get("REPARTICION");
 		if(nombreReparticion!=null){
 			nombreReparticion=nombreReparticion.trim();
-			Reparticion theReparticion = null;
-			theReparticion = reparticionService.findByNombre(nombreReparticion);
+			Department theReparticion = null;
+			theReparticion = departmentService.findByName(nombreReparticion);
 			//si no existe todavia, crearlo
 			if(theReparticion==null){
-				theReparticion = new ReparticionImpl();
-				theReparticion.setNombre(nombreReparticion);
+				theReparticion = new DepartmentImpl();
+				theReparticion.setName(nombreReparticion);
 			}
 			String codigoReparticion = (String)row.get("CODIGO_REPARTICION");
 			if(codigoReparticion!=null && theReparticion.getCode()==null){
 				theReparticion.setCode(codigoReparticion);
 			}
 			
-			reparticionService.saveOrUpdate(theReparticion);
-			sLog.info("Created new reparticion "+ theReparticion.getId()+ ": " +theReparticion.getNombre() );
+			departmentService.saveOrUpdate(theReparticion);
+			sLog.info("Created new reparticion "+ theReparticion.getId()+ ": " +theReparticion.getName() );
 
 		}
 	}
 	
 	
-	/*private void importarCentroSectores(Map<String, Object> row) {
+	/*private void importarsubDepartmentes(Map<String, Object> row) {
 		String codigoCentro = (String)row.get("CENTRO");
 		String codigoSector = (String)row.get("SECTOR");
 		String nombreCentro = (String)row.get("NOMBRECENTRO");
 		String nombreSector = (String)row.get("NOMBRESECTOR");
 		
 		if(codigoCentro!=null && codigoSector!=null){
-			CentroSector centroSector = centroSectorService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
+			subDepartment subDepartment = subDepartmentService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
 			//si no existe todavia, crearlo
-			if(centroSector==null){
+			if(subDepartment==null){
 				CentroSectorImpl newCentroSector = new CentroSectorImpl();
 				newCentroSector.setCodigoCentro(codigoCentro);
 				newCentroSector.setCodigoSector(codigoSector);
 				newCentroSector.setNombreCentro(nombreCentro);
 				newCentroSector.setNombreSector(nombreSector);
-				centroSectorService.saveOrUpdate(newCentroSector);
+				subDepartmentService.saveOrUpdate(newCentroSector);
 			}
 		}
 	}*/
@@ -270,7 +270,7 @@ public class ImportarEntidades {
 		
 		if(codigoCentro!=null && codigoSector!=null){
 			
-			CentroSector centroSector = centroSectorService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
+			SubDepartment subDepartment = subDepartmentService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
 			
 			String cuil = (String)row.get("CUIL");
 			
@@ -299,7 +299,7 @@ public class ImportarEntidades {
 						//crear una entrada en empleo
 						empleo = new EmploymentImpl();
 						empleo.setPerson(person);
-						empleo.setCentroSector(centroSector);
+						empleo.setSubDepartment(subDepartment);
 						empleo.setCategory(categoria);
 						empleo.setStatus(EmploymentStatus.ACTIVO);
 						
@@ -341,7 +341,7 @@ public class ImportarEntidades {
 		
 		if(codigoCentro!=null && codigoSector!=null){
 			
-			CentroSector centroSector = centroSectorService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
+			CentroSector subDepartment = subDepartmentService.findByCodigoCentroCodigoSector(codigoCentro,codigoSector );
 			
 			String cuil = (String)row.get("CUIL");
 			
@@ -370,7 +370,7 @@ public class ImportarEntidades {
 						//crear una entrada en empleo
 						empleo = new EmpleoImpl();
 						empleo.setAgente(agente);
-						empleo.setCentroSector(centroSector);
+						empleo.setCentroSector(subDepartment);
 						empleo.setCategoria(categoria);
 					}else{
 						empleo = empleos.get(0);
@@ -442,20 +442,20 @@ public class ImportarEntidades {
 	}
 
 	
-	public ReparticionService getReparticionService() {
-		return reparticionService;
+	public DepartmentService getDepartmentService() {
+		return departmentService;
 	}
 
-	public void setReparticionService(ReparticionService reparticionService) {
-		this.reparticionService = reparticionService;
+	public void setDepartmentService(DepartmentService departmentService) {
+		this.departmentService = departmentService;
 	}
 	
-	public CentroSectorService getCentroSectorService() {
-		return centroSectorService;
+	public SubDepartmentService getSubDepartmentService() {
+		return subDepartmentService;
 	}
 
-	public void setCentroSectorService(CentroSectorService centroSectorService) {
-		this.centroSectorService = centroSectorService;
+	public void setSubDepartmentService(SubDepartmentService subDepartmentService) {
+		this.subDepartmentService = subDepartmentService;
 	}
 	
 	public TransactionTemplate getTransactionTemplate() {

@@ -169,8 +169,8 @@ public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 				StringBuffer sb = new StringBuffer();
 				sb.append(" FROM PersonImpl person ");
 				sb.append(" LEFT OUTER JOIN FETCH person.employments employment");
-				sb.append(" LEFT OUTER JOIN FETCH employment.centroSector centroSector");
-				sb.append(" LEFT OUTER JOIN FETCH centroSector.reparticion ");
+				sb.append(" LEFT OUTER JOIN FETCH employment.subDepartment subDepartment");
+				sb.append(" LEFT OUTER JOIN FETCH subDepartment.department ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.category ");
 				sb.append(" LEFT OUTER JOIN FETCH employment.creditsEntries ");
 
@@ -190,8 +190,8 @@ public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 						q.setLong("idPerson",personQueryFilter.getPersonId());
 					}
 
-					if(personQueryFilter.getReparticionId()!=null){
-						q.setParameter("idReparticion",personQueryFilter.getReparticionId());
+					if(personQueryFilter.getDepartmentId()!=null){
+						q.setParameter("idDepartment",personQueryFilter.getDepartmentId());
 					}
 
 
@@ -224,9 +224,9 @@ public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 				sb.append(" AND person.id = :idPerson ");
 			}
 			
-			Long idReparticion = personQueryFilter.getReparticionId();
-			if(idReparticion!=null) {
-				sb.append(" AND centroSector.reparticion.id = :idReparticion ");
+			Long idDepartment = personQueryFilter.getDepartmentId();
+			if(idDepartment!=null) {
+				sb.append(" AND subDepartment.department.id = :idDepartment ");
 			}
 
 
@@ -237,11 +237,11 @@ public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 									sb.append(" (Select personActivo.id " );
 									sb.append("	from PersonImpl personActivo ");
 									sb.append("	LEFT OUTER JOIN personActivo.employments employment2 ");
-									sb.append(" LEFT OUTER JOIN employment2.centroSector centroSector2");
-									sb.append(" LEFT OUTER JOIN centroSector2.reparticion ");
+									sb.append(" LEFT OUTER JOIN employment2.subDepartment subDepartment2");
+									sb.append(" LEFT OUTER JOIN subDepartment2.department ");
 									sb.append("	WHERE employment2.estado = '"+EstadoEmpleo.ACTIVO.name()+"'");
-									if(idReparticion!=null) {
-										sb.append(" AND centroSector2.reparticion.id = '").append(idReparticion).append("'");
+									if(idDepartment!=null) {
+										sb.append(" AND subDepartment2.department.id = '").append(idDepartment).append("'");
 									}
 
 									sb.append("	)");

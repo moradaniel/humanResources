@@ -28,7 +28,7 @@ public class EmploymentQueryFilter extends AbstractQueryFilter implements Serial
 	private String categoryCode;
 	private List<Long> personsIds= new ArrayList<Long>();
 
-	private Long reparticionId;
+	private Long departmentId;
 	private Long employmentId;
 	
 	private Date startDate;
@@ -75,11 +75,11 @@ public class EmploymentQueryFilter extends AbstractQueryFilter implements Serial
 		this.categoryCode = categoryCode;
 	}
 	
-	public Long getReparticionId() {
-		return reparticionId;
+	public Long getDepartmentId() {
+		return departmentId;
 	}
-	public void setReparticionId(Long reparticionId) {
-		this.reparticionId = reparticionId;
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
 	}
 	
 	public Long getEmploymentId() {
