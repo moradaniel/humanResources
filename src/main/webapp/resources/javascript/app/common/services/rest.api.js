@@ -79,13 +79,13 @@
 					},
 					employments : {
 						search : function(query) {
-							return RestFullResponse.one('reparticiones',/*SessionService.currentDepartmentId*/
+							return RestFullResponse.one('departments',/*SessionService.currentDepartmentId*/
 									currentSelectedDepartmentId).all('employments').getList(query);
 
 						},
 
 						save : function(employment) {
-							return RestFullResponse.one('reparticiones',/*SessionService.currentDepartmentId*/
+							return RestFullResponse.one('departments',/*SessionService.currentDepartmentId*/
 									currentSelectedDepartmentId).all('employments').post(employment);
 
 						}
