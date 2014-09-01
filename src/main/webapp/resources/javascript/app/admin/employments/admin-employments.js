@@ -10,7 +10,7 @@
 	                                                  ]);
 
 
-	module.controller('GridCtrl', ["$scope", "$rootScope", "api",
+	module.controller('EmploymentsGridCtrl', ["$scope", "$rootScope", "api",
 	                               "SessionService","LogNotificationService",function ($scope, $rootScope, api, SessionService,LogNotificationService) {
 		$scope.SessionService = SessionService;
 		$scope.totalPages = 0;
@@ -61,7 +61,7 @@
 		                  },
 		                  {
 		                	  title: 'Observaciones',
-		                	  value: 'observaciones'
+		                	  value: 'notes'
 		                  },
 		                  {
 		                	  title: 'Estado',

@@ -52,6 +52,12 @@
 			{ "URL":"departments/department/showCreditEntries/2014",   "label":"Movimientos de Credito",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") }
 		]
 	},
+	{ "label":"Movimientos",
+        "doDisplay":account?exists && account.hasPermissions("Manage_CreditsEntries", "UPDATE_STATUS"),
+        "subNav": [
+            { "URL":"creditsentries/showCreditsEntries",   "label":"Buscar Movimientos de Credito",         "requiresDepartment":false, "doDisplay":account?exists && account.hasPermissions("Manage_CreditsEntries", "UPDATE_STATUS") }
+        ]
+    },
 
 	{ "label":"Rooms/Rates",
 		"doDisplay":account?exists && account.hasPermissions("Rooms_Rates", "UPDATE"),

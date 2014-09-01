@@ -17,9 +17,9 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	CreditsEntryType creditsEntryType;
 
 	Employment employment;
-	int cantidadCreditos;
+	int numberOfCredits;
 
-	private String observaciones;
+	private String notes;
 
 	private CreditsPeriod creditsPeriod;
 	
@@ -41,13 +41,13 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 		
 	}
 	@Override
-	public int getCantidadCreditos() {
-		return this.cantidadCreditos;
+	public int getNumberOfCredits() {
+		return this.numberOfCredits;
 	}
 
 	@Override
-	public void setCantidadCreditos(int cantidadCreditos) {
-		this.cantidadCreditos=cantidadCreditos;
+	public void setNumberOfCredits(int numberOfCredits) {
+		this.numberOfCredits=numberOfCredits;
 		
 	}
 	
@@ -62,14 +62,14 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	}
 
 	@Override
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
+	public void setNotes(String notes) {
+		this.notes = notes;
 		
 	}
 
 	@Override
-	public String getObservaciones() {
-		return this.observaciones;
+	public String getNotes() {
+		return this.notes;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 		
 		sb.append("creditsEntryType", getCreditsEntryType().name());
 		sb.append("grantedStatus", getGrantedStatus().name());
-		sb.append("credits", getCantidadCreditos());
+		sb.append("credits", getNumberOfCredits());
 
 		
 		return sb.toString();
@@ -111,7 +111,7 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + cantidadCreditos;
+		result = prime * result + numberOfCredits;
 		result = prime
 				* result
 				+ ((creditsEntryType == null) ? 0 : creditsEntryType.hashCode());
@@ -122,7 +122,7 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 		result = prime * result
 				+ ((grantedStatus == null) ? 0 : grantedStatus.hashCode());
 		result = prime * result
-				+ ((observaciones == null) ? 0 : observaciones.hashCode());
+				+ ((notes == null) ? 0 : notes.hashCode());
 		return result;
 	}
 
@@ -136,7 +136,7 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 		if (getClass() != obj.getClass())
 			return false;
 		CreditsEntryImpl other = (CreditsEntryImpl) obj;
-		if (cantidadCreditos != other.cantidadCreditos)
+		if (numberOfCredits != other.numberOfCredits)
 			return false;
 		if (creditsEntryType != other.creditsEntryType)
 			return false;
@@ -152,10 +152,10 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 			return false;
 		if (grantedStatus != other.grantedStatus)
 			return false;
-		if (observaciones == null) {
-			if (other.observaciones != null)
+		if (notes == null) {
+			if (other.notes != null)
 				return false;
-		} else if (!observaciones.equals(other.observaciones))
+		} else if (!notes.equals(other.notes))
 			return false;
 		return true;
 	}

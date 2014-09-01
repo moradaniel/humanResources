@@ -370,6 +370,8 @@ public class DepartmentController {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String accountName = ((Account) principal).getName();
 		Set<DepartmentAdminInfo> departments = accessService.getDepartmentListForAccount(accountName, null);
+		
+		
 
 		request.setAttribute(DepartmentController.KEY_DEPARTMENT_LIST,departments);
 	}

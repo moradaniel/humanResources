@@ -63,17 +63,18 @@ public class CreditsPeriodServiceImpl implements CreditsPeriodService
 		creditsPeriodDao.delete(creditsPeriod);
 	}
 
-
+    @Override
 	public CreditsPeriodDao getCreditsPeriodDao()
 	{
 		return creditsPeriodDao;
 	}
 	
-	
+	@Override
 	public List<CreditsPeriod> findAll(){
 		return this.creditsPeriodDao.findAll();
 	}
 	
+	@Override
 	public void setApplicationContext(final ApplicationContext aApplicationContext) throws BeansException
 	{
 		this.applicationContext = aApplicationContext;

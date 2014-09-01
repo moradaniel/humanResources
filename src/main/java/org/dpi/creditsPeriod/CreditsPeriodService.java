@@ -15,6 +15,8 @@ import biz.janux.calendar.DateRange;
  */
 public interface CreditsPeriodService extends ApplicationContextAware
 {
+    public List<CreditsPeriod> findAll();
+    
 	public CreditsPeriod findById(Long id);
 	
 	/**

@@ -4,3 +4,6 @@ target
 /dependency/
 .project
 .classpath
+/bin
+/tomcat.58080
+/sources/

@@ -104,19 +104,6 @@ public class EmploymentController {
 	}
 
 
-
-	/*@ModelAttribute
-	public Reparticion addReparticion(@PathVariable Long id) {
-		return (id != null) ? departmentService.findById(id) : null;
-	}*/
-
-	/*@RequestMapping(value = "/departments/{id}", method = RequestMethod.GET)
-	public String show(@PathVariable Long id, Model model) {
-		Long creditosDisponibles = this.administradorCreditosService.getCreditosDisponibles(id);
-		model.addAttribute("creditosDisponibles", creditosDisponibles);
-		return "departments/show";
-	}*/
-
 	@RequestMapping(value = "/employments/{id}/deactivatePerson", method = RequestMethod.GET)
 	public String deactivate(@PathVariable Long id, Model model) {
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
@@ -399,7 +386,7 @@ public class EmploymentController {
 
 
 	/**
-	 * get all employments of a department
+	 * Search employments of a department
 	 * @param departmentId
 	 * @return
 	 * @throws JsonProcessingException 
@@ -431,9 +418,6 @@ public class EmploymentController {
 			) throws JsonProcessingException {
 		log.info("Started employments paginated search");		
 
-		/*if(true) {
-		    throw new JsonGenerationException("errorrrrrrrrrrr");
-		}*/
 
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
 		employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));
@@ -455,9 +439,6 @@ public class EmploymentController {
 		employmentQueryFilter.setPage(page-1);
 
 		PageList<Employment> employments = employmentService.findEmployments(employmentQueryFilter);
-		
-		//List<Employment> employments = employmentService.find(employmentQueryFilter);
-
 
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Account currenUser = (Account)accountObj;

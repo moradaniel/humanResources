@@ -2,6 +2,7 @@ package org.dpi.creditsEntry;
 
 import java.util.List;
 
+import org.dpi.util.PageList;
 import org.janux.bus.persistence.HibernateDataAccessObject;
 
 /**
@@ -14,5 +15,7 @@ public interface CreditsEntryDao extends HibernateDataAccessObject
 	public List<CreditsEntry> findAll();
 	
 	public List<CreditsEntry> find(CreditsEntryQueryFilter creditsEntryFilter);
+	
+	public PageList<CreditsEntry> findCreditsEntries(final CreditsEntryQueryFilter creditsEntryQueryFilter);
 	
 }

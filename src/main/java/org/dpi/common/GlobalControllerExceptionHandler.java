@@ -31,13 +31,16 @@ class GlobalControllerExceptionHandler {
 	@ExceptionHandler
 	public ResponseEntity<String> handleException(Exception ex){
 		
-		log.error(ex.getMessage());	
+	    ex.printStackTrace();
+	    
+		log.error("Exception ",ex);	
 
 		//TODO inject this as a Spring bean!!!
 		ObjectMapper mapper = new CustomObjectMapper();
 
-
-		Map<String, Object> responseMap = new ResponseMap<Employment>().mapError(ex.getMessage());
+		String  exceptionString = org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(ex);
+		
+		Map<String, Object> responseMap = new ResponseMap<Employment>().mapError(exceptionString);
 
 		try {
 			String serializedResponse = mapper.writeValueAsString(responseMap);

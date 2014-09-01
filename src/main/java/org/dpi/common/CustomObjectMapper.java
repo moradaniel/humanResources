@@ -5,6 +5,10 @@ import java.util.Date;
 import org.dpi.category.Category;
 import org.dpi.category.CategoryImpl;
 import org.dpi.category.CategorySerializer;
+import org.dpi.creditsPeriod.CreditsPeriodImpl;
+import org.dpi.creditsPeriod.CreditsPeriodSerializer;
+import org.dpi.department.DepartmentImpl;
+import org.dpi.department.DepartmentSerializer;
 import org.dpi.employment.EmploymentImpl;
 import org.dpi.employment.EmploymentSerializer;
 import org.dpi.occupationalGroup.OccupationalGroup;
@@ -43,11 +47,18 @@ public class CustomObjectMapper extends ObjectMapper {
 		module.addDeserializer(Date.class, new DateDeserializer());
 		
 		module.addSerializer(EmploymentImpl.class, new EmploymentSerializer());
+		
+		
 		//module.addDeserializer(EmploymentImpl.class, new EmploymentDeserializer());
+		
+		
+		module.addSerializer(CreditsPeriodImpl.class, new CreditsPeriodSerializer());
 		
 		module.addSerializer(PersonImpl.class, new PersonSerializer());
 		module.addSerializer(CategoryImpl.class, new CategorySerializer());
 		module.addSerializer(OccupationalGroupImpl.class, new OccupationalGroupSerializer());
+		
+		module.addSerializer(DepartmentImpl.class, new DepartmentSerializer());
 		module.addSerializer(SubDepartmentImpl.class, new SubDepartmentSerializer());
 		
 		module.addAbstractTypeMapping(Person.class, PersonImpl.class);

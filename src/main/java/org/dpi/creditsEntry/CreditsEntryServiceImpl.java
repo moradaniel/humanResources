@@ -18,6 +18,7 @@ import org.dpi.employment.EmploymentService;
 import org.dpi.employment.EmploymentStatus;
 import org.dpi.person.Person;
 import org.dpi.person.PersonService;
+import org.dpi.util.PageList;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,11 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	public List<CreditsEntry> find(CreditsEntryQueryFilter creditsEntryQueryFilter){
 		
 		return creditsEntryDao.find(creditsEntryQueryFilter);
+	}
+	
+	public PageList<CreditsEntry> findCreditsEntries(final CreditsEntryQueryFilter creditsEntryQueryFilter){
+	    
+	    return creditsEntryDao.findCreditsEntries(creditsEntryQueryFilter);
 	}
 
 	
@@ -195,7 +201,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		 }else
 		 
 		 if(creditsEntry.getCreditsEntryType()== CreditsEntryType.IngresoAgente){
-			 if(creditsEntry.getCantidadCreditos()==0){
+			 if(creditsEntry.getNumberOfCredits()==0){
 				 return false;
 			 }
 		 }
@@ -217,7 +223,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 
 	public static boolean canChangeCreditsEntryStatus(Account account) {
 		
-		if(account.hasPermissions("Manage_MovimientoCreditos", "UPDATE_STATUS")){
+		if(account.hasPermissions("Manage_CreditsEntries", "UPDATE_STATUS")){
 			return true;
 		}
 		return false;
@@ -232,7 +238,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	
 	public boolean canDeleteCreditsEntry(Account account) {
 		
-		if(account.hasPermissions("Manage_MovimientoCreditos", "DELETE")){
+		if(account.hasPermissions("Manage_CreditsEntries", "DELETE")){
 			return true;
 		}
 		return false;
@@ -295,7 +301,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 			//Obtener los creditos por ascenso para la categoria anterior y la categoria actual
 			int nuevaCantidaddeCreditos = creditsManagerService.getCreditosPorAscenso(employmentAnterior.getCategory().getCode(),
 																						employmentaActualizar.getCategory().getCode());
-			creditsEntry.setCantidadCreditos(nuevaCantidaddeCreditos);
+			creditsEntry.setNumberOfCredits(nuevaCantidaddeCreditos);
 			this.saveOrUpdate(creditsEntry);
 			
 	

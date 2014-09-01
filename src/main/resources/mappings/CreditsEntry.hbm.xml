@@ -12,7 +12,7 @@
 			</generator>
 		</id>
 
-		<property name="cantidadCreditos" column="CANTIDADCREDITOS" type="int"/>
+		<property name="numberOfCredits" column="NUMBER_OF_CREDITS" type="int"/>
 		<!-- one to one association mapped as a many to one association with uniique true -->
 		<!-- many-to-one
 			name="employment"
@@ -51,7 +51,7 @@
 			type="org.dpi.persistence.GrantedStatusEnumUserType" not-null="true"/>
 			
 		
-	    <property name="observaciones" column="OBSERVACIONES" type="string"/>
+	    <property name="notes" column="NOTES" type="string"/>
 	</class>
 	
 </hibernate-mapping>

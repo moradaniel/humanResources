@@ -70,9 +70,9 @@ public class UserAccessServiceImpl implements UserAccessService
 			final Map<String, Object> rowMap = (Map<String, Object>) rowObj;
 			final BigDecimal id = (BigDecimal) rowMap.get("id");
 			final String name = (String) rowMap.get("name");
-			//final String status = (String ) rowMap.get("status");
+			final String code = (String ) rowMap.get("code");
 
-			DepartmentAdminInfo info = new DepartmentAdminInfo(new Long(id.longValue()),name);
+			DepartmentAdminInfo info = new DepartmentAdminInfo(new Long(id.longValue()),name,code);
 
 			/*if (StringUtils.hasText(status))
 			{
@@ -119,7 +119,7 @@ public class UserAccessServiceImpl implements UserAccessService
 			{
 				if(role.getName().equals("DEPARTMENT_RESPONSIBLE") || role.getName().equals("HR_MANAGER") )
 					{
-						 sHotelQuery = " select h.id, h.name " +
+						 sHotelQuery = " select h.id, h.name, h.code " +
 			                          " from DEPARTMENT_ACCOUNT ha " +
 			                          " inner join DEPARTMENT h on h.id = ha.DEPARTMENTID " +
 			                          " inner join sec_account a on a.id = ha.accountId " +
@@ -135,7 +135,7 @@ public class UserAccessServiceImpl implements UserAccessService
 					
 				if(role.getName().equals("SUBTREE_SUPERVISOR"))
 					{
-						sHotelQuery = "Select h.id, h.nombre " +
+						sHotelQuery = "Select h.id, h.nombre , h.code" +
 								"From department h " +
 								"where REGEXP_LIKE (h.code, (select reverse(cast((cast(reverse(code) as number)) as varchar2(30))) as patron from DEPARTMENT_ACCOUNT ha " +
 								"inner join DEPARTMENT r on r.id = ha.DEPARTMENTID " +
@@ -156,8 +156,8 @@ public class UserAccessServiceImpl implements UserAccessService
 						departmentSearchInfos = departmentService.findAllDepartments();
 						for(DepartmentSearchInfo departmentSearchInfo: departmentSearchInfos)
 							{
-								DepartmentAdminInfo info = new DepartmentAdminInfo(departmentSearchInfo.getDepartmentId(),departmentSearchInfo.getDepartmentName());
-								//info.setStatus(departmentSearchInfo.getHotelStatus());
+								DepartmentAdminInfo info = new DepartmentAdminInfo(departmentSearchInfo.getDepartmentId(),departmentSearchInfo.getDepartmentName(),departmentSearchInfo.getDepartmentCode());
+
 								departmentList.add(info);
 							}
 					}
@@ -247,9 +247,9 @@ public class UserAccessServiceImpl implements UserAccessService
 	{
 		final JdbcTemplate template = new JdbcTemplate(datasource);
 
-		// this is the query to lookup the list of associated accounts for the given hotel
+		// this is the query to lookup the list of associated accounts for the given department
 		final String sHotelQuery =  " select a.name" +
-							        " from hotel_account ha " +
+							        " from department_account ha " +
 							        " inner join sec_account a on a.id = ha.accountId " +
 							        " inner join hotel_hotel h on h.id = ha.hotelId " +
 							        " where h.code = ? " +

@@ -5,9 +5,10 @@ public class DepartmentSearchInfo {
 
 	Long departmentId;
 	String departmentName;
+    String departmentCode;
 
 
-	/**
+    /**
 	 * @return the departmentId
 	 */
 	public Long getDepartmentId() {
@@ -38,5 +39,13 @@ public class DepartmentSearchInfo {
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
 	}
+	
+	   public String getDepartmentCode() {
+	        return departmentCode;
+	    }
+
+	    public void setDepartmentCode(String departmentCode) {
+	        this.departmentCode = departmentCode;
+	    }
 
 }

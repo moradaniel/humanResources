@@ -2,7 +2,7 @@
 <#import "/WEB-INF/views/creditosUtils.ftl" as creditosUtils />
 
 
-<div id="movimientoDetails">
+<div id="creditsEntriesDetails">
 <p>
 	<#if !currentDepartment?exists>
 		No ha seleccionado reparticion.
@@ -11,7 +11,7 @@
 		<#assign departmentsUrl= requestContext.contextPath+"/departments">
 	
 	
-		<!--  start page-heading -->
+	<!--  start page-heading -->
 	<div id="page-heading">
 		<h1>Reparticion:  ${currentDepartment.name}</h1>
 	</div>
@@ -75,7 +75,6 @@
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
 						<th class="table-header-repeat line-left"><a href="">Periodo</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Apellido y Nombre</a>	</th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Condicion Agente</a>	</th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Tipo Movimiento</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Estado</a></th>
 						<th class="table-header-repeat line-left minwidth-1"><a href="">Fecha Inicio</a></th>
@@ -113,7 +112,6 @@
 				<tr class="${trStyle}">
 					<td>${entry.creditsEntry.creditsPeriod.name}</td>
 					<td>${entry.creditsEntry.employment.person.apellidoNombre}</td>
-					<td>${entry.creditsEntry.employment.person.condition?default("")}</td>
 					<td>${entry.creditsEntry.creditsEntryType}</td>
 					<td>
 						<#if entry.canAccountChangeCreditsEntryStatus>
@@ -125,7 +123,7 @@
 					</td>
 					<td>${entry.creditsEntry.employment.startDate!""}</td>
 					<td>${entry.creditsEntry.employment.endDate!""}</td>
-					<td>${entry.creditsEntry.cantidadCreditos}</td>
+					<td>${entry.creditsEntry.numberOfCredits}</td>
 					
 					<td>${entry.currentCategory?default("")}</td>
 					
@@ -148,7 +146,7 @@
 						</#if>
 					</td>
 					
-					<td>${entry.creditsEntry.observaciones?default("")}</td>
+					<td>${entry.creditsEntry.notes?default("")}</td>
 					<td>
 						<#if mostrarActionBorrarMovimiento>
 							<a href="${departmentsUrl}/department/creditsentries/${entry.creditsEntry.id}/delete" class="ajaxLink">Borrar Movimiento</a>

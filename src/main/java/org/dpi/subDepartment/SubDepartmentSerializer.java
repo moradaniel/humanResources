@@ -19,6 +19,8 @@ public class SubDepartmentSerializer extends JsonSerializer<SubDepartmentImpl> {
         jgen.writeStringField("codigoSector", value.getCodigoSector());
         jgen.writeStringField("nombreCentro", value.getNombreCentro());
         jgen.writeStringField("nombreSector", value.getNombreSector());
+        
+        jgen.writeObjectField("department",value.getDepartment());
 
         jgen.writeEndObject();
         

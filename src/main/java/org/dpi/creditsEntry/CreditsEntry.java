@@ -18,17 +18,17 @@ public interface CreditsEntry extends Persistent,Serializable{
 
 	void setEmployment(Employment employment);
 	
-	int getCantidadCreditos();
+	int getNumberOfCredits();
 
-	void setCantidadCreditos(int cantidadCreditos);
+	void setNumberOfCredits(int numberOfCredits);
 	
 	public CreditsEntryType getCreditsEntryType();
 
 	public void setCreditsEntryType(CreditsEntryType creditsEntryType);
 	
-	void setObservaciones(String observaciones);
+	void setNotes(String notes);
 	
-	String getObservaciones();
+	String getNotes();
 
 	public CreditsPeriod getCreditsPeriod();
 	public void setCreditsPeriod(CreditsPeriod grantedStatus);

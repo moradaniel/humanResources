@@ -28,7 +28,7 @@ public class CreditsPeriodDaoHibImpl extends BaseDAOHibernate implements Credits
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all CreditsPeriod");
 
-		List<CreditsPeriod> list = getHibernateTemplate().find("from CreditsPeriod order by name");
+		List<CreditsPeriod> list = getHibernateTemplate().find("from CreditsPeriodImpl order by name");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " CreditsPeriod in " + timer.printElapsedTime());
 

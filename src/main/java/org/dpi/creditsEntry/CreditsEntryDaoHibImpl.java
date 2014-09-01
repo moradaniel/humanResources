@@ -1,12 +1,15 @@
 package org.dpi.creditsEntry;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentStatus;
+import org.dpi.util.PageList;
+import org.dpi.util.query.QueryBind.OrderDirection;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -128,7 +131,7 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 		}
 		
 		if(entryQueryFilter.hasCredits!=null && entryQueryFilter.hasCredits.booleanValue()==true){
-			sb.append(" AND cantidadCreditos > 0 ").append(" ");
+			sb.append(" AND numberOfCredits > 0 ").append(" ");
 		}
 		
 		if(entryQueryFilter.getEmploymentQueryFilter()!=null) {
@@ -201,4 +204,101 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 		}
 		return sb.toString();
 	}
+	
+	
+	
+	   private void buildWhereClause2(CreditsEntryQueryFilter creditsEntryQueryFilter,
+	            List<String> wheres, List<String> paramNames, List<Object> values) {
+	       
+           if (creditsEntryQueryFilter != null) {
+               
+               if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsPeriodNames())){
+                   wheres.add("  creditsPeriod.name IN ( :creditsPeriodsNames )  ");
+                   paramNames.add("creditsPeriodsNames");
+                   values.add(creditsEntryQueryFilter.getCreditsPeriodNames());
+                   
+               }
+               
+               if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsEntryTypes())){
+                   StringBuilder sb = new StringBuilder();
+
+                   sb.append(" ( ");
+                   
+                   int statusIndex = 1;
+                   for (Iterator iterator = creditsEntryQueryFilter.getCreditsEntryTypes().iterator(); iterator.hasNext();) {
+                       CreditsEntryType creditsEntryType = (CreditsEntryType) iterator.next();
+                       sb.append(" entry.creditsEntryType = :creditsEntryType"+statusIndex);
+                       
+                       paramNames.add("creditsEntryType"+statusIndex);
+                       values.add(creditsEntryType);
+                       
+                       if(iterator.hasNext()){
+                           sb.append(" OR ");
+                       }
+                       statusIndex++;
+                   }
+                   sb.append(" ) ");   
+                   
+                   wheres.add(sb.toString());
+                       
+               }
+               
+               
+           }
+           
+
+	       
+	    }
+	
+	
+	@Override
+    public PageList<CreditsEntry> findCreditsEntries(final CreditsEntryQueryFilter creditsEntryQueryFilter){
+
+        List<String> wheres = new ArrayList<String>();
+        List<String> paramNames = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
+        
+        StringBuffer queryBuilder = new StringBuffer();
+       
+
+        queryBuilder.append(" FROM CreditsEntryImpl entry ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH entry.employment employment ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH employment.person person ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH employment.subDepartment subDepartment ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH subDepartment.department department ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH employment.category ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH entry.creditsPeriod creditsPeriod ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH employment.previousEmployment previousEmployment ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH previousEmployment.category previousCategory ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH employment.occupationalGroup occupationalGroup ");
+        queryBuilder.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup ");
+        
+        
+        
+        buildWhereClause2(creditsEntryQueryFilter,wheres,paramNames,values);
+        
+
+        String queryWithoutOrdering = wheres.isEmpty() ? queryBuilder.toString() : queryBuilder.append(" WHERE ").append(
+                org.dpi.util.StringUtils.getStringsSeparatedBy(" AND ", wheres)).toString();
+
+        String queryWithOrdering = queryWithoutOrdering;
+        if (creditsEntryQueryFilter != null && creditsEntryQueryFilter.getOrderBy() != null) {
+            queryWithOrdering += " ORDER BY LOWER(" + creditsEntryQueryFilter.getOrderBy() + ")"
+                    + (creditsEntryQueryFilter.getOrderDirection().equals(OrderDirection.DESCENDING) ? " DESC " : " ASC ");
+        } else {
+            queryWithOrdering += " ORDER BY creditsPeriod.name ASC ,"+
+                                 "          department.name ASC, "+
+                                 "          LOWER(person.apellidoNombre) ASC";
+                    
+        }
+        
+        
+
+        return new PageList<CreditsEntry>(
+                findByNamedParam(" Select distinct entry  " + queryWithOrdering, paramNames, values, creditsEntryQueryFilter != null ? creditsEntryQueryFilter
+                        .getStartIndex() : null, creditsEntryQueryFilter != null ? creditsEntryQueryFilter.getMaxResults() : null), countByNamedParam(
+                " SELECT count(distinct entry) " + queryWithoutOrdering, paramNames, values));
+
+
+    }
 }

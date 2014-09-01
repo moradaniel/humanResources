@@ -44,7 +44,7 @@
   -->
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>classpath:hr/${spring.profiles.active}/log4j.xml</param-value>
+		<param-value>classpath:humanResources/${spring.profiles.active}/log4j.xml</param-value>
 	</context-param>
 
 	<!--

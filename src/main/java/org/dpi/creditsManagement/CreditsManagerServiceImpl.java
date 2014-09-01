@@ -313,55 +313,54 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
         long retainedCredits = 0; 
 
-        long creditosPorBajasDeReparticion = getCreditosPorBajasDeReparticion(creditsPeriodId, departmentId);
+        long creditsBecauseOfDepartmentDeactivations = getCreditosPorBajasDeReparticion(creditsPeriodId, departmentId);
 
         long fixedRetainedCredits = 0;
         long baseLimit = 0;
         float percentage = 0;
 
-        if(creditosPorBajasDeReparticion <= 0) {
+        if(creditsBecauseOfDepartmentDeactivations <= 0) {
             return 0l;
         }else
-            if(creditosPorBajasDeReparticion > 0  && creditosPorBajasDeReparticion <=     773) {
-                baseLimit = 0;
-                fixedRetainedCredits = 0;
-                percentage = 0.10f;
-            }else
-           if(creditosPorBajasDeReparticion > 773  && creditosPorBajasDeReparticion <=     827) {
-                    baseLimit = 773;
+          if(creditsBecauseOfDepartmentDeactivations > 0  && creditsBecauseOfDepartmentDeactivations <=     773) {
+            baseLimit = 0;
+            fixedRetainedCredits = 0;
+            percentage = 0.10f;
+          }else
+           if(creditsBecauseOfDepartmentDeactivations >= 774  && creditsBecauseOfDepartmentDeactivations <=     827) {
+                    baseLimit = 774;
                     fixedRetainedCredits = 77;
                     percentage = 0.14f;
            }else
-           if(creditosPorBajasDeReparticion > 827  && creditosPorBajasDeReparticion <=     920) {
-                        baseLimit = 827;
-                        fixedRetainedCredits = 108;
+           if(creditsBecauseOfDepartmentDeactivations >= 828  && creditsBecauseOfDepartmentDeactivations <=     920) {
+                        baseLimit = 828;
+                        fixedRetainedCredits = 115;
                         percentage = 0.18f;
-                    }else
-                        if(creditosPorBajasDeReparticion > 920  && creditosPorBajasDeReparticion <=     1065) {
-                            baseLimit = 827;
-                            fixedRetainedCredits = 147;
-                            percentage = 0.22f;
-                        }else
-                            if(creditosPorBajasDeReparticion > 1065  && creditosPorBajasDeReparticion <=     1283) {
-                                baseLimit = 1065;
-                                fixedRetainedCredits = 202;
-                                percentage = 0.26f;
-                            }
-                            else
-                                if(creditosPorBajasDeReparticion > 1283  && creditosPorBajasDeReparticion <=     1637) {
-                                    baseLimit = 1283;
-                                    fixedRetainedCredits = 282;
-                                    percentage = 0.28f;
-                                }
-                                else
-                                    if(creditosPorBajasDeReparticion > 1637) {
-                                        baseLimit = 1637;
-                                        fixedRetainedCredits = 409;
-                                        percentage = 0.30f;
+           }else
+           if(creditsBecauseOfDepartmentDeactivations >= 921  && creditsBecauseOfDepartmentDeactivations <=     1065) {
+                baseLimit = 921;
+                fixedRetainedCredits = 165;
+                percentage = 0.22f;
+            }else
+           if(creditsBecauseOfDepartmentDeactivations >= 1066  && creditsBecauseOfDepartmentDeactivations <=     1283) {
+                baseLimit = 1066;
+                fixedRetainedCredits = 234;
+                percentage = 0.26f;
+            }else
+           if(creditsBecauseOfDepartmentDeactivations >= 1284  && creditsBecauseOfDepartmentDeactivations <=     1637) {
+                baseLimit = 1284;
+                fixedRetainedCredits = 333;
+                percentage = 0.28f;
+            }
+            else
+                if(creditsBecauseOfDepartmentDeactivations >= 1638) {
+                    baseLimit = 1638;
+                    fixedRetainedCredits = 458;
+                    percentage = 0.30f;
+    
+                }     
 
-                                    }     
-
-        retainedCredits = fixedRetainedCredits + Math.round(percentage * (creditosPorBajasDeReparticion - baseLimit));
+        retainedCredits = fixedRetainedCredits + Math.round(percentage * (creditsBecauseOfDepartmentDeactivations - baseLimit));
 
 
         return retainedCredits;
@@ -395,7 +394,7 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
                 if (log.isDebugEnabled()) log.debug("attempting to calculate credits for Reparticion with id: '" + creditsEntryQueryFilter.getEmploymentQueryFilter().getDepartmentId() + "'");
 
                 StringBuffer sb = new StringBuffer();
-                sb.append(" select sum(entry.cantidadCreditos) ")
+                sb.append(" select sum(entry.numberOfCredits) ")
                 .append(" from CreditsEntryImpl entry ")
                 .append(" INNER JOIN entry.employment employment " )
                 .append(" INNER JOIN employment.subDepartment subDepartment " )
@@ -507,7 +506,7 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
                 String where = " WHERE 1=1 " + CreditsEntryDaoHibImpl.buildWhereClause(creditsEntryQueryFilter);
 
                 StringBuffer sb = new StringBuffer();
-                sb.append("select sum(entry.cantidadCreditos) ");
+                sb.append("select sum(entry.numberOfCredits) ");
                 sb.append(" from CreditsEntryImpl entry ");
                 sb.append(" INNER JOIN entry.employment employment ");
                 sb.append(" INNER JOIN employment.subDepartment subDepartment ");

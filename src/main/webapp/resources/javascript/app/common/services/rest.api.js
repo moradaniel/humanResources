@@ -90,7 +90,50 @@
 
 						}
 
+					},
+					
+					creditsEntries : {
+						search : function(query) {
+							return RestFullResponse.all('creditsentries').all('findCreditsEntries').getList(query);
+
+						}/*,
+
+						save : function(employment) {
+							return RestFullResponse.one('departments',/SessionService.currentDepartmentId/
+									currentSelectedDepartmentId).all('employments').post(employment);
+
+						}*/
+
+					},
+					
+					creditsPeriods : {
+						search : function(query) {
+							return RestFullResponse.all('creditsPeriods').all('findCreditsPeriods').getList(query);
+
+						}/*,
+
+						save : function(employment) {
+							return RestFullResponse.one('departments',/SessionService.currentDepartmentId/
+									currentSelectedDepartmentId).all('employments').post(employment);
+
+						}*/
+
+					},
+					creditsEntriesTypes : {
+						search : function(query) {
+							return RestFullResponse.all('creditsEntriesTypes').all('findCreditsEntriesTypes').getList(query);
+
+						}/*,
+
+						save : function(employment) {
+							return RestFullResponse.one('departments',/SessionService.currentDepartmentId/
+									currentSelectedDepartmentId).all('employments').post(employment);
+
+						}*/
+
 					}
+					
+					
 				};
 			} ]);
 

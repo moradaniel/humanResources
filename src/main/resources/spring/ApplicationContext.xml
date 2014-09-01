@@ -15,7 +15,7 @@
 		<!-- <property name="order" value="1"/> -->
 		<property name="locations">
 			<list>
-				<value>classpath:/hr/${spring.profiles.active}/ApplicationContext.properties</value>
+				<value>classpath:/humanResources/${spring.profiles.active}/ApplicationContext.properties</value>
 			</list>
 		</property>
 		<property name="ignoreInvalidKeys" value="false"/>

@@ -84,7 +84,7 @@
 	
 							<#if myDepartments?exists >
 								<option value="" >-- Seleccione Reparticion --</option>
-								<#list myDepartments?sort_by("name") as aDepartment>
+								<#list myDepartments?sort_by("code") as aDepartment>
 									<#assign selected="">
 									<#if currentDepartment?exists && (currentDepartment.id == aDepartment.id)>
 										<#assign selected="selected">
@@ -454,7 +454,7 @@
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-resource.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-route.js'/></script>
 		
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ng-table-0.3.1/ng-table.js'/></script>
+	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ng-table-0.3.1/ng-table.js'/></script -->
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/restangular/restangular.js'/></script>
 		
@@ -470,6 +470,8 @@
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments.js'/></script>
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments2.js'/></script -->
 	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/creditsEntries/admin-creditsEntries.js'/></script>
+		
 			
 	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/app.js"/></script>
 		

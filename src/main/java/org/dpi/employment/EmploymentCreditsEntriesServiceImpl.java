@@ -105,7 +105,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		entryAscenso.setCreditsPeriod(currentCreditsPeriod);
 
 		
-		entryAscenso.setCantidadCreditos(cantidadCreditosPorAscenso);
+		entryAscenso.setNumberOfCredits(cantidadCreditosPorAscenso);
 		
 		
 		//setear empleo a entry  y agregar entry a empleo
@@ -158,7 +158,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		int cantidadCreditosPorBaja = creditsManagerService.getCreditosPorBaja(employment.getCategory().getCode());
 
 		
-		deactivationEntry.setCantidadCreditos(cantidadCreditosPorBaja);
+		deactivationEntry.setNumberOfCredits(cantidadCreditosPorBaja);
 		
 		
 		//setear empleo a entry  y agregar entry a empleo
@@ -282,7 +282,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		newProposedEmployee.addCreditsEntry(creditsEntryIngreso);
 		
 		int creditosPorIngreso = creditsManagerService.getCreditosPorIngreso(proposedCategoryCode);
-		creditsEntryIngreso.setCantidadCreditos(creditosPorIngreso);
+		creditsEntryIngreso.setNumberOfCredits(creditosPorIngreso);
 		
 		employmentService.save(newProposedEmployee);
 		
@@ -426,7 +426,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 
 	public static boolean canAccountPromotePerson(Account account) {
 		
-		if(account.hasPermissions("Manage_MovimientoCreditos", "CREATE")){
+		if(account.hasPermissions("Manage_CreditsEntries", "CREATE")){
 			return true;
 		}
 		return false;
@@ -453,7 +453,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	
 	public static boolean canAccountProposeNewEmployment(Account account) {
 		
-		if(account.hasPermissions("Manage_MovimientoCreditos", "CREATE")){
+		if(account.hasPermissions("Manage_CreditsEntries", "CREATE")){
 			return true;
 		}
 		return false;

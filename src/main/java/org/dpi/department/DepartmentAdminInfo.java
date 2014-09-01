@@ -17,6 +17,8 @@ public class DepartmentAdminInfo implements Serializable
 	private Long id = null;
 
 	private String name = null;
+	private String code = null;
+	
 
 	private Set<String> users = null;
 
@@ -28,13 +30,15 @@ public class DepartmentAdminInfo implements Serializable
 	{
 		this.id = department.getId();
 		this.name = department.getName();
+		this.code = department.getCode();
 	}
 
 
-	public DepartmentAdminInfo(Long id,String name)
+	public DepartmentAdminInfo(Long id,String name,String code)
 	{
 		this.id = id;
 		this.name = name;
+		this.code = code;
 	}
 
 	/**
@@ -67,6 +71,7 @@ public class DepartmentAdminInfo implements Serializable
 	     return new HashCodeBuilder(17, 37).
 	       append(this.getId()).
 	       append(this.getName()).
+	       append(this.getCode()).
 	       toHashCode();
 	}
 
@@ -121,7 +126,14 @@ public class DepartmentAdminInfo implements Serializable
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getCode() {
+	    return code;
+	}
 
+	public void setCode(String code) {
+	    this.code = code;
+	}
 
 	public Set<String> getUsers() {
 		return users;
@@ -138,20 +150,14 @@ public class DepartmentAdminInfo implements Serializable
 		if (this.getId() != null) 
 			sb.append("id", this.getId());
 		
-		/*if (this.getChainCode() != null) 
-			sb.append("chainCode", this.getChainCode());*/
-		
 		if (this.getName() != null) 
 			sb.append("name", this.getName());
-		/*
-		if (this.getStatus() != null) 
-			sb.append("status", this.getStatus());
-		 */
+
+		if (this.getCode() != null) 
+			sb.append("code", this.getCode());
+		
 		if (this.getUsers() != null) 
 			sb.append("users", this.getUsers());
-		/*
-		if (this.getGroupCode() != null) 
-			sb.append("groupCode", this.getGroupCode());*/
 		
 		return sb.toString();
 	}

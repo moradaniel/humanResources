@@ -48,7 +48,7 @@
 	    </div>
    </div -->
 
-<div ng-controller="GridCtrl">
+<div ng-controller="EmploymentsGridCtrl">
 <h1>Reparticion:  ${currentDepartment.name}</h1>
 <!-- h1>Reparticion:  {{SessionService.getCurrentDepartment().name}}</h1 -->
 <!-- input type="text" name="input" ng-model="SessionService.getCurrentDepartment().name" size="100" -->

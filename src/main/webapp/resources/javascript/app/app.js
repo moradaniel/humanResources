@@ -30,7 +30,8 @@
 	                                        'lodash',
 	                                        'admin-employments',
 	                                        /*'admin-employments2',*/
-	                                        'admin-employment-edit']);
+	                                        'admin-employment-edit',
+	                                        'admin-creditsEntries',]);
 
 	as.config(['$routeProvider'/*, '$httpProvider'*/, function($routeProvider/*, $httpProvider*/) {
 

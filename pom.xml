@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.samples</groupId>
-	<artifactId>hr</artifactId>
+	<artifactId>humanResources</artifactId>
 	<name>human resources</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
@@ -29,6 +29,7 @@
 		<!-- Embedded Tomcat 7 -->
 		<tomcat.version>7.0.42</tomcat.version>
 
+        <querydsl.version>3.4.2</querydsl.version>
 
 	</properties>
 	<dependencies>
@@ -493,7 +494,43 @@
 		</dependency>
 
 		<!-- End Embedded Tomcat dependencies -->
+		
+		
+		<dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-collections</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
 
+		<dependency>
+		    <groupId>com.mysema.querydsl</groupId>
+		    <artifactId>querydsl-jpa-codegen</artifactId>
+		    <version>${querydsl.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.mysema.querydsl</groupId>
+		    <artifactId>querydsl-sql</artifactId>
+		    <version>${querydsl.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.mysema.querydsl</groupId>
+		    <artifactId>querydsl-codegen</artifactId>
+		    <version>${querydsl.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.mysema.querydsl</groupId>
+		    <artifactId>querydsl-sql-codegen</artifactId>
+		    <version>${querydsl.version}</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -556,7 +593,7 @@
 		</repository>
 	</repositories>
 	<build>
-		<finalName>hr</finalName>
+		<finalName>humanResources</finalName>
 
 		<resources>
 			<resource>
@@ -595,7 +632,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>hr</warName>
+					<warName>humanResources</warName>
 					<!-- resource> <directory>${janux.baseDir}/modules/bus/src/test/resources</directory> 
 						<targetPath>WEB-INF/classes/META-INF/spring</targetPath> <filtering>false</filtering> 
 						<includes> <include>SecurityContext.xml</include> <include>SecurityContextGeneric.xml</include> 
@@ -687,6 +724,33 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			
+			
+            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <version>1.0.9</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mysema.querydsl</groupId>
+                        <artifactId>querydsl-apt</artifactId>
+                        <version>${querydsl.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.mysema.query.apt.QuerydslAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
 		</plugins>
 	</build>
 </project>

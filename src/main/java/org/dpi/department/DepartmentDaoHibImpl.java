@@ -146,9 +146,10 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("SELECT hh.id as departmentId, ");
-		sb.append(" hh.name as departmentName ");
-		sb.append(" FROM department hh ");
+		sb.append("SELECT department.id as departmentId, ");
+		sb.append(" department.name as departmentName, ");
+		sb.append(" department.code as departmentCode ");
+		sb.append(" FROM department ");
 		
 		SQLQuery aQuery = this.getSession().createSQLQuery(sb.toString());
 		
@@ -162,6 +163,7 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 			Long departmentId = ((BigDecimal)object[0]).longValue();
 			searchInfo.setDepartmentId(departmentId);
 			searchInfo.setDepartmentName(ObjectUtils.toString(object[1]));
+			searchInfo.setDepartmentCode(ObjectUtils.toString(object[2]));
 
 			
 			departmentSearchInfos.add(searchInfo);

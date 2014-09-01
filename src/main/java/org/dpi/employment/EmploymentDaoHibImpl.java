@@ -115,7 +115,7 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 
         String queryWithOrdering = queryWithoutOrdering;
         if (employmentQueryFilter != null && employmentQueryFilter.getOrderBy() != null) {
-        	queryWithOrdering += " ORDER BY BY LOWER(" + employmentQueryFilter.getOrderBy() + ")"
+        	queryWithOrdering += " ORDER BY LOWER(" + employmentQueryFilter.getOrderBy() + ")"
                     + (employmentQueryFilter.getOrderDirection().equals(OrderDirection.DESCENDING) ? " DESC " : " ASC ");
         } else {
         	queryWithOrdering += " ORDER BY LOWER(person.apellidoNombre) ASC ";
