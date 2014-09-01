@@ -78,6 +78,12 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
+2014 - September
+
+ - Listing CreditsEntries using AngularJS
+ - Added REST API for finding CreditsEntries and CreditsEntriesPeriods
+ - Using **AngularJS Promises** for asynchronous calls
+
 2014 - August
  
  - Added pagination in the front-end using **Bootstrap UI pagination** and in the backend for searching employments
