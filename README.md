@@ -16,7 +16,7 @@ Each department has a balance of credits that are used to add or promote employe
 ## Technologies
 ### Frontend
 
-- AngularJS 1.2.16 
+- AngularJS 1.2.23 
 - Bootstrap 3.1.1
 - Supported browsers: Internet Explorer 9+, Firefox, Chrome
 
@@ -84,6 +84,7 @@ even if Tomcat is running under a 64-bit JVM.
  - Added REST API for finding CreditsEntries and CreditsEntriesPeriods
  - Using **AngularJS Promises** for asynchronous calls
  - Added **AngularJS** drop-down with search capability for searching for departments.  [**ui-select**](https://github.com/angular-ui/ui-select)
+ - Added REST API for retrieving available departments
 
 2014 - August
  
