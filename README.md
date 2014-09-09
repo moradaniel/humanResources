@@ -83,6 +83,7 @@ even if Tomcat is running under a 64-bit JVM.
  - Listing CreditsEntries using AngularJS
  - Added REST API for finding CreditsEntries and CreditsEntriesPeriods
  - Using **AngularJS Promises** for asynchronous calls
+ - Added **AngularJS** drop-down with search capability for searching for departments.  [**ui-select**](https://github.com/angular-ui/ui-select)
 
 2014 - August
  
@@ -131,3 +132,5 @@ even if Tomcat is running under a 64-bit JVM.
 https://github.com/mateu-aguilo-bosch/message-center
 
 - Alerts Growl - https://github.com/JanStevens/angular-growl-2
+
+- Drop-down - https://github.com/angular-ui/ui-select

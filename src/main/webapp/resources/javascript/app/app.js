@@ -28,10 +28,13 @@
 	as = angular.module('hrangularspring', ['ngRoute',
 	                                        'ngResource',
 	                                        'lodash',
+	                                        'ngSanitize', 
+	                                        'ui.select',
 	                                        'admin-employments',
 	                                        /*'admin-employments2',*/
 	                                        'admin-employment-edit',
-	                                        'admin-creditsEntries',]);
+	                                        'admin-creditsEntries',
+	                                        'admin-departments']);
 
 	as.config(['$routeProvider'/*, '$httpProvider'*/, function($routeProvider/*, $httpProvider*/) {
 

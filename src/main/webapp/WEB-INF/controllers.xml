@@ -73,4 +73,8 @@
 		<constructor-arg><ref bean="userAccessService"/></constructor-arg>
 	</bean>
 	
+	
+	<bean id="customObjectMapper" class="org.dpi.common.CustomObjectMapper">
+    </bean>
+    
 </beans>

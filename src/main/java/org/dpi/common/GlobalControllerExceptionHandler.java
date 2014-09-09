@@ -6,6 +6,7 @@ import org.dpi.employment.Employment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,10 @@ class GlobalControllerExceptionHandler {
 	
 	@Autowired
 	private MessageSource message;
+	
+    @Autowired
+    @Qualifier("customObjectMapper")
+    private ObjectMapper objectMapper;
 
 	@ExceptionHandler
 	public ResponseEntity<String> handleException(Exception ex){
@@ -35,15 +40,12 @@ class GlobalControllerExceptionHandler {
 	    
 		log.error("Exception ",ex);	
 
-		//TODO inject this as a Spring bean!!!
-		ObjectMapper mapper = new CustomObjectMapper();
-
 		String  exceptionString = org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(ex);
 		
 		Map<String, Object> responseMap = new ResponseMap<Employment>().mapError(exceptionString);
 
 		try {
-			String serializedResponse = mapper.writeValueAsString(responseMap);
+			String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.add("Content-Type", "application/json;charset=utf-8");

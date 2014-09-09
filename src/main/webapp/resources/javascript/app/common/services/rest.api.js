@@ -131,9 +131,13 @@
 
 						}*/
 
+					},
+					departments : {
+						findAvailableDepartmentsForAccount : function(query) {
+							return RestFullResponse.all('departments').all('findAvailableDepartmentsForAccount').getList(query);
+						}
 					}
-					
-					
+
 				};
 			} ]);
 

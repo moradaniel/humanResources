@@ -7,11 +7,11 @@
 	module.service("SessionService", [function(){
 
 		this.departments = [
-		                    {"id": "0", "name": "-- Seleccione Reparticion --"},
+		                    /*{"id": "0", "name": "-- Seleccione Reparticion --"},
 		                    {"id": "215", "name": "ADMINISTRACION PARAJE DIFUNTA CORREA"},
 		                    {"id": "31", "name": "ADMINISTRACION PARQUE PROVINICAL ISCHIGUALASTO"},
 		                    {"id": "154", "name": "AGENCIA SAN JUAN DE DESARROLLO DE INVERSIONES"},
-		                    {"id": "46", "name": "ASESORIA LETRADA DE GOBIERNO"}
+		                    {"id": "46", "name": "ASESORIA LETRADA DE GOBIERNO"}*/
 		                    ];
 
 		this.currentSelectedDepartmentId = "0";
@@ -31,8 +31,7 @@
 			return obj;
 
 		};
-
-
+	
 	}]);
 
 }());

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dpi.category.CategoryService;
-import org.dpi.common.CustomObjectMapper;
 import org.dpi.common.ResponseMap;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsManagement.CreditsManagerService;
@@ -24,6 +23,8 @@ import org.dpi.util.PageList;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,6 +66,13 @@ public class CreditsEntryController {
 	
 	@Resource(name = "creditsPeriodService")
 	private CreditsPeriodService creditsPeriodService;
+	
+	
+	@Autowired
+	@Qualifier("customObjectMapper")
+	private ObjectMapper objectMapper; 
+	    
+	       
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
@@ -266,8 +274,6 @@ public class CreditsEntryController {
         List<CreditsEntryVO> creditsEntryVOReparticion = creditsEntryService.buildCreditsEntryVO(creditsEntries,currentUser);
         
 
-        ObjectMapper mapper = new CustomObjectMapper();
-
         long total = creditsEntries.getTotalItems();
 
 
@@ -276,7 +282,7 @@ public class CreditsEntryController {
 
         Map<String, Object> responseMap = new ResponseMap<CreditsEntryVO>().mapOK(creditsEntryVOReparticion,total);
 
-        String serializedResponse = mapper.writeValueAsString(responseMap);
+        String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
 
         return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
@@ -310,12 +316,11 @@ public class CreditsEntryController {
         
         Map<String, Object> responseMap = new ResponseMap<CreditsPeriod>().mapOK(creditsPeriods);
 
-        ObjectMapper mapper = new CustomObjectMapper();
         
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
         
-        String serializedResponse = mapper.writeValueAsString(responseMap);
+        String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
         return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
         
@@ -326,7 +331,6 @@ public class CreditsEntryController {
     public ResponseEntity<String> getAllCreditsEntriesTypes() throws JsonProcessingException {
         log.info("Start getAllCreditsEntriesTypes.");     
 
-        ObjectMapper mapper = new CustomObjectMapper();
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -340,7 +344,7 @@ public class CreditsEntryController {
 
         Map<String, Object> responseMap = new ResponseMap<CreditsEntryType>().mapOK(searcheableCreditsEntriesTypes);
 
-        String serializedResponse = mapper.writeValueAsString(responseMap);
+        String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
         return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
 

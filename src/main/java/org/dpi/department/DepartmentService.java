@@ -3,7 +3,6 @@ package org.dpi.department;
 import java.util.List;
 
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.samples.travel.SearchCriteria;
 
 
 /**
@@ -33,6 +32,6 @@ public interface DepartmentService extends ApplicationContextAware
 	
 	public DepartmentDao getDepartmentDao();
 
-	public List<Department> findDepartments(SearchCriteria criteria);
+	//public List<Department> findDepartments(SearchCriteria criteria);
 
 }

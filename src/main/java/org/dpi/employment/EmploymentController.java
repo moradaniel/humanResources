@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dpi.category.CategoryService;
-import org.dpi.common.CustomObjectMapper;
 import org.dpi.common.ResponseMap;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.department.Department;
@@ -24,6 +23,8 @@ import org.dpi.web.response.StatusResponse;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -69,6 +70,11 @@ public class EmploymentController {
 
 	@Resource(name = "personService")
 	private PersonService personService;
+	
+	
+	@Autowired
+	@Qualifier("customObjectMapper")
+	private ObjectMapper objectMapper;
 
 	@Inject
 	public EmploymentController(EmploymentCreditsEntriesService employmentCreditsEntriesService) {
@@ -445,9 +451,6 @@ public class EmploymentController {
 		List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(employments,Long.parseLong(departmentId),currenUser);
 
 
-
-		ObjectMapper mapper = new CustomObjectMapper();
-
 		long total = employments.getTotalItems();
 
 
@@ -456,7 +459,7 @@ public class EmploymentController {
 
 		Map<String, Object> responseMap = new ResponseMap<EmploymentVO>().mapOK(employmentsVO,total);
 
-		String serializedResponse = mapper.writeValueAsString(responseMap);
+		String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
 
 		return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
@@ -470,7 +473,6 @@ public class EmploymentController {
 	public ResponseEntity<String> getAllEmploymentsStatus() throws JsonProcessingException {
 		log.info("Start getAllEmploymentsStatus.");		
 
-		ObjectMapper mapper = new CustomObjectMapper();
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -482,7 +484,7 @@ public class EmploymentController {
 
 		Map<String, Object> responseMap = new ResponseMap<EmploymentStatus>().mapOK(searcheableEmploymentStatusesEmploymentStatus);
 
-		String serializedResponse = mapper.writeValueAsString(responseMap);
+		String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
 		return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
 
@@ -521,14 +523,12 @@ public class EmploymentController {
         }
         personService.addPerson(employment);*/
        // return new ResponseMessage(ResponseMessage.Type.success, "personAdded");
-        
-    	//TODO inject this as a Spring bean!!!
-		ObjectMapper mapper = new CustomObjectMapper();
+
 
         
 		Map<String, Object> responseMap = new ResponseMap<Employment>().mapOK(existingEmployment, "Employment saved");
 
-		String serializedResponse = mapper.writeValueAsString(responseMap);
+		String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "application/json;charset=utf-8");

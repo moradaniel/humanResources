@@ -1442,7 +1442,7 @@ a.back-login:hover {
 	/*float: right;*/
     font-size: 13px;
     color: #FFFFFF;
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: relative;
     /*right: 0;*/
     top: 20px;

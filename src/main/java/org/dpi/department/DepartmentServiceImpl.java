@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.samples.travel.SearchCriteria;
 
 
 
@@ -59,9 +58,9 @@ public class DepartmentServiceImpl implements DepartmentService
 
 	/*@Transactional(readOnly = true)
 	@SuppressWarnings("unchecked")*/
-	public List<Department> findDepartments(SearchCriteria criteria) {
+	/*public List<Department> findDepartments(SearchCriteria criteria) {
 		return departmentDao.findDepartments(criteria);
 	}
-	
+	*/
 
 }

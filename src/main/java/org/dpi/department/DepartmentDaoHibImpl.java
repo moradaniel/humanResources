@@ -1,20 +1,13 @@
 package org.dpi.department;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
-import org.hibernate.Session;
 import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.samples.travel.SearchCriteria;
-import org.springframework.util.StringUtils;
 
 /**
  * Used to create, save, retrieve, update and delete department objects from
@@ -78,7 +71,7 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 		return department;
 	}
 
-	
+	/*
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List<Department> findDepartments(final SearchCriteria criteria) {
@@ -102,11 +95,7 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 				sb.append(where);
 				
 				Query q = sess.createQuery(select+sb.toString());
-				/*q.setParameter("franchising", franchising);
-				if (bind != null) {
-					q.setMaxResults(bind.getCountToLastElement());
-					q.setFirstResult(bind.getFirstElement());
-				}*/				
+		
 				List<Department> list = q.list();
 				return list;
 			}
@@ -114,9 +103,9 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 		
 		//if (log.isDebugEnabled()) log.debug("successfully retrieved Department with codigo '" + codigo+ "' in " + timer.printElapsedTime());
 		return list;
-	}
+	}*/
 	
-	private String buildWhereClause(SearchCriteria criteria) {
+	/*private String buildWhereClause(SearchCriteria criteria) {
 		StringBuffer sb = new StringBuffer();
 		if(criteria!=null) {
 			String searchString = criteria.getSearchString();
@@ -137,7 +126,7 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 		} else {
 			return "'%'";
 		}
-	}
+	}*/
 	
 	
 	@SuppressWarnings("unchecked")

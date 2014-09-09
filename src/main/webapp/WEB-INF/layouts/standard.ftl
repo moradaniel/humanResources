@@ -28,8 +28,11 @@
 	
 		
 	<link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jquery-ui/1.8.18/smoothness/jquery-ui-1.8.18.custom.css'/>
-	<link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/ui.jqgrid-4.3.1.css'/>
+	<#-- link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/ui.jqgrid-4.3.1.css'/ -->
 
+
+    <link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/dist/select.css'/>
+    
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.10/jquery-1.10.2.min.js'/></script>
 	
@@ -40,7 +43,6 @@
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/blockUI/2.64/jquery.blockUI.js'/></script>
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/utils/utils.js'/></script>
-	
 
 		
 </head>
@@ -64,7 +66,7 @@
 	</div>
 	
 			<#if account?exists>
-				<div style="float:right;">
+				<div style="float:right; width:65%;">
 					<div id="loggedInAs">
 						<strong>Usuario: </strong>${account.name} <strong>Rol: </strong>
 						<#assign isFirstRole=true>
@@ -78,9 +80,9 @@
 						</#list>
 					</div>
 					
-					<div id="div_departmentSearch" >
-						<span class="searchDropDown">Reparticion: </span>
-						<select style="color:black;" id="departmentId" name="departmentId" <#-- onchange="onSelect(this,'${currentURL?default('')}')" --> >
+					<div id="div_departmentSearch">
+						<!--span class="searchDropDown">Reparticion: </span>
+						<!--select style="color:black;" id="departmentId" name="departmentId" <-- onchange="onSelect(this,'${currentURL?default('')}')" -> >
 	
 							<#if myDepartments?exists >
 								<option value="" >-- Seleccione Reparticion --</option>
@@ -97,19 +99,47 @@
 									<option value="${aDepartment.id}" ${selected?default("")} >${departmentName?html}</option>
 								</#list>
 							</#if>
-						</select>
+						</select -->
 						
-					    <!-- select id="makeListBox" 
-  						    ng-model="make.selected" 
-      						ng-options="make.id as make.name for make in makes"
-      						ng-change="makeChanged(make.selected)"
-      						class="form-control  input-sm"
-      						>
-  						</select -->
+                       <div ng-controller="departmentsCtrl">
+                              <div style="float:left">
+                                 <span>Reparticion: </span>
+                             </div>
+                             <#-- div style="float:right; width:90%">
+                                  <ui-select ng-model="person.selected" theme="bootstrap" on-select="someFunction($item, $model)" ng-disabled="disabled" style="min-width: 300px;">
+                                    <ui-select-match placeholder="Select a person in the list or search his name/age...">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="person.email as person in people | propsFilter: {name: $select.search, age: $select.search}">
+                                      <div ng-bind-html="person.name | highlight: $select.search"></div>
+                                      <small>
+                                        email: {{person.email}}
+                                        age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+                                      </small>
+                                    </ui-select-choices>
+                                  </ui-select>
+                              </div -->
+                              
+                              <div style="float:right; width:90%">
+                                  <ui-select ng-model="$parent.department" theme="bootstrap" on-select="selectDepartment($item, $model)" ng-disabled="disabled" style="min-width: 300px;">
+                                    <ui-select-match placeholder="Seleccione una reparticion o busque por nombre o codigo...">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="department.code as department in availableDepartmentsForAccount | propsFilter: {name: $select.search, code: $select.search}">
+                                      <div ng-bind-html="department.name | highlight: $select.search"></div>
+                                      <small>
+                                        <!--code: {{department.code}} -->
+                                        codigo: <span ng-bind-html="''+department.code | highlight: $select.search"></span>
+                                      </small>
+                                    </ui-select-choices>
+                                  </ui-select>
+                              </div>
+                              
+                        </div>
+
   						
   						<!-- span>{{SessionService.getCurrentDepartment().id}} - {{SessionService.getCurrentDepartment().name}}</span -->
   						
 					</div>
+					
+
+
 				</div>
 			</#if>
 	
@@ -400,7 +430,15 @@
 		});
 		
 		
-		var currentSelectedDepartmentId;
+		//var currentSelectedDepartmentId;
+		
+		
+		var currentSelectedDepartmentId = '';
+		
+		<#if currentDepartment?exists >
+            currentSelectedDepartmentId =  ${currentDepartment.id}
+        </#if>
+	
 		
 		var prefixContextPath = '${requestContext.contextPath}';
 		
@@ -412,27 +450,16 @@
 				onSelect($("#departmentId option:selected").get(0),'${currentURL?default('')}');
 			}
 			
-			//AddIncSearch does not work for ie<8 or firefox < 3.6
-			/*if(browserLessThanIE8()==false && browserLessThanGecko1_9_2()==false){
-				//add search capability to department combo
-				$("#departmentId").AddIncSearch(
-						{
-					        maxListSize: 200,
-					        maxMultiMatch: 150,
-					        warnMultiMatch: 'top {0} matches ...',
-					        warnNoMatch: 'no matches ...'
-						}
-						);
-			}*/
+
 			
 			//we store the current selected department for comparing in the onSelect function
-			currentSelectedDepartmentId=$("#departmentId").val();
+			/*currentSelectedDepartmentId=$("#departmentId").val();
 			
 					
 			
 			$('#departmentId').bind('change', function() {
 				onSelect(this,'${currentURL?default('')}');
-			});
+			});*/
 			
 			
 		});
@@ -444,15 +471,19 @@
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/lodash.js'/></script>
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular.js'/></script>
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/i18n/angular-locale_es-ar.js'/></script -->
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.0.min.js'/></script>
 	
 	
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-resource.js'/></script>
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/angular-route.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular-resource.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular-route.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular-sanitize.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/dist/select.js'/></script>
+	   
 		
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ng-table-0.3.1/ng-table.js'/></script -->
 	
@@ -460,6 +491,11 @@
 		
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-growl-2/build/angular-growl.js'/></script>		
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/message-center/message-center.js'/></script>
+	
+    
+
+	
+	
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/notifications.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/session.js'/></script>
@@ -469,6 +505,8 @@
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments.js'/></script>
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments2.js'/></script -->
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/departments/admin-departments.js'/></script>
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/creditsEntries/admin-creditsEntries.js'/></script>
 		
