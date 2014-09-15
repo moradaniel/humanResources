@@ -1,7 +1,7 @@
-DevOps
+DevOps (Draft)
 =====================
 
-xsfsfgsfgsfdgsdfsfgsf
+This document describes the infrastructure used to deploy a production cluster of Tomcat servers with an Apache Server as a Load Balancer
 
 
 ## Ubuntu server
@@ -14,35 +14,36 @@ Install Oracle Java8
 	sudo add-apt-repository ppa:webupd8team/java
 	sudo apt-get update
 	sudo apt-get install oracle-java8-installer
+	
+	
+	sudo vim /etc/environment
+	//append
+	JAVA_HOME=/usr/lib/jvm/java-8-oracle
+
+	//restart env
+	$source /etc/environment
+
+	//check
+	$echo $JAVA_HOME
+	/usr/lib/jvm/java-8-oracle
 
 
+	//Switch to Oracle Java 8 (from Oracle java 7)
+	$ sudo update-java-alternatives -s java-8-oracle
+	//switch to Oracle Java 8 (from Oracle java 7)
+	$ sudo update-java-alternatives -s java-7-oracle
 
-Switching between Oracle Java 7 and Oracle Java 8
+	$ java -version
 
-Switch to Oracle Java 8 (from Oracle java 7)
-
-
-	sudo update-java-alternatives -s java-8-oracle
-
-
-switch to Oracle Java 8 (from Oracle java 7)
-
-	sudo update-java-alternatives -s java-7-oracle
-
-
-
-```
-$ java -version
-```
 
 ## Apache Web Server
- - version
+ - version 2.4
  
 ### Installation
 
-```
-$sudo apt-get install apache2
-```
+
+	$sudo apt-get install apache2
+
 
 the default web page should display at
 
@@ -66,13 +67,18 @@ To see the apache directory structure
 	drwxr-xr-x   2 root root  4096 sep 13 14:59 sites-enabled
 
 
+Check that the user www-data exists. www-data is the Linux user assigned to the Apache Server
 
+	$ id www-data
+
+<!--
 /etc/hosts
+-->
 
-### Restart
-```
-$sudo service apache2 restart
-```
+### Restart Apache
+
+	$sudo service apache2 restart
+
  
 ## Load Balancing and Scalability
 
@@ -139,15 +145,461 @@ Above is the full server.xml for my “server2”. The only difference to the se
 ### CATALINA_HOME
 
 
-
 The directory where tomcat binaries reside is known as CATALINA_HOME, common to all running tomcat instances. In our case:
 
-CATALINA_HOME=/opt/tomcat
+	CATALINA_HOME=/opt/tomcat
 
 
-/etc/environment (you do not use the command export in this file as it is not a normal bash script)
+Add CATALINA_HOME to **/etc/environment** (you do not use the command export in this file as it is not a normal bash script)
 
-CATALINA_HOME=/path/to/the/root/folder/of/tomcat
+	$sudo vim /etc/environment
+	append:
+	CATALINA_HOME=/opt/tomcat
+
+	$echo $CATALINA_HOME
+
+###Tomcat instances/profiles
+
+We are creating different Tomcat profiles to simultaneously run several tomcat instances on the same system. Each tomcat profile location is called CATALINA_BASE, and it will be different for each running instance. In our case:
+
+CATALINA_BASE=/var/tomcat/$INSTANCE_NAME
+Where $INSTANCE_NAME will receive different values.
+
+##Creating the tomcat profiles
+First, create a template profile with the needed files and directories. It will be cloned to create the real ones:
+
+	$sudo -s
+	$mkdir -p /var/tomcat/template
+	$cd /var/tomcat/template
+	$mkdir logs temp webapps work bin lib
+	$cp -r /opt/tomcat/conf conf
+	$touch bin/setenv.sh
+
+Create tomcat8 linux user:
+
+<!--
+	opcion1
+	$useradd tomcat8
+	$useradd -r tomcat8 --shell /bin/false
+	//how to verify that tomcat8 was created? in which group?
+-->
+
+	
+	$ groupadd tomcat
+	$ useradd -g tomcat -d /opt/tomcat tomcat
+	$ passwd tomcat
+	//make user tomcat member of group www-data
+	$usermod -G www-data tomcat
+
+
+	$chown -R tomcat:tomcat /opt/tomcat
+
+
+3.5. Running Tomcat as Non-Root User
+
+I don't believe there any issues with running Tomcat as root user. However, for the more security-conscious readers out there, here are some instructions on running Tomcat as a non-root user.
+
+At this stage, the Tomcat packages, files and binaries are owned by root. We will first need to create a Tomcat user and group that will own these files, and under which Tomcat will run.
+
+Tomcat User :: tomcat
+
+Tomcat Group :: tomcat
+
+Not too imaginative, huh ? We will now create the Tomcat user and group. Open a terminal window and, as root,
+
+	$ groupadd tomcat
+	$ useradd -g tomcat -d /opt/tomcat tomcat
+	$ passwd tomcat
+
+	//make user tomcat member of group www-data
+	usermod -G www-data tomcat
+
+Notice that we specified the home directory of Tomcat to be /opt/tomcat. Some people believe that this is good practice because it eliminates an additional home directory that needs to be administered.
+
+Now, we will put everything in /opt/tomcat under Tomcat user and group. As root,
+
+	chown -R tomcat:tomcat /opt/tomcat
+If /opt/tomcat is a symlink to your Tomcat install directory, you'll need to do this:
+
+	chown -R tomcat:tomcat /opt/jakarta-tomcat-5.x.xx
+Verify that JAVA_HOME and CATALINA_HOME environment variables are setup for tomcat user, and you should be good to go. Once the Tomcat binaries are under Tomcat user, the way you invoke it will be different.
+
+
+	//check Tomcat manager
+	http://localhost:8200/manager/text/list
+
+	//check that the ports used by the tomcat instances are opened
+	$ sudo lsof -i
+
+
+
+
+Fin opcion 2
+
+
+
+Copy /var/tomcat/template to /var/<instance_name>. This location will be the instance’s CATALINA_BASE:
+
+
+	$cp -r /var/tomcat/template /opt/<instance_name>
+	in our case
+	cp -r /var/tomcat/template /opt/tomcat01
+	cp -r /var/tomcat/template /opt/tomcat02
+
+
+	chown -hR tomcat8: /opt/tomcat /opt/apache-tomcat-8.0.12
+
+Edit CATALINA_BASE/conf/server.xml, replacing the port numbers for shutdown, ajp and http connectors. Use a rational enumeration on port assignation (see the tables above). For example, for stg_geoserver, do:
+
+	cd /opt/tomcat01
+	sed -i 's/port="8005"/port="8020"/g' conf/server.xml #shutdown port
+	sed -i 's/port="8009"/port="8100"/g' conf/server.xml #ajp port
+	sed -i 's/port="8080"/port="8200"/g' conf/server.xml #http port
+
+
+	cd /opt/tomcat02
+	sed -i 's/port="8005"/port="8020"/g' conf/server.xml #shutdown port
+	sed -i 's/port="8009"/port="8101"/g' conf/server.xml #ajp port
+	sed -i 's/port="8080"/port="8201"/g' conf/server.xml #http port
+
+Edit CATALINA_BASE/bin/setenv.sh and add the needed environment variables, depending on the applications running on the specific instance. Dont’t forget to set the CATALINA_HOME var with the own path for each application and set JAVA_OPTS variable setting the JVM parameters.
+
+These are the suggested **setenv.sh** contents for each instance. For more details on these environment setups, please refer to application specific documentation:
+
+**tomcat01**
+
+	SERVICE=tomcat01
+
+	# Application specific environment
+	#GEOSTORE_OVR_FILE=file:/var/$SERVICE/geostore-datasource-ovr.properties
+	
+	# Java options
+	#JAVA_OPTS="-server -Xms512m -Xmx512m -Dgeostore-ovr=$GEOSTORE_OVR_FILE -Duser.timezone=GMT"
+	JAVA_OPTS="-server -Xms512m -Xmx512m"
+
+
+**tomcat02**
+
+	SERVICE=tomcat02
+	
+	# Java options
+
+	JAVA_OPTS="-server -Xms512m -Xmx512m"
+
+
+----------
+
+Create the file /etc/init.d/ubuntuTomcatRunner.sh with this content:
+
+	#!/bin/sh
+	#
+	# /etc/init.d/tomcat6 -- startup script for the Tomcat 6 servlet engine
+	#
+	# Written by Miquel van Smoorenburg <miquels@cistron.nl>.
+	# Modified for Debian GNU/Linux  by Ian Murdock <imurdock@gnu.ai.mit.edu>.
+	# Modified for Tomcat by Stefan Gybas <sgybas@debian.org>.
+	# Modified for Tomcat6 by Thierry Carrez <thierry.carrez@ubuntu.com>.
+	# Additional improvements by Jason Brittain <jason.brittain@mulesoft.com>.
+	# Adapted to run multiple tomcat instances for UN-REDD NFMS platform.
+	
+	set -e
+	
+	DESC="NFMS4REDD Tomcat"
+	CATALINA_BASE=/var/tomcat/$SERVICE
+	PATH=/bin:/usr/bin:/sbin:/usr/sbin
+	DEFAULT=/etc/default/$SERVICE
+	JVM_TMP=$CATALINA_BASE/temp
+	
+	if [ -r $CATALINA_BASE/bin/setenv.sh ]; then
+	        . $CATALINA_BASE/bin/setenv.sh
+	fi
+	
+	if [ `id -u` -ne 0 ]; then
+	   echo "You need root privileges to run this script"
+	   exit 1
+	fi
+	
+	# Make sure tomcat is started with system locale
+	if [ -r /etc/default/locale ]; then
+	   . /etc/default/locale
+	   export LANG
+	fi
+	
+	. /lib/lsb/init-functions
+	
+	if [ -r /etc/default/rcS ]; then
+	   . /etc/default/rcS
+	fi
+	
+	
+	# The following variables can be overwritten in $DEFAULT
+	
+	# Run Tomcat 6 as this user ID and group ID
+	TOMCAT6_USER=tomcat6
+	TOMCAT6_GROUP=tomcat6
+	
+	# The first existing directory is used for JAVA_HOME (if JAVA_HOME is not
+	# defined in $DEFAULT)
+	JDK_DIRS="/usr/lib/jvm/default-java"
+	
+	# Look for the right JVM to use
+	for jdir in $JDK_DIRS; do
+	    if [ -r "$jdir/bin/java" -a -z "${JAVA_HOME}" ]; then
+	   JAVA_HOME="$jdir"
+	    fi
+	done
+	export JAVA_HOME
+	
+	# Directory where the Tomcat 6 binary distribution resides
+	CATALINA_HOME=/opt/tomcat
+	
+	# Use the Java security manager? (yes/no)
+	TOMCAT6_SECURITY=no
+	
+	# Default Java options
+	# Set java.awt.headless=true if JAVA_OPTS is not set so the
+	# Xalan XSL transformer can work without X11 display on JDK 1.4+
+	# It also looks like the default heap size of 64M is not enough for most cases
+	# so the maximum heap size is set to 128M
+	if [ -z "$JAVA_OPTS" ]; then
+	   JAVA_OPTS="-Djava.awt.headless=true -Xmx128M"
+	fi
+	
+	# End of variables that can be overwritten in $DEFAULT
+	
+	# overwrite settings from default file
+	#if [ -f "$DEFAULT" ]; then
+	#  . "$DEFAULT"
+	#fi
+	
+	if [ ! -f "$CATALINA_HOME/bin/bootstrap.jar" ]; then
+	   log_failure_msg "$SERVICE is not installed"
+	   exit 1
+	fi
+	
+	POLICY_CACHE="$CATALINA_BASE/work/catalina.policy"
+	
+	if [ -z "$CATALINA_TMPDIR" ]; then
+	   CATALINA_TMPDIR="$JVM_TMP"
+	fi
+	
+	# Set the JSP compiler if set in the tomcat6.default file
+	if [ -n "$JSP_COMPILER" ]; then
+	   JAVA_OPTS="$JAVA_OPTS -Dbuild.compiler=\"$JSP_COMPILER\""
+	fi
+	
+	SECURITY="no"
+	if [ "$TOMCAT6_SECURITY" = "yes" ]; then
+	   SECURITY="-security"
+	fi
+	
+	# Define other required variables
+	CATALINA_PID="/var/run/$SERVICE.pid"
+	CATALINA_SH="$CATALINA_HOME/bin/catalina.sh"
+	
+	# Look for Java Secure Sockets Extension (JSSE) JARs
+	if [ -z "${JSSE_HOME}" -a -r "${JAVA_HOME}/jre/lib/jsse.jar" ]; then
+	    JSSE_HOME="${JAVA_HOME}/jre/"
+	fi
+	
+	catalina_sh() {
+	   # Escape any double quotes in the value of JAVA_OPTS
+	   JAVA_OPTS="$(echo $JAVA_OPTS | sed 's/\"/\\\"/g')"
+	
+	   AUTHBIND_COMMAND=""
+	   if [ "$AUTHBIND" = "yes" -a "$1" = "start" ]; then
+	      JAVA_OPTS="$JAVA_OPTS -Djava.net.preferIPv4Stack=true"
+	      AUTHBIND_COMMAND="/usr/bin/authbind --deep /bin/bash -c "
+	   fi
+	
+	   # Define the command to run Tomcat's catalina.sh as a daemon
+	   # set -a tells sh to export assigned variables to spawned shells.
+	   TOMCAT_SH="set -a; JAVA_HOME=\"$JAVA_HOME\"; source \"$DEFAULT\"; \
+	      CATALINA_HOME=\"$CATALINA_HOME\"; \
+	      CATALINA_BASE=\"$CATALINA_BASE\"; \
+	      JAVA_OPTS=\"$JAVA_OPTS\"; \
+	      CATALINA_PID=\"$CATALINA_PID\"; \
+	      CATALINA_TMPDIR=\"$CATALINA_TMPDIR\"; \
+	      LANG=\"$LANG\"; JSSE_HOME=\"$JSSE_HOME\"; \
+	      cd \"$CATALINA_BASE\"; \
+	      \"$CATALINA_SH\" $@"
+	
+	   if [ "$AUTHBIND" = "yes" -a "$1" = "start" ]; then
+	      TOMCAT_SH="'$TOMCAT_SH'"
+	   fi
+	
+	   # Run the catalina.sh script as a daemon
+	   set +e
+	   touch "$CATALINA_PID" "$CATALINA_BASE"/logs/catalina.out
+	   #chown -R $TOMCAT6_USER:$TOMCAT6_USER $CATALINA_BASE
+	   chown $TOMCAT6_USER "$CATALINA_PID" "$CATALINA_BASE"/logs/catalina.out
+	   start-stop-daemon --start -b -u "$TOMCAT6_USER" -g "$TOMCAT6_GROUP" \
+	      -c "$TOMCAT6_USER" -d "$CATALINA_TMPDIR" -p "$CATALINA_PID" \
+	      -x /bin/bash -- -c "$AUTHBIND_COMMAND $TOMCAT_SH"
+	   status="$?"
+	   set +a -e
+	   return $status
+	}
+	
+	case "$1" in
+	  start)
+	   if [ -z "$JAVA_HOME" ]; then
+	      log_failure_msg "no JDK found - please set JAVA_HOME"
+	      exit 1
+	   fi
+	
+	   if [ ! -d "$CATALINA_BASE/conf" ]; then
+	      log_failure_msg "invalid CATALINA_BASE: $CATALINA_BASE"
+	      exit 1
+	   fi
+	
+	   log_daemon_msg "Starting $DESC" "$SERVICE"
+	   if start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
+	      --user $TOMCAT6_USER --exec "$JAVA_HOME/bin/java" \
+	      >/dev/null; then
+	
+	      # Regenerate POLICY_CACHE file
+	#     umask 022
+	#     echo "// AUTO-GENERATED FILE from /etc/tomcat6/policy.d/" \
+	#        > "$POLICY_CACHE"
+	#     echo ""  >> "$POLICY_CACHE"
+	#     cat $CATALINA_BASE/conf/policy.d/*.policy \
+	#        >> "$POLICY_CACHE"
+	
+	      # Remove / recreate JVM_TMP directory
+	      rm -rf "$JVM_TMP"
+	      mkdir -p "$JVM_TMP" || {
+	         log_failure_msg "could not create JVM temporary directory"
+	         exit 1
+	      }
+	      chown $TOMCAT6_USER "$JVM_TMP"
+	
+	      catalina_sh start $SECURITY
+	      sleep 5
+	         if start-stop-daemon --test --start --pidfile "$CATALINA_PID" --user $TOMCAT6_USER --exec "$JAVA_HOME/bin/java" \
+	         >/dev/null; then
+	         echo $?
+	         if [ -f "$CATALINA_PID" ]; then
+	            rm -f "$CATALINA_PID"
+	         fi
+	         log_end_msg 1
+	      else
+	         log_end_msg 0
+	      fi
+	   else
+	           log_progress_msg "(already running)"
+	      log_end_msg 0
+	   fi
+	   ;;
+	  stop)
+	   log_daemon_msg "Stopping $DESC" "$SERVICE"
+	
+	   set +e
+	   if [ -f "$CATALINA_PID" ]; then
+	      start-stop-daemon --stop --pidfile "$CATALINA_PID" \
+	         --user "$TOMCAT6_USER" \
+	         --retry=TERM/20/KILL/5 >/dev/null
+	      if [ $? -eq 1 ]; then
+	         log_progress_msg "$SERVICE is not running but pid file exists, cleaning up"
+	      elif [ $? -eq 3 ]; then
+	         PID="`cat $CATALINA_PID`"
+	         log_failure_msg "Failed to stop $SERVICE (pid $PID)"
+	         exit 1
+	      fi
+	      rm -f "$CATALINA_PID"
+	      rm -rf "$JVM_TMP"
+	   else
+	      log_progress_msg "(not running)"
+	   fi
+	   log_end_msg 0
+	   set -e
+	   ;;
+	   status)
+	   set +e
+	   start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
+	      --user "$TOMCAT6_USER" \
+	      >/dev/null 2>&1
+	   if [ "$?" = "0" ]; then
+	
+	      if [ -f "$CATALINA_PID" ]; then
+	          log_success_msg "$SERVICE is not running, but pid file exists."
+	         exit 1
+	      else
+	          log_success_msg "$SERVICE is not running."
+	         exit 3
+	      fi
+	   else
+	      log_success_msg "$SERVICE is running with pid `cat $CATALINA_PID`"
+	   fi
+	   set -e
+	        ;;
+	  restart|force-reload)
+	   if [ -f "$CATALINA_PID" ]; then
+	      $0 stop
+	      sleep 1
+	   fi
+	   $0 start
+	   ;;
+	  try-restart)
+	        if start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
+	      --user $TOMCAT6_USER --exec "$JAVA_HOME/bin/java" \
+	      >/dev/null; then
+	      $0 start
+	   fi
+	        ;;
+	  *)
+	   log_success_msg "Usage: $0 {start|stop|restart|try-restart|force-reload|status}"
+	   exit 1
+	   ;;
+	esac
+	
+	exit 0
+
+
+
+----------
+
+For each of the instances, create a file under /etc/init.d/ named exactly as the correspondig directory under /var/tomcat. It will contain the INIT block, the service name, and a description. File contents for tomcat01 service would be (for each file, replace portal occurrences in this example with the corresponding service name):
+
+	#!/bin/sh
+	### BEGIN INIT INFO
+	# Provides:          portal
+	# Required-Start:    $local_fs $remote_fs $network
+	# Required-Stop:     $local_fs $remote_fs $network
+	# Should-Start:      $named
+	# Should-Stop:       $named
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Description:       Start portal.
+	### END INIT INFO
+	
+	SERVICE=tomcat01
+	. /etc/init.d/ubuntuTomcatRunner.sh
+
+
+Make all scripts created in /etc/init.d/ executable:
+
+	chmod +x ubuntuTomcatRunner.sh tomcat0*
+
+
+---------
+Make services start at boot time
+Install sysv-rc-conf
+
+	sudo apt-get install sysv-rc-conf
+
+
+Add all of the services to start on boot:
+
+	sysv-rc-conf <service_name> on
+
+
+Check their status:
+	sysv-rc-conf --list 
+
+Check tomcat01 status:
+	sysv-rc-conf --list tomcat01
+
 
 
 ## mod_jk
@@ -169,6 +621,42 @@ Since you’ve already used APT to install Apache, it makes sense to use it agai
 	
 
 
+
+Enable module mod_jk in Apache Server
+
+
+
+Configuring mod_jk
+mod_jk requires exactly one workers.properties file where load balancing is configured. “Workers” are defined in the properties file and represent actual or virtual workers.
+
+
+         worker.list=loadbalancer,status  
+         worker.tomact01.port=8100
+         worker.tomcat01.host=localhost  
+         worker.tomcat01.type=ajp13  
+
+         worker.tomcat02.port=8101  
+         worker.tomcat02.host=localhost  
+         worker.tomcat02.type=ajp13  
+
+         worker.tomcat01.lbfactor=1  
+         worker.tomcat02.lbfactor=1  
+
+         worker.loadbalancer.type=lb  
+         worker.loadbalancer.balance_workers=tomcat01,tomcat02 
+
+         worker.status.type=status  
+
+
+
+The above configuration defines two virtual workers, and two actual workers, which map to my Tomcat servers. The virtual workers “status” and “loadbalancer” are defined in the worker.list property, because I’m going to refer to them later in my apache configuration.
+
+Second, I’ve defined workers for each of my servers, using the values from the AJP connectors in the server.xml from earlier. I’ve also included two optional properties for these workers, “lbfactor”. The higher the number of this property, the more preference mod_jk will give that worker when load balancing. If I had given the servers lbfactors of 1 and 3, I would find that the round-robin loadbalancing would prefer one server over the other with a 3:1 ratio.
+
+Lastly, I’ve got a little configuration for my virtual workers. I’ve set the loadbalancer worker to have type “lb” and listed the workers which represent Tomcat  in the “balance_workers” property. If I had any further servers to add, I would define them as a worker and list them in the same property. The only configuration that the status worker needs is to set the type to status.
+
+
+
 ## Security
 - SSL
 
@@ -184,38 +672,6 @@ Since you’ve already used APT to install Apache, it makes sense to use it agai
 
 ## Monitoring
  - cactis?
-
-## Linux
-
-restart networking
-
-Download a file from the web:
-
-
-    wget http://www.sevenacross.com/photos.zip
-
-
-### Compress/decompress folder
-For example, you have directory called /home/jerry/prog and you would like to compress this directory then you can type tar command as follows:
-
-    $ tar -zcvf prog-1-jan-2005.tar.gz /home/jerry/prog
-
-Above command will create an archive file called prog-1-jan-2005.tar.gz in current directory. If you wish to restore your archive then you need to use following command (it will extract all files in current directory):
-
-    $ tar -zxvf prog-1-jan-2005.tar.gz
-
-Symbolic Link
-
-	$ ln -s /path/to/file /path/to/symlink
-
-
-###logs
-The tail Command
-
-The reverse of head is tail. Using tail, you can view the last ten lines of a file. This can be useful for viewing the last 10 lines of a log file for important system messages. You can also use tail to watch log files as they are updated. Using the -f option, tail automatically print new messages from an open file to the screen in real-time. For example, to actively watch /var/log/messages, type the following at a shell prompt as the root user:
-
-	$tail -f /var/log/messages
-
 
 
 ## VIM
@@ -293,3 +749,6 @@ command mode: Ctrl-w + flecha
 
 - http://blog.c2b2.co.uk/2014/04/how-to-set-up-cluster-with-tomcat-8.html
 - http://blog.c2b2.co.uk/2013/10/how-to-install-apache-and-modjk.html
+- http://nfms4redd.org/downloads/previous/documentation/install/sw_prerequisites.html
+- http://linux-sxs.org/internet_serving/c140.html
+- http://www.gesea.de/techdocs.htm?id=67616&  (jkmanager)
