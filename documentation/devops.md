@@ -86,8 +86,10 @@ Check that the user www-data exists. www-data is the Linux user assigned to the 
 
 -mod_jk
 Apache Server and Tomcat instances
-## Tomcat 
+## Tomcat
+ 
  - Version 8.0.12
+ 
 ### Installation
 
 We will install Tomcat on the /opt/ directory, the one used for third party software.
@@ -234,11 +236,11 @@ Verify that JAVA_HOME and CATALINA_HOME environment variables are setup for tomc
 
 
 
-Fin opcion 2
+<!--    -->
 
 
 
-Copy /var/tomcat/template to /var/<instance_name>. This location will be the instance’s CATALINA_BASE:
+Copy /var/tomcat/template to /opt/<instance_name>. This location will be the instance’s CATALINA_BASE:
 
 
 	$cp -r /var/tomcat/template /opt/<instance_name>
@@ -249,7 +251,7 @@ Copy /var/tomcat/template to /var/<instance_name>. This location will be the ins
 
 	chown -hR tomcat8: /opt/tomcat /opt/apache-tomcat-8.0.12
 
-Edit CATALINA_BASE/conf/server.xml, replacing the port numbers for shutdown, ajp and http connectors. Use a rational enumeration on port assignation (see the tables above). For example, for stg_geoserver, do:
+Edit CATALINA_BASE/conf/server.xml, replacing the port numbers for shutdown, ajp and http connectors. Use a rational enumeration on port assignation (see the tables above). For example, do:
 
 	cd /opt/tomcat01
 	sed -i 's/port="8005"/port="8020"/g' conf/server.xml #shutdown port
