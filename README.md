@@ -80,6 +80,8 @@ even if Tomcat is running under a 64-bit JVM.
 
 2014 - September
 
+ - **Concurrency and Thread Safety:** String formatters in JDK are not thread-safe so 
+a ThreadLocal was used to ensure only one copy of DATE_FORMATTER
  - Listing CreditsEntries using AngularJS
  - Added REST API for finding CreditsEntries and CreditsEntriesPeriods
  - Using **AngularJS Promises** for asynchronous calls
