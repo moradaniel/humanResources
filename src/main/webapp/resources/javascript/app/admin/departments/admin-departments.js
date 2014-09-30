@@ -62,7 +62,10 @@
 		$scope.fetchAvailableDepartmentsForAccount().then(function(){
 
 			if($scope.availableDepartmentsForAccount.length===1){
-				$scope.department = $scope.availableDepartmentsForAccount[0];						
+				$scope.department = $scope.availableDepartmentsForAccount[0];
+				if(currentSelectedDepartmentId===''){
+					$scope.selectDepartment($scope.department);
+				}
 			}else{
 				//find by id
 				$scope.department = _.find($scope.availableDepartmentsForAccount, function(obj) { return obj.id === currentSelectedDepartmentId; });
