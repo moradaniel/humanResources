@@ -28,8 +28,6 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.CollectionUtils;
 
-//
-//import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserAccessServiceImpl implements UserAccessService
 {
@@ -111,7 +109,7 @@ public class UserAccessServiceImpl implements UserAccessService
 
 		Set<DepartmentAdminInfo> departmentList=new HashSet();
 		
-		String sHotelQuery = "  " ;
+		String sdepartmentQuery = "  " ;
 				
 		Account account = accountService.loadAccountByName(aAccountName);
 		
@@ -119,7 +117,7 @@ public class UserAccessServiceImpl implements UserAccessService
 			{
 				if(role.getName().equals("DEPARTMENT_RESPONSIBLE") || role.getName().equals("HR_MANAGER") )
 					{
-						 sHotelQuery = " select h.id, h.name, h.code " +
+						 sdepartmentQuery = " select h.id, h.name, h.code " +
 			                          " from DEPARTMENT_ACCOUNT ha " +
 			                          " inner join DEPARTMENT h on h.id = ha.DEPARTMENTID " +
 			                          " inner join sec_account a on a.id = ha.accountId " +
@@ -127,7 +125,7 @@ public class UserAccessServiceImpl implements UserAccessService
 						 
 						final int[] types = { Types.VARCHAR };
 						final Object[] args = { aAccountName };
-						final List results = template.queryForList(sHotelQuery, args, types);
+						final List results = template.queryForList(sdepartmentQuery, args, types);
 							
 						departmentList = this.getDepartmentList(results,comp,false);
 				
@@ -135,15 +133,15 @@ public class UserAccessServiceImpl implements UserAccessService
 					
 				if(role.getName().equals("SUBTREE_SUPERVISOR"))
 					{
-						sHotelQuery = "Select h.id, h.nombre , h.code" +
-								"From department h " +
-								"where REGEXP_LIKE (h.code, (select reverse(cast((cast(reverse(code) as number)) as varchar2(30))) as patron from DEPARTMENT_ACCOUNT ha " +
-								"inner join DEPARTMENT r on r.id = ha.DEPARTMENTID " +
-								"inner join sec_account a on a.id = ha.accountId " +
-								"where a.name = ?))" ;
+						sdepartmentQuery = "Select h.id, h.name , h.code " +
+								" from department h " +
+								" where REGEXP_LIKE (h.code, (select reverse(cast((cast(reverse(code) as number)) as varchar2(30))) as patron from DEPARTMENT_ACCOUNT ha " +
+								" inner join DEPARTMENT r on r.id = ha.DEPARTMENTID " +
+								" inner join sec_account a on a.id = ha.accountId " +
+								" where a.name = ?))" ;
 						final int[] types = { Types.VARCHAR };
 						final Object[] args = { aAccountName };
-						final List results = template.queryForList(sHotelQuery, args, types);
+						final List results = template.queryForList(sdepartmentQuery, args, types);
 								
 						departmentList = this.getDepartmentList(results,comp,false);
 						
