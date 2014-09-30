@@ -131,7 +131,7 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 		}
 		
 		if(entryQueryFilter.hasCredits!=null && entryQueryFilter.hasCredits.booleanValue()==true){
-			sb.append(" AND numberOfCredits > 0 ").append(" ");
+			sb.append(" AND entry.numberOfCredits > 0 ").append(" ");
 		}
 		
 		if(entryQueryFilter.getEmploymentQueryFilter()!=null) {
