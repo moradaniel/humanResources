@@ -72,9 +72,22 @@
 		<constructor-arg><ref bean="departmentService"/></constructor-arg>
 		<constructor-arg><ref bean="userAccessService"/></constructor-arg>
 	</bean>
-	
-	
-	<bean id="customObjectMapper" class="org.dpi.common.CustomObjectMapper">
-    </bean>
+
+    
+        <!-- Configure bean to convert JSON to POJO and vice versa -->
+    <!-- beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    </beans:bean --> 
+
+    <bean id="customObjectMapper" class="org.dpi.common.CustomObjectMapper" />
+    
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="customObjectMapper" />
+            </bean>        
+        </mvc:message-converters>
+    </mvc:annotation-driven>
     
 </beans>

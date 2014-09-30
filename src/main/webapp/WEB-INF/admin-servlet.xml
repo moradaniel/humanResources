@@ -39,22 +39,6 @@
         </beans:property>
     </beans:bean -->
      
-    <!-- Configure bean to convert JSON to POJO and vice versa -->
-    <!-- beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-    </beans:bean --> 
-
-	<beans:bean id="jacksonObjectMapper" class="org.dpi.common.CustomObjectMapper" />
-	
-	<mvc:annotation-driven>
-	    <mvc:message-converters>
-	        <beans:bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-	        <beans:bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
-	        <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-	            <beans:property name="objectMapper" ref="jacksonObjectMapper" />
-	        </beans:bean>        
-	    </mvc:message-converters>
-	</mvc:annotation-driven>
-
 
 	
 	<!-- Maps view names to Tiles Definitions -->
