@@ -12,6 +12,8 @@ import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
+import org.dpi.department.Department;
+import org.dpi.department.DepartmentService;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -29,6 +31,9 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
     @Resource(name = "creditsPeriodService")
     private CreditsPeriodService creditsPeriodService;
+    
+    @Resource(name = "departmentService")
+    private DepartmentService departmentService;
 
     Map<String,Integer> creditosPorCargaInicial = new HashMap<String,Integer>();
 
@@ -311,6 +316,14 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
         }
 
 
+        //TODO this is just a quick workaround, we need attributes to be added to departments
+        //for example departments_attributes.eligibleForCreditsRetention = false
+        //for now all departments with codes starting with "4" are not retaining credits 
+        Department department = departmentService.findById(departmentId);
+        if(department.getCode().startsWith("4")) {
+            return 0l;
+        }
+        
         long retainedCredits = 0; 
 
         long creditsBecauseOfDepartmentDeactivations = getCreditosPorBajasDeReparticion(creditsPeriodId, departmentId);
@@ -630,6 +643,15 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
     public void setCreditsPeriodService(CreditsPeriodService creditsPeriodService) {
         this.creditsPeriodService = creditsPeriodService;
+    }
+    
+    public DepartmentService getDepartmentService() {
+        return departmentService;
+    }
+
+
+    public void setDepartmentService(DepartmentService departmentService) {
+        this.departmentService = departmentService;
     }
 
 }
