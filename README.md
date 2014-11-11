@@ -78,6 +78,12 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
+2014 - October
+
+ - Added draft version of the documentation about clustering Tomcat and **Load Balancing** using **Apache** and **mod_jk**
+ - Added documentation about the balancer web console using the **jkmanager** monitor
+
+ 
 2014 - September
 
  - **Concurrency and Thread Safety:** String formatters in JDK are not thread-safe so 

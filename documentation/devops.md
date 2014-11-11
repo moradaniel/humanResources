@@ -84,8 +84,7 @@ Check that the user www-data exists. www-data is the Linux user assigned to the 
 
 ![](./tomcatClustering.png)
 
--mod_jk
-Apache Server and Tomcat instances
+
 ## Tomcat
  
  - Version 8.0.12
@@ -104,7 +103,7 @@ We will install Tomcat on the /opt/ directory, the one used for third party soft
 
 Before I can start the servers, I need to edit the port numbers to avoid conflicts:
 
-	 mike@ubuntu:~$ vim /opt/tomcat/apache-tomcat-8.0.5-server2/conf/server.xml  
+	 mike@ubuntu:~$ vim /opt/tomcat/apache-tomcat-8.0.12-server2/conf/server.xml  
 	 <Server port="9005" shutdown="SHUTDOWN">  
 	  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />  
 	  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />  
@@ -176,6 +175,7 @@ First, create a template profile with the needed files and directories. It will 
 	$mkdir logs temp webapps work bin lib
 	$cp -r /opt/tomcat/conf conf
 	$touch bin/setenv.sh
+
 
 Create tomcat8 linux user:
 
@@ -270,23 +270,24 @@ These are the suggested **setenv.sh** contents for each instance. For more detai
 
 **tomcat01**
 
-	SERVICE=tomcat01
+<!--  SERVICE=tomcat01 -->
+	# Java options
+	JAVA_OPTS="-server -Xms512m -Xmx512m -Dspring.profiles.active=prod"
 
+<!--
 	# Application specific environment
 	#GEOSTORE_OVR_FILE=file:/var/$SERVICE/geostore-datasource-ovr.properties
 	
-	# Java options
-	#JAVA_OPTS="-server -Xms512m -Xmx512m -Dgeostore-ovr=$GEOSTORE_OVR_FILE -Duser.timezone=GMT"
-	JAVA_OPTS="-server -Xms512m -Xmx512m"
+
+JAVA_OPTS="-server -Xms512m -Xmx512m -Dgeostore-ovr=$GEOSTORE_OVR_FILE -Duser.timezone=GMT" -->
 
 
 **tomcat02**
 
-	SERVICE=tomcat02
+<!--  SERVICE=tomcat02 -->
 	
 	# Java options
-
-	JAVA_OPTS="-server -Xms512m -Xmx512m"
+	JAVA_OPTS="-server -Xms512m -Xmx512m -Dspring.profiles.active=prod"
 
 
 ----------
@@ -583,6 +584,12 @@ Make all scripts created in /etc/init.d/ executable:
 
 	chmod +x ubuntuTomcatRunner.sh tomcat0*
 
+Verify thet the executable services were created
+
+	dmora@ubuntuhr:/etc/init.d$ ls tomcat* -la
+	-rwxr-xr-x 1 root root 380 sep 14 02:12 tomcat01
+	-rwxr-xr-x 1 root root 380 sep 14 02:13 tomcat02
+
 
 ---------
 Make services start at boot time
@@ -631,9 +638,10 @@ Enable module mod_jk in Apache Server
 Configuring mod_jk
 mod_jk requires exactly one workers.properties file where load balancing is configured. “Workers” are defined in the properties file and represent actual or virtual workers.
 
+	dmora@ubuntuhr:/etc/libapache2-mod-jk$ vim workers.properties
 
          worker.list=loadbalancer,status  
-         worker.tomact01.port=8100
+         worker.tomcat01.port=8100
          worker.tomcat01.host=localhost  
          worker.tomcat01.type=ajp13  
 
@@ -658,6 +666,93 @@ Second, I’ve defined workers for each of my servers, using the values from the
 Lastly, I’ve got a little configuration for my virtual workers. I’ve set the loadbalancer worker to have type “lb” and listed the workers which represent Tomcat  in the “balance_workers” property. If I had any further servers to add, I would define them as a worker and list them in the same property. The only configuration that the status worker needs is to set the type to status.
 
 
+#Tomcat logs
+	
+	sudo chown -R tomcat:tomcat logs
+
+
+##JKStatusManager - Tomcat cluster monitor / Apache mod_jk load balancer management
+
+http://localhost/jkmanager/
+
+The Apache webserver with mod_jk modul loaded can serve as a load balancer for a cluster of tomcat instances, distributes the work load of web applications.In most cases the java web applications will run on different Tomcat instances and multiple server machines.
+
+Once the Apache load balancer and Tomcat cluster is configured there is a need for a monitoring and management tool. For this reason there is the JKStatusManager web application. With JkStatusManager it is possible to active manage the tomcat workers and mod_jk load balancer.
+
+To activate the jkmanager edit the file:
+
+	/etc/libapache2-mod-jk/httpd-jk.conf
+
+add this configuration
+
+	# Add the jkstatus mount point
+	JkMount /jkmanager/* jkstatus
+	#Enable the JK manager access from localhost only
+	<Location /jkmanager/>
+	  JkMount jkstatus
+	  Order deny,allow
+	  Deny from all
+	  Allow from 127.0.0.1
+	  Allow from 10.11.0.150
+	</Location>
+	
+Open browser to see the balancer web console
+
+	http://localhost/jkmanager/
+
+![](./jkmanagerWebConsole.png)
+
+
+With JkStatusManager the tomcat cluster worker can temporarily disabled for maintenance reasons e.g. software installations, updates or application reconfiguration. 
+To disable a tomcat instance in a cluster set the worker status to 'disabled'. Before doing some maintenance tasks be sure that there are no active sessions remains on this tomcat worker.The value 'disabled' means that no new further sessions will be created by the load balancer on this tomcat worker. If all sessions of the worker are finished or timed out the worker is cluster released and can be configured.
+
+
+## Enable humanResources site in Apache
+
+create the following file in 
+
+	/etc/apache2/sites-available/001-human-resources.conf
+
+	<VirtualHost *:80>
+		# The ServerName directive sets the request scheme, hostname and port that
+		# the server uses to identify itself. This is used when creating
+		# redirection URLs. In the context of virtual hosts, the ServerName
+		# specifies what hostname must appear in the request's Host: header to
+		# match this virtual host. For the default virtual host (this file) this
+		# value is not decisive as it is used as a last resort host regardless.
+		# However, you must set it for any further virtual host explicitly.
+		#ServerName www.example.com
+	
+		ServerAdmin webmaster@localhost
+		#DocumentRoot /var/www/html
+	
+		JkMountCopy On 	
+		JkMount /status/* status  
+		JkMount /creditos loadbalancer
+		JkMount /creditos/* loadbalancer
+	
+	
+		# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+		# error, crit, alert, emerg.
+		# It is also possible to configure the loglevel for particular
+		# modules, e.g.
+		#LogLevel info ssl:warn
+	
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+		CustomLog ${APACHE_LOG_DIR}/access.log combined
+	
+		# For most configuration files from conf-available/, which are
+		# enabled or disabled at a global level, it is possible to
+		# include a line for only one particular virtual host. For example the
+		# following line enables the CGI configuration for this host only
+		# after it has been globally disabled with "a2disconf".
+		#Include conf-available/serve-cgi-bin.conf
+	</VirtualHost>
+
+Enable the site by createing a symbolic link in the enabled directory
+
+	$ ln -s /etc/apache2/sites-available/001-human-resources.conf /etc/apache2/sites-enabled/001-human-resources.conf
+
 
 ## Security
 - SSL
@@ -674,6 +769,7 @@ Lastly, I’ve got a little configuration for my virtual workers. I’ve set the
 
 ## Monitoring
  - cactis?
+ - zabbix
 
 
 ## VIM
