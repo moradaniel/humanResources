@@ -39,7 +39,7 @@ In order to have different environment this project uses spring profiles. Using 
 ## Testing
 
 
-Integration tests are ran using HSQLDB, an in-memory dababase HSQLDB
+Integration tests are ran using HSQLDB, an in-memory dababase.
 
  - Database schema
 test-data/schema.sql
@@ -77,6 +77,12 @@ even if Tomcat is running under a 64-bit JVM.
 
 
 ## ChangeLog
+
+
+2014 - December
+
+ - Added parentId to Department class in order to build a hierarchical structure.
+ - Added calculation of retained credits traversing and summing up credits from bottom to top.
 
 2014 - October
 
