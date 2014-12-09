@@ -2,6 +2,7 @@ package org.dpi.department;
 
 import java.util.List;
 
+import org.dpi.util.tree.GenericTreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -54,6 +55,12 @@ public class DepartmentServiceImpl implements DepartmentService
 	{
 		this.applicationContext = aApplicationContext;
 	}
+
+    @Override
+    public GenericTreeNode<Department> getSubTree(Long departmentId) {
+        
+        return departmentDao.getSubTree(departmentId);
+    }
 
 
 	/*@Transactional(readOnly = true)

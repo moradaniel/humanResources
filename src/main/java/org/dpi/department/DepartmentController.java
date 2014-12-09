@@ -3,6 +3,7 @@ package org.dpi.department;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -32,6 +33,7 @@ import org.dpi.security.UserSettingsFactory;
 import org.dpi.security.UserSettingsFactoryImpl;
 import org.dpi.stats.HistoricPeriodSummaryData;
 import org.dpi.stats.PeriodSummaryData;
+import org.dpi.util.tree.GenericTreeNode;
 import org.dpi.web.reporting.CanGenerateReportResult;
 import org.dpi.web.reporting.ReportService;
 import org.dpi.web.reporting.ReportServiceImpl.ManagementReports;
@@ -70,14 +72,14 @@ public class DepartmentController {
 
 
 	/** 
-	 * key that we use when placing an Reparticion instance in a model: 'reparticion'
+	 * key that we use when placing an Department instance in a model: 'department'
 	 * TODO: make private; have clients use session getters/putters
 	 */
 	public static final String KEY_DEPARTMENT = "currentDepartment";
 
 	/** 
-	 * The key by which we store in the Session the list of Reparticions that the
-	 * Principal is authorized to view: "myReparticions"
+	 * The key by which we store in the Session the list of Departments that the
+	 * Principal is authorized to view: "myDepartments"
 	 */
 	private static final String KEY_DEPARTMENT_LIST = "myDepartments";
 
@@ -150,7 +152,7 @@ public class DepartmentController {
 	@RequestMapping(value = "/departments/department/showCredits", method = RequestMethod.GET)
 	public String showCredits(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-		// get the current reparticion in the session
+		// get the current department in the session
 		final Department department = DepartmentController.getCurrentDepartment(request);
 
 		if (department != null){
@@ -602,6 +604,90 @@ public class DepartmentController {
 		return historicPeriodsSummaryData;
 
 	}
+	
+	   @RequestMapping(value = "/departments/department/hierarchicalCummulativeCredits", method = RequestMethod.GET)
+	    public String showHierarchicalCummulativeCredits(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+	        // get the current department in the session
+	        final Department department = DepartmentController.getCurrentDepartment(request);
+
+	        if (department != null){
+
+	            if (department instanceof Department) 
+	            {
+	                model.addAttribute(PARAM_DEPARTMENT_ID, department.getId());
+	            }
+	            
+	            List<String> departmentsList = buildHierarchicalCummulativeCredits(department);
+
+	            model.addAttribute("departmentsList", departmentsList);
+	            
 
 
+	        }
+	        return "departments/showHierarchicalCummulativeCredits";
+	    }
+
+	   List<String> buildHierarchicalCummulativeCredits(Department department){
+	       
+	       
+	       GenericTreeNode<Department> root = departmentService.getSubTree(department.getId());
+	       
+     
+	       List<String> departmentsList = new ArrayList<String>();
+	       Stack<String> departmentsStack = new Stack<String>();
+           
+	       int indent = 0;
+
+	       printTree(root,indent,departmentsStack);
+	       
+	       while(!departmentsStack.isEmpty()) {
+	           departmentsList.add(departmentsStack.pop());
+	       }
+	       
+	       for(String data:departmentsList) {
+	           System.out.println(data);
+           }
+	       
+	       return departmentsList;
+	       
+	   }
+	   
+      
+       
+       private Long printTree(GenericTreeNode<Department> root, int indent, Stack<String> departmentsList) {
+           
+           String prefix = "";
+           for(int i = 0;i<=indent;i++) {
+               prefix = prefix + "--";
+               
+           }
+           Long currentPeriodRetainedCredits = 0l;
+           
+           if(!root.hasChildren()) {
+               CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+               currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), root.getData().getId());
+           }else {
+               for(GenericTreeNode<Department> child:root.getChildren()) {
+                   Long retainedCredits = printTree(child,indent+1,departmentsList);
+                   currentPeriodRetainedCredits = currentPeriodRetainedCredits + retainedCredits;
+               }
+           }
+           
+           String line = prefix+root.getData().getCode()+" - "+root.getData().getName();//+ " - " +currentPeriodRetainedCredits;    
+           departmentsList.push(line);
+
+           return currentPeriodRetainedCredits;
+
+       }
+
+	   private void printTree2(GenericTreeNode<Department> root, int indent) {
+	       for(int i = 0;i<=indent;i++) {
+	           System.out.print("-");
+	       }
+	       System.out.print(root.getData().getName() + '\n');
+	       for(GenericTreeNode<Department> child:root.getChildren()) {
+	           printTree2(child,indent+1);
+	       }
+	   }
 }

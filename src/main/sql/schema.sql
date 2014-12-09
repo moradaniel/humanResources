@@ -1,7 +1,7 @@
 /*
  * 
  * To find which tnsnames.ora is being used
- * c:\instantclient_11_2\tnsping XE_ISIS
+ * c:\instantclient_11_2\tnsping XE_EROS
  * 
  * 
  * 
@@ -10,7 +10,7 @@
  * 
  * initialization file init.ora
  * 
- * sqlplus SYS/password@XE_ISIS as sysdba
+ * sqlplus SYS/password@XE_EROS as sysdba
  * 
  * SQL> show parameter audit;
  * 
@@ -584,6 +584,10 @@ alter table CREDITOS.OCCUPATIONAL_GROUP
         foreign key (MINIMUM_CATEGORY_ID) 
         references CATEGORY;
 
+ALTER TABLE CREDITOS.DEPARTMENT ADD (
+  CONSTRAINT "fk_DepartmentParent" 
+  FOREIGN KEY (PARENT_ID) 
+  REFERENCES CREDITOS.DEPARTMENT (ID));
         
 CREATE SEQUENCE CREDITOS.OCCUPATIONAL_GROUP_SEQ
   START WITH 1

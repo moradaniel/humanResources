@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.dpi.util.tree.GenericTreeNode;
 import org.hibernate.SQLQuery;
 import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
@@ -160,5 +161,36 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 		
 		return departmentSearchInfos;
 	}
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public GenericTreeNode<Department> getSubTree(Long departmentId/*,GenericTreeNode<Department> rootDepartmentTreeNode*/){
+        Chronometer timer = new Chronometer();
+
+        if (log.isDebugEnabled()) log.debug("attempting to find Department with id: '" + departmentId + "'");
+
+        List list = getHibernateTemplate().find("from DepartmentImpl department LEFT OUTER JOIN FETCH department.children children where department.id=?", departmentId);
+
+        Department department = (list.size() > 0) ? (Department)list.get(0) : null;
+
+        if (department == null) {
+            log.warn("Unable to find Department with id: '" + departmentId + "'");
+            return null;
+        }
+
+        if (log.isDebugEnabled()) log.debug("successfully retrieved Department with id: '" + departmentId + "' in " + timer.printElapsedTime());
+        
+        GenericTreeNode<Department> rootDepartmentTreeNode = new GenericTreeNode<Department>();
+        
+        rootDepartmentTreeNode.setData(department);
+                
+        for(Department childDepartment : department.getChildren()) {
+            GenericTreeNode<Department> childDepartmentTreeNode = getSubTree(childDepartment.getId());
+            rootDepartmentTreeNode.addChild(childDepartmentTreeNode);
+            
+        }
+
+        return rootDepartmentTreeNode;
+    }
 
 }

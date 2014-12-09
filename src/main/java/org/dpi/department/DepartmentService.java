@@ -2,6 +2,7 @@ package org.dpi.department;
 
 import java.util.List;
 
+import org.dpi.util.tree.GenericTreeNode;
 import org.springframework.context.ApplicationContextAware;
 
 
@@ -31,6 +32,9 @@ public interface DepartmentService extends ApplicationContextAware
 	public void saveOrUpdate(final Department aDepartment); 
 	
 	public DepartmentDao getDepartmentDao();
+
+
+    public GenericTreeNode<Department> getSubTree(Long departmentId);
 
 	//public List<Department> findDepartments(SearchCriteria criteria);
 

@@ -14,7 +14,7 @@
 
   <!-- default file logger -->
   <appender name="DefaultLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/application.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/application.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -24,7 +24,7 @@
 
   <!-- Logger for the main model entity classes -->
   <appender name="ModelLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/model.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/model.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -34,7 +34,7 @@
 
 	<!-- logger to track hibernate activity and SQL queries -->
   <appender name="SqlLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/sql.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/sql.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -44,7 +44,7 @@
 
 	<!-- logger to track activity on User Interfaces -->
   <appender name="UiLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/ui.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/ui.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -54,7 +54,7 @@
 
   <!-- inventory logger -->
   <appender name="InventoryLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/inventory.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/inventory.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -64,7 +64,7 @@
 
   <!-- Price logger -->
   <appender name="PriceLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/price.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/price.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -74,7 +74,7 @@
 
   <!-- Rules logger -->
   <appender name="RuleLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/rules.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/rules.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -84,7 +84,7 @@
 
   <!-- Policy logger -->
   <appender name="PolicyLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/policy.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/policy.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">
@@ -94,7 +94,7 @@
 
   <!-- DataFlexer logger -->
   <appender name="DataFlexerLogger" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="D:/proyectos/dpi/javaProjects/apache-tomcat-7.0.42/logs/humanResources/dataflexer.log"/>
+    <param name="File" value="/home/dmora/proyectos/dpi/javaProjects/humanResources/logs/humanResources/dataflexer.log"/>
     <param name="Append" value="false"/>
     <param name="DatePattern" value="'.'yyyyMMdd"/>
     <layout class="org.apache.log4j.PatternLayout">

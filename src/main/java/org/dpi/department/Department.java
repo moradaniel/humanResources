@@ -16,4 +16,11 @@ public interface Department extends Persistent, Serializable{
 	public void setSubDepartments(Set<SubDepartment> subDepartments);
 	public void addSubDepartment(SubDepartment subDepartment);
 
+    public Department getParent();
+
+    public void setParent(Department parent);
+
+    public Set<Department> getChildren();
+
+    public void setChildren(Set<Department> children);
 }

@@ -17,5 +17,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/departments/creditsentries.ftl" />
 	</definition>
 
+    <definition name="departments/showHierarchicalCummulativeCredits" extends="standardLayout" templateType="freemarker">
+        <put-attribute name="body" value="/WEB-INF/views/departments/showHierarchicalCummulativeCredits.ftl" />
+    </definition>
 
 </tiles-definitions>

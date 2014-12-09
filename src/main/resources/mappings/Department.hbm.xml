@@ -20,6 +20,26 @@
 		<key column="DEPARTMENTID" foreign-key="fk_DepartmentSubDepartment"/>
 		<one-to-many class="org.dpi.subDepartment.SubDepartmentImpl"/>
 	</set>
+	
+	
+    <set name="children" cascade="save-update" lazy="true">
+        <key column="PARENT_ID" foreign-key="fk_DepartmentParent"/>
+        <one-to-many class="org.dpi.department.DepartmentImpl"/>
+    </set>
+    
+    <!-- many departments can have a department as their parent -->
+    <many-to-one
+            name="parent"
+            class="org.dpi.department.DepartmentImpl"
+            column="PARENT_ID"
+            not-null="false"
+            lazy="proxy"
+            cascade="none"
+            foreign-key="fk_DepartmentParent"
+        >
+            <!-- meta attribute="use-in-tostring">true</meta -->
+            <!-- meta attribute="use-in-equals">true</meta -->
+        </many-to-one>
 
   </class>
 </hibernate-mapping>

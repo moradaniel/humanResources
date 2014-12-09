@@ -17,6 +17,9 @@ public class DepartmentImpl extends PersistentAbstract implements Department {
 	private String name;
 	
 	private Set<SubDepartment> subDepartments = new HashSet<SubDepartment>();
+	
+	private Department parent;
+	private Set<Department> children = new HashSet<Department>();
 
 	public DepartmentImpl(){
 	}
@@ -52,4 +55,20 @@ public class DepartmentImpl extends PersistentAbstract implements Department {
 	public void addSubDepartment(SubDepartment subDepartment) {
 		this.subDepartments.add(subDepartment);
 	}
+
+    public Department getParent() {
+        return parent;
+    }
+
+    public void setParent(Department parent) {
+        this.parent = parent;
+    }
+
+    public Set<Department> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<Department> children) {
+        this.children = children;
+    }
 }
