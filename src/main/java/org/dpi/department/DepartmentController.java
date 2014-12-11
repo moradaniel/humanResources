@@ -655,31 +655,27 @@ public class DepartmentController {
 	   
       
        
-       private Long printTree(GenericTreeNode<Department> root, int indent, Stack<String> departmentsList) {
-           
-           String prefix = "";
-           for(int i = 0;i<=indent;i++) {
-               prefix = prefix + "--";
-               
-           }
-           Long currentPeriodRetainedCredits = 0l;
-           
-           if(!root.hasChildren()) {
-               CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
-               currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), root.getData().getId());
-           }else {
-               for(GenericTreeNode<Department> child:root.getChildren()) {
-                   Long retainedCredits = printTree(child,indent+1,departmentsList);
-                   currentPeriodRetainedCredits = currentPeriodRetainedCredits + retainedCredits;
-               }
-           }
-           
-           String line = prefix+root.getData().getCode()+" - "+root.getData().getName();//+ " - " +currentPeriodRetainedCredits;    
-           departmentsList.push(line);
+	   private Long printTree(GenericTreeNode<Department> root, int indent, Stack<String> departmentsList) {
 
-           return currentPeriodRetainedCredits;
+	       String prefix = "";
+	       for(int i = 0;i<=indent;i++) {
+	           prefix = prefix + "--";
+	       }
 
-       }
+	       CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+	       Long currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), root.getData().getId());
+
+	       for(GenericTreeNode<Department> child:root.getChildren()) {
+	           Long retainedCredits = printTree(child,indent+1,departmentsList);
+	           currentPeriodRetainedCredits = currentPeriodRetainedCredits + retainedCredits;
+	       }
+
+	       String line = prefix+root.getData().getCode()+" - "+root.getData().getName()+ " - " +currentPeriodRetainedCredits;    
+	       departmentsList.push(line);
+
+	       return currentPeriodRetainedCredits;
+
+	   }
 
 	   private void printTree2(GenericTreeNode<Department> root, int indent) {
 	       for(int i = 0;i<=indent;i++) {
