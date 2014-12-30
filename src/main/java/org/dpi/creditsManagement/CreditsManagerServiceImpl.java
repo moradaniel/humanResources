@@ -1,7 +1,9 @@
 package org.dpi.creditsManagement;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -516,24 +518,39 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
                 if (log.isDebugEnabled()) log.debug("attempting to find CreditEntries with id: '" + departmentId + "'");
 
-                String where = " WHERE 1=1 " + CreditsEntryDaoHibImpl.buildWhereClause(creditsEntryQueryFilter);
+                List<String> wheres = new ArrayList<String>();
+                List<String> paramNames = new ArrayList<String>();
+                List<Object> values = new ArrayList<Object>();
 
-                StringBuffer sb = new StringBuffer();
-                sb.append("select sum(entry.numberOfCredits) ");
-                sb.append(" from CreditsEntryImpl entry ");
-                sb.append(" INNER JOIN entry.employment employment ");
-                sb.append(" INNER JOIN employment.subDepartment subDepartment ");
-                sb.append(" INNER JOIN subDepartment.department department ");
-                sb.append(" INNER JOIN entry.creditsPeriod creditsPeriod ");
+                StringBuffer queryBuilder = new StringBuffer();
+                
+                queryBuilder.append("select sum(entry.numberOfCredits) ");
+                queryBuilder.append(" from CreditsEntryImpl entry ");
+                queryBuilder.append(" INNER JOIN entry.employment employment ");
+                queryBuilder.append(" INNER JOIN employment.subDepartment subDepartment ");
+                queryBuilder.append(" INNER JOIN subDepartment.department department ");
+                queryBuilder.append(" INNER JOIN entry.creditsPeriod creditsPeriod ");
+                
+                
+                CreditsEntryDaoHibImpl.buildWhereClause(creditsEntryQueryFilter,wheres,paramNames,values);
+                
+                
+                String queryWithoutOrdering = wheres.isEmpty() ? queryBuilder.toString() : queryBuilder.append(" WHERE ").append(
+                        org.dpi.util.StringUtils.getStringsSeparatedBy(" AND ", wheres)).toString();
 
-
-                sb.append(where);
-
-                Query query = sess.createQuery(sb.toString());
-
-                Long totalAmount = (Long) query.uniqueResult();
-
-
+                String queryWithOrdering = queryWithoutOrdering;
+                
+                Query queryObject = sess.createQuery(queryWithOrdering);
+                
+                if (values != null) {
+                    for (int i = 0; i < values.size(); i++) {
+                        applyNamedParameterToQuery(queryObject, paramNames.get(i), values.get(i), null);
+                    }
+                }
+                
+                
+                Long totalAmount = (Long) queryObject.uniqueResult();
+                
                 if (log.isDebugEnabled()) log.debug("successfully retrieved department with id: '" + departmentId + "' in " + timer.printElapsedTime());
                 if(totalAmount==null){
                     totalAmount=new Long(0);
