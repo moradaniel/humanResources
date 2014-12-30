@@ -1,18 +1,17 @@
 package org.dpi.creditsPeriod;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import org.dpi.creditsPeriod.CreditsPeriod.Status;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.janux.bus.persistence.BaseDAOHibernate;
 import org.janux.util.Chronometer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * Used to create, save, retrieve, update and delete objects from
@@ -21,117 +20,123 @@ import org.springframework.util.CollectionUtils;
  */
 public class CreditsPeriodDaoHibImpl extends BaseDAOHibernate implements CreditsPeriodDao
 {
-	@SuppressWarnings("unchecked")
-	public List<CreditsPeriod> findAll()
-	{
-		Chronometer timer = new Chronometer();
+    @SuppressWarnings("unchecked")
+    public List<CreditsPeriod> findAll()
+    {
+        Chronometer timer = new Chronometer();
 
-		if (log.isDebugEnabled()) log.debug("attempting to find all CreditsPeriod");
+        if (log.isDebugEnabled()) log.debug("attempting to find all CreditsPeriod");
 
-		List<CreditsPeriod> list = getHibernateTemplate().find("from CreditsPeriodImpl order by name");
+        List<CreditsPeriod> list = getHibernateTemplate().find("from CreditsPeriodImpl order by name");
 
-		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " CreditsPeriod in " + timer.printElapsedTime());
+        if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " CreditsPeriod in " + timer.printElapsedTime());
 
-		return list;
-	}	
-	
-	
-	@SuppressWarnings( "unchecked" )
-	public List<CreditsPeriod> find(final CreditsPeriodQueryFilter creditsPeriodQueryFilter){
-		Chronometer timer = new Chronometer();
-
-		if (log.isDebugEnabled()) log.debug("attempting to find CreditsPeriod with filter '" + creditsPeriodQueryFilter.toString() + "'" );
-
-		List<CreditsPeriod> list = getHibernateTemplate().executeFind(new HibernateCallback() {
-			
-			public Object doInHibernate(Session sess)
-					throws HibernateException, SQLException  {	
-				
-				String where = " WHERE 1=1 "+buildWhereClause(creditsPeriodQueryFilter);
-				
-				String select = "Select creditsPeriod ";
-				
-				StringBuffer sb = new StringBuffer();
-				sb.append(" FROM CreditsPeriodImpl creditsPeriod ");
-				sb.append(" LEFT OUTER JOIN FETCH creditsPeriod.previousCreditsPeriod previousCreditsPeriod ");
+        return list;
+    }	
 
 
-				sb.append(where);
-				
-				sb.append(" ORDER BY creditsPeriod.name desc ");
-				
-				Query q = sess.createQuery(select+sb.toString());
-				/*q.setParameter("franchising", franchising);
-				if (bind != null) {
-					q.setMaxResults(bind.getCountToLastElement());
-					q.setFirstResult(bind.getFirstElement());
-				}*/				
-				List<CreditsPeriod> list = q.list();
-				return list;
-			}
-		});
-		
-		//if (log.isDebugEnabled()) log.debug("successfully retrieved  with codigo '" + codigo+ "' in " + timer.printElapsedTime());
-		return list;
-	}
-	
-	private String buildWhereClause(CreditsPeriodQueryFilter creditsPeriodQueryFilter) {
-		StringBuffer sb = new StringBuffer();
-		if(creditsPeriodQueryFilter!=null) {
-			String name = creditsPeriodQueryFilter.getName();
-			if(name!=null) {
-				sb.append(" AND creditsPeriod.name = '").append(name).append("'");
-			}
-			
-			Date startDate = creditsPeriodQueryFilter.getStartDate();
-			if(startDate!=null) {
-				sb.append(" AND creditsPeriod.startDate >= :startDate '");
-			}
-			
-			Date endDate = creditsPeriodQueryFilter.getEndDate();
-			if(endDate!=null) {
-				sb.append(" AND creditsPeriod.endDate <= :startDate '");
-			}
-			
+    @SuppressWarnings( "unchecked" )
+    public List<CreditsPeriod> find(final CreditsPeriodQueryFilter creditsPeriodQueryFilter){
+        Chronometer timer = new Chronometer();
 
-			if(!CollectionUtils.isEmpty(creditsPeriodQueryFilter.getStatuses())){
-				sb.append(" AND (");
-				for (Iterator<Status> iterator = creditsPeriodQueryFilter.getStatuses().iterator(); iterator.hasNext();) {
-					Status status = (Status) iterator.next();
-					sb.append(" creditsPeriod.status = '"+status.name()+"' ");
-					if(iterator.hasNext()){
-						sb.append(" OR ");
-					}
-				}
-				sb.append(" ) ");				
-					
-			}
-			
+        if (log.isDebugEnabled()) log.debug("attempting to find CreditsPeriod with filter '" + creditsPeriodQueryFilter.toString() + "'" );
 
-		}
-		return sb.toString();
-	}
-	
+        List<CreditsPeriod> list = getHibernateTemplate().executeFind(new HibernateCallback() {
 
-	@Override
-	public CreditsPeriod findById(Long id) {
-		Chronometer timer = new Chronometer();
+            public Object doInHibernate(Session sess)
+                    throws HibernateException, SQLException  {	
 
-		if (log.isDebugEnabled()) log.debug("attempting to find CreditsPeriod with id: '" + id + "'");
 
-		List list = getHibernateTemplate().find("from CreditsPeriodImpl where id=?", id);
+                List<String> wheres = new ArrayList<String>();
+                List<String> paramNames = new ArrayList<String>();
+                List<Object> values = new ArrayList<Object>();
 
-		CreditsPeriod creditsPeriod = (list.size() > 0) ? (CreditsPeriod)list.get(0) : null;
+                StringBuffer queryBuilder = new StringBuffer();
 
-		if (creditsPeriod == null) {
-			log.warn("Unable to find CreditsPeriod with id: '" + id + "'");
-			return null;
-		}
+                queryBuilder.append("Select creditsPeriod ");
 
-		if (log.isDebugEnabled()) log.debug("successfully retrieved CreditsPeriod with id: '" + id + "' in " + timer.printElapsedTime());
+                queryBuilder.append(" FROM CreditsPeriodImpl creditsPeriod ");
+                queryBuilder.append(" LEFT OUTER JOIN FETCH creditsPeriod.previousCreditsPeriod previousCreditsPeriod ");
 
-		return creditsPeriod;
-	}
+                buildWhereClause(creditsPeriodQueryFilter,wheres,paramNames,values);
 
-	
+
+                String queryWithoutOrdering = wheres.isEmpty() ? queryBuilder.toString() : queryBuilder.append(" WHERE ").append(
+                        org.dpi.util.StringUtils.getStringsSeparatedBy(" AND ", wheres)).toString();
+
+                String queryWithOrdering = queryWithoutOrdering;
+
+                queryWithOrdering += " ORDER BY creditsPeriod.name desc ";
+
+                int startIndex = 0;
+                Integer maxResults = null;
+
+                return findByNamedParam(queryWithOrdering, paramNames, values, startIndex, maxResults);
+
+            }
+        });
+
+        //if (log.isDebugEnabled()) log.debug("successfully retrieved  with codigo '" + codigo+ "' in " + timer.printElapsedTime());
+        return list;
+    }
+
+    public static void buildWhereClause(CreditsPeriodQueryFilter creditsPeriodQueryFilter,
+            List<String> wheres, List<String> paramNames, List<Object> values) {
+
+        if(creditsPeriodQueryFilter!=null) {
+            String name = creditsPeriodQueryFilter.getName();
+            if(!StringUtils.isEmpty(name)) {
+                wheres.add(" creditsPeriod.name = :name ");
+                paramNames.add("name");
+                values.add(name);
+            }
+
+
+            Date startDate = creditsPeriodQueryFilter.getStartDate();
+            if(startDate!=null) {
+                wheres.add(" creditsPeriod.startDate >= :startDate ");
+                paramNames.add("startDate");
+                values.add(startDate);
+            }
+
+            Date endDate = creditsPeriodQueryFilter.getEndDate();
+            if(endDate!=null) {
+                wheres.add(" creditsPeriod.endDate <= :endDate ");
+                paramNames.add("endDate");
+                values.add(endDate);
+            }
+
+            if(!CollectionUtils.isEmpty(creditsPeriodQueryFilter.getStatuses())){
+                wheres.add(" creditsPeriod.status IN (:status) ");
+                paramNames.add("status");
+                values.add(creditsPeriodQueryFilter.getStatuses());
+            }
+
+
+        }
+    }
+
+
+
+    @Override
+    public CreditsPeriod findById(Long id) {
+        Chronometer timer = new Chronometer();
+
+        if (log.isDebugEnabled()) log.debug("attempting to find CreditsPeriod with id: '" + id + "'");
+
+        List list = getHibernateTemplate().find("from CreditsPeriodImpl where id=?", id);
+
+        CreditsPeriod creditsPeriod = (list.size() > 0) ? (CreditsPeriod)list.get(0) : null;
+
+        if (creditsPeriod == null) {
+            log.warn("Unable to find CreditsPeriod with id: '" + id + "'");
+            return null;
+        }
+
+        if (log.isDebugEnabled()) log.debug("successfully retrieved CreditsPeriod with id: '" + id + "' in " + timer.printElapsedTime());
+
+        return creditsPeriod;
+    }
+
+
 }
