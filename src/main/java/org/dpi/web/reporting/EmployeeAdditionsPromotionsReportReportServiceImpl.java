@@ -70,7 +70,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		
 			
 		
-		params.put("MOVIMIENTOS_ASCENSO",  new MovimientosAscensoReportDataSource(getReportDataMovimientosAscenso(creditsEntriesAscensosDepartmentVO)));
+		params.put("MOVIMIENTOS_ASCENSO",  new PromotionCreditEntriesReportDataSource(getReportDataMovimientosAscenso(creditsEntriesAscensosDepartmentVO)));
 		
 		//get movimientos de Ingreso
 		empleoQueryFilter = new EmploymentQueryFilter();
@@ -92,7 +92,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		
 		params.put("CANTIDAD_MOVIMIENTOS_INGRESO",  cantidadMovimientosIngreso);
 		
-		params.put("MOVIMIENTOS_INGRESO",  new MovimientosIngresoReportDataSource(getReportDataMovimientosIngreso(creditsEntryIngresosDepartment)));
+		params.put("MOVIMIENTOS_INGRESO",  new AdditionsCreditEntriesReportDataSource(getReportDataMovimientosIngreso(creditsEntryIngresosDepartment)));
 		
 		
 		Long creditosDisponiblesAlInicioDelPeriodo =this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
@@ -123,12 +123,12 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		final List<GenericReportRecord> records = new ArrayList<GenericReportRecord>();
 		for(CreditsEntryVO creditsEntryAscensosDepartmentVO:creditsEntriesAscensosDepartmentVO){
 			GenericReportRecord record = new GenericReportRecord();
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.PERSON_APELLIDO_NOMBRE.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getEmployment().getPerson().getApellidoNombre());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.PERSON_CUIL.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getEmployment().getPerson().getCuil());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_CURRENT_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getCurrentCategory());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PROPOSED_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getProposedCategory());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getOccupationalGroup());
-			record.setValue(MovimientosAscensoReportDataSource.ReportFieldID.EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getParentOccupationalGroup());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.PERSON_APELLIDO_NOMBRE.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getEmployment().getPerson().getApellidoNombre());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.PERSON_CUIL.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getEmployment().getPerson().getCuil());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_CURRENT_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getCurrentCategory());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_PROPOSED_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getProposedCategory());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getOccupationalGroup());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getParentOccupationalGroup());
 			records.add(record);
 		}
 		
@@ -141,9 +141,9 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		final List<GenericReportRecord> records = new ArrayList<GenericReportRecord>();
 		for(CreditsEntry creditsEntryIngreso:creditsEntryIngresosDepartment){
 			GenericReportRecord record = new GenericReportRecord();
-			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.PERSON_NUEVO_PERFIL.name(),"");
-			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),"");
-			record.setValue(MovimientosIngresoReportDataSource.ReportFieldID.PERSON_NUEVO_CATEGORIA_PROPUESTA.name(),creditsEntryIngreso.getEmployment().getCategory().getCode());
+			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.PERSON_NUEVO_PERFIL.name(),"");
+			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),"");
+			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.PERSON_NUEVO_CATEGORIA_PROPUESTA.name(),creditsEntryIngreso.getEmployment().getCategory().getCode());
 			
 			records.add(record);
 		}

@@ -58,8 +58,8 @@
 		<field name="NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
 		<field name="PERSON_NUEVO_CATEGORIA_PROPUESTA" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.MovimientosAscensoReportDataSource" isForPrompting="false"/>
-	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.MovimientosIngresoReportDataSource" isForPrompting="false"/>
+	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
+	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
 	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO" class="java.lang.Long"/>
 	<parameter name="CANTIDAD_CREDITOS_POR_BAJAS" class="java.lang.Long"/>

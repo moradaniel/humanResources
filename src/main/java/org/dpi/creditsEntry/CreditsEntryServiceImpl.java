@@ -154,8 +154,8 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 			CreditsEntryVO creditsEntryVO = new CreditsEntryVO();
 			creditsEntryVO.setCreditsEntry(creditsEntry);
 			if(creditsEntry.getCreditsEntryType()==CreditsEntryType.AscensoAgente){
-				Employment employmentAnterior = creditsEntry.getEmployment().getPreviousEmployment();
-				creditsEntryVO.setCurrentCategory(employmentAnterior.getCategory().getCode());
+				Employment previousEmployment = creditsEntry.getEmployment().getPreviousEmployment();
+				creditsEntryVO.setCurrentCategory(previousEmployment.getCategory().getCode());
 				creditsEntryVO.setProposedCategory(creditsEntry.getEmployment().getCategory().getCode());
 			}else{
 				creditsEntryVO.setCurrentCategory(creditsEntry.getEmployment().getCategory().getCode());
@@ -328,7 +328,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 					" Type:"+entry.getCreditsEntryType().name()+
 					" Person name:"+ entry.getEmployment().getPerson().getApellidoNombre()+
 					" from status: "+entry.getGrantedStatus().name() + " to "+newStatus.name());	
-		}	
+		}
 		
 		if(entry.getCreditsEntryType()==CreditsEntryType.AscensoAgente){
 		
@@ -341,12 +341,12 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 					
 					employmentService.saveOrUpdate(employmentActual);
 				
-					Employment employmentAnterior = employmentService.findById(employmentActual.getPreviousEmployment().getId());
+					Employment previousEmployment = employmentService.findById(employmentActual.getPreviousEmployment().getId());
 					
-					employmentAnterior.setStatus(EmploymentStatus.INACTIVO);
+					previousEmployment.setStatus(EmploymentStatus.PENDIENTE);
 								
 					
-					employmentService.saveOrUpdate(employmentAnterior);
+					employmentService.saveOrUpdate(previousEmployment);
 				}
 				
 			}else{
@@ -356,15 +356,15 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 							
 							employmentActual = employmentService.findById(employmentActual.getId());
 							
-							employmentActual.setStatus(EmploymentStatus.INACTIVO);
+							employmentActual.setStatus(EmploymentStatus.PENDIENTE);
 							
 							employmentService.saveOrUpdate(employmentActual);
 						
-							Employment employmentAnterior = employmentService.findById(employmentActual.getPreviousEmployment().getId());
+							Employment previousEmployment = employmentService.findById(employmentActual.getPreviousEmployment().getId());
 							
-							employmentAnterior.setStatus(EmploymentStatus.ACTIVO);
+							previousEmployment.setStatus(EmploymentStatus.ACTIVO);
 							
-							employmentService.saveOrUpdate(employmentAnterior);
+							employmentService.saveOrUpdate(previousEmployment);
 													
 						}
 					}
@@ -388,7 +388,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 							
 							employment = employmentService.findById(employment.getId());
 							
-							employment.setStatus(EmploymentStatus.INACTIVO);
+							employment.setStatus(EmploymentStatus.PENDIENTE);
 							employmentService.saveOrUpdate(employment);
 						}
 					}

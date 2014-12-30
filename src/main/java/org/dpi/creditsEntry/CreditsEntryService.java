@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 
 
 /**
- * Used to create, save, retrieve, update and delete Movimiento objects from
+ * Used to create, save, retrieve, update and delete CreditsEntry objects from
  * persistent storage
  *
  */
@@ -27,7 +27,7 @@ public interface CreditsEntryService extends ApplicationContextAware
 	public void saveOrUpdate(final CreditsEntry creditsEntry);
 	public void actualizarCreditosPorAscenso();
 	
-	public void changeGrantedStatus(CreditsEntry movimiento, GrantedStatus newEstado);
+	public void changeGrantedStatus(CreditsEntry creditsEntry, GrantedStatus newEstado);
 	
 	public Set<Long> havePendingEntries(List<Long> personsIds, Long idReparticion,Long idCreditsPeriod);
 		

@@ -45,6 +45,7 @@ public class DownloadService {
 	@Autowired
 	ServletContext servletContext;
 	
+	
 
 	@Resource(name = "exporterService")
 	private ExporterService exporter;
@@ -60,7 +61,6 @@ public class DownloadService {
 			
 			Map<String, Object> reportParamMap = new HashMap<String, Object>();
 			
-						
 			
 			// 1. Add report parameters
 			
@@ -68,11 +68,10 @@ public class DownloadService {
 
 			// 2.  Retrieve template
 
-			//InputStream reportStream = this.getClass().getResourceAsStream(TEMPLATE);
+	         InputStream reportStream = servletContext.getResourceAsStream(TEMPLATE_FOLDER+reportParams.getTemplateFileName()) ;
 			
-			InputStream reportStream = servletContext.getResourceAsStream(TEMPLATE_FOLDER+reportParams.getTemplateFileName()) ;
+			//InputStream reportStream = this.getClass().getClassLoader().getResourceAsStream(TEMPLATE_FOLDER+reportParams.getTemplateFileName());
 			
-			//InputStream reportStream = this.getClass().getResourceAsStream(TEMPLATE);
 			
 			Map<String, Object> recordsMap = null;
 			

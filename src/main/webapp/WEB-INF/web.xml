@@ -10,7 +10,7 @@
 			classpath:/spring/root-context.xml
 			classpath:GenericDaoContext.xml
 			classpath:SecurityContextGeneric.xml
-			/WEB-INF/controllers.xml
+			classpath:/spring/controllers.xml
 		</param-value>
 	</context-param>
 	

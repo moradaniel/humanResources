@@ -45,9 +45,17 @@ SQL>
  */
 
 /*
+ * Windows
+ * 
  * alter database datafile 'C:\oraclexe\oradata\XE\SYSTEM.DBF' resize 4G;
  * alter database datafile 'C:\oraclexe\oradata\XE\UNDO.DBF' resize 1024M;
  * alter database datafile 'C:\ORACLEXE\ORADATA\XE\SYSTEM.DBF'  autoextend on;
+ * 
+ * Ubuntu
+ * 
+ * alter database datafile '/usr/lib/oracle/xe/oradata/XE/SYSTEM.DBF' resize 4G;
+ * alter database datafile '/usr/lib/oracle/xe/oradata/XE/UNDO.DBF' resize 1024M;
+ * alter database datafile '/usr/lib/oracle/xe/oradata/XE/SYSTEM.DBF'  autoextend on;
  * 
  * 
  * 

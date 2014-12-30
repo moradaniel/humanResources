@@ -9,7 +9,7 @@ import net.sf.jasperreports.engine.JRField;
 
 import org.dpi.web.reporting.dto.GenericReportRecord;
 
-public class MovimientosIngresoReportDataSource implements JRDataSource
+public class AdditionsCreditEntriesReportDataSource implements JRDataSource
 {
 	
 	private Iterator<GenericReportRecord> recordIterator;
@@ -23,7 +23,7 @@ public class MovimientosIngresoReportDataSource implements JRDataSource
 		PERSON_NUEVO_CATEGORIA_PROPUESTA
 	};
 	
-	public MovimientosIngresoReportDataSource(List<GenericReportRecord> records)
+	public AdditionsCreditEntriesReportDataSource(List<GenericReportRecord> records)
 	{
 		this.recordIterator = records.iterator();
 	}
