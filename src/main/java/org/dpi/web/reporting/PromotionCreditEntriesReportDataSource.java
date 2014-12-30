@@ -9,7 +9,7 @@ import net.sf.jasperreports.engine.JRField;
 
 import org.dpi.web.reporting.dto.GenericReportRecord;
 
-public class MovimientosAscensoReportDataSource implements JRDataSource
+public class PromotionCreditEntriesReportDataSource implements JRDataSource
 {
 	
 	private Iterator<GenericReportRecord> recordIterator;
@@ -26,7 +26,7 @@ public class MovimientosAscensoReportDataSource implements JRDataSource
 		EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP
 	};
 	
-	public MovimientosAscensoReportDataSource(List<GenericReportRecord> records)
+	public PromotionCreditEntriesReportDataSource(List<GenericReportRecord> records)
 	{
 		this.recordIterator = records.iterator();
 	}
