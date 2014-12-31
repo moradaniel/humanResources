@@ -18,4 +18,11 @@ span.error { color: red; font-weight: bold; }
 
 /* end form validation */
 
+
+.table th {
+    background-color: #ccc; /* #f0f0f0 */
+    /*font-weight: 300;*/
+}
+
+
 /*--- END custom bootstrap 3 alert size -----------------*/

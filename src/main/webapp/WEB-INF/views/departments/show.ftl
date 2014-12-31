@@ -30,18 +30,19 @@
 
 			
 				<h2>Periodo ${currentPeriodSummaryData.year}</h2>
-				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
+				<#-- table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table" -->
+				<table class="table table-bordered">
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo Disponible al Inicio de ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Acreditados Por Bajas durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Retenidos durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Total Creditos Disponibles al Inicio de ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos(Solicitados) durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos(Otorgados) durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Solicitado durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Otorgado durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
+						<th>Saldo Disponible al Inicio de ${currentPeriodSummaryData.year}</th>
+						<th>Creditos Acreditados Por Bajas durante ${currentPeriodSummaryData.year}</th>
+						<th>Creditos Retenidos durante ${currentPeriodSummaryData.year}</th>
+						<th>Total Creditos Disponibles al Inicio de ${currentPeriodSummaryData.year}</th>
+						<th>Creditos Consumidos Por Ingresos o Ascensos(Solicitados) durante ${currentPeriodSummaryData.year}</th>
+						<th>Creditos Consumidos Por Ingresos o Ascensos(Otorgados) durante ${currentPeriodSummaryData.year}</th>
+						<th>Creditos Disponibles segun Solicitado durante ${currentPeriodSummaryData.year}</th>
+						<th>Creditos Disponibles segun Otorgado durante ${currentPeriodSummaryData.year}</th>
+						<th>Accion</th>
 					</tr>
 					
 					<tr>
@@ -66,16 +67,17 @@
 				
 				<#list historicPeriodsSummaryData as historicPeriodSummaryData>
 					<h2>Historicos ${historicPeriodSummaryData.year}</h2>
-					<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
+					<#-- table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table" -->
+					<table class="table table-bordered">
 						<tr>
 							<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos por Carga Inicial ${historicPeriodSummaryData.year}</a></th>
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo Disponible al Inicio de ${historicPeriodSummaryData.year}</a></th>
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Acreditados Por Bajas durante ${historicPeriodSummaryData.year}</a></th>
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Retenidos durante ${historicPeriodSummaryData.year}</a></th>
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos Otorgados ${historicPeriodSummaryData.year}</a></th>
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo de Creditos al Final del Periodo ${historicPeriodSummaryData.year}</a></th>
-							<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
+							<th>Creditos por Carga Inicial ${historicPeriodSummaryData.year}</th>
+							<th>Saldo Disponible al Inicio de ${historicPeriodSummaryData.year}</th>
+							<th>Creditos Acreditados Por Bajas durante ${historicPeriodSummaryData.year}</th>
+							<th>Creditos Retenidos durante ${historicPeriodSummaryData.year}</th>
+							<th>Creditos Consumidos Por Ingresos o Ascensos Otorgados ${historicPeriodSummaryData.year}</th>
+							<th>Saldo de Creditos al Final del Periodo ${historicPeriodSummaryData.year}</th>
+							<th>Accion</th>
 						</tr>
 						
 						<tr>

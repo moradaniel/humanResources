@@ -68,28 +68,29 @@
 
 		
 			<!--  start table-content  -->
-			<div id="table-content">
+			<#-- div id="table-content" -->
 			
-				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
+				<#-- table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table" -->
+				<table class="table table-bordered table-striped">
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
-						<th class="table-header-repeat line-left"><a href="">Periodo</a>	</th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Apellido y Nombre</a>	</th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Tipo Movimiento</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Estado</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Fecha Inicio</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Fecha Fin</a></th>
-						<th class="table-header-repeat line-left "><a href="">Creditos</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Categoria Actual</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Categoria Propuesta</a></th>
-						<th class="table-header-repeat line-left "><a href="">Codigo Centro</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Nombre Centro</a></th>
-						<th class="table-header-repeat line-left "><a href="">Codigo Sector</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Nombre Sector</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Tramo</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Agrupamiento</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Observaciones</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th>
+						<th>Periodo</th>
+						<th>Apellido y Nombre</th>
+						<th>Tipo Movimiento</th>
+						<th>Estado</th>
+						<th>Fecha Inicio</th>
+						<th>Fecha Fin</th>
+						<th>Creditos</th>
+						<th>Categoria Actual</th>
+						<th>Categoria Propuesta</th>
+						<th>Codigo Centro</th>
+						<th>Nombre Centro</th>
+						<th>Codigo Sector</th>
+						<th>Nombre Sector</th>
+						<th>Tramo</th>
+						<th>Agrupamiento</th>
+						<th>Observaciones</th>
+						<th>Accion</th>
 						
 					</tr>
 				
@@ -170,7 +171,7 @@
 			
 			
 			
-			</div>
+			</div> 
 			<!--  end content-table  -->
 			
 				<div class="clear"></div>
