@@ -14,21 +14,20 @@ import org.janux.bus.security.Account;
 import org.janux.bus.security.Role;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
 /**
  ***************************************************************************************************
- * This interceptor wraps all actions involving Reparticions; it performs the following actions:
+ * This interceptor wraps all actions involving departments; it performs the following actions:
  *
  * <ul>
  * 	<li>ensures that a Session exists</li>
  * 	<li>
- * 		ensures that a list of the Reparticions that the current Principal can edit has
+ * 		ensures that a list of the departments that the current Principal can edit has
  * 		been loaded into the session; this list should contain at least the Code
- * 		and Name of the Reparticion
+ * 		and Name of the department
  * 	</li>
  * </ul>
  * 
@@ -86,7 +85,7 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 
 
 	/** 
-	 * update the reparticion and reparticion list
+	 * update the department and department list
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 	{
