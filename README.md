@@ -78,7 +78,10 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
+2014 - January
 
+ - Added Hibernate mapping for DepartmentAccount. This is an association class that keeps the relation between a Department and an Account
+ 
 2014 - December
 
  - Added parentId to Department class in order to build a hierarchical structure.
