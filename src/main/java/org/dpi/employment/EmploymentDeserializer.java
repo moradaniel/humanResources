@@ -1,14 +1,14 @@
 package org.dpi.employment;
 
+import java.io.IOException;
+
+import org.dpi.person.PersonImpl;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.io.IOException;
-
-import org.dpi.person.PersonImpl;
 
 public class EmploymentDeserializer extends JsonDeserializer<EmploymentImpl> {
 
@@ -22,6 +22,7 @@ public class EmploymentDeserializer extends JsonDeserializer<EmploymentImpl> {
         
         PersonImpl person = new PersonImpl();
         person.setApellidoNombre(node.get("person").get("apellidoNombre").asText());
+        person.setCuil(node.get("person").get("cuil").asText());
         
         employment.setPerson(person);
         return employment;
