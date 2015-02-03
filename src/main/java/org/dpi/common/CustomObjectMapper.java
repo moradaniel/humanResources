@@ -9,6 +9,7 @@ import org.dpi.creditsPeriod.CreditsPeriodImpl;
 import org.dpi.creditsPeriod.CreditsPeriodSerializer;
 import org.dpi.department.DepartmentImpl;
 import org.dpi.department.DepartmentSerializer;
+import org.dpi.employment.EmploymentDeserializer;
 import org.dpi.employment.EmploymentImpl;
 import org.dpi.employment.EmploymentSerializer;
 import org.dpi.occupationalGroup.OccupationalGroup;
@@ -26,11 +27,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 
 
-/**
- * TODO find a way to register this mapper using Spring
- *
- */
-
 public class CustomObjectMapper extends ObjectMapper {
 
 	/**
@@ -47,9 +43,7 @@ public class CustomObjectMapper extends ObjectMapper {
 		module.addDeserializer(Date.class, new DateDeserializer());
 		
 		module.addSerializer(EmploymentImpl.class, new EmploymentSerializer());
-		
-		
-		//module.addDeserializer(EmploymentImpl.class, new EmploymentDeserializer());
+		module.addDeserializer(EmploymentImpl.class, new EmploymentDeserializer());
 		
 		
 		module.addSerializer(CreditsPeriodImpl.class, new CreditsPeriodSerializer());
