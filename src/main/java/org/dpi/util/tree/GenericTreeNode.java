@@ -1,9 +1,12 @@
 package org.dpi.util.tree;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public class GenericTreeNode<T> {
 
@@ -127,5 +130,23 @@ public class GenericTreeNode<T> {
         stringRepresentation += "]";
 
         return stringRepresentation;
+    }
+    
+    public Set<GenericTreeNode<T>> returnAllNodes(GenericTreeNode<T> node){
+        Set<GenericTreeNode<T>> listOfNodes = new HashSet<GenericTreeNode<T>>();
+        addAllNodes(node, listOfNodes);
+        return listOfNodes;
+    }
+
+    private void addAllNodes(GenericTreeNode<T> node, Set<GenericTreeNode<T>> listOfNodes) {
+        if (node != null) {
+            listOfNodes.add(node);
+            List<GenericTreeNode<T>> children = node.getChildren();
+            if (children != null) {
+                for (GenericTreeNode<T> child: children) {
+                    addAllNodes(child, listOfNodes);
+                }
+            }
+        }
     }
 }

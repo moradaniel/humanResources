@@ -108,6 +108,7 @@
 				<value>/mappings/Account.hbm.xml</value>
 				<value>/mappings/Role.hbm.xml</value>
 				<value>/mappings/PermissionContext.hbm.xml</value>
+				<value>/mappings/DepartmentAccount.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

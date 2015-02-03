@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+       "-//Hibernate/Hibernate Mapping DTD//EN"
+       "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+       
+<hibernate-mapping>
+    <class
+        name="org.dpi.department.DepartmentAccountImpl"
+        table="DEPARTMENT_ACCOUNT"
+        dynamic-update="false"
+        dynamic-insert="false"
+        select-before-update="false">
+
+      <composite-id>
+
+         <key-many-to-one
+            name="department"
+            class="org.dpi.department.DepartmentImpl"
+            column="DEPARTMENTID">
+
+         </key-many-to-one>
+
+         <key-many-to-one
+            name="account"
+            class="org.janux.bus.security.AccountImpl"
+            column="ACCOUNTID">
+
+         </key-many-to-one>
+         
+      </composite-id>
+
+      <!-- property
+         name="sortOrder"
+         column="SORT_ORDER"
+         not-null="false"/ -->
+
+    </class>
+</hibernate-mapping>
