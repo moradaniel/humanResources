@@ -605,8 +605,8 @@ public class DepartmentController {
 
 	}
 	
-	   @RequestMapping(value = "/departments/department/hierarchicalCummulativeCredits", method = RequestMethod.GET)
-	    public String showHierarchicalCummulativeCredits(HttpServletRequest request, HttpServletResponse response, Model model) {
+	   @RequestMapping(value = "/departments/department/hierarchicalAccumulatedCredits", method = RequestMethod.GET)
+	    public String showHierarchicalAccumulatedCredits(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 	        // get the current department in the session
 	        final Department department = DepartmentController.getCurrentDepartment(request);
@@ -618,28 +618,36 @@ public class DepartmentController {
 	                model.addAttribute(PARAM_DEPARTMENT_ID, department.getId());
 	            }
 	            
-	            List<String> departmentsList = buildHierarchicalCummulativeCredits(department);
+	            List<String> departmentsList = buildHierarchicalAccumulatedCredits(department);
 
 	            model.addAttribute("departmentsList", departmentsList);
 	            
 
 
 	        }
-	        return "departments/showHierarchicalCummulativeCredits";
+	        return "departments/showHierarchicalAccumulatedCredits";
 	    }
 
-	   List<String> buildHierarchicalCummulativeCredits(Department department){
+	   List<String> buildHierarchicalAccumulatedCredits(Department department){
+
+           
+           
+           if(!departmentService.canGenerateRetainedCreditsTree(department)) {
+               //return empty list
+               return new ArrayList<String>();
+           }
+           
 	       
+	       GenericTreeNode<Department> currentNode = departmentService.getSubTree(department.getId());
 	       
-	       GenericTreeNode<Department> root = departmentService.getSubTree(department.getId());
-	       
-     
 	       List<String> departmentsList = new ArrayList<String>();
+     	       
+	       
 	       Stack<String> departmentsStack = new Stack<String>();
            
 	       int indent = 0;
 
-	       printTree(root,indent,departmentsStack);
+	       printTree(currentNode,indent,departmentsStack);
 	       
 	       while(!departmentsStack.isEmpty()) {
 	           departmentsList.add(departmentsStack.pop());
@@ -655,7 +663,7 @@ public class DepartmentController {
 	   
       
        
-	   private Long printTree(GenericTreeNode<Department> root, int indent, Stack<String> departmentsList) {
+	   private Long printTree(GenericTreeNode<Department> currentNode, int indent, Stack<String> departmentsList) {
 
 	       String prefix = "";
 	       for(int i = 0;i<=indent;i++) {
@@ -663,17 +671,32 @@ public class DepartmentController {
 	       }
 
 	       CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
-	       Long currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), root.getData().getId());
+       
+	       Long retainedCreditsForCurrentDepartment = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), currentNode.getData().getId());
+	       
+	       Long accumulatedRetainedCreditsForCurrentDepartment = 0l;
 
-	       for(GenericTreeNode<Department> child:root.getChildren()) {
-	           Long retainedCredits = printTree(child,indent+1,departmentsList);
-	           currentPeriodRetainedCredits = currentPeriodRetainedCredits + retainedCredits;
+	       for(GenericTreeNode<Department> child:currentNode.getChildren()) {
+	           Long childRetainedCredits = printTree(child,indent+1,departmentsList);
+	           accumulatedRetainedCreditsForCurrentDepartment = accumulatedRetainedCreditsForCurrentDepartment + childRetainedCredits;
 	       }
 
-	       String line = prefix+root.getData().getCode()+" - "+root.getData().getName()+ " - " +currentPeriodRetainedCredits;    
+	       String line = prefix+currentNode.getData().getCode()+" - "+currentNode.getData().getName();
+	       
+	       if(departmentService.isMinisterio( currentNode.getData())) {//is ministerio or secretaria, parent is root
+	           long availableToDistributeAmongDependentDepartments = Math.round( 0.7*accumulatedRetainedCreditsForCurrentDepartment );
+	           long availableForRootNode = accumulatedRetainedCreditsForCurrentDepartment - availableToDistributeAmongDependentDepartments;
+	           line = line +" - Disponibles para repartir en reparticiones dependientes: 70% de "+accumulatedRetainedCreditsForCurrentDepartment + " = "+availableToDistributeAmongDependentDepartments +". Para Poder Ejecutivo: "+availableForRootNode;
+	       }else if(departmentService.isPoderEjecutivo(currentNode.getData())) {
+	           long availableCreditsForRoot = Math.round( 0.3*accumulatedRetainedCreditsForCurrentDepartment );
+	           line = line +" - Disponibles: 30% de " + accumulatedRetainedCreditsForCurrentDepartment +" = "+availableCreditsForRoot;
+	       }else{ // other departments
+	           line = line +" - Retenidos:" + retainedCreditsForCurrentDepartment + " - Creditos retenidos acumulados en subordinados: "+ accumulatedRetainedCreditsForCurrentDepartment ;    
+	       }
+	       
 	       departmentsList.push(line);
 
-	       return currentPeriodRetainedCredits;
+	       return accumulatedRetainedCreditsForCurrentDepartment + retainedCreditsForCurrentDepartment;
 
 	   }
 
