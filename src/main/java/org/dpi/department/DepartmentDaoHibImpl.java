@@ -8,6 +8,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.dpi.util.tree.GenericTreeNode;
 import org.hibernate.SQLQuery;
 import org.janux.bus.persistence.BaseDAOHibernate;
+import org.janux.bus.security.Account;
 import org.janux.util.Chronometer;
 
 /**
@@ -38,7 +39,11 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 
 		if (log.isDebugEnabled()) log.debug("attempting to find Department with name '" + name + "'");
 
-		List list = getHibernateTemplate().find("from DepartmentImpl where name=?", name);
+		//List list = getHibernateTemplate().find("from DepartmentImpl where name=?", name);
+		List list = getHibernateTemplate().find("from DepartmentImpl department "
+		                                         + " LEFT OUTER JOIN FETCH department.children children "
+	                                             + " LEFT OUTER JOIN FETCH department.parent parent "
+		                                         + " where department.name=?", name);
 
 		Department department = (list.size() > 0) ? (Department)list.get(0) : null;
 
@@ -58,7 +63,10 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 
 		if (log.isDebugEnabled()) log.debug("attempting to find Department with id: '" + id + "'");
 
-		List list = getHibernateTemplate().find("from DepartmentImpl where id=?", id);
+		List list = getHibernateTemplate().find("from DepartmentImpl department "
+                + " LEFT OUTER JOIN FETCH department.children children "
+                + " LEFT OUTER JOIN FETCH department.parent parent "
+		        + " where department.id=?", id);
 
 		Department department = (list.size() > 0) ? (Department)list.get(0) : null;
 
@@ -169,7 +177,10 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 
         if (log.isDebugEnabled()) log.debug("attempting to find Department with id: '" + departmentId + "'");
 
-        List list = getHibernateTemplate().find("from DepartmentImpl department LEFT OUTER JOIN FETCH department.children children where department.id=?", departmentId);
+        List list = getHibernateTemplate().find("from DepartmentImpl department "
+                                                + " LEFT OUTER JOIN FETCH department.children children "
+                                                + " LEFT OUTER JOIN FETCH department.parent parent "
+                                                + " where department.id=? ", departmentId);
 
         Department department = (list.size() > 0) ? (Department)list.get(0) : null;
 
@@ -192,5 +203,29 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 
         return rootDepartmentTreeNode;
     }
+    
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Department> findUserDepartments(Account account)
+    {
+        Chronometer timer = new Chronometer();
+
+        if (log.isDebugEnabled()) log.debug("attempting to find all departments of account: " + account.getName());
+        
+        StringBuffer stringBuffer = new StringBuffer(); 
+        stringBuffer.append("Select department from DepartmentAccountImpl departmentAccount "
+                + " INNER JOIN departmentAccount.department department "
+                + " INNER JOIN departmentAccount.account account "
+                + " where account.id=? ");
+        
+        
+        List<Department> list = getHibernateTemplate().find(stringBuffer.toString(), account.getId());
+
+        if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " departments of account: " + account.getName() + " in " + timer.printElapsedTime());
+
+        return list;
+    }
+
 
 }

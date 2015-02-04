@@ -3,6 +3,7 @@ package org.dpi.department;
 import java.util.List;
 
 import org.dpi.util.tree.GenericTreeNode;
+import org.janux.bus.security.Account;
 import org.springframework.context.ApplicationContextAware;
 
 
@@ -27,6 +28,8 @@ public interface DepartmentService extends ApplicationContextAware
 	
 	public List<DepartmentSearchInfo> findAllDepartments();
 	
+	public List<Department> findUserDepartments(Account account);
+	
 	public void save(final Department aDepartment); 
 	
 	public void saveOrUpdate(final Department aDepartment); 
@@ -35,7 +38,14 @@ public interface DepartmentService extends ApplicationContextAware
 
 
     public GenericTreeNode<Department> getSubTree(Long departmentId);
+    
 
-	//public List<Department> findDepartments(SearchCriteria criteria);
+	public boolean canGenerateRetainedCreditsTree(Department department);
+
+
+    boolean isMinisterio(Department department);
+
+
+    boolean isPoderEjecutivo(Department department);
 
 }

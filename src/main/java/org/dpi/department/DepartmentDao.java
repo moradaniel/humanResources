@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.dpi.util.tree.GenericTreeNode;
 import org.janux.bus.persistence.HibernateDataAccessObject;
+import org.janux.bus.security.Account;
 
 
 public interface DepartmentDao extends HibernateDataAccessObject
@@ -20,5 +21,7 @@ public interface DepartmentDao extends HibernateDataAccessObject
 	public List<DepartmentSearchInfo> findAllDepartments();
 
 	public GenericTreeNode<Department> getSubTree(Long departmentId);
+	
+	public List<Department> findUserDepartments(Account account);
 	
 }
