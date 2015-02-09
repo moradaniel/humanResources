@@ -136,7 +136,14 @@
 						findAvailableDepartmentsForAccount : function(query) {
 							return RestFullResponse.all('departments').all('findAvailableDepartmentsForAccount').getList(query);
 						}
-					}
+					},
+					occupationalGroups : {
+						search : function(query) {
+							return RestFullResponse.all('employments').all('findOccupationalGroups').getList(query);
+
+						}
+
+					},
 
 				};
 			} ]);

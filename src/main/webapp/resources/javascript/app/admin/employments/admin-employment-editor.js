@@ -7,22 +7,50 @@
 	                                                      	'services.notifications'
 	                                                      	]);
 
-	module.directive('modalEmploymentEditor', ["api","SessionService","LogNotificationService",
-	                                           function(api,SessionService,LogNotificationService) {
+	/**
+	 * Angular uses name-with-dashes for attribute names and camelCase for the corresponding directive name
+	 * To where this directive is used look for: modal-employment-editor
+	 *  modalEmploymentEditor -> modal-employment-editor
+	 */
+	module.directive('modalEmploymentEditor', ["api","SessionService","LogNotificationService","$q",
+	                                           function(api,SessionService,LogNotificationService,$q) {
 		return {
+
+			// restrict to an attribute type.
 			restrict : 'A',
+			/*
+			 * 
+			 * */
+
 			templateUrl: prefixContextPath +'/resources/javascript/app/admin/employments/admin-employment-editor.html',
+			/*
+			 * 
+			 * */
+
 			transclude: false,
+			/*
+			 * 
+			 * This code will be run: Before compilation
+			 * controller ‘$scope’ and link ‘scope’ are the same thing. 
+			 * The difference is parameters sent to the controller get there through Dependency Injection (so calling it ‘$scope’ is required), 
+			 * where parameters sent to link are standard order based functions.
+			 * */
 			controller: function($scope) {
 				$scope.modal_id = 'modal_' + Math.floor((Math.random()*100+1));
 				$scope.handler = $scope.modal_id;
 			},
+			/*
+			 * 
+			 * */
 			scope : {
 				handler : '=', //twoway binding 
 				'employmentToEdit' : '=employment', //twoway binding employment
 				callback: '=callback' //twoway binding 
 			},
-
+			/*
+			 * This code will be run: After compilation
+			 *
+			 * */
 			link : function ($scope, $element, $attrs) {
 				$scope.saveEmployment = function() {
 					return api.employments.save($scope.employmentToEdit).then(function (response) {
@@ -35,6 +63,42 @@
 
 					});
 				};
+				
+				
+				$scope.fetchAvailableOccupationalGroups = function () {
+					var deferred = $q.defer();
+					
+					api.occupationalGroups.search().then(function (response) {
+						//-promise fulfilled
+						$scope.availableOccupationalGroups = response.data;
+						
+						 deferred.resolve();
+						 
+					}, function (error) {
+						//-promise rejected, some error happened
+						
+						deferred.reject(error);
+
+					});
+					
+					
+					//return a promise
+					return deferred.promise;
+					
+				};
+
+				$scope.fetchAvailableOccupationalGroups().then(function(){
+					
+					}
+				);
+				
+				$scope.getOccupationalGroupFullName = function(occupationalGroup){
+					return occupationalGroup.code + '-'+occupationalGroup.name + ' - Agrupamiento:' + occupationalGroup.parentOccupationalGroup.name;
+				}
+						
+				
+				
+				
 			}
 
 		};

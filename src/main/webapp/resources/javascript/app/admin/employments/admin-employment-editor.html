@@ -34,6 +34,29 @@
 								</span>
 							</div>
 				      	</div>
+                        <div class="form-group">
+                            <label for="occupationalGroup" class="col-sm-2 control-label">Tramo</label>
+                            <div class="col-sm-10">
+                                    <!-- Angular.JS uses native JavaScript comparison for comparing the objects. 
+                                        In JavaScript, unrelated to Angular.JS or anything, comparing objects (object literals) is "by reference", 
+                                        so it doesn’t factor the similarity of the objects. Only checks if the two references compared point to the same object in memory or not.
+                                        Solution:
+                                        A feature in ng-options is that you can use some bits from the ng-repeat directive with it, like track by. 
+                                        This allows us to choose some property as the comparison key. -->
+                                        
+                                    <select name="occupationalGroup" 
+                                            ng-model="employmentToEdit.occupationalGroup"
+                                            ng-options="getOccupationalGroupFullName(occupationalGroup) for occupationalGroup in availableOccupationalGroups track by occupationalGroup.code" 
+                                            class="form-control  input-sm" >
+                                        <option value="">-- Sin tramo --</option>
+                                    </select>
+                                        
+                               
+                            </div>
+                        </div>				      	
+				      	
+      
+      
 				      <!-- label>Short Name</label>
 				      <input type='text' ng-model="employment.shortname"/>
 				      <label>Phone Number</label>
