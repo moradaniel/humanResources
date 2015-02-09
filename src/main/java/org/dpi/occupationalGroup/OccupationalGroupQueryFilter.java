@@ -2,6 +2,8 @@ package org.dpi.occupationalGroup;
 
 import java.io.Serializable;
 
+import org.dpi.util.query.AbstractQueryFilter;
+
 
 /**
  * DAO implementation agnostic class that can hold commons constraints to be used
@@ -11,7 +13,7 @@ import java.io.Serializable;
  * 
  *
  */
-public class OccupationalGroupQueryFilter implements Serializable {
+public class OccupationalGroupQueryFilter extends AbstractQueryFilter implements Serializable {
 	
 	
 	/**
@@ -23,9 +25,11 @@ public class OccupationalGroupQueryFilter implements Serializable {
 	Long id;
 	
 	String code;
+	
+	boolean onlyLeafsOccupationalGroups = false;
 
 
-	public OccupationalGroupQueryFilter(){
+    public OccupationalGroupQueryFilter(){
 		
 	}
 
@@ -46,4 +50,26 @@ public class OccupationalGroupQueryFilter implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
+	
+
+    public boolean isOnlyLeafsOccupationalGroups() {
+        return onlyLeafsOccupationalGroups;
+    }
+
+    public void setOnlyLeafsOccupationalGroups(boolean onlyLeafsOccupationalGroups) {
+        this.onlyLeafsOccupationalGroups = onlyLeafsOccupationalGroups;
+    }
+    
+    @Override
+    public void reset() {
+        /*role = null;
+            fromDate = null;
+            toDate = null;
+            activeLoanEncharges = null;
+            consultancyType = null; 
+            posId = null;
+            acId = null;
+            amId = null;*/
+    }
+    
 }

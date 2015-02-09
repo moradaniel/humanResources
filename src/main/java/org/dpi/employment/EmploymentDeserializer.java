@@ -2,7 +2,10 @@ package org.dpi.employment;
 
 import java.io.IOException;
 
+import org.dpi.occupationalGroup.OccupationalGroup;
+import org.dpi.occupationalGroup.OccupationalGroupImpl;
 import org.dpi.person.PersonImpl;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -23,8 +26,16 @@ public class EmploymentDeserializer extends JsonDeserializer<EmploymentImpl> {
         PersonImpl person = new PersonImpl();
         person.setApellidoNombre(node.get("person").get("apellidoNombre").asText());
         person.setCuil(node.get("person").get("cuil").asText());
-        
+       
         employment.setPerson(person);
+        
+        OccupationalGroup occupationalGroup = null;
+        if(node.get("occupationalGroup")!=null && !StringUtils.isEmpty(node.get("occupationalGroup").get("code"))) {
+            occupationalGroup = new OccupationalGroupImpl();
+            occupationalGroup.setCode(node.get("occupationalGroup").get("code").asText());
+        }
+        employment.setOccupationalGroup(occupationalGroup);
+        
         return employment;
     }
 }

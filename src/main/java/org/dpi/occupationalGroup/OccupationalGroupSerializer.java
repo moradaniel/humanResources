@@ -20,10 +20,12 @@ public class OccupationalGroupSerializer extends JsonSerializer<OccupationalGrou
         
         //start parentoOccupationalGroup object
         OccupationalGroup parentoOccupationalGroup = value.getParentOccupationalGroup();
-        jgen.writeObjectFieldStart("parentOccupationalGroup"); 
-        jgen.writeStringField("code", parentoOccupationalGroup.getCode());
-        jgen.writeStringField("name", parentoOccupationalGroup.getName());
-        jgen.writeEndObject(); 
+        if(parentoOccupationalGroup!=null) {
+            jgen.writeObjectFieldStart("parentOccupationalGroup"); 
+            jgen.writeStringField("code", parentoOccupationalGroup.getCode());
+            jgen.writeStringField("name", parentoOccupationalGroup.getName());
+            jgen.writeEndObject(); 
+        }
         //end parentoOccupationalGroup object
         
         

@@ -14,6 +14,8 @@ import org.dpi.common.ResponseMap;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.department.Department;
 import org.dpi.department.DepartmentController;
+import org.dpi.occupationalGroup.OccupationalGroup;
+import org.dpi.occupationalGroup.OccupationalGroupQueryFilter;
 import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.person.PersonService;
 import org.dpi.subDepartment.SubDepartment;
@@ -473,10 +475,6 @@ public class EmploymentController {
 	public ResponseEntity<String> getAllEmploymentsStatus() throws JsonProcessingException {
 		log.info("Start getAllEmploymentsStatus.");		
 
-
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
-
 		List<EmploymentStatus> searcheableEmploymentStatusesEmploymentStatus = new ArrayList<EmploymentStatus>();
 
 		searcheableEmploymentStatusesEmploymentStatus.add(EmploymentStatus.ACTIVO);
@@ -486,6 +484,8 @@ public class EmploymentController {
 
 		String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "application/json;charset=utf-8");
 		return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
 
 	}
@@ -497,8 +497,7 @@ public class EmploymentController {
     	/*if(true) {
     		throw new RuntimeException("Error de prueba");
     	}*/
-    	
-    	
+    	    	
     	
     	//retrieve the existing employments
     	EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
@@ -511,6 +510,15 @@ public class EmploymentController {
     	//set the desired attributes
     	existingEmployment.getPerson().setApellidoNombre(employment.getPerson().getApellidoNombre());
     	existingEmployment.getPerson().setCuil(employment.getPerson().getCuil());
+    	
+    	OccupationalGroup occupationalGroup = null;
+    	if( employment.getOccupationalGroup() != null ) { 
+    	    OccupationalGroupQueryFilter occupationalGroupQueryFilter = new OccupationalGroupQueryFilter();
+    	    occupationalGroupQueryFilter.setCode(employment.getOccupationalGroup().getCode());
+    	    occupationalGroup = occupationalGroupService.find(occupationalGroupQueryFilter).get(0);
+    	}
+    	
+    	existingEmployment.setOccupationalGroup(occupationalGroup);
     	
     	//save the person. This is not necessary if we configure cascade save-update 
     	personService.saveOrUpdate(existingEmployment.getPerson());
@@ -537,6 +545,26 @@ public class EmploymentController {
 		return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
     }
 
+    
+    @RequestMapping(value = "/rest/employments/findOccupationalGroups", method = RequestMethod.GET)
+    public ResponseEntity<String> occupationalGroupsSearch() throws JsonProcessingException {
+        log.info("Start findOccupationalGroups.");     
+    
+        OccupationalGroupQueryFilter occupationalGroupQueryFilter = new OccupationalGroupQueryFilter();
+        occupationalGroupQueryFilter.setOnlyLeafsOccupationalGroups(true);
+        List<OccupationalGroup> allLeafsOccupationalGroups = occupationalGroupService.find(occupationalGroupQueryFilter);
+
+
+        Map<String, Object> responseMap = new ResponseMap<OccupationalGroup>().mapOK(allLeafsOccupationalGroups);
+
+        String serializedResponse = objectMapper.writeValueAsString(responseMap);
+        
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json;charset=utf-8");
+
+        return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
+
+    }
 
 
 
