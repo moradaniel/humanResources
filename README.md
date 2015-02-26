@@ -78,13 +78,13 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
-2014 - February
+2015 - February
 
  
  - REST API: added method findOccupationalGroups
  - AngularJS: added select for modifying the occupationalGroup of an employment.
 
-2014 - January
+2015 - January
 
  - Added Hibernate mapping for DepartmentAccount. This is an association class that keeps the relation between a Department and an Account
  
