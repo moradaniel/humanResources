@@ -31,6 +31,8 @@ public class EmploymentQueryFilter extends AbstractQueryFilter implements Serial
 	private Long departmentId;
 	private Long employmentId;
 	
+	private Long previousEmploymentId;
+	
 	private Date startDate;
 
 	private Date endDate;
@@ -128,6 +130,13 @@ public class EmploymentQueryFilter extends AbstractQueryFilter implements Serial
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+	
+    public Long getPreviousEmploymentId() {
+        return previousEmploymentId;
+    }
+    public void setPreviousEmploymentId(Long previousEmploymentId) {
+        this.previousEmploymentId = previousEmploymentId;
+    }
 
 	@Override
 	public void reset() {
@@ -140,4 +149,5 @@ public class EmploymentQueryFilter extends AbstractQueryFilter implements Serial
 		acId = null;
 		amId = null;*/
 	}
+
 }

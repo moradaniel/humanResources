@@ -328,6 +328,13 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
                     values.add(employmentId);
                 }
 
+                Long previousEmploymentId = employmentQueryFilter.getPreviousEmploymentId();
+                if(previousEmploymentId!=null) {
+                    wheres.add(" previousEmployment.id = :previousEmploymentId");
+                    paramNames.add("previousEmploymentId");
+                    values.add(previousEmploymentId);
+                }
+                
                 List<Long> personsIds = employmentQueryFilter.getPersonsIds();
                 if(!CollectionUtils.isEmpty(personsIds)){
                     StringBuilder sb = new StringBuilder();
