@@ -58,6 +58,11 @@
 			<ref bean="departmentActionInterceptor"/>
 		</mvc:interceptor> 
 		
+		<mvc:interceptor>
+            <mvc:mapping path="/**"/> 
+            <ref bean="menuActionInterceptor"/>
+        </mvc:interceptor> 
+		
 	</mvc:interceptors>
 	
 	
@@ -72,6 +77,10 @@
 		<constructor-arg><ref bean="departmentService"/></constructor-arg>
 		<constructor-arg><ref bean="userAccessService"/></constructor-arg>
 	</bean>
+	
+	<bean id="menuActionInterceptor" class="org.dpi.web.MenuActionInterceptor">
+        <constructor-arg><ref bean="departmentService"/></constructor-arg>
+    </bean>
 
     
         <!-- Configure bean to convert JSON to POJO and vice versa -->

@@ -50,7 +50,7 @@
 			{ "URL":"departments/department/showCredits",   "label":"Resumen Creditos",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") },
 			{ "URL":"departments/department/showEmployments",   "label":"Agentes",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Manage_Employments", "READ") },
 			{ "URL":"departments/department/showCreditEntries/2014",   "label":"Movimientos de Credito",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") },
-			{ "URL":"departments/department/hierarchicalAccumulatedCredits",   "label":"Creditos Retenidos Acumulados",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") }
+			{ "URL":"departments/department/hierarchicalAccumulatedCredits",   "label":"Creditos Retenidos Acumulados",         "requiresDepartment":true, "doDisplay":account?exists && showHierarchicalAccumulatedCredits }
 		]
 	},
 	{ "label":"Movimientos",
