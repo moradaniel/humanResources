@@ -175,7 +175,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	}
 	
 	public boolean canAccountChangeCreditsEntryStatus(CreditsEntry creditsEntry, Account account) {
-		return canChangeCreditsEntryStatus(account) && creditsEntry.canCreditsEntryStatusBeChanged(this,creditsPeriodService);
+		return canChangeCreditsEntryStatus(account) && creditsEntry.canStatusBeChanged(this,creditsPeriodService);
 	}
 	
 	

@@ -119,8 +119,8 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	     this.subsequentCreditEntries = subsequentCreditsEntries;
 	}
 	
-	public boolean canCreditsEntryStatusBeChanged(CreditsEntryService creditsEntryService, CreditsPeriodService creditsPeriodService) {
-            //CreditsEntry creditsEntry) {
+	@Override
+	public boolean canStatusBeChanged(CreditsEntryService creditsEntryService, CreditsPeriodService creditsPeriodService) {
         
         if(this.getCreditsPeriod().getStatus()==CreditsPeriod.Status.Closed){
             
@@ -141,24 +141,17 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
             }
                
             return true;
-        }else 
-            if(this.getCreditsPeriod().getStatus()==CreditsPeriod.Status.Active){
-        
-                 if(this.getCreditsEntryType()== CreditsEntryType.BajaAgente){
-                     return true;
-                 }else
+        }else { 
+            //CreditsPeriod is Active
+
                  if(this.getCreditsEntryType()== CreditsEntryType.CargaInicialAgenteExistente){
                      return false;
                  }else
-                 if(this.getCreditsEntryType()== CreditsEntryType.IngresoAgente){
-                     if(this.getNumberOfCredits()==0){
-                         return false;
-                     }
+                 if(this.isIngresoWithoutCredits()){
+                     return false;
                  }
                  return true;
             }
-         
-         return false;
     }
 	
 	public boolean hasSubsequentEntries(CreditsEntryService creditsEntryService) {
@@ -166,6 +159,14 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	}
 	
 	
+    
+    @Override
+    public boolean isIngresoWithoutCredits() {
+        return  this.getCreditsEntryType()== CreditsEntryType.IngresoAgente
+                && 
+                this.getNumberOfCredits() == 0;
+    }
+    
 
 	@Override
 	public String toString() 
