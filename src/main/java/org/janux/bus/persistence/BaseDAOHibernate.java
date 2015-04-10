@@ -167,10 +167,12 @@ public class BaseDAOHibernate extends HibernateDaoSupport implements HibernateDa
 		return result;
 	}
 
+	@Override
 	public List getInstances(final DetachedCriteria detachedCriteria) {
 		return getInstances(detachedCriteria, null, null);
 	}
 
+	@Override
 	public List getInstances(final DetachedCriteria detachedCriteria, final Integer startIndex, final Integer maxResults) {
 		return (List) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
@@ -191,6 +193,7 @@ public class BaseDAOHibernate extends HibernateDaoSupport implements HibernateDa
 		return (List) findByNamedParam(queryString, paramNames, values, null, null, null);
 	}
 
+	@Override
 	public List findByNamedParam(final String queryString, final List<String> paramNames, final List<Object> values,
 			final Integer startIndex, final Integer maxResults) throws DataAccessException {
 		return (List) findByNamedParam(queryString, paramNames, values, null, startIndex, maxResults);
