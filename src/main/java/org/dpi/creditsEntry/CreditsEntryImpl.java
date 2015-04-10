@@ -1,10 +1,14 @@
 package org.dpi.creditsEntry;
 
+import java.util.List;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.employment.Employment;
 import org.janux.util.JanuxToStringStyle;
+import org.springframework.util.CollectionUtils;
 
 public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntry{
 	
@@ -24,6 +28,8 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	private CreditsPeriod creditsPeriod;
 	
 	private GrantedStatus grantedStatus;
+	
+	protected List<CreditsEntry> subsequentCreditEntries;
 	
 	public CreditsEntryImpl() {
 		super();
@@ -91,6 +97,75 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	public void setGrantedStatus(GrantedStatus grantedStatus) {
 		this.grantedStatus = grantedStatus;
 	}
+
+	/**
+	 * To be able to override this by Unit Tests
+     * TODO: can this be removed by using Mocks? 
+	 * @param creditsEntryService
+	 * @return
+	 */
+	@Override
+	public List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService){
+	    return creditsEntryService.findSubsequentEntries(this);
+	}
+	
+	/**
+	 * To be able to set subsequentCreditsEntries in unit test
+	 * TODO: can this be removed by using Mocks?
+	 * @param subsequentCreditsEntries
+	 */
+	@Override
+	public void setSubsequentCreditsEntries(List<CreditsEntry> subsequentCreditsEntries){
+	     this.subsequentCreditEntries = subsequentCreditsEntries;
+	}
+	
+	public boolean canCreditsEntryStatusBeChanged(CreditsEntryService creditsEntryService, CreditsPeriodService creditsPeriodService) {
+            //CreditsEntry creditsEntry) {
+        
+        if(this.getCreditsPeriod().getStatus()==CreditsPeriod.Status.Closed){
+            
+            //if the creditsPeriod is closed
+            
+            //Not changeable if: 1) older than 1 year 
+            if( this.getCreditsPeriod().isOlderThanOtherPeriodInYears(creditsPeriodService.getCurrentCreditsPeriod(),1)
+                //or 2) the credits entry is a BajaAgente
+                //if we delete a past BajaAgente the balance for the next period can become negative
+                 ||
+                 (this.getCreditsEntryType()== CreditsEntryType.BajaAgente)
+                 ||
+                 //or 3) the period is closed then check if the employment has subsequent entries
+                 // subsequent entries have to be undone before changing the status
+                 (this.hasSubsequentEntries(creditsEntryService)) 
+                 ) {
+                return false;
+            }
+               
+            return true;
+        }else 
+            if(this.getCreditsPeriod().getStatus()==CreditsPeriod.Status.Active){
+        
+                 if(this.getCreditsEntryType()== CreditsEntryType.BajaAgente){
+                     return true;
+                 }else
+                 if(this.getCreditsEntryType()== CreditsEntryType.CargaInicialAgenteExistente){
+                     return false;
+                 }else
+                 if(this.getCreditsEntryType()== CreditsEntryType.IngresoAgente){
+                     if(this.getNumberOfCredits()==0){
+                         return false;
+                     }
+                 }
+                 return true;
+            }
+         
+         return false;
+    }
+	
+	public boolean hasSubsequentEntries(CreditsEntryService creditsEntryService) {
+	    return !CollectionUtils.isEmpty(this.getSubsequentCreditsEntries(creditsEntryService));
+	}
+	
+	
 
 	@Override
 	public String toString() 

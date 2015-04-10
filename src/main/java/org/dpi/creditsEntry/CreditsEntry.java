@@ -1,8 +1,10 @@
 package org.dpi.creditsEntry;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.domain.Persistent;
 import org.dpi.employment.Employment;
 
@@ -35,5 +37,10 @@ public interface CreditsEntry extends Persistent,Serializable{
 
 	public GrantedStatus getGrantedStatus();
 	public void setGrantedStatus(GrantedStatus grantedStatus);
+	
+    boolean canCreditsEntryStatusBeChanged(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService);
+
+    void setSubsequentCreditsEntries(List<CreditsEntry> subsequentCreditsEntries);
+    List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService);
 	
 }
