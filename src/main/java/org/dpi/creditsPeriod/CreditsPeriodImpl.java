@@ -67,5 +67,11 @@ public class CreditsPeriodImpl extends PersistentAbstract implements CreditsPeri
 	public void setPreviousCreditsPeriod(CreditsPeriod previousCreditsPeriod) {
 		this.previousCreditsPeriod = previousCreditsPeriod;
 	}
+
+    @Override
+    public boolean isOlderThanOtherPeriodInYears(CreditsPeriod anotherPeriod, int numberOfYears) {
+        return Integer.valueOf(anotherPeriod.getName())- Integer.valueOf(this.getName()) > numberOfYears;
+        
+    }
 	
 }

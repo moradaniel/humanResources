@@ -36,6 +36,9 @@ public interface CreditsPeriod extends Persistent,Serializable{
 	public CreditsPeriod getPreviousCreditsPeriod();
 
 	public void setPreviousCreditsPeriod(CreditsPeriod previousCreditsPeriod);
+
+    
+    boolean isOlderThanOtherPeriodInYears(CreditsPeriod anotherPeriod, int i);
 	
 
 }
