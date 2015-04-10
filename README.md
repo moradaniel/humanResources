@@ -78,6 +78,13 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
+2015 - April
+
+ - Added Unit Tests for CreditsEntry canStatusBeChanged
+ - Applying Domain Driven Design. Moved canStatusBeChanged from service to CreditsEntry entity
+ - Using "seams" to break dependencies in unit tests
+ - Applying Builder pattern in unit tests
+
 2015 - February
 
  
