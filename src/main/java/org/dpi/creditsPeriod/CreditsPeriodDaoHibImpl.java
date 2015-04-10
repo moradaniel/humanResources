@@ -20,6 +20,10 @@ import org.springframework.util.StringUtils;
  */
 public class CreditsPeriodDaoHibImpl extends BaseDAOHibernate implements CreditsPeriodDao
 {
+    public CreditsPeriodDaoHibImpl() {
+        // TODO Auto-generated constructor stub
+    }
+    
     @SuppressWarnings("unchecked")
     public List<CreditsPeriod> findAll()
     {
