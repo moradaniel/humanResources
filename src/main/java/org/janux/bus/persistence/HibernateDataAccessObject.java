@@ -1,12 +1,11 @@
 package org.janux.bus.persistence;
 
-import java.io.Serializable;
-
-import org.springframework.dao.DataAccessException;
-
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
+import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  ***************************************************************************************************
@@ -38,5 +37,11 @@ public interface HibernateDataAccessObject extends DataAccessObject
 	 * @throws DataAccessException
 	 */
 	public void attachClean(final Object persistentObject) throws DataAccessException;
+	
+	public List getInstances(final DetachedCriteria detachedCriteria);
+	public List getInstances(final DetachedCriteria detachedCriteria, final Integer startIndex, final Integer maxResults);
+	
+	public List findByNamedParam(final String queryString, final List<String> paramNames, final List<Object> values,
+            final Integer startIndex, final Integer maxResults);
 }
 
