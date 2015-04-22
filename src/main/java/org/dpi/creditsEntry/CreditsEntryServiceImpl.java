@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.CollectionUtils;
 
 
 
@@ -431,77 +430,6 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	public void setEmploymentService(EmploymentService employmentService) {
 		this.employmentService = employmentService;
 	}
-
-
-    @Override
-    public List<CreditsEntry> findSubsequentEntries(CreditsEntry creditsEntry) {
-        String currentCreditsEntryPeriodName = creditsPeriodService.getCurrentCreditsPeriod().getName();
-        String creditsEntryPeriodName = creditsEntry.getCreditsPeriod().getName();
-        int currentCreditsEntryPeriodNameInt = Integer.parseInt(currentCreditsEntryPeriodName);
-        int creditsEntryPeriodNameInt = Integer.parseInt(creditsEntryPeriodName);
-        creditsEntryPeriodNameInt = creditsEntryPeriodNameInt + 1;
-        List<String> pastCreditsPeriodNames = new ArrayList<String>();
-        while(creditsEntryPeriodNameInt < currentCreditsEntryPeriodNameInt) {
-            pastCreditsPeriodNames.add(String.valueOf(creditsEntryPeriodNameInt));
-            creditsEntryPeriodNameInt = creditsEntryPeriodNameInt + 1;
-            
-        }
-                    
-        List<GrantedStatus> pastGrantedStatus = new ArrayList<GrantedStatus>();
-        pastGrantedStatus.add(GrantedStatus.Otorgado);
-        
-        List<String> paramNames = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
-        
-        StringBuffer queryBuilder = new StringBuffer();
-
-        queryBuilder.append(" Select entry FROM CreditsEntryImpl entry ");
-        queryBuilder.append(" LEFT OUTER JOIN entry.employment employment ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH employment.person person ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH employment.subDepartment subDepartment ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH subDepartment.department department ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH employment.category category ");
-        queryBuilder.append(" LEFT OUTER JOIN entry.creditsPeriod creditsPeriod ");
-        queryBuilder.append(" LEFT OUTER JOIN employment.previousEmployment previousEmployment ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH previousEmployment.category previousCategory ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH employment.occupationalGroup occupationalGroup ");
-        //queryBuilder.append(" LEFT OUTER JOIN FETCH occupationalGroup.parentOccupationalGroup parentOccupationalGroup ");
-        
-        queryBuilder.append(" WHERE ");
-        queryBuilder.append(" previousEmployment.id = :previousEmploymentId");
-        queryBuilder.append(" and ");
-        queryBuilder.append(" ( 1<>1");
-        if(!CollectionUtils.isEmpty(pastCreditsPeriodNames)) {
-            queryBuilder.append("  or (creditsPeriod.name IN (:pastCreditsPeriodNames) ");
-            queryBuilder.append("       and entry.grantedStatus IN (:pastGrantedStatus) )");
-            
-            paramNames.add("pastCreditsPeriodNames");
-            values.add(pastCreditsPeriodNames);
-
-            paramNames.add("pastGrantedStatus");
-            values.add(pastGrantedStatus);
-        }
-        
-        queryBuilder.append("   or ");
-        queryBuilder.append("   creditsPeriod.name = :currentCreditsEntryPeriodName ");
-        queryBuilder.append("  )");
-
-        
-        paramNames.add("previousEmploymentId");
-        values.add(creditsEntry.getEmployment().getId());
-        
-
-
-        paramNames.add("currentCreditsEntryPeriodName");
-        values.add(currentCreditsEntryPeriodName);
-        
-
-                            
-        List<CreditsEntry> subsequentEntries = creditsEntryDao.findByNamedParam(queryBuilder.toString(),paramNames,values, null, null);
-        return subsequentEntries;
-       // return !CollectionUtils.isEmpty(subsequentEntries);
-
-    }
 	
     
     protected CreditsEntryDao getCreditsEntryDao()

@@ -30,8 +30,5 @@ public interface CreditsEntryService extends ApplicationContextAware
 	public void changeGrantedStatus(CreditsEntry creditsEntry, GrantedStatus newEstado);
 	
 	public Set<Long> havePendingEntries(List<Long> personIds, Long departmentId, Long idCreditsPeriod);
-	
-	//public boolean hasSubsequentEntries(CreditsEntry creditsEntry);
-	public List<CreditsEntry> findSubsequentEntries(CreditsEntry creditsEntry);
 		
 }

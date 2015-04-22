@@ -41,7 +41,7 @@ public interface CreditsEntry extends Persistent,Serializable{
     boolean canStatusBeChanged(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService);
 
     void setSubsequentCreditsEntries(List<CreditsEntry> subsequentCreditsEntries);
-    List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService);
+    List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService);
 	
     public boolean isIngresoWithoutCredits();
 

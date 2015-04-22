@@ -143,13 +143,6 @@ public class CreditsEntryTest {
                 aCreditsEntry.canStatusBeChanged(creditsEntryService, creditsPeriodService));
 
     }
-    
-    
-    @Test
-    public void creditsEntryStatus_can_be_changed_for_active_period_and_is_BajaAgente() {
-
-         
-    }
 
 
     
@@ -170,15 +163,16 @@ public class CreditsEntryTest {
     }
 
     
+    @SuppressWarnings("serial")
     private class TestableCreditsEntry extends CreditsEntryImpl{
         
         @Override
-        public boolean hasSubsequentEntries(CreditsEntryService creditsEntryService) {
-            return !CollectionUtils.isEmpty(this.getSubsequentCreditsEntries(creditsEntryService));
+        public boolean hasSubsequentEntries(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService) {
+            return !CollectionUtils.isEmpty(this.getSubsequentCreditsEntries(creditsEntryService,creditsPeriodService));
         }
         
         @Override
-        public List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService){
+        public List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService){
             return this.subsequentCreditEntries;
         }
     }

@@ -1,5 +1,6 @@
 package org.dpi.creditsEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -7,6 +8,7 @@ import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.employment.Employment;
+import org.dpi.employment.EmploymentQueryFilter;
 import org.janux.util.JanuxToStringStyle;
 import org.springframework.util.CollectionUtils;
 
@@ -105,8 +107,38 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
 	 * @return
 	 */
 	@Override
-	public List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService){
-	    return creditsEntryService.findSubsequentEntries(this);
+	public List<CreditsEntry> getSubsequentCreditsEntries(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService){
+
+	    //if this is a creditsEntry in the current period it DOUES NOT have subsequent related credistentries
+	    if(creditsPeriodService.getCurrentCreditsPeriod().getName().equalsIgnoreCase(this.getCreditsPeriod().getName()))
+	    {
+	        return new ArrayList<CreditsEntry>();
+	    }
+	    
+	    List<CreditsEntry> subsequentCreditsEntries = new ArrayList<CreditsEntry>();
+	    
+	    //1)
+	    //find creditsentries in the future with previousEmployment equals to this creditsentry employment.previousEmployment
+	    // futureCreditsEntry.employment.previousEmployment == this.employment.previousEmployment
+	    CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+	    EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+	    creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
+	    if(this.getEmployment().getPreviousEmployment()!=null) {
+    	    employmentQueryFilter.setPreviousEmploymentId(this.getEmployment().getPreviousEmployment().getId());
+    	    List<String> creditsPeriodNames = new ArrayList<String>();
+    	    creditsPeriodNames.add(creditsPeriodService.getCurrentCreditsPeriod().getName());
+    	    creditsEntryQueryFilter.setCreditsPeriodNames(creditsPeriodNames);
+    	    subsequentCreditsEntries.addAll(creditsEntryService.find(creditsEntryQueryFilter));
+	    }
+	    
+	    //2)
+        //find creditsentries in the future with previousEmployment equals to this creditsentry employment
+        // futureCreditsEntry.employment.previousEmployment == this.employment
+	    employmentQueryFilter.setPreviousEmploymentId(this.getEmployment().getId());
+	    subsequentCreditsEntries.addAll(creditsEntryService.find(creditsEntryQueryFilter));
+	    	    
+	    return subsequentCreditsEntries;
+
 	}
 	
 	/**
@@ -135,7 +167,7 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
                  ||
                  //or 3) the period is closed then check if the employment has subsequent entries
                  // subsequent entries have to be undone before changing the status
-                 (this.hasSubsequentEntries(creditsEntryService)) 
+                 (this.hasSubsequentEntries(creditsEntryService,creditsPeriodService)) 
                  ) {
                 return false;
             }
@@ -154,8 +186,8 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
             }
     }
 	
-	public boolean hasSubsequentEntries(CreditsEntryService creditsEntryService) {
-	    return !CollectionUtils.isEmpty(this.getSubsequentCreditsEntries(creditsEntryService));
+	public boolean hasSubsequentEntries(CreditsEntryService creditsEntryService,CreditsPeriodService creditsPeriodService) {
+	    return !CollectionUtils.isEmpty(this.getSubsequentCreditsEntries(creditsEntryService,creditsPeriodService));
 	}
 	
 	
