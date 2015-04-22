@@ -1,9 +1,10 @@
 package org.dpi.department;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -639,31 +640,44 @@ public class DepartmentController {
            
 	       
 	       GenericTreeNode<Department> currentNode = departmentService.getSubTree(department.getId());
-	       
-	       List<String> departmentsList = new ArrayList<String>();
-     	       
-	       
-	       Stack<String> departmentsStack = new Stack<String>();
+     	   
+	       GenericTreeNode<DepartmentResults<String>> departmentsTreeWithResults = new GenericTreeNode<DepartmentResults<String>>();
+
            
 	       int indent = 0;
 
-	       printTree(currentNode,indent,departmentsStack);
+	       printTree(currentNode,indent,departmentsTreeWithResults);
 	       
-	       while(!departmentsStack.isEmpty()) {
-	           departmentsList.add(departmentsStack.pop());
-	       }
+	       List<String> resultsList = new ArrayList<String>();
+	          
+	       treeToList(departmentsTreeWithResults, resultsList);
 	       
-	       for(String data:departmentsList) {
-	           System.out.println(data);
-           }
-	       
-	       return departmentsList;
+	       return resultsList;
 	       
 	   }
 	   
-      
+      private void treeToList(GenericTreeNode<DepartmentResults<String>> node, List<String> resultsList) {
+
+          resultsList.add(node.getData().getResults());
+          
+          List<GenericTreeNode<DepartmentResults<String>>> childrenArrayList = node.getChildren();
+          
+          Collections.sort(childrenArrayList, new Comparator<GenericTreeNode<DepartmentResults<String>>>()
+          {
+              public int compare( GenericTreeNode<DepartmentResults<String>> one, GenericTreeNode<DepartmentResults<String>> another){
+                  return one.getData().getDepartment().getCode().compareTo(another.getData().getDepartment().getCode());
+              }
+              
+          }
+          );
+          
+          for (GenericTreeNode<DepartmentResults<String>>  childNode :childrenArrayList) {
+              treeToList(childNode, resultsList);
+          }
+          
+      }
        
-	   private Long printTree(GenericTreeNode<Department> currentNode, int indent, Stack<String> departmentsList) {
+	   private Long printTree(GenericTreeNode<Department> currentNode, int indent, GenericTreeNode<DepartmentResults<String>> currentNodeDepartmentTreeWithResults/*, Queue<String> departmentsQueue*/) {
 
 	       String prefix = "";
 	       for(int i = 0;i<=indent;i++) {
@@ -676,8 +690,12 @@ public class DepartmentController {
 	       
 	       Long accumulatedRetainedCreditsForCurrentDepartment = 0l;
 
-	       for(GenericTreeNode<Department> child:currentNode.getChildren()) {
-	           Long childRetainedCredits = printTree(child,indent+1,departmentsList);
+	       List<GenericTreeNode<Department>> childrenArrayList = currentNode.getChildren();
+	       
+	       for(GenericTreeNode<Department> child:childrenArrayList) {
+	           GenericTreeNode<DepartmentResults<String>> childNodeDepartmentWithResults = new GenericTreeNode<DepartmentResults<String>>();
+	           currentNodeDepartmentTreeWithResults.addChild(childNodeDepartmentWithResults);
+	           Long childRetainedCredits = printTree(child,indent+1,childNodeDepartmentWithResults/*,departmentsQueue*/);
 	           accumulatedRetainedCreditsForCurrentDepartment = accumulatedRetainedCreditsForCurrentDepartment + childRetainedCredits;
 	       }
 
@@ -694,19 +712,14 @@ public class DepartmentController {
 	           line = line +" - Retenidos:" + retainedCreditsForCurrentDepartment + " - Creditos retenidos acumulados en subordinados: "+ accumulatedRetainedCreditsForCurrentDepartment ;    
 	       }
 	       
-	       departmentsList.push(line);
+	       DepartmentResults<String> currentNodeDepartmentResults = new DepartmentResults<String>();
+	       currentNodeDepartmentResults.setDepartment(currentNode.getData());
+	       currentNodeDepartmentResults.setResults(line);
+	       
+	       currentNodeDepartmentTreeWithResults.setData(currentNodeDepartmentResults);
 
 	       return accumulatedRetainedCreditsForCurrentDepartment + retainedCreditsForCurrentDepartment;
 
 	   }
 
-	   private void printTree2(GenericTreeNode<Department> root, int indent) {
-	       for(int i = 0;i<=indent;i++) {
-	           System.out.print("-");
-	       }
-	       System.out.print(root.getData().getName() + '\n');
-	       for(GenericTreeNode<Department> child:root.getChildren()) {
-	           printTree2(child,indent+1);
-	       }
-	   }
 }
