@@ -15,6 +15,7 @@ import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsEntry.CreditsEntryVO;
 import org.dpi.creditsManagement.CreditsManagerService;
+import org.dpi.department.DepartmentService;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.web.reporting.dto.GenericReportRecord;
 import org.dpi.web.reporting.parameters.EmployeeAdditionsPromotionsReportParameters;
@@ -28,6 +29,9 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 {
 	Log log = LogFactory.getLog(this.getClass());
 	
+	@Resource(name = "departmentService")
+	private DepartmentService departmentService;
+	   
 	@Resource(name = "creditsEntryService")
 	private CreditsEntryService creditsEntryService;
 	
@@ -50,7 +54,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		//downloadService.downloadPdf(response);
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		
-
+		params.put("DEPARTMENT_NAME",  departmentService.findById(departmentId).getName());
 
 		//get movimientos de ascenso
 		EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();

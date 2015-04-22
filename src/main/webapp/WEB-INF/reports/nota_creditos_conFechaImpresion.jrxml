@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-04-22T09:31:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nota_creditos" pageWidth="595" pageHeight="842" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="77a40a11-da63-402b-9cb8-d86c41e834f0">
 	<property name="template.type" value="columnar"/>
 	<property name="ireport.zoom" value="1.2100000000000006"/>
@@ -58,6 +59,7 @@
 		<field name="NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
 		<field name="PERSON_NUEVO_CATEGORIA_PROPUESTA" class="java.lang.String"/>
 	</subDataset>
+	<parameter name="DEPARTMENT_NAME" class="java.lang.String"/>
 	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
@@ -78,7 +80,7 @@ Ministro/Secretario de Estado de
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="115" width="497" height="73" uuid="dd3f1250-8dee-4f73-907f-56d7546fb12f"/>
+				<reportElement positionType="Float" x="0" y="120" width="497" height="73" uuid="dd3f1250-8dee-4f73-907f-56d7546fb12f"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
@@ -397,6 +399,13 @@ Ministro/Secretario de Estado de
 					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["SAN JUAN, ....... de ............................. de "+ new Integer(new Date().getYear()+1900)+".-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="88" width="487" height="32" isRemoveLineWhenBlank="true" uuid="df9cb94f-3f59-4454-9f8c-3388fe2ed167"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Reparticion: "+ $P{DEPARTMENT_NAME}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
