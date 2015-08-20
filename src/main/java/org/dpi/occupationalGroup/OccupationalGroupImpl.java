@@ -3,8 +3,10 @@ package org.dpi.occupationalGroup;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.category.Category;
 import org.dpi.domain.PersistentAbstract;
+import org.janux.util.JanuxToStringStyle;
 
 public class OccupationalGroupImpl extends PersistentAbstract implements OccupationalGroup{
 
@@ -96,5 +98,17 @@ public class OccupationalGroupImpl extends PersistentAbstract implements Occupat
 	public void setMaximumCategory(Category maximumCategory) {
 		this.maximumCategory = maximumCategory;
 	}
-
+	
+    @Override
+    public String toString() 
+    {
+        ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
+        
+        sb.append(super.toString());
+        
+        sb.append("code", getCode());
+        sb.append("name", getName());
+                
+        return sb.toString();
+    }
 }

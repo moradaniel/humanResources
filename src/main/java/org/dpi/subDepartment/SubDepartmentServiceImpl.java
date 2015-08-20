@@ -50,6 +50,7 @@ public class SubDepartmentServiceImpl implements SubDepartmentService
 		return subDepartmentDao;
 	}
 
+	@Override
 	public List<SubDepartment> findAll(){
 		return this.subDepartmentDao.findAll();
 	}
@@ -71,4 +72,5 @@ public class SubDepartmentServiceImpl implements SubDepartmentService
 	public List<SubDepartment> findSubDepartments(final Department department){
 		return this.subDepartmentDao.findSubDepartments(department);
 	}
+
 }

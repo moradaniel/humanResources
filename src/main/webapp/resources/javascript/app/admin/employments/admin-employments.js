@@ -203,6 +203,19 @@
 
 			}
 		};
+		
+		/* Do not populate any component of EmploymentTransferDirective
+		 * unitil we open the dialog */
+		$scope.initializeEmploymentTransferDirective = false;
+		
+		$scope.transferEmployment = function(employment) {
+			$scope.employmentToTransfer= angular.copy(employment);
+			
+			/*Directive modalEmploymentTransfer has to populate its components
+			 * like the subdepartments dropdown */
+			$scope.initializeEmploymentTransferDirective = true;
+			
+		};
 
 	}]);
 

@@ -108,6 +108,7 @@ public class CreditsEntryTest {
         aCreditsEntry = new CreditsEntryBuilder().aCreditsEntry()
                 .withCreditsPeriod(creditsPeriodService.getCurrentCreditsPeriod())
                 .withCreditsEntryType(CreditsEntryType.BajaAgente)
+                .withNumberOfCredits(20)
                 .build();
         
         assertTrue("creditsEntryStatus_can_be_changed_for_active_period_and_is_BajaAgente",
@@ -115,6 +116,19 @@ public class CreditsEntryTest {
 
     }
     
+    @Test
+    public void creditsEntryStatus_cannot_be_changed_for_transfers() {
+
+        CreditsEntry aCreditsEntry = new CreditsEntryBuilder().aCreditsEntry()
+                .withCreditsPeriod(creditsPeriodService.getCurrentCreditsPeriod())
+                .withCreditsEntryType(CreditsEntryType.BajaAgente)
+                .withNumberOfCredits(0)
+                .build();
+        
+        assertFalse("creditsEntryStatus_cannot_be_changed_for_transfer",
+                aCreditsEntry.canStatusBeChanged(creditsEntryService, creditsPeriodService));
+
+    }
     
     @Test
     public void creditsEntryStatus_should_not_be_changed_for_active_period_and_CargaInicialAgenteExistente() {

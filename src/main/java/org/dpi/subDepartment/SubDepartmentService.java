@@ -17,6 +17,8 @@ import org.springframework.context.ApplicationContextAware;
 public interface SubDepartmentService extends ApplicationContextAware
 {
 
+    public List<SubDepartment> findAll();
+    
 	public SubDepartment findByCodigoCentroCodigoSector(String codigoCentro, String codigoSector);
 
 	public PageList<SubDepartment> findSubDepartments(final QueryBind bind,

@@ -172,6 +172,5 @@ public class EmploymentServiceImpl implements EmploymentService
 	public void setSubDepartmentService(SubDepartmentService subDepartmentService) {
 		this.subDepartmentService = subDepartmentService;
 	}
-
 	
 }

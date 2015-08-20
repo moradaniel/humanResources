@@ -1,9 +1,9 @@
 package org.dpi.subDepartment;
 
+import org.apache.commons.lang.builder.StandardToStringStyle;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.department.Department;
 import org.dpi.domain.PersistentAbstract;
-import org.janux.util.JanuxToStringStyle;
 
 public class SubDepartmentImpl  extends PersistentAbstract implements SubDepartment{
 
@@ -58,19 +58,31 @@ public class SubDepartmentImpl  extends PersistentAbstract implements SubDepartm
 		this.department = department;
 		
 	}
-	
-	public String toString(){
-		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
-		
-		sb.append(super.toString());
-		
-		sb.append("codigoCentro", getCodigoCentro());
-		sb.append("codigoSector", getCodigoSector());
-		sb.append("nombreCentro", getNombreCentro());
-		sb.append("nombreSector", getNombreSector());
-		
-		return sb.toString();
-	}
 
+	/*
+    @Override
+    public String toString() {
+        return "SubDepartment [codigoCentro=" + codigoCentro
+                + ", codigoSector=" + codigoSector + ", nombreCentro="
+                + nombreCentro + ", nombreSector=" + nombreSector
+                + ", department=" + department.toString() + "]";
+    }*/
+    @Override
+    public String toString() {
+        
+        StandardToStringStyle style = new StandardToStringStyle();
+        style.setFieldSeparator(", ");
+        style.setUseShortClassName(true);
+        style.setUseIdentityHashCode(false);
+        
+        return new ToStringBuilder(this,style).
+                append("codigoCentro", codigoCentro).
+                append("codigoSector", codigoSector).
+                append("nombreCentro", nombreCentro).
+                append("nombreSector", nombreSector).
+                append("department", department).
+                toString();
+    }
+ 
 
 }

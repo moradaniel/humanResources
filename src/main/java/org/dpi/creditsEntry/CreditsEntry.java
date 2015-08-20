@@ -45,4 +45,5 @@ public interface CreditsEntry extends Persistent,Serializable{
 	
     public boolean isIngresoWithoutCredits();
 
+    public boolean isTransferWithoutCredits();
 }

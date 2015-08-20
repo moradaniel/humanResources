@@ -15,6 +15,7 @@ public class SubDepartmentSerializer extends JsonSerializer<SubDepartmentImpl> {
 			JsonProcessingException {
 
         jgen.writeStartObject();
+        jgen.writeStringField("id", value.getId().toString());
         jgen.writeStringField("codigoCentro", value.getCodigoCentro());
         jgen.writeStringField("codigoSector", value.getCodigoSector());
         jgen.writeStringField("nombreCentro", value.getNombreCentro());

@@ -102,4 +102,10 @@ public class DepartmentImpl extends PersistentAbstract implements Department {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Department [code=" + code + ", name=" + name + "]";
+    }
+
 }

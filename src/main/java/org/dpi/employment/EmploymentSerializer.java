@@ -22,7 +22,7 @@ public class EmploymentSerializer extends JsonSerializer<EmploymentImpl> {
         jgen.writeObjectField("startDate", value.getStartDate());
         //jgen.writeStringField("endDate", value.getEndDate()==null ?"" :format.format(value.getEndDate()));
         jgen.writeObjectField("endDate", value.getEndDate());
-        jgen.writeStringField("status",value.getStatus().name());
+        jgen.writeStringField("status",value.getStatus()==null ?"" :value.getStatus().name());
         jgen.writeObjectField("person",value.getPerson());
         jgen.writeObjectField("category",value.getCategory());
         jgen.writeObjectField("subDepartment",value.getSubDepartment());

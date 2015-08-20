@@ -182,6 +182,9 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
                  if(this.isIngresoWithoutCredits()){
                      return false;
                  }
+                 if(this.isTransferWithoutCredits()){
+                     return false;
+                 }
                  return true;
             }
     }
@@ -199,6 +202,12 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
                 this.getNumberOfCredits() == 0;
     }
     
+    @Override
+    public boolean isTransferWithoutCredits() {
+        return  this.getCreditsEntryType()== CreditsEntryType.BajaAgente
+                && 
+                this.getNumberOfCredits() == 0;
+    }
 
 	@Override
 	public String toString() 

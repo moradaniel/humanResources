@@ -7,8 +7,10 @@ import org.dpi.category.CategoryImpl;
 import org.dpi.category.CategorySerializer;
 import org.dpi.creditsPeriod.CreditsPeriodImpl;
 import org.dpi.creditsPeriod.CreditsPeriodSerializer;
+import org.dpi.department.Department;
 import org.dpi.department.DepartmentImpl;
 import org.dpi.department.DepartmentSerializer;
+import org.dpi.employment.Employment;
 import org.dpi.employment.EmploymentDeserializer;
 import org.dpi.employment.EmploymentImpl;
 import org.dpi.employment.EmploymentSerializer;
@@ -58,7 +60,9 @@ public class CustomObjectMapper extends ObjectMapper {
 		module.addAbstractTypeMapping(Person.class, PersonImpl.class);
 		module.addAbstractTypeMapping(Category.class, CategoryImpl.class);
 		module.addAbstractTypeMapping(OccupationalGroup.class,OccupationalGroupImpl.class);
+		module.addAbstractTypeMapping(Department.class,DepartmentImpl.class);
 		module.addAbstractTypeMapping(SubDepartment.class,SubDepartmentImpl.class);
+		module.addAbstractTypeMapping(Employment.class,EmploymentImpl.class);
 		
 
 		this.registerModule(module);
