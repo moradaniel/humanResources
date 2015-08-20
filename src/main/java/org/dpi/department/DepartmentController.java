@@ -119,6 +119,9 @@ public class DepartmentController {
 	
 	@Resource(name = "reportService")
 	private ReportService reportService;
+	
+	@Resource(name = "userAccessService")
+	private UserAccessService userAccessService;
 
 
 	@Inject
@@ -507,6 +510,9 @@ public class DepartmentController {
 		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
 		
 		PeriodSummaryData currentPeriodSummaryData = new PeriodSummaryData();
+		
+		currentPeriodSummaryData.setDepartment(department);
+		
 		currentPeriodSummaryData.setYear(currentCreditsPeriod.getName());
 		
 		
@@ -688,28 +694,49 @@ public class DepartmentController {
        
 	       Long retainedCreditsForCurrentDepartment = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), currentNode.getData().getId());
 	       
-	       Long accumulatedRetainedCreditsForCurrentDepartment = 0l;
+	       Long accumulatedRetainedCreditsForCurrentDepartmentFromChildren = 0l;
 
 	       List<GenericTreeNode<Department>> childrenArrayList = currentNode.getChildren();
+	       
+	       /*We do not apply 30% for departments like
+	        * 1000000001 - GOBERNACION - Retenidos:0 - Creditos retenidos acumulados en subordinados: 0
+              1000000002 - ASESORIA LETRADA DE GOBIERNO - Retenidos:889 - Creditos retenidos acumulados en subordinados: 0
+              1000000003 - ESCRIBANIA MAYOR DE GOBIERNO - Retenidos:259 - Creditos retenidos acumulados en subordinados: 0
+              
+              889 and 259 are added to poder ejecutivo
+	        * */
+	       long retainedFromDirectChildrenOfPoderEjecutivoThatAreNotMinisterio = 0;
+	       
 	       
 	       for(GenericTreeNode<Department> child:childrenArrayList) {
 	           GenericTreeNode<DepartmentResults<String>> childNodeDepartmentWithResults = new GenericTreeNode<DepartmentResults<String>>();
 	           currentNodeDepartmentTreeWithResults.addChild(childNodeDepartmentWithResults);
 	           Long childRetainedCredits = printTree(child,indent+1,childNodeDepartmentWithResults/*,departmentsQueue*/);
-	           accumulatedRetainedCreditsForCurrentDepartment = accumulatedRetainedCreditsForCurrentDepartment + childRetainedCredits;
+	           if(departmentService.isPoderEjecutivoChildButNotMinisterio( child.getData())) {
+	               retainedFromDirectChildrenOfPoderEjecutivoThatAreNotMinisterio += childRetainedCredits;
+	             //we do not accumulate retained credits for directChildrenOfPoderEjecutivoThatAreNotMinisterio
+	               continue;
+	           }
+	           accumulatedRetainedCreditsForCurrentDepartmentFromChildren = accumulatedRetainedCreditsForCurrentDepartmentFromChildren + childRetainedCredits;
 	       }
+	       
+	       Long totalRetainedCreditsForCurrentNode = accumulatedRetainedCreditsForCurrentDepartmentFromChildren + retainedCreditsForCurrentDepartment;
 
 	       String line = prefix+currentNode.getData().getCode()+" - "+currentNode.getData().getName();
 	       
 	       if(departmentService.isMinisterio( currentNode.getData())) {//is ministerio or secretaria, parent is root
-	           long availableToDistributeAmongDependentDepartments = Math.round( 0.7*accumulatedRetainedCreditsForCurrentDepartment );
-	           long availableForRootNode = accumulatedRetainedCreditsForCurrentDepartment - availableToDistributeAmongDependentDepartments;
-	           line = line +" - Disponibles para repartir en reparticiones dependientes: 70% de "+accumulatedRetainedCreditsForCurrentDepartment + " = "+availableToDistributeAmongDependentDepartments +". Para Poder Ejecutivo: "+availableForRootNode;
+	           //get retention for its directly dependent subdepartments
+	           //accumulatedRetainedCreditsForCurrentDepartmentFromChildren = accumulatedRetainedCreditsForCurrentDepartmentFromChildren + retainedCreditsForCurrentDepartment;
+	           
+	           long availableToDistributeAmongDependentDepartments = Math.round( 0.7*totalRetainedCreditsForCurrentNode );
+	           long availableForRootNode = totalRetainedCreditsForCurrentNode - availableToDistributeAmongDependentDepartments;
+	           line = line +" - Retenidos:" + retainedCreditsForCurrentDepartment + " - Disponibles para repartir en reparticiones dependientes: 70% de "+totalRetainedCreditsForCurrentNode + " = "+availableToDistributeAmongDependentDepartments +". Para Poder Ejecutivo: "+availableForRootNode;
 	       }else if(departmentService.isPoderEjecutivo(currentNode.getData())) {
-	           long availableCreditsForRoot = Math.round( 0.3*accumulatedRetainedCreditsForCurrentDepartment );
-	           line = line +" - Disponibles: 30% de " + accumulatedRetainedCreditsForCurrentDepartment +" = "+availableCreditsForRoot;
+	           long percentageRetainedForAggregatedMinisterios = Math.round( 0.3*totalRetainedCreditsForCurrentNode );
+	           long availableCreditsForRoot =  percentageRetainedForAggregatedMinisterios + retainedFromDirectChildrenOfPoderEjecutivoThatAreNotMinisterio;
+	           line = line +" - Disponibles: 30% de " + totalRetainedCreditsForCurrentNode +" = "+percentageRetainedForAggregatedMinisterios+" + retenido de reparticiones directas del poder ejecutivo "+retainedFromDirectChildrenOfPoderEjecutivoThatAreNotMinisterio+"  = "+availableCreditsForRoot;
 	       }else{ // other departments
-	           line = line +" - Retenidos:" + retainedCreditsForCurrentDepartment + " - Creditos retenidos acumulados en subordinados: "+ accumulatedRetainedCreditsForCurrentDepartment ;    
+	           line = line +" - Retenidos:" + retainedCreditsForCurrentDepartment + " - Creditos retenidos acumulados en subordinados: "+ accumulatedRetainedCreditsForCurrentDepartmentFromChildren ;    
 	       }
 	       
 	       DepartmentResults<String> currentNodeDepartmentResults = new DepartmentResults<String>();
@@ -718,8 +745,74 @@ public class DepartmentController {
 	       
 	       currentNodeDepartmentTreeWithResults.setData(currentNodeDepartmentResults);
 
-	       return accumulatedRetainedCreditsForCurrentDepartment + retainedCreditsForCurrentDepartment;
+	       return totalRetainedCreditsForCurrentNode;
 
 	   }
 
+	   
+	   
+       @RequestMapping(value = "/departments/listDepartmentsCreditsSummary", method = RequestMethod.GET)
+       public String listDepartmentsCreditsSummary(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+           Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+           String accountName = ((Account) principal).getName();
+           Set<DepartmentAdminInfo> departmentsInfoSet = userAccessService.getDepartmentListForAccount(accountName, null);
+           List<DepartmentAdminInfo> departmentsInfoList = new ArrayList<DepartmentAdminInfo>(departmentsInfoSet);
+
+           //List<GenericTreeNode<DepartmentResults<String>>> childrenArrayList = node.getChildren();
+           
+           Collections.sort(departmentsInfoList, new Comparator<DepartmentAdminInfo>()
+               {
+                   public int compare( DepartmentAdminInfo one, DepartmentAdminInfo another){
+                       return one.getCode().compareTo(another.getCode());
+                   }
+                   
+               }
+           );
+                   
+           
+           List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = new ArrayList<PeriodSummaryData>();
+           for( DepartmentAdminInfo departmentInfo : departmentsInfoList){
+
+               Department department = departmentService.findById(departmentInfo.getId());
+               
+               /*
+               
+               if (department instanceof Department) 
+               {
+                   model.addAttribute(KEY_DEPARTMENT_LIST, department.getId());
+               }*/
+               
+               //build current year
+               
+               log.debug("Generating listDepartmentsCreditsSummary, building buildCurrentPeriodSummaryData for department {}",department.getCode()+department.getName());
+               PeriodSummaryData currentPeriodSummaryData = buildCurrentPeriodSummaryData(department);
+               
+               currentPeriodDepartmentsSummaryData.add(currentPeriodSummaryData);
+               
+               model.addAttribute("currentPeriodDepartmentsSummaryData", currentPeriodDepartmentsSummaryData);
+               
+
+
+           }
+           
+           /*
+           // get the current department in the session
+           final Department department = DepartmentController.getCurrentDepartment(request);
+
+           if (department != null){
+
+               if (department instanceof Department) 
+               {
+                   model.addAttribute(PARAM_DEPARTMENT_ID, department.getId());
+               }
+               
+               List<String> departmentsList = buildHierarchicalAccumulatedCredits(department);
+
+               model.addAttribute("departmentsList", departmentsList);
+
+           }*/
+           
+           return "departments/listDepartmentsCreditsSummary";
+       }
 }

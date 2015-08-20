@@ -92,6 +92,13 @@ public class DepartmentServiceImpl implements DepartmentService
         return false;
     }
     
+    @Override
+    public boolean isPoderEjecutivoChildButNotMinisterio(Department department) {
+        if(isPoderEjecutivo(department.getParent()) && !isMinisterio(department)){
+            return true;
+        } 
+        return false;
+    }
 
     public List<Department> findUserDepartments(Account account){
         return departmentDao.findUserDepartments(account);

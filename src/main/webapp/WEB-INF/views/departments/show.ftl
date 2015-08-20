@@ -57,7 +57,9 @@
 						<td>						
 						<a href="showEmployments" class="ajaxLink">Ver Agentes Activos</a>
 						<br/>
-						<a href="showCreditEntries/${currentPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a>
+						<#if account?exists && account.hasPermissions("Manage_CreditsEntries", "READ")>
+						  <a href="showCreditEntries/${currentPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a>
+                        </#if>
 						</td>
 					</tr>
 
@@ -87,7 +89,9 @@
 							<td>${historicPeriodSummaryData.retainedCredits?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosConsumidosPorIngresosOAscensosOtorgados?default("0")}</td>
 							<td>${historicPeriodSummaryData.saldoCreditosAlFinalPeriodo?default("0")}</td>
-							<td><a href="showCreditEntries/${historicPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a></td>
+                            <#if account?exists && account.hasPermissions("Manage_CreditsEntries", "READ")>
+							 <td><a href="showCreditEntries/${historicPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a></td>
+                            </#if>
 						</tr>
 	
 					</table>

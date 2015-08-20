@@ -21,4 +21,8 @@
         <put-attribute name="body" value="/WEB-INF/views/departments/showHierarchicalAccumulatedCredits.ftl" />
     </definition>
 
+    <definition name="departments/listDepartmentsCreditsSummary" extends="standardLayout" templateType="freemarker">
+        <put-attribute name="body" value="/WEB-INF/views/departments/listDepartmentsCreditsSummary.ftl" />
+    </definition>
+    
 </tiles-definitions>

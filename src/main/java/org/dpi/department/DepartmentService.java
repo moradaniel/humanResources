@@ -47,5 +47,7 @@ public interface DepartmentService extends ApplicationContextAware
 
 
     boolean isPoderEjecutivo(Department department);
+    
+    public boolean isPoderEjecutivoChildButNotMinisterio(Department department);
 
 }
