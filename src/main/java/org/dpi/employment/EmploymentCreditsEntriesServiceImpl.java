@@ -357,6 +357,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 			employmentVO.setCanPersonBeModified(canAccountModifyPerson(currentUser));
 			
 			employmentVO.setCanUndoDeactivation(canAccountUndoDeactivationEmployments(currentUser,employment));
+			
+			employmentVO.setCanPersonBeTransfered(canAccountTransferPerson(currentUser));
 
 			employmentsVO.add(employmentVO);
 		}
@@ -451,6 +453,15 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	}
 	
 	
+	
+   public static boolean canAccountTransferPerson(Account account) {
+        
+        if(account.hasPermissions("Manage_Employments", "TRANSFER")){
+            return true;
+        }
+        return false;
+    }
+	
 	public static boolean canAccountProposeNewEmployment(Account account) {
 		
 		if(account.hasPermissions("Manage_CreditsEntries", "CREATE")){
@@ -458,5 +469,115 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 		}
 		return false;
 	}
+	
+    @Override
+    public void transferEmployee(Person personToBeTransfered,
+            SubDepartment sourceSubdepartment,
+            SubDepartment destinationSubdepartment) {
+        
+        String destinationSubdepartmentName = "";
+        if(destinationSubdepartment==null) {
+            destinationSubdepartmentName = "External subdepartment"; 
+        }else {
+            destinationSubdepartmentName =  destinationSubdepartment.toString();
+        }
+        
+        Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser!=null){
+            log.info("================ user:"+currentUser.getName()+" attempting to transfer person:"+personToBeTransfered.toString()+
+                       " from subDepartment:"+sourceSubdepartment.toString()+" to subDepartment:"+destinationSubdepartmentName ); 
+        }
+
+        EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+        employmentQueryFilter.setCodigoCentro(sourceSubdepartment.getCodigoCentro());
+        employmentQueryFilter.setCodigoSector(sourceSubdepartment.getCodigoSector());
+        employmentQueryFilter.addEmploymentStatus(EmploymentStatus.ACTIVO);
+        employmentQueryFilter.setCuil(personToBeTransfered.getCuil());
+        
+        //get current employment
+        Employment currentEmployment = employmentService.findEmployments(employmentQueryFilter).get(0);
+       
+        //check if employment is active
+        
+        if(!currentEmployment.getStatus().equals(EmploymentStatus.ACTIVO)) {
+            throw new RuntimeException("Cannot transfer Employee. Current employment is not active ."+currentEmployment.toString());
+        }
+        
+        //check if current subdepartment is equal to sourceSubdepartment
+        
+        if(!currentEmployment.getSubDepartment().getId().equals(sourceSubdepartment.getId())){
+            throw new RuntimeException("Cannot transfer Employee. Employment is not in the given subdepartment."+currentEmployment.toString());
+        }
+        
+        Employment newEmployment = new EmploymentImpl();
+        if(destinationSubdepartment!=null) {
+            Category category = categoryService.findByCode(currentEmployment.getCategory().getCode());
+
+            newEmployment.setPerson(currentEmployment.getPerson());
+            newEmployment.setCategory(category);
+            newEmployment.setSubDepartment(destinationSubdepartment);
+            newEmployment.setOccupationalGroup(currentEmployment.getOccupationalGroup());
+            newEmployment.setStartDate(new Date());
+            newEmployment.setStatus(EmploymentStatus.ACTIVO);
+            newEmployment.setPreviousEmployment(currentEmployment);
+            
+            //create an entry of type ingreso 
+            CreditsEntryImpl entryIngreso = new CreditsEntryImpl();
+            entryIngreso.setCreditsEntryType(CreditsEntryType.IngresoAgente);
+            int cantidadCreditosPorTransferencia = 0;
+            entryIngreso.setNumberOfCredits(cantidadCreditosPorTransferencia);
+            entryIngreso.setGrantedStatus(GrantedStatus.Otorgado);
+            entryIngreso.setCreditsPeriod(creditsPeriodService.getCurrentCreditsPeriod());
+            entryIngreso.setNotes("Transferencia desde: ("+sourceSubdepartment.getCodigoCentro()+"-"+sourceSubdepartment.getCodigoSector()+")"+sourceSubdepartment.getNombreCentro()+"-"+sourceSubdepartment.getNombreSector());
+            
+            //set employment to entry and entry to employment
+            newEmployment.addCreditsEntry(entryIngreso);
+            
+            entryIngreso.setEmployment(newEmployment);
+
+            //set previous employment
+            newEmployment.setPreviousEmployment(currentEmployment);
+            
+            
+            //save entry and employment
+            employmentService.saveOrUpdate(newEmployment);
+
+            
+        }
+        
+        //deactivate current employment because of transfer
+        
+        currentEmployment.setStatus(EmploymentStatus.BAJA);
+        currentEmployment.setEndDate(new Date());
+                 
+        CreditsEntryImpl entryBaja = new CreditsEntryImpl();
+        entryBaja.setCreditsEntryType(CreditsEntryType.BajaAgente);
+        int cantidadCreditosPorTransferencia = 0;
+        entryBaja.setNumberOfCredits(cantidadCreditosPorTransferencia);
+        entryBaja.setGrantedStatus(GrantedStatus.Otorgado);
+        entryBaja.setCreditsPeriod(creditsPeriodService.getCurrentCreditsPeriod());
+        String notes = "";
+        if(destinationSubdepartment!= null) {
+            notes="("+destinationSubdepartment.getCodigoCentro()+"-"+destinationSubdepartment.getCodigoSector()+")"+destinationSubdepartment.getNombreCentro()+"-"+destinationSubdepartment.getNombreSector();
+        }else {
+            notes="Centro Sector externo";
+        }
+        entryBaja.setNotes("Transferencia hacia: "+notes);
+        
+        currentEmployment.addCreditsEntry(entryBaja);
+        entryBaja.setEmployment(currentEmployment);
+        
+        //save entry and employment
+        employmentService.saveOrUpdate(currentEmployment);
+        
+        
+        
+        if(currentUser!=null){
+            log.info("================ user:"+currentUser.getName()+" Successfully performed: transfer of person - "+
+                    " from subDepartment: "+sourceSubdepartment.toString()+
+                    " to subDepartment: "+destinationSubdepartmentName); 
+        }
+        
+    }
 
 }

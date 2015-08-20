@@ -2,6 +2,8 @@ package org.dpi.employment;
 
 import java.util.List;
 
+import org.dpi.person.Person;
+import org.dpi.subDepartment.SubDepartment;
 import org.janux.bus.security.Account;
 import org.springframework.context.ApplicationContextAware;
 
@@ -22,4 +24,8 @@ public interface EmploymentCreditsEntriesService extends ApplicationContextAware
 	public void proposeNewEmployment(String proposedCategoryCode,Long subDepartmentId);
 
 	public List<EmploymentVO> buildEmploymentsVO(List<Employment> activeEmployments, Long departmentId, Account currenUser);
+	
+    public void transferEmployee(Person personToBeTransfered,
+            SubDepartment sourceSubdepartment,
+            SubDepartment destinationSubdepartment);
 }

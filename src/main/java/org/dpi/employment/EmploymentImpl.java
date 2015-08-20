@@ -13,7 +13,6 @@ import org.dpi.domain.PersistentAbstract;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.person.Person;
 import org.dpi.subDepartment.SubDepartment;
-import org.janux.util.JanuxToStringStyle;
 
 
 
@@ -171,8 +170,21 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 		return foundCreditsEntries;
 		
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).
+                append("person", person).
+                append("subDepartment", subDepartment).
+                append("status", status).
+                append("startDate", startDate).
+                append("endDate", endDate).
+                append("occupationalGroup", occupationalGroup).
+                toString();
+    }
+
 	
-	@Override
+/*	@Override
 	public String toString() 
 	{
 		ToStringBuilder sb = new ToStringBuilder(this, JanuxToStringStyle.COMPACT);
@@ -180,12 +192,15 @@ public class EmploymentImpl  extends PersistentAbstract implements Employment{
 		sb.append(super.toString());
 		
 		sb.append("person", person.toString());
+		sb.append("status", getStatus());
 		
 		sb.append("category", getCategory().getCode());
-		sb.append("status", getStatus());
-
+		sb.append("occupationalGroup", getOccupationalGroup().toString());
+		
+		
+		sb.append("subdepartment", getSubDepartment().toString());
 		
 		return sb.toString();
-	}
+	}*/
 
 }

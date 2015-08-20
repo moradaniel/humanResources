@@ -502,6 +502,7 @@
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/rest.api.js'/></script>
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employment-editor.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employment-transfer.js'/></script>
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments.js'/></script>
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/employments/admin-employments2.js'/></script -->

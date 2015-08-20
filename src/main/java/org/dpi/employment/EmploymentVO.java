@@ -21,6 +21,8 @@ public class EmploymentVO{
 	boolean canUndoDeactivation = false;
 	
 	boolean canPersonBeModified = false;
+	
+	boolean canPersonBeTransfered = false;
 
 	public EmploymentVO(){
 		super();
@@ -65,6 +67,14 @@ public class EmploymentVO{
 
 	public void setCanPersonBeModified(boolean canPersonBeModified) {
 		this.canPersonBeModified = canPersonBeModified;
+	}
+	
+	public boolean isCanPersonBeTransfered() {
+	     return canPersonBeTransfered;
+	}
+
+	public void setCanPersonBeTransfered(boolean canPersonBeTransfered) {
+	     this.canPersonBeTransfered = canPersonBeTransfered;
 	}
 	
 	public void addNote(String note){

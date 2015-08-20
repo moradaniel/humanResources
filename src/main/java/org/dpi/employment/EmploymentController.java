@@ -492,7 +492,7 @@ public class EmploymentController {
 	
 	
     @RequestMapping(value = "/rest/departments/{departmentId}/employments", method = RequestMethod.POST)
-    public ResponseEntity<String> saveEmployment(@PathVariable String departmentId,@RequestBody EmploymentImpl employment) throws JsonProcessingException{
+    public ResponseEntity<String> saveEmployment(@PathVariable String departmentId,@RequestBody EmploymentImpl modifiedEmployment) throws JsonProcessingException{
     	
     	/*if(true) {
     		throw new RuntimeException("Error de prueba");
@@ -501,20 +501,20 @@ public class EmploymentController {
     	
     	//retrieve the existing employments
     	EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-    	employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));
-    	employmentQueryFilter.setEmploymentId(employment.getId());
+    	//employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));
+    	employmentQueryFilter.setEmploymentId(modifiedEmployment.getId());
     	
     	//TODO check if the employment exists
     	Employment existingEmployment = employmentService.findEmployments(employmentQueryFilter).get(0);
     			
     	//set the desired attributes
-    	existingEmployment.getPerson().setApellidoNombre(employment.getPerson().getApellidoNombre());
-    	existingEmployment.getPerson().setCuil(employment.getPerson().getCuil());
+    	existingEmployment.getPerson().setApellidoNombre(modifiedEmployment.getPerson().getApellidoNombre());
+    	existingEmployment.getPerson().setCuil(modifiedEmployment.getPerson().getCuil());
     	
     	OccupationalGroup occupationalGroup = null;
-    	if( employment.getOccupationalGroup() != null ) { 
+    	if( modifiedEmployment.getOccupationalGroup() != null ) { 
     	    OccupationalGroupQueryFilter occupationalGroupQueryFilter = new OccupationalGroupQueryFilter();
-    	    occupationalGroupQueryFilter.setCode(employment.getOccupationalGroup().getCode());
+    	    occupationalGroupQueryFilter.setCode(modifiedEmployment.getOccupationalGroup().getCode());
     	    occupationalGroup = occupationalGroupService.find(occupationalGroupQueryFilter).get(0);
     	}
     	
@@ -564,6 +564,69 @@ public class EmploymentController {
 
         return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
 
+    }
+
+    @RequestMapping(value = "/rest/departments/{departmentId}/employmentTransfers", method = RequestMethod.POST)
+    public ResponseEntity<String> createEmploymentTransfer(@PathVariable String departmentId,@RequestBody EmploymentTransferImpl employmentTransfer) throws JsonProcessingException{
+        
+        /*if(true) {
+            throw new RuntimeException("Error de prueba");
+        }*/
+                
+        
+        //retrieve the existing employments
+        EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
+        employmentQueryFilter.setEmploymentId(employmentTransfer.getEmploymentToTransfer().getId());
+        
+        //TODO check if the employment exists
+        Employment existingEmployment = employmentService.findEmployments(employmentQueryFilter).get(0);
+
+        
+        SubDepartment destination = subDepartmentService.findById(employmentTransfer.getDestination().getId());
+        
+        employmentCreditsEntriesService.transferEmployee(existingEmployment.getPerson(), 
+                                                         existingEmployment.getSubDepartment(),
+                                                         destination
+                                                         );
+        
+
+        /*
+        //set the desired attributes
+        existingEmployment.getPerson().setApellidoNombre(modifiedEmployment.getPerson().getApellidoNombre());
+        existingEmployment.getPerson().setCuil(modifiedEmployment.getPerson().getCuil());
+        
+        OccupationalGroup occupationalGroup = null;
+        if( modifiedEmployment.getOccupationalGroup() != null ) { 
+            OccupationalGroupQueryFilter occupationalGroupQueryFilter = new OccupationalGroupQueryFilter();
+            occupationalGroupQueryFilter.setCode(modifiedEmployment.getOccupationalGroup().getCode());
+            occupationalGroup = occupationalGroupService.find(occupationalGroupQueryFilter).get(0);
+        }
+        
+        existingEmployment.setOccupationalGroup(occupationalGroup);
+        
+        //save the person. This is not necessary if we configure cascade save-update 
+        personService.saveOrUpdate(existingEmployment.getPerson());
+        
+        
+        //save the employment
+        employmentService.saveOrUpdate(existingEmployment);*/
+        /*if (employment.getFirstName().length() <= 3 || employment.getLastName().length() <= 3) {
+            throw new IllegalArgumentException("moreThan3Chars");
+        }
+        personService.addPerson(employment);*/
+       // return new ResponseMessage(ResponseMessage.Type.success, "personAdded");
+
+
+        
+        Map<String, Object> responseMap = new ResponseMap<EmploymentTransfer>().mapOK(employmentTransfer, "transfer completed");
+
+        String serializedResponse = objectMapper.writeValueAsString(responseMap);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json;charset=utf-8");
+        
+                
+        return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);
     }
 
 

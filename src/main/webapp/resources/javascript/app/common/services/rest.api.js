@@ -88,6 +88,13 @@
 							return RestFullResponse.one('departments',/*SessionService.currentDepartmentId*/
 									currentSelectedDepartmentId).all('employments').post(employment);
 
+						},
+						
+						transfer : function(transferObject) {
+							transferObject.destination = Restangular.stripRestangular(transferObject.destination);
+							return RestFullResponse.one('departments',/*SessionService.currentDepartmentId*/
+									currentSelectedDepartmentId).all('employmentTransfers').post(transferObject);
+
 						}
 
 					},
@@ -137,13 +144,18 @@
 							return RestFullResponse.all('departments').all('findAvailableDepartmentsForAccount').getList(query);
 						}
 					},
+					subDepartments : {
+						findAvailableSubDepartments : function(query) {
+							return RestFullResponse.all('subDepartments').all('findAvailableSubDepartments').getList(query);
+						}
+					},
 					occupationalGroups : {
 						search : function(query) {
 							return RestFullResponse.all('employments').all('findOccupationalGroups').getList(query);
 
 						}
 
-					},
+					}
 
 				};
 			} ]);

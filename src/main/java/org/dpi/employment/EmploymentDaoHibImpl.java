@@ -134,6 +134,13 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 	private void buildWhereClause2(EmploymentQueryFilter employmentQueryFilter,
 			List<String> wheres, List<String> paramNames, List<Object> values) {
 		if (employmentQueryFilter != null) {
+		    
+
+		    if(employmentQueryFilter.getEmploymentId()!=null) {
+                wheres.add("  employment.id = :employmentId ");
+                paramNames.add("employmentId");
+                values.add(employmentQueryFilter.getEmploymentId());
+            }
 			
 			String cuil = employmentQueryFilter.getCuil();
 			if(StringUtils.hasText(cuil)) {

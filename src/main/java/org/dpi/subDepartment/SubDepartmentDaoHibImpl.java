@@ -34,8 +34,15 @@ public class SubDepartmentDaoHibImpl extends BaseDAOHibernate implements SubDepa
 		Chronometer timer = new Chronometer();
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all subDepartments");
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("from SubDepartmentImpl subDepartment")
+        .append(" INNER JOIN FETCH subDepartment.department department ")
+		.append(" order by subDepartment.codigoCentro asc, " )
+		.append("          subDepartment.codigoSector asc " );
+        
 
-		List<SubDepartment> list = getHibernateTemplate().find("from SubDepartmentImpl order by code");
+		List<SubDepartment> list = getHibernateTemplate().find(sb.toString());
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " subDepartments in " + timer.printElapsedTime());
 
@@ -76,7 +83,14 @@ public class SubDepartmentDaoHibImpl extends BaseDAOHibernate implements SubDepa
 
 		if (log.isDebugEnabled()) log.debug("attempting to find SubDepartment with id: '" + id + "'");
 
-		List list = getHibernateTemplate().find("from SubDepartmentImpl where id=?", id);
+		StringBuffer query = new StringBuffer();
+		query.append("from SubDepartmentImpl subDepartment ")
+		.append(" INNER JOIN FETCH subDepartment.department department ")
+		.append(" where subDepartment.id=? ");
+		
+		List list = getHibernateTemplate().find(query.toString(), id);
+		
+		
 
 		SubDepartment subDepartment = (list.size() > 0) ? (SubDepartment)list.get(0) : null;
 

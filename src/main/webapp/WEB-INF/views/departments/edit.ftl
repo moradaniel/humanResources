@@ -130,6 +130,7 @@
 		
 		<#noparse>
 		<button ng-if="employmentVO.canPersonBeModified" role='button' class="btn btn-default btn-xs" ng-click="editEmployment(employmentVO.employment)" data-toggle="modal" href="#{{handler}}">Modificar</button>
+		<button ng-if="employmentVO.canPersonBeTransfered" role='button' class="btn btn-default btn-xs" ng-click="transferEmployment(employmentVO.employment)" data-toggle="modal" href="#{{handlerTransfer}}">Transferir</button>
 		</#noparse>
 		
 		<a ng-if="employmentVO.canBeDeactivated" ng-href="/creditos/employments/{{employmentVO.employment.id}}/deactivatePerson" class="btn btn-default btn-xs" role="button">Dar de Baja</a>
@@ -141,6 +142,12 @@
   		  <div modal-employment-editor handler="handler" employment="employmentToEdit" callback="fetchResult">
     		<h1>Content</h1>
   		  </div>
+  		  
+  		  <div modal-employment-transfer handler="handlerTransfer" employment="employmentToTransfer" initialize="initializeEmploymentTransferDirective" callback="fetchResult">
+            <h1>Content</h1>
+          </div>
+  		  
+    
 </table>
 <div ng-show="employmentsCount == 0">
   <h3>No se encontraron empleos con este criterio de busqueda</h3>

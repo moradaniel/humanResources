@@ -304,6 +304,7 @@
 				<prop key="deactivate">PROPAGATION_REQUIRED</prop>
 				<prop key="promotePerson">PROPAGATION_REQUIRED</prop>
 				<prop key="proposeNewEmployment">PROPAGATION_REQUIRED</prop>
+				<prop key="transferEmployee">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_SUPPORTS</prop>
 			</props>
 		</property>
@@ -435,5 +436,47 @@
 	</bean>
 
 	<bean id="accountSettingsFactory" class="org.dpi.security.UserSettingsFactoryImpl"/>
+	
+	
+	<bean id="departmentCreditsEntryService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager"><ref bean="transactionManager"/></property> 
+        <property name="target">
+            <bean class="org.dpi.departmentCreditsEntry.DepartmentCreditsEntryServiceImpl">
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="actualizar*">PROPAGATION_REQUIRED</prop>
+                <prop key="change*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- the Service DAO on which the Facade relies -->
+    <bean id="departmentCreditsEntryDao" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager"><ref bean="transactionManager"/></property> 
+        <property name="target">
+            <bean class="org.dpi.departmentCreditsEntry.DepartmentCreditsEntryDaoHibImpl">
+                <property name="sessionFactory"><ref bean="hibernateSessionFactory"/></property>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    
 	
 </beans>
