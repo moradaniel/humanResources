@@ -1,7 +1,10 @@
 package org.dpi.stats;
 
+import org.dpi.department.Department;
+
 public class PeriodSummaryData {
 
+        Department department;
         private String year;
 		private long creditosDisponiblesInicioPeriodo;
     	private long creditosAcreditadosPorBajaDurantePeriodo;
@@ -79,6 +82,14 @@ public class PeriodSummaryData {
                 long totalAvailableCredits) {
             this.totalAvailableCredits = totalAvailableCredits;
             
+        }
+        
+        public Department getDepartment() {
+            return department;
+        }
+        
+        public void setDepartment(Department department) {
+            this.department = department;
         }
 		
 	}

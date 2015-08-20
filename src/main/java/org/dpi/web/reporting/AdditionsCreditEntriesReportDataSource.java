@@ -20,7 +20,8 @@ public class AdditionsCreditEntriesReportDataSource implements JRDataSource
 	public enum ReportFieldID {
 		PERSON_NUEVO_PERFIL,
 		NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP,
-		PERSON_NUEVO_CATEGORIA_PROPUESTA
+		PERSON_NUEVO_CATEGORIA_PROPUESTA,
+		NUMBER_OF_CREDITS
 	};
 	
 	public AdditionsCreditEntriesReportDataSource(List<GenericReportRecord> records)

@@ -89,11 +89,17 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		
 		List<CreditsEntry> creditsEntryIngresosDepartment = creditsEntryService.find(creditsEntryQueryFilter);
 
+	    int cantidadMovimientosAscenso = 0;
+	        if(!CollectionUtils.isEmpty(creditsEntriesAscensosDepartmentVO)){
+	            cantidadMovimientosAscenso=creditsEntriesAscensosDepartmentVO.size();
+	        }
+	        
 		int cantidadMovimientosIngreso = 0;
 		if(!CollectionUtils.isEmpty(creditsEntryIngresosDepartment)){
 			cantidadMovimientosIngreso=creditsEntryIngresosDepartment.size();
 		}
 		
+		params.put("CANTIDAD_MOVIMIENTOS_ASCENSO",  cantidadMovimientosAscenso);
 		params.put("CANTIDAD_MOVIMIENTOS_INGRESO",  cantidadMovimientosIngreso);
 		
 		params.put("MOVIMIENTOS_INGRESO",  new AdditionsCreditEntriesReportDataSource(getReportDataMovimientosIngreso(creditsEntryIngresosDepartment)));
@@ -102,6 +108,8 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		Long creditosDisponiblesAlInicioDelPeriodo =this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
 		
 		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(creditsPeriodId,departmentId);
+		
+		Long creditosRetenidosPeriodoActual = this.creditsManagerService.getRetainedCreditsByDepartment(creditsPeriodId,departmentId);
 
 		Long creditosPorIngresosOAscensosSolicitados = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(creditsPeriodId, departmentId);
 
@@ -110,6 +118,8 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO",creditosDisponiblesAlInicioDelPeriodo);
 		params.put("CANTIDAD_CREDITOS_POR_BAJAS",creditosAcreditadosPorBajaDurantePeriodoActual);
+		params.put("CANTIDAD_CREDITOS_RETENIDOS",creditosRetenidosPeriodoActual);
+		
 		
 		params.put("CANTIDAD_CREDITOS_UTILIZADOS",creditosPorIngresosOAscensosSolicitados);
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO",creditosDisponibles);
@@ -133,6 +143,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_PROPOSED_CATEGORY.name(),creditsEntryAscensosDepartmentVO.getProposedCategory());
 			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getOccupationalGroup());
 			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),creditsEntryAscensosDepartmentVO.getParentOccupationalGroup());
+			record.setValue(PromotionCreditEntriesReportDataSource.ReportFieldID.NUMBER_OF_CREDITS.name(),creditsEntryAscensosDepartmentVO.getCreditsEntry().getNumberOfCredits());
 			records.add(record);
 		}
 		
@@ -148,6 +159,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.PERSON_NUEVO_PERFIL.name(),"");
 			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP.name(),"");
 			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.PERSON_NUEVO_CATEGORIA_PROPUESTA.name(),creditsEntryIngreso.getEmployment().getCategory().getCode());
+			record.setValue(AdditionsCreditEntriesReportDataSource.ReportFieldID.NUMBER_OF_CREDITS.name(),creditsEntryIngreso.getNumberOfCredits());
 			
 			records.add(record);
 		}

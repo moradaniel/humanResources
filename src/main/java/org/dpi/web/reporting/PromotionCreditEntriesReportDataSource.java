@@ -20,6 +20,7 @@ public class PromotionCreditEntriesReportDataSource implements JRDataSource
 	public enum ReportFieldID {
 		PERSON_APELLIDO_NOMBRE,
 		PERSON_CUIL,
+		NUMBER_OF_CREDITS,
 		EMPLOYMENT_CURRENT_CATEGORY,
 		EMPLOYMENT_PROPOSED_CATEGORY,
 		EMPLOYMENT_OCCUPATIONAL_GROUP,

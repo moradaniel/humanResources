@@ -1,412 +1,536 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-04-22T09:31:13 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nota_creditos" pageWidth="595" pageHeight="842" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="77a40a11-da63-402b-9cb8-d86c41e834f0">
-	<property name="template.type" value="columnar"/>
-	<property name="ireport.zoom" value="1.2100000000000006"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
-	<style name="table">
-		<box>
-			<pen lineWidth="0.0" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table_CH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table 1">
-		<box>
-			<pen lineWidth="0.0" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table 1_TH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table 1_CH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<subDataset name="TableDataset_Ascensos" uuid="8ed087b1-164d-4078-85a5-fecad399c5d1">
-		<field name="PERSON_APELLIDO_NOMBRE" class="java.lang.String"/>
-		<field name="PERSON_CUIL" class="java.lang.String"/>
-		<field name="EMPLOYMENT_CURRENT_CATEGORY" class="java.lang.String"/>
-		<field name="EMPLOYMENT_PROPOSED_CATEGORY" class="java.lang.String"/>
-		<field name="EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
-		<field name="EMPLOYMENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
-	</subDataset>
-	<subDataset name="TableDataset_Ingresos" uuid="f7de51a8-05af-4936-8a78-b22b412dc4d2">
-		<field name="PERSON_NUEVO_PERFIL" class="java.lang.String"/>
-		<field name="NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
-		<field name="PERSON_NUEVO_CATEGORIA_PROPUESTA" class="java.lang.String"/>
-	</subDataset>
-	<parameter name="DEPARTMENT_NAME" class="java.lang.String"/>
-	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
-	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
-	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
-	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO" class="java.lang.Long"/>
-	<parameter name="CANTIDAD_CREDITOS_POR_BAJAS" class="java.lang.Long"/>
-	<parameter name="CANTIDAD_CREDITOS_UTILIZADOS" class="java.lang.Long"/>
-	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO" class="java.lang.Long"/>
-	<title>
-		<band height="758" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="39" width="278" height="49" uuid="dd3f1250-8dee-4f73-907f-56d7546fb12f"/>
-				<textElement>
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Señor
+<!-- 2015-08-14T12:25:32 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notaCreditos" pageWidth="595" pageHeight="842" columnWidth="533" leftMargin="42" rightMargin="20" topMargin="42" bottomMargin="42" uuid="50df32a8-aea8-43d6-a16c-0663c35d840a">
+    <style name="table">
+        <box>
+            <pen lineWidth="0.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_CH" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1">
+        <box>
+            <pen lineWidth="0.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_TH" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_CH" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <subDataset name="TableDataset_Ascensos" uuid="8ed087b1-164d-4078-85a5-fecad399c5d1">
+        <field name="PERSON_APELLIDO_NOMBRE" class="java.lang.String"/>
+        <field name="PERSON_CUIL" class="java.lang.String"/>
+        <field name="EMPLOYMENT_CURRENT_CATEGORY" class="java.lang.String"/>
+        <field name="EMPLOYMENT_PROPOSED_CATEGORY" class="java.lang.String"/>
+        <field name="EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
+        <field name="EMPLOYMENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
+        <field name="NUMBER_OF_CREDITS" class="java.lang.Integer"/>
+    </subDataset>
+    <subDataset name="TableDataset_Ingresos" uuid="f7de51a8-05af-4936-8a78-b22b412dc4d2">
+        <field name="PERSON_NUEVO_PERFIL" class="java.lang.String"/>
+        <field name="NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP" class="java.lang.String"/>
+        <field name="PERSON_NUEVO_CATEGORIA_PROPUESTA" class="java.lang.String"/>
+        <field name="NUMBER_OF_CREDITS" class="java.lang.Integer"/>
+    </subDataset>
+    <parameter name="DEPARTMENT_NAME" class="java.lang.String"/>
+    <parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
+    <parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
+    <parameter name="CANTIDAD_MOVIMIENTOS_ASCENSO" class="java.lang.Integer"/>
+    <parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
+    <parameter name="CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO" class="java.lang.Long"/>
+    <parameter name="CANTIDAD_CREDITOS_POR_BAJAS" class="java.lang.Long"/>
+    <parameter name="CANTIDAD_CREDITOS_RETENIDOS" class="java.lang.Long"/>
+    <parameter name="CANTIDAD_CREDITOS_UTILIZADOS" class="java.lang.Long"/>
+    <parameter name="CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO" class="java.lang.Long"/>
+    <title>
+        <band height="758" splitType="Stretch">
+            <property name="local_mesure_unitheight" value="pixel"/>
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <textField pattern="dd-MMMMM-yyyy hh:mm aaa" isBlankWhenNull="false">
+                <reportElement positionType="Float" x="308" y="645" width="165" height="17" uuid="b4ef8f1b-7356-4b42-8862-68d1c20fa73c"/>
+                <textElement textAlignment="Right">
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement positionType="Float" x="0" y="594" width="308" height="20" uuid="bbef807c-6869-43f2-8fa1-d17e134557de"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <text><![CDATA[Créditos utilizados: ]]></text>
+            </staticText>
+            <line>
+                <reportElement positionType="Float" x="0" y="615" width="427" height="1" uuid="4f4969c9-4fc9-4a8b-884e-7877fd3e075d"/>
+            </line>
+            <staticText>
+                <reportElement positionType="Float" x="0" y="495" width="325" height="20" uuid="7117889b-11ec-4b6f-86f2-70709651465d"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[RESUMEN DE LA DISPONIBILIDAD Y USO DEL CREDITO]]></text>
+            </staticText>
+            <staticText>
+                <reportElement positionType="Float" x="0" y="553" width="310" height="20" uuid="14972646-7178-4fc8-8dbb-174854deca8a"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <text><![CDATA[Créditos por Bajas: ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement positionType="Float" x="0" y="574" width="308" height="20" uuid="cfd6979c-6206-46e1-8347-6e715368c455"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <text><![CDATA[Créditos Retenidos: ]]></text>
+            </staticText>
+            <textField>
+                <reportElement positionType="Float" x="311" y="554" width="118" height="19" uuid="5767e562-7e11-425a-9831-b1043ec100d8"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_POR_BAJAS}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement positionType="Float" x="30" y="645" width="278" height="17" uuid="842b06d9-4b4b-492a-929f-66f6e828c877"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <text><![CDATA[Fecha y Hora de Impresion: ]]></text>
+            </staticText>
+            <textField>
+                <reportElement positionType="Float" x="310" y="535" width="118" height="19" uuid="b9a4aec8-05c0-4bcb-9d66-394ed4a442e4"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="Float" x="311" y="595" width="118" height="19" uuid="576bd67f-d4b6-4190-b363-7d39ca23bfdc"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_UTILIZADOS}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement positionType="Float" x="1" y="614" width="310" height="20" uuid="0a8b6f33-8bb4-4a90-a2b5-dfe0610f6aad"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <text><![CDATA[SALDO AL FINAL DEL PROCESO: ]]></text>
+            </staticText>
+            <textField>
+                <reportElement positionType="Float" x="0" y="465" width="497" height="20" isRemoveLineWhenBlank="true" uuid="47663691-1eec-4c74-9162-bffd1c6f5657"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Reparticion: "+ $P{DEPARTMENT_NAME}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="Float" x="311" y="615" width="118" height="19" uuid="6cfe87b3-2886-4753-ab9e-4d8c75281d08"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="Float" x="310" y="575" width="118" height="19" uuid="3a23583e-a345-4b6a-8efc-f294af23e236"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_RETENIDOS}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="39" width="278" height="49" uuid="e34a2e04-65b0-403a-87c3-feb7e3a3c299"/>
+                <textElement>
+                    <font size="12" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Señor
 Ministro/Secretario de Estado de
 ..............................................................
 ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="120" width="497" height="73" uuid="dd3f1250-8dee-4f73-907f-56d7546fb12f"/>
-				<textElement>
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[					Me dirijo a usted a fin de llevar a su conocimiento y consideración la nómina de los agentes propuestos para ser promocionados de acuerdo a lo prescripto en el CAPITULO III de la Ley Nro 8.243 y el Decreto Nro 0492-MHF-12, que reglamenta la misma.]]></text>
-			</staticText>
-			<componentElement>
-				<reportElement key="table" style="table" positionType="Float" x="0" y="220" width="497" height="54" uuid="2528ea09-0003-431d-b1c9-e0a1ccb5a5eb">
-					<property name="local_mesure_unity" value="pixel"/>
-				</reportElement>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="TableDataset_Ascensos" uuid="3e7d67a7-4a01-4cd9-8f35-de1cb8f76c80">
-						<dataSourceExpression><![CDATA[$P{MOVIMIENTOS_ASCENSO}]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="135" uuid="55089409-0260-4af2-801c-513eec18b093">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="135" height="30" uuid="6f3d5d56-97b6-4bf4-9ae7-541adf36cfbf"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
-								</textElement>
-								<text><![CDATA[Apellido y Nombre]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="135" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
-								<box leftPadding="2" rightPadding="2"/>
-								<textFieldExpression><![CDATA[$F{PERSON_APELLIDO_NOMBRE}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="75" uuid="0234c2f5-b7dc-4208-bbb6-7eac620e5870">
-						<property name="local_mesure_unitwidth" value="pixel"/>
-						<property name="com.jaspersoft.studio.unit.width" value="px"/>
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="75" height="30" uuid="cb36bacf-7f0d-4ee8-9ba6-c50711290a6e"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
-								</textElement>
-								<text><![CDATA[CUIL]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="75" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
-								<box leftPadding="2" rightPadding="2"/>
-								<textFieldExpression><![CDATA[$F{PERSON_CUIL}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="56" uuid="683f7d5b-2f4c-42bd-a7cf-5a5fb4ac4b52">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="56" height="30" uuid="8d908181-c71e-48ac-b48f-8006b34e756f"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
-								</textElement>
-								<text><![CDATA[Categoría Actual]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-								<reportElement mode="Transparent" x="0" y="0" width="56" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
-								<box leftPadding="2" rightPadding="2"/>
-								<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-									<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{EMPLOYMENT_CURRENT_CATEGORY}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="58" uuid="f46a2f18-eea4-413d-992b-369ff8aadf0c">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="57" height="30" uuid="37c33e13-840e-4a95-9fe0-9ecfda2a0fa9"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
-								</textElement>
-								<text><![CDATA[Categoría Propuesta]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="57" height="20" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
-								<box leftPadding="2" rightPadding="2"/>
-								<textFieldExpression><![CDATA[$F{EMPLOYMENT_PROPOSED_CATEGORY}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="96" uuid="268147cd-82b7-4250-8b2a-2f74b2213c96">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="96" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="37c33e13-840e-4a95-9fe0-9ecfda2a0fa9"/>
-								<box>
-									<pen lineWidth="0.0"/>
-									<topPen lineWidth="0.0"/>
-									<leftPen lineWidth="0.0"/>
-									<bottomPen lineWidth="0.0"/>
-									<rightPen lineWidth="0.0"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Tramo]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="30" rowSpan="1"/>
-						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="96" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
-								<box leftPadding="2" rightPadding="2">
-									<pen lineWidth="0.0"/>
-									<topPen lineWidth="0.0"/>
-									<leftPen lineWidth="0.0"/>
-									<bottomPen lineWidth="0.0"/>
-									<rightPen lineWidth="0.0"/>
-								</box>
-								<textFieldExpression><![CDATA[$F{EMPLOYMENT_OCCUPATIONAL_GROUP}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="fff59276-7237-4436-b2ff-c22e35e51183">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="90" height="30" uuid="37c33e13-840e-4a95-9fe0-9ecfda2a0fa9"/>
-								<box>
-									<pen lineWidth="0.0"/>
-									<topPen lineWidth="0.0"/>
-									<leftPen lineWidth="0.0"/>
-									<bottomPen lineWidth="0.0"/>
-									<rightPen lineWidth="0.0"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
-								</textElement>
-								<text><![CDATA[Agrupamiento]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="30" rowSpan="1"/>
-						<jr:detailCell style="table_TD" height="30" rowSpan="1">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="90" height="30" uuid="e89c933a-f1ef-475a-842c-950ec0ed9170"/>
-								<box leftPadding="2" rightPadding="2">
-									<pen lineWidth="0.0"/>
-									<topPen lineWidth="0.0"/>
-									<leftPen lineWidth="0.0"/>
-									<bottomPen lineWidth="0.0"/>
-									<rightPen lineWidth="0.0"/>
-								</box>
-								<textFieldExpression><![CDATA[$F{EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
-			<componentElement>
-				<reportElement key="table 1" style="table 1" positionType="Float" x="0" y="368" width="497" height="51" isRemoveLineWhenBlank="true" uuid="672c1321-b96b-47af-9aec-c6ef45b40f3e">
-					<printWhenExpression><![CDATA[$P{CANTIDAD_MOVIMIENTOS_INGRESO}>0]]></printWhenExpression>
-				</reportElement>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="TableDataset_Ingresos" uuid="693a4421-f72c-4e6f-b744-fa7d22653eca">
-						<dataSourceExpression><![CDATA[$P{MOVIMIENTOS_INGRESO}]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="157" uuid="67ba5682-f4f1-4996-b1e8-aa15fe5a5ad6">
-						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="157" height="30" uuid="2e4070ef-46dc-45ab-8d6d-1302a4aa293a"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Perfil]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
-							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="157" height="20" uuid="0c191d25-5bc5-4297-b336-16590b2c8da1"/>
-								<textFieldExpression><![CDATA[$F{PERSON_NUEVO_PERFIL}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="120" uuid="bda361a6-1034-44c3-a5c5-3a0f12668a8a">
-						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="120" height="30" uuid="c9d0b4bb-dd60-4461-82b4-0ae9c54c3ee0"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Categoria]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
-							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="120" height="20" uuid="a629df5f-be3b-47a5-ad86-d1a72d41da0f"/>
-								<textFieldExpression><![CDATA[$F{PERSON_NUEVO_CATEGORIA_PROPUESTA}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="123" uuid="12d8a9eb-8b43-4a27-9668-58753250986b">
-						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="123" height="30" uuid="b9199046-2a10-47e5-9bc0-8cb788adda95"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Tramo]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="100" uuid="c42aaf82-1ea0-4663-9ca4-bb8f8eb2acc3">
-						<jr:columnHeader style="table 1_CH" height="30">
-							<staticText>
-								<reportElement x="0" y="0" width="100" height="30" uuid="1458b554-71f9-4831-84a9-8281f62878ec"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Agrupamiento]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table 1_TD" height="20">
-							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="100" height="20" uuid="0efea068-5c39-4f31-8b41-05be5cbfa539"/>
-								<textFieldExpression><![CDATA[$F{NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
-			<textField>
-				<reportElement positionType="Float" x="0" y="288" width="443" height="63" isRemoveLineWhenBlank="true" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434">
-					<printWhenExpression><![CDATA[$P{CANTIDAD_MOVIMIENTOS_INGRESO}>0]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["					Asimismo, solicito la incorporación de "+ $P{CANTIDAD_MOVIMIENTOS_INGRESO}+" agente/s, con el/los perfil/es siguiente/s:"]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="435" width="443" height="20" uuid="a3e203e0-33c7-477f-a108-8b16278987ff"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[RESUMEN DE LA DISPONIBILIDAD Y USO DEL CREDITO]]></text>
-			</staticText>
-			<line>
-				<reportElement positionType="Float" x="0" y="516" width="443" height="1" uuid="0946bb0a-da3a-4ab6-b864-28a6cd5435da"/>
-			</line>
-			<textField>
-				<reportElement positionType="Float" x="325" y="455" width="118" height="19" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="454" width="325" height="20" uuid="2fe43d33-f72a-45e2-b82e-22e6c3e306c4"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Créditos disponibles al inicio del proceso: ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="495" width="325" height="20" uuid="90c988d4-c662-4540-9069-512d743b2850"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Créditos utilizados: ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="517" width="325" height="20" uuid="798f1b5f-1594-416b-908c-d3655c398162"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[SALDO AL FINAL DEL PROCESO: ]]></text>
-			</staticText>
-			<textField>
-				<reportElement positionType="Float" x="325" y="496" width="118" height="19" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_UTILIZADOS}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="325" y="518" width="118" height="19" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd-MMMMM-yyyy hh:mm aaa" isBlankWhenNull="false">
-				<reportElement positionType="Float" x="278" y="537" width="165" height="20" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434"/>
-				<textElement textAlignment="Right">
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="537" width="278" height="20" uuid="798f1b5f-1594-416b-908c-d3655c398162"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Fecha y Hora de Impresion: ]]></text>
-			</staticText>
-			<textField>
-				<reportElement positionType="Float" x="325" y="475" width="118" height="19" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_POR_BAJAS}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement positionType="Float" x="0" y="474" width="325" height="20" uuid="90c988d4-c662-4540-9069-512d743b2850"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<text><![CDATA[Créditos por Bajas: ]]></text>
-			</staticText>
-			<textField>
-				<reportElement positionType="Float" x="176" y="0" width="291" height="19" uuid="ef3f8769-b6de-4e98-bae2-6ea413638434"/>
-				<textElement textAlignment="Right">
-					<font fontName="SansSerif" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["SAN JUAN, ....... de ............................. de "+ new Integer(new Date().getYear()+1900)+".-"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="0" y="88" width="487" height="32" isRemoveLineWhenBlank="true" uuid="df9cb94f-3f59-4454-9f8c-3388fe2ed167"/>
-				<textElement>
-					<font fontName="Times New Roman" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Reparticion: "+ $P{DEPARTMENT_NAME}]]></textFieldExpression>
-			</textField>
-		</band>
-	</title>
+            </staticText>
+            <staticText>
+                <reportElement positionType="Float" x="0" y="120" width="524" height="73" uuid="0f7ac104-35d1-4f25-b5c7-85580de4a1ba"/>
+                <textElement textAlignment="Justified">
+                    <font size="12" isBold="false"/>
+                </textElement>
+                <text><![CDATA[                 Me dirijo a usted a fin de llevar a su conocimiento y consideración las nóminas de agentes propuestos para ser promocionados y/o perfil de agentes a incorporar, de acuerdo a lo prescripto en el CAPITULO III de la Ley Nro. 8.243 y el Decreto Nro. 0492-MHF-12, que reglamenta la misma.]]></text>
+            </staticText>
+            <textField>
+                <reportElement positionType="Float" x="0" y="90" width="524" height="20" isRemoveLineWhenBlank="true" uuid="25f95c6f-77b2-44c5-919e-848b03218673"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Reparticion: "+ $P{DEPARTMENT_NAME}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="Float" x="215" y="0" width="309" height="19" uuid="9d4322a3-9a87-4c34-8219-73645e0816f8"/>
+                <textElement textAlignment="Right">
+                    <font fontName="SansSerif" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["SAN JUAN, ....... de ............................. de "+ new Integer(new Date().getYear()+1900)+".-"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="Float" x="0" y="215" width="524" height="31" isRemoveLineWhenBlank="true" uuid="be40beed-05c9-4528-897e-e205c00ffaf0">
+                    <printWhenExpression><![CDATA[$P{CANTIDAD_MOVIMIENTOS_ASCENSO}>0]]></printWhenExpression>
+                </reportElement>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Propuesta de promociones"]]></textFieldExpression>
+            </textField>
+            <componentElement>
+                <reportElement key="table" positionType="Float" x="0" y="250" width="497" height="54" uuid="59cd0e06-8b5f-44c8-8424-36a4d2d61ae9">
+                    <property name="local_mesure_unity" value="pixel"/>
+                    <printWhenExpression><![CDATA[$P{CANTIDAD_MOVIMIENTOS_ASCENSO}>0]]></printWhenExpression>
+                </reportElement>
+                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+                    <datasetRun subDataset="TableDataset_Ascensos" uuid="22a9a9da-26c4-4aad-9b40-a1cac6bf78f5">
+                        <dataSourceExpression><![CDATA[$P{MOVIMIENTOS_ASCENSO}]]></dataSourceExpression>
+                    </datasetRun>
+                    <jr:column width="135" uuid="0cc9e317-3e06-4167-8152-6a1269f8a66e">
+                        <jr:columnHeader style="table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="135" height="30" uuid="e046cb10-e6fa-47ba-a0ba-cc19aadc95db"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Times New Roman" size="10"/>
+                                </textElement>
+                                <text><![CDATA[Apellido y Nombre]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table_TD" height="30" rowSpan="1">
+                            <textField isStretchWithOverflow="true">
+                                <reportElement x="0" y="0" width="135" height="20" uuid="02194371-cf66-45f1-a256-98f6026888fa"/>
+                                <box leftPadding="2" rightPadding="2"/>
+                                <textElement>
+                                    <font size="10"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{PERSON_APELLIDO_NOMBRE}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="70" uuid="c30fe217-1284-42f4-84d2-7003b76d83a2">
+                        <property name="local_mesure_unitwidth" value="pixel"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                        <jr:columnHeader style="table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="70" height="30" uuid="84708ddb-b588-4c94-9771-14017017df19"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Times New Roman" size="10"/>
+                                </textElement>
+                                <text><![CDATA[CUIL]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table_TD" height="30" rowSpan="1">
+                            <textField isStretchWithOverflow="true">
+                                <reportElement x="0" y="0" width="70" height="20" uuid="415ac830-a820-47c4-9766-00ac481727b3"/>
+                                <box leftPadding="2" rightPadding="2"/>
+                                <textElement>
+                                    <font size="10"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{PERSON_CUIL}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="56" uuid="b8975954-6967-4faf-90b2-72bd91257841">
+                        <jr:columnHeader style="table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="56" height="30" uuid="78ed5461-2795-435d-a242-1bc962060c23"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Times New Roman" size="10"/>
+                                </textElement>
+                                <text><![CDATA[Categoría Actual]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table_TD" height="30" rowSpan="1">
+                            <textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+                                <reportElement mode="Transparent" x="0" y="0" width="56" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="396f58a3-5fc7-40f3-a073-06d1ae560b31"/>
+                                <box leftPadding="2" rightPadding="2"/>
+                                <textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+                                    <font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                    <paragraph lineSpacing="Single"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{EMPLOYMENT_CURRENT_CATEGORY}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="49" uuid="082b568d-b4f6-48ca-b363-5157ba6e484f">
+                        <jr:columnHeader style="table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="49" height="30" uuid="9671313e-2000-4dc5-add5-f17cb54d3709"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Times New Roman" size="10"/>
+                                </textElement>
+                                <text><![CDATA[Categoría Propuesta]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table_TD" height="30" rowSpan="1">
+                            <textField isStretchWithOverflow="true">
+                                <reportElement x="0" y="0" width="49" height="20" uuid="07db24dd-0a5d-4fd3-851d-6682c452de32"/>
+                                <box leftPadding="2" rightPadding="2"/>
+                                <textElement>
+                                    <font size="10"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{EMPLOYMENT_PROPOSED_CATEGORY}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="61" uuid="6bccd06c-b7a1-406b-9df7-4d30353b570e">
+                        <jr:columnHeader style="table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="61" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="5c2ae175-bbcc-4c65-810f-498267aee01c"/>
+                                <box>
+                                    <pen lineWidth="0.0"/>
+                                    <topPen lineWidth="0.0"/>
+                                    <leftPen lineWidth="0.0"/>
+                                    <bottomPen lineWidth="0.0"/>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+                                    <font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                    <paragraph lineSpacing="Single"/>
+                                </textElement>
+                                <text><![CDATA[Tramo]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:columnFooter height="30" rowSpan="1"/>
+                        <jr:detailCell style="table_TD" height="30" rowSpan="1">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="61" height="30" uuid="56b4367d-9ad3-4323-9ae6-615d59977038"/>
+                                <box leftPadding="2" rightPadding="2">
+                                    <pen lineWidth="0.0"/>
+                                    <topPen lineWidth="0.0"/>
+                                    <leftPen lineWidth="0.0"/>
+                                    <bottomPen lineWidth="0.0"/>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textElement>
+                                    <font size="10"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{EMPLOYMENT_OCCUPATIONAL_GROUP}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="71" uuid="cb6db2ce-9993-4a0e-9913-bbf11882bc16">
+                        <jr:columnHeader style="table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="70" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="de33df05-0ab5-412a-8bb6-8f53a9d4521d"/>
+                                <box>
+                                    <pen lineWidth="0.0"/>
+                                    <topPen lineWidth="0.0"/>
+                                    <leftPen lineWidth="0.0"/>
+                                    <bottomPen lineWidth="0.0"/>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+                                    <font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+                                    <paragraph lineSpacing="Single"/>
+                                </textElement>
+                                <text><![CDATA[Agrupamiento]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:columnFooter height="30" rowSpan="1"/>
+                        <jr:detailCell style="table_TD" height="30" rowSpan="1">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="70" height="30" uuid="7e17f1be-4ac6-438d-8e35-bc2ff16caf68"/>
+                                <box leftPadding="2" rightPadding="2">
+                                    <pen lineWidth="0.0"/>
+                                    <topPen lineWidth="0.0"/>
+                                    <leftPen lineWidth="0.0"/>
+                                    <bottomPen lineWidth="0.0"/>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textElement>
+                                    <font size="10"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="47" uuid="ea0dfbde-590b-42b4-87ea-f912b48ff0c2">
+                        <jr:columnHeader style="table_CH" height="30">
+                            <staticText>
+                                <reportElement x="0" y="0" width="46" height="30" uuid="62ef1bcf-7c64-4df2-952d-bd52cb059455"/>
+                                <box>
+                                    <pen lineWidth="0.0"/>
+                                    <topPen lineWidth="0.0"/>
+                                    <leftPen lineWidth="0.0"/>
+                                    <bottomPen lineWidth="0.0"/>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Times New Roman" size="10"/>
+                                </textElement>
+                                <text><![CDATA[Creditos]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:columnFooter height="30"/>
+                        <jr:detailCell style="table_TD" height="30">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="46" height="30" uuid="f33e8335-a1dc-4cd2-9a5f-75c16ffc4e32"/>
+                                <box leftPadding="2" rightPadding="2">
+                                    <pen lineWidth="0.0"/>
+                                    <topPen lineWidth="0.0"/>
+                                    <leftPen lineWidth="0.0"/>
+                                    <bottomPen lineWidth="0.0"/>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textElement>
+                                    <font size="10"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{NUMBER_OF_CREDITS}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                </jr:table>
+            </componentElement>
+            <textField>
+                <reportElement positionType="Float" x="0" y="337" width="443" height="31" isRemoveLineWhenBlank="true" uuid="e780d473-d4e8-4c2e-aa69-698f676d6991">
+                    <printWhenExpression><![CDATA[$P{CANTIDAD_MOVIMIENTOS_INGRESO}>0]]></printWhenExpression>
+                </reportElement>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Perfil de agentes a incorporar"]]></textFieldExpression>
+            </textField>
+            <componentElement>
+                <reportElement positionType="Float" x="0" y="370" width="500" height="54" uuid="b949ea20-52c0-47d8-a043-1656e8a6b99c"/>
+                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+                    <datasetRun subDataset="TableDataset_Ingresos" uuid="1fff11a5-4574-43eb-bd8d-b8797645f042">
+                        <dataSourceExpression><![CDATA[$P{MOVIMIENTOS_INGRESO}]]></dataSourceExpression>
+                    </datasetRun>
+                    <jr:column width="155" uuid="b8ac6c5b-39ba-41a2-83b7-63bf15a1a722">
+                        <jr:columnHeader style="table 1_CH" height="30">
+                            <staticText>
+                                <reportElement x="0" y="0" width="155" height="30" uuid="66d9b4af-98a0-47a7-8610-c1f511994f59"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Perfil]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField>
+                                <reportElement x="0" y="0" width="155" height="30" uuid="b7449b7d-746b-49cb-9f00-67fe13d82ec4"/>
+                                <textFieldExpression><![CDATA[$F{PERSON_NUEVO_PERFIL}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="75" uuid="840bd756-1bf7-4482-ae61-95c414e95990">
+                        <jr:columnHeader style="table 1_CH" height="30">
+                            <staticText>
+                                <reportElement x="0" y="0" width="75" height="30" uuid="a97e5595-a4e6-471c-a869-ff5441d6bccd"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Categoria]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField>
+                                <reportElement style="table_TD" x="0" y="0" width="75" height="30" uuid="0c88d656-cecf-4b71-a314-68b5cc46f7e7"/>
+                                <textFieldExpression><![CDATA[$F{PERSON_NUEVO_CATEGORIA_PROPUESTA}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="70" uuid="0838b67a-32ed-406c-82bd-677252db4e98">
+                        <jr:columnHeader style="table 1_CH" height="30">
+                            <staticText>
+                                <reportElement x="0" y="0" width="70" height="30" uuid="2aa43649-8c9c-4c6a-b4e6-96a5ca58aaf2"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Tramo]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField>
+                                <reportElement x="0" y="0" width="70" height="30" uuid="4e781add-9047-4fd5-b63c-583cbfff2bcd"/>
+                                <textFieldExpression><![CDATA[$F{NEW_EMPLOYMENT_PARENT_OCCUPATIONAL_GROUP}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="85" uuid="a71cdc52-d607-4b57-8ed8-b2bc7691bd24">
+                        <jr:columnHeader style="table 1_CH" height="30">
+                            <staticText>
+                                <reportElement x="1" y="0" width="84" height="30" uuid="b9183faf-0d49-48e1-97b9-83c22a9e436f"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Agrupamiento]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30"/>
+                    </jr:column>
+                    <jr:column width="60" uuid="1ea79525-7069-463b-b434-e8a9b7ff9feb">
+                        <jr:columnHeader style="table 1_CH" height="30">
+                            <staticText>
+                                <reportElement x="0" y="0" width="60" height="30" uuid="dbd98cc8-0ac8-409e-b854-76c1eac87759"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Creditos]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField>
+                                <reportElement x="0" y="0" width="60" height="30" uuid="da581ebe-3632-45e1-8038-b83140ff4f45"/>
+                                <textFieldExpression><![CDATA[$F{NUMBER_OF_CREDITS}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                </jr:table>
+            </componentElement>
+            <staticText>
+                <reportElement positionType="Float" x="0" y="534" width="311" height="20" uuid="18bafb68-4f4e-49de-855c-eb9e34dd91e4"/>
+                <textElement>
+                    <font fontName="Times New Roman" size="12"/>
+                </textElement>
+                <text><![CDATA[Créditos disponibles al inicio del proceso:]]></text>
+            </staticText>
+        </band>
+    </title>
 </jasperReport>
