@@ -57,6 +57,10 @@ public class HomeController {
 				return "redirect:departments/department/showCredits";
 
 			}
+			
+	        if(role.getName().equals("GOVERNOR")){
+                  return "redirect:departments/department/hierarchicalAccumulatedCredits";
+            }
 		}
 
 		return "redirect:departments/department/showCredits";

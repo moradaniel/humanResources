@@ -163,7 +163,7 @@ public class UserAccessServiceImpl implements UserAccessService
 
             }else
 
-            if(role.getName().equals("SUBTREE_SUPERVISOR")){
+            if(role.getName().equals("SUBTREE_SUPERVISOR") || role.getName().equals("GOVERNOR")){
 
                 List<Department> userDepartments = departmentService.findUserDepartments(accountService.findAccountByName(aAccountName));
 

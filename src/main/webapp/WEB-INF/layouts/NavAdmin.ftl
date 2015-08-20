@@ -49,7 +49,7 @@
 		"subNav": [
 			{ "URL":"departments/department/showCredits",   "label":"Resumen Creditos",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") },
 			{ "URL":"departments/department/showEmployments",   "label":"Agentes",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Manage_Employments", "READ") },
-			{ "URL":"departments/department/showCreditEntries/2014",   "label":"Movimientos de Credito",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Department_Info", "UPDATE") },
+			{ "URL":"departments/department/showCreditEntries/2014",   "label":"Movimientos de Credito",         "requiresDepartment":true, "doDisplay":account?exists && account.hasPermissions("Manage_CreditsEntries", "READ") },
 			{ "URL":"departments/department/hierarchicalAccumulatedCredits",   "label":"Creditos Retenidos Acumulados",         "requiresDepartment":true, "doDisplay":account?exists && showHierarchicalAccumulatedCredits }
 		]
 	},
@@ -73,6 +73,8 @@
 		"doDisplay":account?exists && account.hasPermissions("Reports", "READ"),
 		"subNav": [
 			{ "URL":"reports/reportSetup", "label":"Reportes Administrativos","requiresDepartment":true,"doDisplay":true },
+			{ "URL":"departments/listDepartmentsCreditsSummary", "label":"Reporte Resumen Creditos Reparticiones","requiresDepartment":false,"doDisplay":true },
+			
 			{ "URL":"reportadmin/ReportAdminSetup","label":"Administration Reports","requiresDepartment":true,
 				"doDisplay":account?exists && account.hasPermissions("ADMINISTRATION_REPORTS", "READ")},
 			<#--{ "URL":"report/resSearch",   "label":"Reservation Production","requiresDepartment":true,"doDisplay":true }, -->
