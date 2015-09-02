@@ -554,6 +554,16 @@ public class DepartmentController {
 		Long creditosDisponiblesSegunOtorgadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod.getId(),department.getId());
 		currentPeriodSummaryData.setCreditosDisponiblesSegunOtorgadoPeriodo(creditosDisponiblesSegunOtorgadoPeriodo);
 		
+        Long totalCreditosReparticionAjustes_Debito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesDebitoPeriodo(currentCreditsPeriod.getId(), department.getId());
+        currentPeriodSummaryData.setTotalCreditosReparticionAjustes_Debito_Periodo(totalCreditosReparticionAjustes_Debito_Periodo);
+        
+        Long totalCreditosReparticionAjustes_Credito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesCreditoPeriodo(currentCreditsPeriod.getId(), department.getId());
+        currentPeriodSummaryData.setTotalCreditosReparticionAjustes_Credito_Periodo(totalCreditosReparticionAjustes_Credito_Periodo);
+
+        Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo = this.creditsManagerService.getCreditosReparticion_ReasignadosDeRetencion_Periodo(currentCreditsPeriod.getId(), department.getId());
+        currentPeriodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion_Periodo(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
+
+        
 		return currentPeriodSummaryData;
 					
 	}
@@ -588,7 +598,28 @@ public class DepartmentController {
 			historicPeriodSummaryData.setCreditosConsumidosPorIngresosOAscensosOtorgados(creditosConsumidosPorIngresosOAscensosOtorgados);
 			
 			
-			Long saldoCreditosAlFinalPeriodo = creditosAcreditadosPorCargaInicial+creditosDisponiblesInicioPeriodo+creditosAcreditadosPorBajas-creditosConsumidosPorIngresosOAscensosOtorgados;
+	        Long totalCreditosReparticionAjustes_Debito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesDebitoPeriodo(previousCreditsPeriod.getId(), department.getId());
+	            
+	        historicPeriodSummaryData.setTotalCreditosReparticionAjustes_Debito(totalCreditosReparticionAjustes_Debito_Periodo);
+	        
+	        Long totalCreditosReparticionAjustes_Credito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesCreditoPeriodo(previousCreditsPeriod.getId(), department.getId());
+               
+	        historicPeriodSummaryData.setTotalCreditosReparticionAjustes_Credito(totalCreditosReparticionAjustes_Credito_Periodo);
+	            
+			
+	        Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo = this.creditsManagerService.getCreditosReparticion_ReasignadosDeRetencion_Periodo(previousCreditsPeriod.getId(), department.getId());
+               
+	        historicPeriodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
+	            
+	        
+	        
+			Long saldoCreditosAlFinalPeriodo = creditosAcreditadosPorCargaInicial
+			                                   +creditosDisponiblesInicioPeriodo
+			                                   +creditosAcreditadosPorBajas
+			                                   -creditosConsumidosPorIngresosOAscensosOtorgados
+			                                   -totalCreditosReparticionAjustes_Debito_Periodo
+			                                   +totalCreditosReparticionAjustes_Credito_Periodo
+			                                   +totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
 			
 			historicPeriodSummaryData.setSaldoCreditosAlFinalPeriodo(saldoCreditosAlFinalPeriodo);
 			

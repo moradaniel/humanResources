@@ -16,6 +16,10 @@ import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.department.Department;
 import org.dpi.department.DepartmentService;
+import org.dpi.departmentCreditsEntry.CreditsEntryTransactionType;
+import org.dpi.departmentCreditsEntry.DepartmentCreditsEntryDaoHibImpl;
+import org.dpi.departmentCreditsEntry.DepartmentCreditsEntryQueryFilter;
+import org.dpi.departmentCreditsEntry.DepartmentCreditsEntryType;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -386,12 +390,24 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
         Long creditosDisponiblesInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
 
-        Long creditosAcreditadosPorBajaDurantePeriodo = getCreditosPorBajasDeReparticion(creditsPeriodId, departmentId);
+        Long creditosAcreditadosPorBajaDurantePeriodoActual = getCreditosPorBajasDeReparticion(creditsPeriodId, departmentId);
 
-        Long retainedCredits = getRetainedCreditsByDepartment(creditsPeriodId, departmentId);
+        Long retainedCreditsPeriodoActual = getRetainedCreditsByDepartment(creditsPeriodId, departmentId);
 
+       
+        Long totalCreditosReparticionAjustes_Debito_PeriodoActual = this.getCreditosReparticionAjustesDebitoPeriodo(creditsPeriodId,departmentId);
+        
+        Long totalCreditosReparticionAjustes_Credito_PeriodoActual = this.getCreditosReparticionAjustesCreditoPeriodo(creditsPeriodId,departmentId);
+                
+        Long totalCreditosReasignadosDeRetencion_PeriodoActual = this.getCreditosReparticion_ReasignadosDeRetencion_Periodo(creditsPeriodId,departmentId);
+        
 
-        Long currentPeriodTotalAvailableCredits = creditosDisponiblesInicioPeriodo + creditosAcreditadosPorBajaDurantePeriodo - retainedCredits;
+        Long currentPeriodTotalAvailableCredits = creditosDisponiblesInicioPeriodo 
+                                                 +creditosAcreditadosPorBajaDurantePeriodoActual 
+                                                 -retainedCreditsPeriodoActual
+                                                 -totalCreditosReparticionAjustes_Debito_PeriodoActual
+                                                 +totalCreditosReparticionAjustes_Credito_PeriodoActual
+                                                 +totalCreditosReasignadosDeRetencion_PeriodoActual;
         
         return currentPeriodTotalAvailableCredits;
 
@@ -564,15 +580,11 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
     @Override
     public Long getCreditosDisponiblesSegunSolicitado(Long creditsPeriodId,final long departmentId){
 
-        Long creditosDisponiblesAlInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
-
-        Long creditosAcreditadosPorBajasDelPeriodo = getCreditosPorBajasDeReparticion(creditsPeriodId,departmentId);
-
-        Long retainedCredits = getRetainedCreditsByDepartment(creditsPeriodId, departmentId);
-
+        Long totalCreditosDisponiblesAlInicioPeriodo = getTotalCreditosDisponiblesAlInicioPeriodo(creditsPeriodId, departmentId);
+        
         Long totalPorIngresosOAscensosSegunSolicitado = this.getCreditosPorIngresosOAscensosSolicitados(creditsPeriodId, departmentId);
 
-        return creditosDisponiblesAlInicioPeriodo + creditosAcreditadosPorBajasDelPeriodo - retainedCredits -totalPorIngresosOAscensosSegunSolicitado;
+        return totalCreditosDisponiblesAlInicioPeriodo - totalPorIngresosOAscensosSegunSolicitado;
 
     }
 
@@ -580,15 +592,12 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
     @Override
     public Long getCreditosDisponiblesSegunOtorgado(Long creditsPeriodId, final long departmentId){
 
-        Long creditosDisponiblesAlInicioPeriodo = getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
 
-        Long creditosAcreditadosPorBajasDelPeriodo = getCreditosPorBajasDeReparticion(creditsPeriodId,departmentId);
-
-        Long retainedCredits = getRetainedCreditsByDepartment(creditsPeriodId, departmentId);
+        Long totalCreditosDisponiblesAlInicioPeriodo = getTotalCreditosDisponiblesAlInicioPeriodo(creditsPeriodId, departmentId);
 
         Long totalPorIngresosOAscensosSegunOtorgado = this.getCreditosPorIngresosOAscensosOtorgados(creditsPeriodId, departmentId);
-
-        return creditosDisponiblesAlInicioPeriodo + creditosAcreditadosPorBajasDelPeriodo - retainedCredits - totalPorIngresosOAscensosSegunOtorgado;
+        
+        return totalCreditosDisponiblesAlInicioPeriodo - totalPorIngresosOAscensosSegunOtorgado;
 
     }
 
@@ -638,19 +647,76 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
         //get previous period
         CreditsPeriod previousPeriod = creditsPeriod.getPreviousCreditsPeriod();
 
-        Long totalPorCargaInicial = this.getCreditosPorCargaInicialDeReparticion(previousPeriod.getId(),departmentId);
+        Long totalPorCargaInicialPeriodoAnterior = this.getCreditosPorCargaInicialDeReparticion(previousPeriod.getId(),departmentId);
 
-        Long totalPorBajas = this.getCreditosPorBajasDeReparticion(previousPeriod.getId(),departmentId);
+        Long totalPorBajasPeriodoAnterior = this.getCreditosPorBajasDeReparticion(previousPeriod.getId(),departmentId);
 
-        Long totalcreditosDisponiblesSegunOtorgadoPeriodoActual = this.getCreditosPorIngresosOAscensosOtorgados(previousPeriod.getId(),departmentId);
+        Long retainedCreditsPeriodoAnterior = this.getRetainedCreditsByDepartment(previousPeriod.getId(), departmentId);
+        
+        Long totalCreditosDisponiblesSegunOtorgadoPeriodoAnterior = this.getCreditosPorIngresosOAscensosOtorgados(previousPeriod.getId(),departmentId);
 
-        long creditosDisponiblesAlInicioPeriodoActual = totalPorCargaInicial+totalPorBajas-totalcreditosDisponiblesSegunOtorgadoPeriodoActual;
+        Long totalCreditosReparticionAjustes_Debito_PeriodoAnterior = this.getCreditosReparticionAjustesDebitoPeriodo(previousPeriod.getId(),departmentId);
+        
+        Long totalCreditosReparticionAjustes_Credito_PeriodoAnterior = this.getCreditosReparticionAjustesCreditoPeriodo(previousPeriod.getId(),departmentId);
+                
+        Long totalCreditosReasignadosDeRetencion_PeriodoAnterior = this.getCreditosReparticion_ReasignadosDeRetencion_Periodo(previousPeriod.getId(),departmentId);
+        
+        long creditosDisponiblesAlInicioPeriodoActual = totalPorCargaInicialPeriodoAnterior
+                +totalPorBajasPeriodoAnterior
+                -totalCreditosDisponiblesSegunOtorgadoPeriodoAnterior
+                -retainedCreditsPeriodoAnterior
+                -totalCreditosReparticionAjustes_Debito_PeriodoAnterior
+                +totalCreditosReparticionAjustes_Credito_PeriodoAnterior
+                +totalCreditosReasignadosDeRetencion_PeriodoAnterior;
+        
+       
 
         long creditosDisponiblesAlInicioPeriodoAnterior = getCreditosDisponiblesAlInicioPeriodo(previousPeriod.getId(), departmentId);
 
         return creditosDisponiblesAlInicioPeriodoAnterior + creditosDisponiblesAlInicioPeriodoActual;
 
     }
+
+
+    @Override
+    public Long getCreditosReparticion_ReasignadosDeRetencion_Periodo(Long creditsPeriodId, Long departmentId) {
+        
+        DepartmentCreditsEntryQueryFilter departmentCreditsEntryQueryFilter = new DepartmentCreditsEntryQueryFilter();
+        departmentCreditsEntryQueryFilter.setCreditsPeriodId(creditsPeriodId);
+        departmentCreditsEntryQueryFilter.setDepartmentId(departmentId);
+        
+        departmentCreditsEntryQueryFilter.addDepartmentCreditsEntryType(DepartmentCreditsEntryType.ReassignedFromRetention);
+        departmentCreditsEntryQueryFilter.addCreditsEntryTransactionType(CreditsEntryTransactionType.Credit);
+        return getTotalDepartmentCreditEntries(departmentCreditsEntryQueryFilter);
+    }
+
+
+    @Override
+    public Long getCreditosReparticionAjustesDebitoPeriodo(Long creditsPeriodId, Long departmentId) {
+        
+        DepartmentCreditsEntryQueryFilter departmentCreditsEntryQueryFilter = new DepartmentCreditsEntryQueryFilter();
+        departmentCreditsEntryQueryFilter.setCreditsPeriodId(creditsPeriodId);
+        departmentCreditsEntryQueryFilter.setDepartmentId(departmentId);
+        
+        departmentCreditsEntryQueryFilter.addDepartmentCreditsEntryType(DepartmentCreditsEntryType.Adjustment);
+        departmentCreditsEntryQueryFilter.addCreditsEntryTransactionType(CreditsEntryTransactionType.Debit);
+        return getTotalDepartmentCreditEntries(departmentCreditsEntryQueryFilter);
+        
+    }
+    
+    @Override
+    public Long getCreditosReparticionAjustesCreditoPeriodo(Long creditsPeriodId, Long departmentId) {
+        
+        DepartmentCreditsEntryQueryFilter departmentCreditsEntryQueryFilter = new DepartmentCreditsEntryQueryFilter();
+        departmentCreditsEntryQueryFilter.setCreditsPeriodId(creditsPeriodId);
+        departmentCreditsEntryQueryFilter.setDepartmentId(departmentId);
+        
+        departmentCreditsEntryQueryFilter.addDepartmentCreditsEntryType(DepartmentCreditsEntryType.Adjustment);
+        departmentCreditsEntryQueryFilter.addCreditsEntryTransactionType(CreditsEntryTransactionType.Credit);
+        return getTotalDepartmentCreditEntries(departmentCreditsEntryQueryFilter);
+        
+    }
+
 
 
     public CreditsPeriodService getCreditsPeriodService() {
@@ -670,5 +736,62 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
     public void setDepartmentService(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
+    
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public  Long getTotalDepartmentCreditEntries(final DepartmentCreditsEntryQueryFilter departmentCreditsEntryQueryFilter){
+        return (Long) getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session sess)
+                    throws HibernateException, SQLException  {
+
+                Chronometer timer = new Chronometer();
+
+                Long departmentId = departmentCreditsEntryQueryFilter.getDepartmentId();
+
+                if (log.isDebugEnabled()) log.debug("attempting to find DepartmentCreditEntries with id: '" + departmentId + "'");
+
+                List<String> wheres = new ArrayList<String>();
+                List<String> paramNames = new ArrayList<String>();
+                List<Object> values = new ArrayList<Object>();
+
+                StringBuffer queryBuilder = new StringBuffer();
+                
+                queryBuilder.append("select sum(entry.numberOfCredits) ");
+                queryBuilder.append(" from DepartmentCreditsEntryImpl entry ");
+                //queryBuilder.append(" INNER JOIN entry.employment employment ");
+                //queryBuilder.append(" INNER JOIN employment.subDepartment subDepartment ");
+                queryBuilder.append(" INNER JOIN entry.department department ");
+                queryBuilder.append(" INNER JOIN entry.creditsPeriod creditsPeriod ");
+                
+                
+                DepartmentCreditsEntryDaoHibImpl.buildWhereClause(departmentCreditsEntryQueryFilter,wheres,paramNames,values);
+                
+                
+                String queryWithoutOrdering = wheres.isEmpty() ? queryBuilder.toString() : queryBuilder.append(" WHERE ").append(
+                        org.dpi.util.StringUtils.getStringsSeparatedBy(" AND ", wheres)).toString();
+
+                String queryWithOrdering = queryWithoutOrdering;
+                
+                Query queryObject = sess.createQuery(queryWithOrdering);
+                
+                if (values != null) {
+                    for (int i = 0; i < values.size(); i++) {
+                        applyNamedParameterToQuery(queryObject, paramNames.get(i), values.get(i), null);
+                    }
+                }
+                
+                
+                Long totalAmount = (Long) queryObject.uniqueResult();
+                
+                if (log.isDebugEnabled()) log.debug("successfully retrieved department with id: '" + departmentId + "' in " + timer.printElapsedTime());
+                if(totalAmount==null){
+                    totalAmount=new Long(0);
+                }
+                return totalAmount;
+            }
+        });
+    }
+
 
 }

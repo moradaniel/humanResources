@@ -8,7 +8,9 @@ public class HistoricPeriodSummaryData {
 	long creditosAcreditadosPorBajas;
 	long creditosConsumidosPorIngresosOAscensosOtorgados;
 	long saldoCreditosAlFinalPeriodo;
-	
+	long totalCreditosReparticionAjustes_Debito;
+    long totalCreditosReparticionAjustes_Credito;
+	long totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
 	
 	
 	public String getYear() {
@@ -46,10 +48,36 @@ public class HistoricPeriodSummaryData {
 	public long getCreditosDisponiblesInicioPeriodo() {
 		return creditosDisponiblesInicioPeriodo;
 	}
-	public void setCreditosDisponiblesInicioPeriodo(
-			long creditosDisponiblesInicioPeriodo) {
+	public void setCreditosDisponiblesInicioPeriodo(long creditosDisponiblesInicioPeriodo) {
 		this.creditosDisponiblesInicioPeriodo = creditosDisponiblesInicioPeriodo;
 	}
+	
+    public long getTotalCreditosReparticionAjustes_Debito() {
+        return totalCreditosReparticionAjustes_Debito;
+    }
+    
+    public void setTotalCreditosReparticionAjustes_Debito(Long totalCreditosReparticionAjustes_Debito) {
+        this.totalCreditosReparticionAjustes_Debito = totalCreditosReparticionAjustes_Debito;
+    }
+
+    public long getTotalCreditosReparticionAjustes_Credito() {
+        return totalCreditosReparticionAjustes_Credito;
+    }
+
+    public void setTotalCreditosReparticionAjustes_Credito(Long totalCreditosReparticionAjustes_Credito) {
+        this.totalCreditosReparticionAjustes_Credito = totalCreditosReparticionAjustes_Credito;
+    }
+    
+    
+    public long getTotalCreditosReparticion_ReasignadosDeRetencion() {
+        return totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
+    }
+    
+    public void setTotalCreditosReparticion_ReasignadosDeRetencion( Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo) {
+        this.totalCreditosReparticion_ReasignadosDeRetencion_Periodo = totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
+        
+    }
+   
 
 
 }

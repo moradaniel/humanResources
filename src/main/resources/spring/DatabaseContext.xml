@@ -103,6 +103,7 @@
 				<value>/mappings/Category.hbm.xml</value>
 				<value>/mappings/Employment.hbm.xml</value>
 				<value>/mappings/CreditsEntry.hbm.xml</value>
+				<value>/mappings/DepartmentCreditsEntry.hbm.xml</value>
 				<value>/mappings/CreditsPeriod.hbm.xml</value>
 				<value>/mappings/OccupationalGroup.hbm.xml</value>
 				<value>/mappings/Account.hbm.xml</value>

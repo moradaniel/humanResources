@@ -35,6 +35,7 @@
 		<mapping resource="mappings/Person.hbm.xml" />
 		<mapping resource="mappings/Category.hbm.xml" />
 		<mapping resource="mappings/CreditsEntry.hbm.xml" />
+		<mapping resource="mappings/DepartmentCreditsEntry.hbm.xml" />
 		<mapping resource="mappings/Employment.hbm.xml" />
 		<mapping resource="mappings/CreditsPeriod.hbm.xml" />
 		<mapping resource="mappings/OccupationalGroup.hbm.xml" />

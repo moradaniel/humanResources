@@ -42,6 +42,7 @@
 						<th>Creditos Consumidos Por Ingresos o Ascensos(Otorgados) durante ${currentPeriodSummaryData.year}</th>
 						<th>Creditos Disponibles segun Solicitado durante ${currentPeriodSummaryData.year}</th>
 						<th>Creditos Disponibles segun Otorgado durante ${currentPeriodSummaryData.year}</th>
+
 						<th>Accion</th>
 					</tr>
 					
@@ -54,8 +55,9 @@
 						<td>${currentPeriodSummaryData.creditosPorIngresosOAscensosOtorgadosPeriodo?default("0")}</td>
 						<td>${currentPeriodSummaryData.creditosDisponiblesSegunSolicitadoPeriodo?default("0")}</td>
 						<td>${currentPeriodSummaryData.creditosDisponiblesSegunOtorgadoPeriodo?default("0")}</td>
+		                    				
 						<td>						
-						<a href="showEmployments" class="ajaxLink">Ver Agentes Activos</a>
+						<a href="showEmployments" class="ajaxLink">Ver Agentes Activos</a>   
 						<br/>
 						<#if account?exists && account.hasPermissions("Manage_CreditsEntries", "READ")>
 						  <a href="showCreditEntries/${currentPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a>
@@ -64,6 +66,24 @@
 					</tr>
 
 				</table>
+				
+				<table class="table table-bordered">
+                    <tr>
+                        <th>Ajuste Debito ${currentPeriodSummaryData.year}</th>
+                        <th>Ajuste Credito ${currentPeriodSummaryData.year}</th>
+                        <th>Reasignacion de Retencion ${currentPeriodSummaryData.year}</th>
+                        
+                        <th>Accion</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Debito?default("0")}</td>
+                        <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Credito?default("0")}</td>
+                        <td>${currentPeriodSummaryData.totalCreditosReparticion_ReasignadosDeRetencion_Periodo?default("0")}</td>
+                    </tr>
+
+                </table>
+				
 				
 				
 				
@@ -78,6 +98,7 @@
 							<th>Creditos Acreditados Por Bajas durante ${historicPeriodSummaryData.year}</th>
 							<th>Creditos Retenidos durante ${historicPeriodSummaryData.year}</th>
 							<th>Creditos Consumidos Por Ingresos o Ascensos Otorgados ${historicPeriodSummaryData.year}</th>
+
 							<th>Saldo de Creditos al Final del Periodo ${historicPeriodSummaryData.year}</th>
 							<th>Accion</th>
 						</tr>
@@ -88,6 +109,7 @@
 							<td>${historicPeriodSummaryData.creditosAcreditadosPorBajas?default("0")}</td>
 							<td>${historicPeriodSummaryData.retainedCredits?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosConsumidosPorIngresosOAscensosOtorgados?default("0")}</td>
+
 							<td>${historicPeriodSummaryData.saldoCreditosAlFinalPeriodo?default("0")}</td>
                             <#if account?exists && account.hasPermissions("Manage_CreditsEntries", "READ")>
 							 <td><a href="showCreditEntries/${historicPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a></td>
@@ -95,6 +117,22 @@
 						</tr>
 	
 					</table>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Ajuste Debito ${historicPeriodSummaryData.year}</th>
+                            <th>Ajuste Credito ${historicPeriodSummaryData.year}</th>
+                            <th>Reasignacion de Retencion ${historicPeriodSummaryData.year}</th>
+                            <th>Accion</th>
+                        </tr>
+                        
+                        <tr>
+                            <td>${historicPeriodSummaryData.totalCreditosReparticionAjustes_Debito?default("0")}</td>
+                            <td>${historicPeriodSummaryData.totalCreditosReparticionAjustes_Credito?default("0")}</td>
+                            <td>${historicPeriodSummaryData.totalCreditosReparticion_ReasignadosDeRetencion?default("0")}</td>
+                        </tr>
+    
+                    </table>
 				</#list>
 				
 				

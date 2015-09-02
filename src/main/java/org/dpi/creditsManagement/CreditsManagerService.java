@@ -1,6 +1,7 @@
 package org.dpi.creditsManagement;
 
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
+import org.dpi.departmentCreditsEntry.DepartmentCreditsEntryQueryFilter;
 
 
 public interface CreditsManagerService {
@@ -35,6 +36,15 @@ public interface CreditsManagerService {
 	
 	/*this is for considering retentions*/
 	public Long getTotalCreditosDisponiblesAlInicioPeriodo(Long creditsPeriodId, long departmentId);
+	
+	
+	public Long getTotalDepartmentCreditEntries(final DepartmentCreditsEntryQueryFilter departmentCreditsEntryQueryFilter);
+	
+    public Long getCreditosReparticionAjustesDebitoPeriodo(Long creditsPeriodId, Long departmentId);
+    
+    public Long getCreditosReparticionAjustesCreditoPeriodo(Long creditsPeriodId, Long departmentId);
+    
+    public Long getCreditosReparticion_ReasignadosDeRetencion_Periodo(Long creditsPeriodId, Long departmentId);
 	
 	
 
