@@ -298,7 +298,7 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 	
 	private Person createPendingPerson(){
 		PersonImpl newPerson = new PersonImpl();
-		newPerson.setApellidoNombre("Ingreso Nuevo Propuesto");
+		newPerson.setApellidoNombre("Ingreso Nuevo Propuesto "+creditsPeriodService.getCurrentCreditsPeriod().getName());
 		newPerson.setCuil("");
 		return newPerson;
 	}
