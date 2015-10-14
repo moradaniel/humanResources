@@ -31,7 +31,7 @@ public class CreditsPeriodDaoHibImpl extends BaseDAOHibernate implements Credits
 
         if (log.isDebugEnabled()) log.debug("attempting to find all CreditsPeriod");
 
-        List<CreditsPeriod> list = getHibernateTemplate().find("from CreditsPeriodImpl order by name");
+        List<CreditsPeriod> list = (List<CreditsPeriod>)getHibernateTemplate().find("from CreditsPeriodImpl order by name");
 
         if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " CreditsPeriod in " + timer.printElapsedTime());
 
@@ -45,7 +45,7 @@ public class CreditsPeriodDaoHibImpl extends BaseDAOHibernate implements Credits
 
         if (log.isDebugEnabled()) log.debug("attempting to find CreditsPeriod with filter '" + creditsPeriodQueryFilter.toString() + "'" );
 
-        List<CreditsPeriod> list = getHibernateTemplate().executeFind(new HibernateCallback() {
+        List<CreditsPeriod> list = (List<CreditsPeriod>)getHibernateTemplate().executeFind(new HibernateCallback() {
 
             public Object doInHibernate(Session sess)
                     throws HibernateException, SQLException  {	

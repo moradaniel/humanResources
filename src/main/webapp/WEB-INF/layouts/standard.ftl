@@ -409,9 +409,38 @@
 
 <script type="text/javascript">
 		
-		function browserLessThanIE9(){
-			   return (/MSIE ((5\\.5)|6|7|8)/.test(navigator.userAgent) );
-		}
+		
+/**
+ * detect IE
+ */
+function isUserBrowserInternetExplorer() {
+    var ua = window.navigator.userAgent;
+
+    var msie = ua.indexOf('MSIE ');
+    if (msie > 0) {
+        // IE 10 or older => return version number
+        //return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+        return true;
+    }
+
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) {
+        // IE 11 => return version number
+        //var rv = ua.indexOf('rv:');
+        //return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+        return true;
+    }
+
+    var edge = ua.indexOf('Edge/');
+    if (edge > 0) {
+       // IE 12 => return version number
+       //return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+       return true;
+    }
+
+    // other browser
+    return false;
+}
 		
 		function browserLessThanGecko1_9_2(){
 			if(typeof(jQuery.browser.mozilla) === 'undefined' ){
@@ -423,8 +452,8 @@
 		
 		$(function() {
 			
-			//no soportamos ie<9
-			if(browserLessThanIE9()==true){
+			//Internet Explorer is not supported for now
+			if(isUserBrowserInternetExplorer()==true){
 				window.location="notSupportedBrowser.html"; //URL to redirect to.
 			}
 		});

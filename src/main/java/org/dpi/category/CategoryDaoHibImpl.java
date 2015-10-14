@@ -19,7 +19,7 @@ public class CategoryDaoHibImpl extends BaseDAOHibernate implements CategoryDao
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all categories");
 
-		List<Category> list = getHibernateTemplate().find("from CategoryImpl order by code");
+		List<Category> list = (List<Category>)getHibernateTemplate().find("from CategoryImpl order by code");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " category in " + timer.printElapsedTime());
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.dpi.departmentCreditsEntry.DepartmentCreditsEntry.GrantedStatus;
 import org.dpi.util.PageList;
-import org.janux.bus.security.Account;
 import org.springframework.context.ApplicationContextAware;
 
 
@@ -22,7 +21,6 @@ public interface DepartmentCreditsEntryService extends ApplicationContextAware
 	   
 	public void delete(DepartmentCreditsEntry creditsEntry);
 	
-	public List<DepartmentCreditsEntryVO> buildCreditsEntryVO(List<DepartmentCreditsEntry> creditsEntryReparticion, Account account);
 	public void saveOrUpdate(final DepartmentCreditsEntry creditsEntry);
 	public void actualizarCreditosPorAscenso();
 	

@@ -58,8 +58,11 @@
 						$scope.callback();
 
 					}, function (reasonError) {
-
-						LogNotificationService.log('error',"Error!");
+						var errorMessage = "Error!";
+						if(_.isEmpty(reasonError)){
+							errorMessage = reasonError;
+						}
+						LogNotificationService.log('error',errorMessage);
 
 					});
 				};

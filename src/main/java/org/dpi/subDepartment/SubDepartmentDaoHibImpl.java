@@ -42,7 +42,7 @@ public class SubDepartmentDaoHibImpl extends BaseDAOHibernate implements SubDepa
 		.append("          subDepartment.codigoSector asc " );
         
 
-		List<SubDepartment> list = getHibernateTemplate().find(sb.toString());
+		List<SubDepartment> list = (List<SubDepartment>)getHibernateTemplate().find(sb.toString());
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " subDepartments in " + timer.printElapsedTime());
 
@@ -202,7 +202,7 @@ public class SubDepartmentDaoHibImpl extends BaseDAOHibernate implements SubDepa
 
 		//if (log.isDebugEnabled()) log.debug("attempting to find employment with filter '" + employmentQueryFilter.toString() + "'" );
 
-		List<SubDepartment> list = getHibernateTemplate().executeFind(new HibernateCallback() {
+		List<SubDepartment> list = (List<SubDepartment>)getHibernateTemplate().executeFind(new HibernateCallback() {
 			
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	

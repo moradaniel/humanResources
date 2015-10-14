@@ -17,6 +17,7 @@ import org.dpi.department.DepartmentController;
 import org.dpi.occupationalGroup.OccupationalGroup;
 import org.dpi.occupationalGroup.OccupationalGroupQueryFilter;
 import org.dpi.occupationalGroup.OccupationalGroupService;
+import org.dpi.person.Person;
 import org.dpi.person.PersonService;
 import org.dpi.subDepartment.SubDepartment;
 import org.dpi.subDepartment.SubDepartmentService;
@@ -494,6 +495,9 @@ public class EmploymentController {
     @RequestMapping(value = "/rest/departments/{departmentId}/employments", method = RequestMethod.POST)
     public ResponseEntity<String> saveEmployment(@PathVariable String departmentId,@RequestBody EmploymentImpl modifiedEmployment) throws JsonProcessingException{
     	
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json;charset=utf-8");
+        
     	/*if(true) {
     		throw new RuntimeException("Error de prueba");
     	}*/
@@ -506,7 +510,19 @@ public class EmploymentController {
     	
     	//TODO check if the employment exists
     	Employment existingEmployment = employmentService.findEmployments(employmentQueryFilter).get(0);
-    			
+
+    	if(StringUtils.isEmpty(existingEmployment.getPerson().getCuil())) {
+    	    //the Person is in database with null CUIL
+    	    //Check if the provided CUIL is not already for another Person
+    	    Person personAlreadyExisting = personService.findByCuil(modifiedEmployment.getPerson().getCuil());
+    	    if(personAlreadyExisting!=null) {
+    	        String errorMessageString = "Ya existe el CUIL "+personAlreadyExisting.getCuil()+" para el agente "+personAlreadyExisting.getApellidoNombre();
+    	        Map<String, Object> responseMap = new ResponseMap<String>().mapError(errorMessageString);
+    	        String serializedResponse = objectMapper.writeValueAsString(responseMap);
+    	        return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.BAD_REQUEST);
+    	    }
+    	}
+    	
     	//set the desired attributes
     	existingEmployment.getPerson().setApellidoNombre(modifiedEmployment.getPerson().getApellidoNombre());
     	existingEmployment.getPerson().setCuil(modifiedEmployment.getPerson().getCuil());
@@ -538,8 +554,7 @@ public class EmploymentController {
 
 		String serializedResponse = objectMapper.writeValueAsString(responseMap);
 
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "application/json;charset=utf-8");
+
 		
 				
 		return new ResponseEntity<String>(serializedResponse, responseHeaders, HttpStatus.OK);

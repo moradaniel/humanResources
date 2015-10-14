@@ -317,7 +317,8 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
         //TODO this is just a quick workaround for 2014, we have to handle historic retained credits, for historic periods
         //for now we retain 0 for historic periods
-        if(creditsPeriodService.getCurrentCreditsPeriod().getId().longValue() != creditsPeriodId) {
+        //if(creditsPeriodService.getCurrentCreditsPeriod().getId().longValue() != creditsPeriodId) {
+        if(Integer.valueOf(creditsPeriodService.findById(creditsPeriodId).getName()) < 2014) {
             return 0l;
         }
 

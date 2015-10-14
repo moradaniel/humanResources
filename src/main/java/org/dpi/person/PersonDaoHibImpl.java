@@ -37,7 +37,7 @@ public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all persons");
 
-		List<Person> list = getHibernateTemplate().find("from PersonImpl order by cuil");
+		List<Person> list = (List<Person>)getHibernateTemplate().find("from PersonImpl order by cuil");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " person in " + timer.printElapsedTime());
 
@@ -157,7 +157,7 @@ public class PersonDaoHibImpl extends BaseDAOHibernate implements PersonDao
 		if (log.isDebugEnabled()) log.debug("attempting to find Person with filter '" + personQueryFilter.toString() + "'" );
 
 		@SuppressWarnings("unchecked")
-		List<Person> list = getHibernateTemplate().executeFind(new HibernateCallback() {
+		List<Person> list = (List<Person>)getHibernateTemplate().executeFind(new HibernateCallback() {
 			
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	

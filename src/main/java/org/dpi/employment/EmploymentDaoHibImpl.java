@@ -25,7 +25,7 @@ public class EmploymentDaoHibImpl extends BaseDAOHibernate implements Employment
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all employments");
 
-		List<Employment> list = getHibernateTemplate().find("from EmploymentImpl order by codigo");
+		List<Employment> list = (List<Employment>)getHibernateTemplate().find("from EmploymentImpl order by codigo");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " employment in " + timer.printElapsedTime());
 

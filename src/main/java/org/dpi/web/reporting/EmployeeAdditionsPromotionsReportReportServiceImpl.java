@@ -110,7 +110,9 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(creditsPeriodId,departmentId);
 		
 		Long creditosRetenidosPeriodoActual = this.creditsManagerService.getRetainedCreditsByDepartment(creditsPeriodId,departmentId);
-
+	
+		Long creditosReasignadosPeriodoActual = this.creditsManagerService.getCreditosReparticion_ReasignadosDeRetencion_Periodo(creditsPeriodId,departmentId);
+		
 		Long creditosPorIngresosOAscensosSolicitados = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(creditsPeriodId, departmentId);
 
 		Long creditosDisponibles = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodId,departmentId);
@@ -119,8 +121,8 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO",creditosDisponiblesAlInicioDelPeriodo);
 		params.put("CANTIDAD_CREDITOS_POR_BAJAS",creditosAcreditadosPorBajaDurantePeriodoActual);
 		params.put("CANTIDAD_CREDITOS_RETENIDOS",creditosRetenidosPeriodoActual);
-		
-		
+		params.put("CANTIDAD_CREDITOS_REASIGNADOS",creditosReasignadosPeriodoActual);
+				
 		params.put("CANTIDAD_CREDITOS_UTILIZADOS",creditosPorIngresosOAscensosSolicitados);
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO",creditosDisponibles);
 

@@ -6,7 +6,8 @@ public class HistoricPeriodSummaryData {
 	long creditosAcreditadosPorCargaInicial;
 	long creditosDisponiblesInicioPeriodo;
 	long creditosAcreditadosPorBajas;
-	long creditosConsumidosPorIngresosOAscensosOtorgados;
+	long creditosRetenidosPorBajas;
+    long creditosConsumidosPorIngresosOAscensosOtorgados;
 	long saldoCreditosAlFinalPeriodo;
 	long totalCreditosReparticionAjustes_Debito;
     long totalCreditosReparticionAjustes_Credito;
@@ -77,7 +78,13 @@ public class HistoricPeriodSummaryData {
         this.totalCreditosReparticion_ReasignadosDeRetencion_Periodo = totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
         
     }
-   
+    public void setCreditosRetenidosPorBajas(Long creditosRetenidosPorBajas) {
+        this.creditosRetenidosPorBajas = creditosRetenidosPorBajas;
+        
+    }
+    public long getCreditosRetenidosPorBajas() {
+        return creditosRetenidosPorBajas;
+    }
 
 
 }

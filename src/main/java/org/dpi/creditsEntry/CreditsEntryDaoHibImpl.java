@@ -29,7 +29,7 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 
         if (log.isDebugEnabled()) log.debug("attempting to find all creditsEntries");
 
-        List<CreditsEntry> list = getHibernateTemplate().find("from CreditsEntryImpl");
+        List<CreditsEntry> list = (List<CreditsEntry>)getHibernateTemplate().find("from CreditsEntryImpl");
 
         if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " entry in " + timer.printElapsedTime());
 
@@ -43,7 +43,7 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
 
         if (log.isDebugEnabled()) log.debug("attempting to find entry with filter '" + creditsEntryQueryFilter.toString() + "'" );
 
-        List<CreditsEntry> list = getHibernateTemplate().executeFind(new HibernateCallback() {
+        List<CreditsEntry> list = (List<CreditsEntry>)getHibernateTemplate().executeFind(new HibernateCallback() {
 
             public Object doInHibernate(Session sess)
                     throws HibernateException, SQLException  {	

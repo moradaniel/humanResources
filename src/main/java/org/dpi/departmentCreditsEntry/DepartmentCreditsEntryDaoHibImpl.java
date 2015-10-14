@@ -21,7 +21,7 @@ public class DepartmentCreditsEntryDaoHibImpl extends BaseDAOHibernate implement
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all departmentCreditsEntries");
 
-		List<DepartmentCreditsEntry> list = getHibernateTemplate().find("from DepartmentCreditsEntryImpl");
+		List<DepartmentCreditsEntry> list = (List<DepartmentCreditsEntry>)getHibernateTemplate().find("from DepartmentCreditsEntryImpl");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " entry in " + timer.printElapsedTime());
 

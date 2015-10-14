@@ -592,7 +592,9 @@ public class DepartmentController {
 			Long creditosAcreditadosPorBajas = this.creditsManagerService.getCreditosPorBajasDeReparticion(previousCreditsPeriod.getId(),department.getId());
 			historicPeriodSummaryData.setCreditosAcreditadosPorBajas(creditosAcreditadosPorBajas);
 				
-			
+	        Long creditosRetenidosPorBajas = this.creditsManagerService.getRetainedCreditsByDepartment(previousCreditsPeriod.getId(),department.getId());
+	        historicPeriodSummaryData.setCreditosRetenidosPorBajas(creditosRetenidosPorBajas);
+	            
 			Long creditosConsumidosPorIngresosOAscensosOtorgados = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(previousCreditsPeriod.getId(), department.getId());
 			
 			historicPeriodSummaryData.setCreditosConsumidosPorIngresosOAscensosOtorgados(creditosConsumidosPorIngresosOAscensosOtorgados);
@@ -616,6 +618,7 @@ public class DepartmentController {
 			Long saldoCreditosAlFinalPeriodo = creditosAcreditadosPorCargaInicial
 			                                   +creditosDisponiblesInicioPeriodo
 			                                   +creditosAcreditadosPorBajas
+			                                   -creditosRetenidosPorBajas
 			                                   -creditosConsumidosPorIngresosOAscensosOtorgados
 			                                   -totalCreditosReparticionAjustes_Debito_Periodo
 			                                   +totalCreditosReparticionAjustes_Credito_Periodo
@@ -683,7 +686,12 @@ public class DepartmentController {
            
 	       int indent = 0;
 
-	       printTree(currentNode,indent,departmentsTreeWithResults);
+	       CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+	       creditsPeriodQueryFilter.setName("2014");
+	       CreditsPeriod creditsPeriod = creditsPeriodService.find(creditsPeriodQueryFilter).get(0);
+
+	       
+	       printTree(currentNode,indent,departmentsTreeWithResults, creditsPeriod);
 	       
 	       List<String> resultsList = new ArrayList<String>();
 	          
@@ -714,16 +722,16 @@ public class DepartmentController {
           
       }
        
-	   private Long printTree(GenericTreeNode<Department> currentNode, int indent, GenericTreeNode<DepartmentResults<String>> currentNodeDepartmentTreeWithResults/*, Queue<String> departmentsQueue*/) {
+	   private Long printTree(GenericTreeNode<Department> currentNode, int indent, GenericTreeNode<DepartmentResults<String>> currentNodeDepartmentTreeWithResults, CreditsPeriod creditsPeriod) {
 
 	       String prefix = "";
 	       for(int i = 0;i<=indent;i++) {
 	           prefix = prefix + "--";
 	       }
 
-	       CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+	       //CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
        
-	       Long retainedCreditsForCurrentDepartment = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), currentNode.getData().getId());
+	       Long retainedCreditsForCurrentDepartment = this.creditsManagerService.getRetainedCreditsByDepartment(creditsPeriod.getId(), currentNode.getData().getId());
 	       
 	       Long accumulatedRetainedCreditsForCurrentDepartmentFromChildren = 0l;
 
@@ -738,11 +746,11 @@ public class DepartmentController {
 	        * */
 	       long retainedFromDirectChildrenOfPoderEjecutivoThatAreNotMinisterio = 0;
 	       
-	       
+    
 	       for(GenericTreeNode<Department> child:childrenArrayList) {
 	           GenericTreeNode<DepartmentResults<String>> childNodeDepartmentWithResults = new GenericTreeNode<DepartmentResults<String>>();
 	           currentNodeDepartmentTreeWithResults.addChild(childNodeDepartmentWithResults);
-	           Long childRetainedCredits = printTree(child,indent+1,childNodeDepartmentWithResults/*,departmentsQueue*/);
+	           Long childRetainedCredits = printTree(child,indent+1,childNodeDepartmentWithResults,creditsPeriod);
 	           if(departmentService.isPoderEjecutivoChildButNotMinisterio( child.getData())) {
 	               retainedFromDirectChildrenOfPoderEjecutivoThatAreNotMinisterio += childRetainedCredits;
 	             //we do not accumulate retained credits for directChildrenOfPoderEjecutivoThatAreNotMinisterio

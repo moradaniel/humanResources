@@ -29,7 +29,7 @@
 			<div id="table-content">
 
 			
-				<h2>Creditos retenidos</h2>
+				<h2>Creditos retenidos 2014</h2>
 				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
 					<tr>
 						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th>

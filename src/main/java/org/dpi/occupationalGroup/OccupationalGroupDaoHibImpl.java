@@ -27,7 +27,7 @@ public class OccupationalGroupDaoHibImpl extends BaseDAOHibernate implements Occ
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all OccupationalGroups");
 
-		List<OccupationalGroup> list = getHibernateTemplate().find("from OccupationalGroupImpl order by code");
+		List<OccupationalGroup> list = (List<OccupationalGroup>)getHibernateTemplate().find("from OccupationalGroupImpl order by code");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " OccupationalGroup in " + timer.printElapsedTime());
 
@@ -72,7 +72,7 @@ public class OccupationalGroupDaoHibImpl extends BaseDAOHibernate implements Occ
 
 		if (log.isDebugEnabled()) log.debug("attempting to find occupationalgroup with filter '" + occupationalGroupQueryFilter.toString() + "'" );
 
-		List<OccupationalGroup> list = getHibernateTemplate().executeFind(new HibernateCallback() {
+		List<OccupationalGroup> list = (List<OccupationalGroup>)getHibernateTemplate().executeFind(new HibernateCallback() {
 			
 			public Object doInHibernate(Session sess)
 					throws HibernateException, SQLException  {	

@@ -25,7 +25,7 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
 
 		if (log.isDebugEnabled()) log.debug("attempting to find all departments");
 
-		List<Department> list = getHibernateTemplate().find("from DepartmentImpl order by code");
+		List<Department> list = (List<Department>)getHibernateTemplate().find("from DepartmentImpl order by code");
 
 		if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " departments in " + timer.printElapsedTime());
 
@@ -220,7 +220,7 @@ public class DepartmentDaoHibImpl extends BaseDAOHibernate implements Department
                 + " where account.id=? ");
         
         
-        List<Department> list = getHibernateTemplate().find(stringBuffer.toString(), account.getId());
+        List<Department> list = (List<Department>)getHibernateTemplate().find(stringBuffer.toString(), account.getId());
 
         if (log.isInfoEnabled()) log.info("successfully retrieved " + list.size() + " departments of account: " + account.getName() + " in " + timer.printElapsedTime());
 

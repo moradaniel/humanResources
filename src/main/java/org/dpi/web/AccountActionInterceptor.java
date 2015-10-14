@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpi.department.Department;
+import org.dpi.department.DepartmentController;
 import org.dpi.security.AbstractUserSettings;
 import org.dpi.security.UserSettingsFactory;
 import org.janux.bus.security.Account;
@@ -96,8 +98,17 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 			{
 				return true; // still anonymous; nothing to do yet;
 			}else{
-				WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails();
-				log.info("User:"+((Account)principal).getName()+" accessing from IP:"+ webAuthenticationDetails.getRemoteAddress());
+			    /*WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails();
+			    
+			    Department department = (Department)request.getAttribute(DepartmentController.KEY_DEPARTMENT);
+			    StringBuffer stringBuffer = new StringBuffer();
+			    stringBuffer.append("=====User:"+((Account)principal).getName()+" accessing from IP:"+ webAuthenticationDetails.getRemoteAddress());
+			    if(department!=null) {
+			        stringBuffer.append("__"+department.getCode());    
+			    }
+			    stringBuffer.append("__"+getURL(request));
+			    //stringBuffer.append("User=====");
+				log.info(stringBuffer.toString());*/
 			}
 			
 			
@@ -137,7 +148,55 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 			}
 			//return model;
 
+			
+			String urlRequested = getURL(request);
+			if(urlRequested.indexOf("findAvailableDepartmentsForAccount") < 0 
+			        ){
+    			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails();
+                
+                Department department = (Department)DepartmentController.getCurrentDepartment(request);
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuffer.append("=====User:"+((Account)principal).getName()+" accessing from IP:"+ webAuthenticationDetails.getRemoteAddress());
+                if(department!=null) {
+                    stringBuffer.append("__"+department.getCode());    
+                }
+                stringBuffer.append("__"+urlRequested);
+                //stringBuffer.append("User=====");
+                log.info(stringBuffer.toString());
+			
+			}
 		}
+	}
+	
+	private static String getURL(HttpServletRequest req) {
+
+	    //String scheme = req.getScheme();             // http
+	    //String serverName = req.getServerName();     // hostname.com
+	    //int serverPort = req.getServerPort();        // 80
+	    //String contextPath = req.getContextPath();   // /mywebapp
+	    String servletPath = req.getServletPath();   // /servlet/MyServlet
+	    String pathInfo = req.getPathInfo();         // /a/b;c=123
+	    String queryString = req.getQueryString();          // d=789
+
+	    // Reconstruct original requesting URL
+	    StringBuffer url =  new StringBuffer();
+	    /*url.append(scheme).append("://").append(serverName);
+
+	    if ((serverPort != 80) && (serverPort != 443)) {
+	        url.append(":").append(serverPort);
+	    }
+
+	    url.append(contextPath);*/
+	    url.append(servletPath);
+
+	    if (pathInfo != null) {
+	        url.append(pathInfo);
+	    }
+	    if (queryString != null) {
+	        url.append("?").append(queryString);
+	    }
+	    return url.toString();
 	}
 
 

@@ -1,6 +1,5 @@
 package org.dpi.departmentCreditsEntry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -145,39 +144,7 @@ public class DepartmentCreditsEntryServiceImpl implements DepartmentCreditsEntry
 	{
 		this.applicationContext = aApplicationContext;
 	}
-	
-	
-	public List<DepartmentCreditsEntryVO> buildCreditsEntryVO(
-			List<DepartmentCreditsEntry> creditsEntryReparticion, Account account) {
-		List<DepartmentCreditsEntryVO> creditsEntriesVO = new ArrayList<DepartmentCreditsEntryVO>();
-		for(DepartmentCreditsEntry creditsEntry:creditsEntryReparticion){
-			DepartmentCreditsEntryVO creditsEntryVO = new DepartmentCreditsEntryVO();
-			creditsEntryVO.setCreditsEntry(creditsEntry);
-			if(creditsEntry.getDepartmentCreditsEntryType()==DepartmentCreditsEntryType.ReassignedFromRetention){
-				/*Employment employmentAnterior = creditsEntry.getEmployment().getPreviousEmployment();
-				creditsEntryVO.setCurrentCategory(employmentAnterior.getCategory().getCode());
-				creditsEntryVO.setProposedCategory(creditsEntry.getEmployment().getCategory().getCode());*/
-			}else{
-				//creditsEntryVO.setCurrentCategory(creditsEntry.getEmployment().getCategory().getCode());
-			}
-			/*
-			if(creditsEntry.getEmployment().getOccupationalGroup()!=null){
-				creditsEntryVO.setOccupationalGroup(creditsEntry.getEmployment().getOccupationalGroup().getName());
-				if(creditsEntry.getEmployment().getOccupationalGroup().getParentOccupationalGroup()!=null){
-					creditsEntryVO.setParentOccupationalGroup(creditsEntry.getEmployment().getOccupationalGroup().getParentOccupationalGroup().getName());
-				}
-			}
-			
-			creditsEntryVO.setCanBeDeleted(canCreditsEntryBeDeletedByAccount(creditsEntry,account));
-			
-			creditsEntryVO.setCanAccountChangeCreditsEntryStatus(canAccountChangeCreditsEntryStatus(creditsEntry,account));
-			
-			creditsEntriesVO.add(creditsEntryVO);*/
-		}
 
-			
-		return creditsEntriesVO;
-	}
 	
 	public boolean canAccountChangeCreditsEntryStatus(CreditsEntry creditsEntry, Account account) {
 		return canChangeCreditsEntryStatus(account) && creditsEntry.canStatusBeChanged(creditsEntryService,creditsPeriodService);

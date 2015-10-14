@@ -65,6 +65,8 @@ SQL>
  * 
  * */
 
+START TRANSACTION;
+
 
 /* Reparticion */
 
@@ -617,6 +619,61 @@ end;
 / 
 
 ALTER TABLE "CREDITOS"."SEC_ACCOUNT" ADD UNIQUE ("NAME");
+ALTER TABLE "CREDITOS"."PERSON" ADD UNIQUE ("CUIL");
 
 ALTER TABLE "CREDITOS"."CREDITSENTRY" ADD UNIQUE ("EMPLOYMENTID", "CREDITS_ENTRY_TYPE", "CREDITSPERIODID");
-  
+
+
+/* DEPARTMENT_CREDITSENTRY */
+
+    create table DEPARTMENT_CREDITSENTRY (
+        ID number(19,0) not null,
+        NUMBER_OF_CREDITS number(10,0) not null,
+        DEPARTMENT_ID number(19,0) not null,
+        CREATED_BY_DEPARTMENT_ID number(19,0) not null,
+        CREDITSPERIOD_ID number(19,0) not null,
+        DEPARTMENT_CREDITS_ENTRY_TYPE varchar2(255 char) not null,
+        CREDITS_ENTRY_TRANSACTION_TYPE varchar2(255 char) not null,
+        GRANTED_STATUS varchar2(255 char) not null,
+        NOTES varchar2(255 char),
+        primary key (ID)
+    );
+    
+
+    alter table DEPARTMENT_CREDITSENTRY 
+        add constraint fk_DepCredEntry_CredPeriod 
+        foreign key (CREDITSPERIOD_ID) 
+        references CREDITSPERIOD;
+
+    alter table DEPARTMENT_CREDITSENTRY 
+        add constraint fk_DepCredEntry_Dep 
+        foreign key (DEPARTMENT_ID) 
+        references DEPARTMENT;
+
+    alter table DEPARTMENT_CREDITSENTRY 
+        add constraint fk_DepCredEntryCreatedByDep 
+        foreign key (CREATED_BY_DEPARTMENT_ID) 
+        references DEPARTMENT;
+
+
+	CREATE SEQUENCE CREDITOS.DEPARTMENT_CREDITSENTRY_SEQ
+	  START WITH 1
+	  MAXVALUE 9999999999999999999999999999
+	  MINVALUE 1
+	  NOCYCLE
+	  CACHE 20
+	  NOORDER;
+	
+	
+	CREATE OR REPLACE TRIGGER CREDITOS.DEPARTMENT_CREDITSENTRY_TRG
+	before insert ON CREDITOS.DEPARTMENT_CREDITSENTRY for each row
+	WHEN (
+	new.id is null
+	      )
+	begin
+	    select CREDITOS.DEPARTMENT_CREDITSENTRY_SEQ.nextval into :new.id from dual;
+	end;
+	/ 
+
+
+COMMIT;

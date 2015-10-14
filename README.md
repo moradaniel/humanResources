@@ -21,11 +21,11 @@ Each department has a balance of credits that are used to add or promote employe
 - Supported browsers: Internet Explorer 9+, Firefox, Chrome
 
 ### Backend
-- Java 1.6+
+- Java 1.8
 - Maven 3 
-- Spring MVC 3.2.5.RELEASE 
+- Spring MVC 4.2.1.RELEASE 
 - Hibernate 3.6.8.Final 
-- Database Oracle 10g 
+- Database Oracle 11g 
 - HSQLDB for integration testing
 
 ## Profiles
@@ -77,6 +77,14 @@ even if Tomcat is running under a 64-bit JVM.
 
 
 ## ChangeLog
+
+2015 - October
+
+ - Implemented DepartmentCreditsEntries
+  
+2015 - August
+
+ - Added support for Java 8, Tomcat 8 and Spring 4.2.1
 
 2015 - April
 

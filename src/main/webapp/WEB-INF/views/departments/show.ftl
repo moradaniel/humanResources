@@ -107,7 +107,7 @@
 							<td>${historicPeriodSummaryData.creditosAcreditadosPorCargaInicial?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosDisponiblesInicioPeriodo?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosAcreditadosPorBajas?default("0")}</td>
-							<td>${historicPeriodSummaryData.retainedCredits?default("0")}</td>
+							<td>${historicPeriodSummaryData.creditosRetenidosPorBajas?default("0")}</td>
 							<td>${historicPeriodSummaryData.creditosConsumidosPorIngresosOAscensosOtorgados?default("0")}</td>
 
 							<td>${historicPeriodSummaryData.saldoCreditosAlFinalPeriodo?default("0")}</td>
