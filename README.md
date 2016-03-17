@@ -16,7 +16,7 @@ Each department has a balance of credits that are used to add or promote employe
 ## Technologies
 ### Frontend
 
-- AngularJS 1.2.23 
+- AngularJS 1.5.0 
 - Bootstrap 3.1.1
 - Supported browsers: Internet Explorer 9+, Firefox, Chrome
 
@@ -77,6 +77,10 @@ even if Tomcat is running under a 64-bit JVM.
 
 
 ## ChangeLog
+
+2016 - March
+
+ - Search employess in all departments
 
 2015 - October
 
