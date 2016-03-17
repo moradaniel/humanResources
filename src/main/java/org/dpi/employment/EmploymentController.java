@@ -401,9 +401,11 @@ public class EmploymentController {
 	 * @throws JsonProcessingException 
 	 */
 
-	@RequestMapping(value = "/rest/departments/{departmentId}/employments", method = RequestMethod.GET,
+	@RequestMapping(value = "/rest/departments/employments", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> employmentsSearch(@PathVariable String departmentId,
+	public ResponseEntity<String> employmentsSearch(
+
+	        @RequestParam(value="departmentId", required=false) String departmentId,
 
 			//@RequestParam(value="apellidoNombre", required=false) String apellidoNombre,
 			//@RequestParam(value="cuil", required=false) String cuil,
@@ -429,7 +431,15 @@ public class EmploymentController {
 
 
 		EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
-		employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));
+		if(departmentId == null || "null".equals(departmentId)) {
+		    departmentId = null;
+		    //search in all departments
+		    employmentQueryFilter.setDepartmentId(null);    
+		}else {
+		    employmentQueryFilter.setDepartmentId(Long.parseLong(departmentId));    
+		}
+		
+		
 
 
 		if(StringUtils.hasText(apellidoNombre)) {
@@ -451,7 +461,21 @@ public class EmploymentController {
 
 		Object accountObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Account currenUser = (Account)accountObj;
-		List<EmploymentVO> employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(employments,Long.parseLong(departmentId),currenUser);
+		
+		List<EmploymentVO> employmentsVO = null;
+		if(departmentId != null) {
+		    //build with permision to do actions
+		    employmentsVO = employmentCreditsEntriesService.buildEmploymentsVO(employments,Long.parseLong(departmentId),currenUser);
+		}
+		else {
+	          //build with no permision to do no actions. Just for searching
+		    employmentsVO = new ArrayList<>();
+		    for(Employment employment : employments) {
+	          EmploymentVO employmentVO = new EmploymentVO();
+	            employmentVO.setEmployment(employment);
+	            employmentsVO.add(employmentVO);
+		    }
+		}
 
 
 		long total = employments.getTotalItems();

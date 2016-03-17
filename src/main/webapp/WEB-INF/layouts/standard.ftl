@@ -31,7 +31,7 @@
 	<#-- link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/jquery/jqgrid/4.3.1/ui.jqgrid-4.3.1.css'/ -->
 
 
-    <link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/dist/select.css'/>
+    <link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/0.14.8/dist/select.css'/>
     
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.10/jquery-1.10.2.min.js'/></script>
@@ -459,13 +459,17 @@ function isUserBrowserInternetExplorer() {
 		});
 		
 		
-		//var currentSelectedDepartmentId;
+		var currentSelectedDepartment = null;
 		
 		
 		var currentSelectedDepartmentId = '';
 		
 		<#if currentDepartment?exists >
             currentSelectedDepartmentId =  ${currentDepartment.id}
+            
+            currentSelectedDepartment = {id:${currentDepartment.id},
+                                         name:'${currentDepartment.name}'
+             };
         </#if>
 	
 		
@@ -498,34 +502,49 @@ function isUserBrowserInternetExplorer() {
 
 	<script type="text/javascript" src="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/js/bootstrap.min.js"></script>
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/lodash.js'/></script>
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular.js'/></script>
-	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.16/i18n/angular-locale_es-ar.js'/></script -->
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/lodash/4.6.1/dist/lodash.js'/></script>
+	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/angular.js'/></script>
+	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/i18n/angular-locale_es-ar.js'/></script -->
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.0.min.js'/></script>
 	
+	<!-- -----------   api-check used by formly  ----------------------------------------------------------------- -->
+    <!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/api-check/7.5.5/dist/api-check.js'></script -->
+
 	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/angular-resource.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/angular-route.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/angular-sanitize.js'/></script>
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular-resource.js'/></script>
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular-route.js'/></script>
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.2.23/angular-sanitize.js'/></script>
+	<!-- -----------   used by schema form  ----------------------------------------------------------------- -->
+
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/tv4/1.0.17/tv4.js'></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/objectpath/1.0.5/lib/ObjectPath.js'></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-schema-form/dist/schema-form.js'></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-schema-form/dist/bootstrap-decorator.js'></script>
+
+
+  
+    <!-- -----------   used by formly  ----------------------------------------------------------------- -->
+    <!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-formly/8.0.0/dist/formly.js'></script>
+    <script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-formly-templates-bootstrap/6.2.0/dist/angular-formly-templates-bootstrap.js'></script -->
+
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/dist/select.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/0.14.8/dist/select.js'/></script>
 	   
 		
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ng-table-0.3.1/ng-table.js'/></script -->
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/restangular/restangular.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/restangular/1.5.2/restangular.js'/></script>
 		
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-growl-2/build/angular-growl.js'/></script>		
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/message-center/message-center.js'/></script>
 	
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/fileSaver/FileSaver.js'/></script>
+	
     
-
-	
-	
-	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/notifications.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/session.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/rest.api.js'/></script>
@@ -540,10 +559,12 @@ function isUserBrowserInternetExplorer() {
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/creditsEntries/admin-creditsEntries.js'/></script>
 		
+    <script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/reports/admin-reports.js'/></script>
 			
 	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/app.js"/></script>
 		
 	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/common/directives/directives.js"/></script>
+
 
 		
 </body>

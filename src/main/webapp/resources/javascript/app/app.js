@@ -30,12 +30,20 @@
 	                                        'lodash',
 	                                        'ngSanitize', 
 	                                        'ui.select',
+	                                        //Begin formly dependencies
+	                                        //'formly', 
+	                                        //'formlyBootstrap',
+	                                        //End formly dependencies	 
+	                                        
+	                                        'schemaForm',
+	                                        
 	                                        'admin-employments',
 	                                        /*'admin-employments2',*/
 	                                        'admin-employment-edit',
 	                                        'admin-employment-transfer',
 	                                        'admin-creditsEntries',
-	                                        'admin-departments']);
+	                                        'admin-departments',
+	                                        'admin-reports']);
 
 	as.config(['$routeProvider'/*, '$httpProvider'*/, function($routeProvider/*, $httpProvider*/) {
 

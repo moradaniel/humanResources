@@ -30,6 +30,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 
 
@@ -351,6 +352,8 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 			//a person can not be deactivated if has pending deactivation entry in REQUESTED status in current period
 			employmentVO.setCanBeDeactivated(employment.getStatus()==EmploymentStatus.ACTIVO 
 											&& canAccountDeactivateEmployments(currentUser) 
+											&& employment.getOccupationalGroup() != null
+											&& !StringUtils.isEmpty(employment.getPerson().getCuil())
 											&& !personsIds.contains(employment.getPerson().getId())
 											&& !hasPendingDeactivationEntry(employment));
 			

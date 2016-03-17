@@ -312,7 +312,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 				
 					Employment previousEmployment = employmentService.findById(employmentActual.getPreviousEmployment().getId());
 					
-					previousEmployment.setStatus(EmploymentStatus.PENDIENTE);
+					previousEmployment.setStatus(EmploymentStatus.INACTIVO);
 								
 					
 					employmentService.saveOrUpdate(previousEmployment);

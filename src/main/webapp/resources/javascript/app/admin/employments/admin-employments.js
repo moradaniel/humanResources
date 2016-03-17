@@ -39,6 +39,10 @@
 		                	  title: 'Agrupamiento',
 		                	  value: 'parentOccupationalGroup'
 		                  },
+		                  {
+		                	  title: 'Reparticion',
+		                	  value: 'departmentName'
+		                  },
 
 		                  {
 		                	  title: 'Codigo Centro',
@@ -73,6 +77,18 @@
 
 		//$scope.employmentstatuses = api.employmentstatuses();
 
+		//default criteria that will be sent to the server
+		$scope.filterCriteria = {
+				pageNumber: 1,
+				pageSize: 10,
+				sortDir: 'asc',
+				sortedBy: 'id',
+				apellidoNombre:null,
+				cuil:null,
+				department:currentSelectedDepartment,
+				employmentstatus:'ACTIVO' //by default retrieve active employments
+		};
+		
 		$scope.employmentStatusesCriteria = {
 				pageNumber: 1
 		};
@@ -96,8 +112,15 @@
 		$scope.fetchEmploymentStatuses();
 
 
+		$scope.availableDepartmentsForSearch = [
+		                                         { name: '--Todas--', id: null }, 
+		                                         { name: currentSelectedDepartment.name, id: currentSelectedDepartment.id } 
+		                                       ];
 
-
+		$scope.filterCriteria.department = $scope.availableDepartmentsForSearch[1];
+		
+		
+		
 		/*$scope.fetchEmploymentStatuses().then(function () {
     	      //The request fires correctly but sometimes the ui doesn't update, that's a fix
     	      //$scope.filterCriteria.pageNumber = 1;
@@ -119,18 +142,22 @@
       	    });
       	  };*/
 
-		//default criteria that will be sent to the server
-		$scope.filterCriteria = {
-				pageNumber: 1,
-				pageSize: 10,
-				sortDir: 'asc',
-				sortedBy: 'id',
-				employmentstatus:'ACTIVO' //by default retrieve active employments
-		};
+
 
 		//The function that is responsible of fetching the result from the server and setting the grid to the new result
 		$scope.fetchResult = function () {
-			return api.employments.search($scope.filterCriteria).then(function (response) {
+			var filterCriteria = {
+					pageNumber: $scope.filterCriteria.pageNumber,
+					pageSize: $scope.filterCriteria.pageSize,
+					sortDir: $scope.filterCriteria.sortDir,
+					sortedBy: $scope.filterCriteria.sortedBy,
+					apellidoNombre:$scope.filterCriteria.apellidoNombre,
+					cuil:$scope.filterCriteria.cuil,
+					departmentId:$scope.filterCriteria.department.id,
+					employmentstatus:$scope.filterCriteria.employmentstatus
+			};
+			
+			return api.employments.search(filterCriteria).then(function (response) {
 				$scope.employmentsVOs = response.data;
 				var meta = response.data.meta;
 				$scope.totalPages = Math.ceil(meta.total/$scope.filterCriteria.pageSize);//round up to next integer

@@ -79,8 +79,7 @@
 					},
 					employments : {
 						search : function(query) {
-							return RestFullResponse.one('departments',/*SessionService.currentDepartmentId*/
-									currentSelectedDepartmentId).all('employments').getList(query);
+							return RestFullResponse.all('departments').all('employments').getList(query);
 
 						},
 

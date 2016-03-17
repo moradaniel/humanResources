@@ -72,6 +72,11 @@
     <td></td>
     <td></td>
     <td></td>
+    <td>
+          <select ng-change="filterResult()" ng-model="filterCriteria.department" ng-options="department.name for department in availableDepartmentsForSearch track by department.id" class="form-control  input-sm" >
+        <!--option value=""> </option -->
+      </select>
+    </td>
     <td></td>
     <td></td>
     <td></td>
@@ -107,6 +112,7 @@
 		</span>
 	</td>		
 
+    <td>{{employmentVO.employment.subDepartment.department.name}}</td>
     <td>{{employmentVO.employment.subDepartment.codigoCentro}}</td>
     <td>{{employmentVO.employment.subDepartment.nombreCentro}}</td>
     <td>{{employmentVO.employment.subDepartment.codigoSector}}</td>
