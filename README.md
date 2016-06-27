@@ -17,7 +17,7 @@ Each department has a balance of credits that are used to add or promote employe
 ### Frontend
 
 - AngularJS 1.5.0 
-- Bootstrap 3.1.1
+- Bootstrap 3.3.6
 - Supported browsers: Internet Explorer 9+, Firefox, Chrome
 
 ### Backend
