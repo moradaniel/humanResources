@@ -36,14 +36,16 @@
 	                                        //End formly dependencies	 
 	                                        
 	                                        'schemaForm',
-	                                        
+	                                        'ui.grid',
 	                                        'admin-employments',
 	                                        /*'admin-employments2',*/
 	                                        'admin-employment-edit',
 	                                        'admin-employment-transfer',
 	                                        'admin-creditsEntries',
 	                                        'admin-departments',
-	                                        'admin-reports']);
+	                                        'admin-reports',
+	                                        'hierarchical-retained-credits'
+	                                        ]);
 
 	as.config(['$routeProvider'/*, '$httpProvider'*/, function($routeProvider/*, $httpProvider*/) {
 

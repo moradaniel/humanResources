@@ -15,10 +15,10 @@
 	<link rel="stylesheet" media="all" type="text/css" href="${requestContext.contextPath}/resources/styles/pro_dropline_ie.css" />
 	<![endif]-->
 	
-	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/bootstrap-3.3.6-dist/css/bootstrap.min.css">
 	
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/bootstrap-3.3.6-dist/css/bootstrap-theme.min.css">
 	
 	<!-- Override bootstrap (loaded after bootstrap css files) -->
 	<link rel="stylesheet" href="${requestContext.contextPath}/resources/styles/custom_bootstrap_3.css">
@@ -32,6 +32,10 @@
 
 
     <link rel="stylesheet" type="text/css" media="screen" href='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-select/0.14.8/dist/select.css'/>
+    
+    <#-- ui-grid -->
+    <link rel="styleSheet" href="${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-ui-grid/3.1.1/ui-grid.min.css"/>
+    
     
 	
 	<script type='text/javascript' src='${requestContext.contextPath}/resources/javascript/jquery/1.10/jquery-1.10.2.min.js'/></script>
@@ -500,7 +504,7 @@ function isUserBrowserInternetExplorer() {
 	</script>
 	
 
-	<script type="text/javascript" src="${requestContext.contextPath}/resources/styles/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${requestContext.contextPath}/resources/styles/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 	
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/lodash/4.6.1/dist/lodash.js'/></script>
@@ -508,7 +512,7 @@ function isUserBrowserInternetExplorer() {
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/angular.js'/></script>
 	<!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/angular-1.5.0/i18n/angular-locale_es-ar.js'/></script -->
 	
-	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.0.min.js'/></script>
+	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/ui-bootstrap/ui-bootstrap-tpls-1.2.5.js'/></script>
 	
 	<!-- -----------   api-check used by formly  ----------------------------------------------------------------- -->
     <!-- script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/angularjs/vendors/api-check/7.5.5/dist/api-check.js'></script -->
@@ -544,6 +548,9 @@ function isUserBrowserInternetExplorer() {
 	
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/fileSaver/FileSaver.js'/></script>
 	
+	<#-- ui-grid -->
+	<script src="${requestContext.contextPath}/resources/javascript/angularjs/vendors/angular-ui-grid/3.1.1/ui-grid.min.js"></script>
+	
     
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/notifications.js'/></script>
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/common/services/session.js'/></script>
@@ -560,6 +567,10 @@ function isUserBrowserInternetExplorer() {
 	<script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/creditsEntries/admin-creditsEntries.js'/></script>
 		
     <script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/reports/admin-reports.js'/></script>
+    
+    <script type="text/javascript" src='${requestContext.contextPath}/resources/javascript/app/admin/hierarchicalRetainedCredits/hierarchical-retained-credits.js'/></script>
+    
+    
 			
 	<script type="text/javascript" src="${requestContext.contextPath}/resources/javascript/app/app.js"/></script>
 		

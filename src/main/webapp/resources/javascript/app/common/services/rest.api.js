@@ -154,6 +154,14 @@
 
 						}
 
+					},
+					
+					hierchicalRetainedCredits : {
+						search : function(query) {
+							return RestFullResponse.all('hierchicalRetainedCredits').all('findHierchicalRetainedCredits').getList(query);
+
+						}
+
 					}
 
 				};

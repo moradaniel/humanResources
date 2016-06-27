@@ -3,6 +3,8 @@ package org.dpi.department;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.subDepartment.SubDepartment;
 
@@ -103,9 +105,19 @@ public class DepartmentImpl extends PersistentAbstract implements Department {
         return true;
     }
 
+    /*
     @Override
     public String toString() {
         return "Department [code=" + code + ", name=" + name + "]";
-    }
+    }*/
+    
+        @Override
+        public String toString() {
+            ToStringBuilder toStringBuilder = new ToStringBuilder(this,
+                    ToStringStyle.SHORT_PREFIX_STYLE);
+            toStringBuilder.append("code", code);
+            toStringBuilder.append("name", name);
+            return toStringBuilder.toString();
+        }
 
 }

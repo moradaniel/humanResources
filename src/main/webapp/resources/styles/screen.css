@@ -1455,7 +1455,7 @@ a.back-login:hover {
 	//background-image: url('error.png');
 }
 
-/*------------------------     ANGULLARJS  ------------------------------  */
+/*------------------------     ANGULARJS  ------------------------------  */
 .selected {
 	background-color: lightgreen;
 }
@@ -1466,4 +1466,13 @@ a.back-login:hover {
     width: 100% /*400px*/; 
     height: 300px
 }
-/*------------------------     ANGULLARJS  ------------------------------  */
+
+/* for ui-grid*/
+.myGrid {
+    /*width: 1500px;*/
+    width: 100%;
+    height: 500px;
+  }
+  
+/*------------------------     ANGULARJS  ------------------------------  */
+

@@ -26,51 +26,41 @@
 		<div id="content-table-inner">
 		
 			<!--  start table-content  -->
-			<div id="table-content">
+			<#-- div id="table-content">
 
 			
 				<h2>Creditos retenidos 2014</h2>
 				<table border="0" width="100%" cellpadding="0" cellspacing="0" class="product-table">
 					<tr>
-						<#-- th class="table-header-check"><a id="toggle-all" ></a> </th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Saldo Disponible al Inicio de ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Acreditados Por Bajas durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Retenidos durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Total Creditos Disponibles al Inicio de ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos(Solicitados) durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Consumidos Por Ingresos o Ascensos(Otorgados) durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Solicitado durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Creditos Disponibles segun Otorgado durante ${currentPeriodSummaryData.year}</a></th>
-						<th class="table-header-repeat line-left minwidth-1"><a href="">Accion</a></th -->
 					</tr>
 					
 					<#list departmentsList as departmentData>
     					<tr>
     						<td>${departmentData?default("")}</td>
-    						<#-- td>${currentPeriodSummaryData.creditosAcreditadosPorBajaDurantePeriodo?default("0")}</td>
-    						<td>${currentPeriodSummaryData.retainedCredits?default("0")}</td>
-    						<td>${currentPeriodSummaryData.totalAvailableCredits?default("0")}</td>
-    						<td>${currentPeriodSummaryData.creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo?default("0")}</td>
-    						<td>${currentPeriodSummaryData.creditosPorIngresosOAscensosOtorgadosPeriodo?default("0")}</td>
-    						<td>${currentPeriodSummaryData.creditosDisponiblesSegunSolicitadoPeriodo?default("0")}</td>
-    						<td>${currentPeriodSummaryData.creditosDisponiblesSegunOtorgadoPeriodo?default("0")}</td>
-    						<td>						
-    						<a href="showEmployments" class="ajaxLink">Ver Agentes Activos</a>
-    						<br/>
-    						<a href="showCreditEntries/${currentPeriodSummaryData.year}" class="ajaxLink">Ver Movimientos de Credito</a>
-    						</td -->
+
     					</tr>
                     </#list>
 				</table>
 				
 				
 			
-				
-				<!--  end product-table................................... --> 
+			</div -->
+			
+			
+			<#-- ui-grid -->
+            
+            <h2>Creditos retenidos 2015</h2>
+            <div ng-controller="HierarchicalRetainedCreditsGridCtrl">
+              <div ui-grid="gridOptions_2015" class="myGrid"></div>
+            </div>
+            
+            <h2>Creditos retenidos 2014</h2>
+			<div ng-controller="HierarchicalRetainedCreditsGridCtrl">
+              <div ui-grid="gridOptions_2014" class="myGrid"></div>
+            </div>
 			
 			
 			
-			</div>
 			<!--  end content-table  -->
 			
 			<div class="clear"></div>
