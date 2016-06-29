@@ -160,7 +160,7 @@
 </div>
 <div ng-show="totalPages > 1" class="align-center">
             
-  <pagination ng-model="filterCriteria.pageNumber" 
+  <uib-pagination ng-model="filterCriteria.pageNumber" 
   			  ng-change="selectPage()" 
   			  total-items="employmentsCount" 
   			  num-pages="totalPages" 
@@ -170,14 +170,19 @@
   			  rotate="false" 
   			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
   			  
-  </pagination>
+  </uib-pagination>
+  
+  
+   
 </div>
 
 
-<!-- pagination ng-model="current" ng-change="changed()" ...></pagination>
+<#-- pagination ng-model="current" ng-change="changed()" ...></pagination>
 
 
 <pagination page="current" on-select-page="changed(page)" ...></pagination -->
+
+
 
 </div>
 

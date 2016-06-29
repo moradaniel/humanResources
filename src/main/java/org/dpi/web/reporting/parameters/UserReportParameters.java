@@ -10,6 +10,8 @@ public class UserReportParameters
 	
 	String reportCode;
 	
+	private String selectedPeriodName;
+	
 
 	public OutputFormat getOutputFormat() {
 		return outputFormat;
@@ -27,6 +29,15 @@ public class UserReportParameters
 	public void setReportCode(String reportCode) {
 		this.reportCode = reportCode;
 	}
+
+    public String getSelectedPeriodName() {
+        return selectedPeriodName;
+    }
+
+    public void setSelectedPeriodName(String selectedPeriodName) {
+        this.selectedPeriodName = selectedPeriodName;
+    }
+
 
 
 }

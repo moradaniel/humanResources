@@ -2,6 +2,15 @@
 
 <#import "/WEB-INF/views/reports/ReportMacros.ftl" as rm />
 
+<#function showSinglePeriodSelector reportCode=''>
+
+        <#if ('Employee_Additions_Promotions_Report' == reportCode?default(""))>
+                <#return true>                
+         </#if>     
+
+         <#return false>
+</#function>
+
 
 <script type="text/javascript">
 
@@ -16,72 +25,143 @@
 			return false;
 		}
 
-		document.reportForm.action = action;
-   		if (action == 'ReportSetup') {
-     		document.reportForm.target="_self";
-			document.reportForm.submit();
+		document.setupReportForm.action = action;
+   		if (action == 'reportSetup') {
+     		document.setupReportForm.target="_self";
+			document.setupReportForm.submit();
 		}
 		else {
-			document.reportForm.target="_blank";
-			if (validate(document.reportForm.startDate,document.reportForm.stopDate,document.reportForm.hotelCodes,document.reportForm.reportCode.options[document.reportForm.reportCode.options.selectedIndex]) == true) {
-				if((document.reportForm.reportCode.value=='Employee_Additions_Promotions_Report') 
-					&& document.reportForm.outputFormat.value=='XLS'){
-					document.reportForm.action= 'ReportRunExcel';
+			document.setupReportForm.target="_blank";
+			//if (validate(document.setupReportForm.startDate,document.setupReportForm.stopDate,document.setupReportForm.hotelCodes,document.setupReportForm.reportCode.options[document.setupReportForm.reportCode.options.selectedIndex]) == true) {
+				if((document.setupReportForm.reportCode.value=='Employee_Additions_Promotions_Report') 
+					&& document.setupReportForm.outputFormat.value=='XLS'){
+					document.setupReportForm.action= 'ReportRunExcel';
 				}
-				document.reportForm.submit();
-			}else {
-				return false;
-			}
+				document.setupReportForm.submit();
+			//}else {
+			//	return false;
+			//}
 		}
 	}
 </script>
 
-<div id="reportSetup">
+
+ <div id="reportSetup" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">Reportes</div>
+                        </div>  
+                        <div class="panel-body" >
+                        
+                            <form id="setupReportForm" name="setupReportForm" 
+                                action="${requestContext.contextPath}/reports/runReport" 
+                                method="post"
+                                target="_blank"
+                                class="form-horizontal" role="form"
+                                >
+                            
+
+                                <div class="form-group">
+                                    <label for="reportCode" class="col-md-3 control-label">Tipo Reporte</label>
+                                    <div class="col-md-9">
+                                        
+                                        <select id="reportCode" name="reportCode" class="form-control" >
+                                            <option value=""><@spring.message "msg.pleaseSelectReport"/></option>
+                                            <#list availableReports?values?sort_by("reportTitle") as report>
+                                                <#-- if canRunReport(currentAccountRoles report.reportCode ) -->
+                                                    <#assign selected="">
+                                                    <#if reportCode?exists && (reportCode == report.reportCode)>
+                                                        <#assign selected="selected">
+                                                    </#if>
+                                                    <option value="${report.reportCode}" ${selected?default("")}><@spring.message ("msg."+report.reportCode) /></option>
+                                                <#-- /#if -->
+                                            </#list>
+                                        </select>
+                        
+                        
+                                    </div>
+                                </div>
+                        
+                        
+                               <#if showSinglePeriodSelector(reportCode)>
+                                                       
+                                    <div class="form-group">
+                                        <label for="selectedPeriodName" class="col-md-3 control-label">Periodo</label>
+                                        <div class="col-md-9">
+                                            
+                                                <select name="selectedPeriodName"  class="form-control">
+                                                    <option value="2015" selected>2015</option>
+                                                    <option value="2014">2014</option>
+                                                </select>
+                            
+                            
+                                        </div>
+                                    </div>
+                                
+                                </#if>
 
 
-	
-	<form id="setupReportForm" name="setupReportForm" 
-			action="${requestContext.contextPath}/reports/runReport" 
-			method="post"
-			target="_blank"
+                                <div class="form-group">
+                                    <!-- Button -->                                        
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp <@spring.message "msg.run"/></button>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                
+                            </form>
+                            
+                         </div>
+                    </div>
 
-			>
-			
-		
+               
+               
+                
+         </div> 
 
-			<table id="report">
-				<tr>
-					<td class="label">
-						<@spring.message "msg.reportName"/>:
-					</td>
-					<td class="right">
-						<select id="reportCode" name="reportCode" <#-- onchange="return process('ReportSetup');"--> >
-							<option value=""><@spring.message "msg.pleaseSelectReport"/></option>
-							<#list availableReports?values?sort_by("reportTitle") as report>
-								<#-- if canRunReport(currentAccountRoles report.reportCode ) -->
-									<#assign selected="">
-									<#if reportCode?exists && (reportCode == report.reportCode)>
-										<#assign selected="selected">
-									</#if>
-									<option value="${report.reportCode}" ${selected?default("")}><@spring.message ("msg."+report.reportCode) /></option>
-								<#-- /#if -->
-							</#list>
-						</select>
-						<@rm.required />
-						<#-- @crs_util.popHelp helpId="Reports_Management_Reports"/ -->
-					</td>
-				</tr>
-			</table>
-	
-		<table border="0">
-		
-			<tr>
-				<td colspan="3">
-					<input class="button" type="submit" value="<@spring.message "msg.run"/>" onclick="return process('ReportRun');" />
-				</td>
-			</tr>
-		</table>
-	</form>
-	
-</div>	
+<script type="text/javascript">
+        
+        $(function() {
+            
+            
+             $('#reportCode').change(function () {
+                process('reportSetup');
+              });
+        });
 
+    </script>
+    
+
+    <#-- div class="panel panel-default">
+      <div class="panel-heading">Resumen de Creditos</div>
+          <div class="panel-body">
+                <div ng-controller="ChildCtrl as child">
+                
+                        <form name="myForm"
+                            sf-schema="child.schema" 
+                            sf-form="child.form" 
+                            sf-model="child.selectedReportOptions"
+                            ng-submit="child.sendPost()" >
+                        </form>
+                    
+                </div>
+          </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">Resumen de Creditos 2</div>
+          <div class="panel-body">
+                <div ng-controller="Child2Ctrl as child">
+                
+                        <form name="myForm"
+                            sf-schema="child.schema" 
+                            sf-form="child.form" 
+                            sf-model="child.selectedReportOptions"
+                            ng-submit="child.sendPost()" >
+                        </form>
+                    
+                </div>
+          </div>
+    </div -->

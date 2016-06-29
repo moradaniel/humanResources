@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-09-07T12:14:08 -->
+<!-- 2016-06-29T10:55:14 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notaCreditos" pageWidth="595" pageHeight="842" columnWidth="533" leftMargin="42" rightMargin="20" topMargin="42" bottomMargin="42" uuid="50df32a8-aea8-43d6-a16c-0663c35d840a">
 	<style name="table">
 		<box>
@@ -85,6 +85,7 @@
 		<field name="NUMBER_OF_CREDITS" class="java.lang.Integer"/>
 	</subDataset>
 	<parameter name="DEPARTMENT_NAME" class="java.lang.String"/>
+	<parameter name="CURRENT_USER_NAME" class="java.lang.String"/>
 	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_ASCENSO" class="java.lang.Integer"/>
@@ -146,7 +147,7 @@
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="30" y="665" width="278" height="17" uuid="842b06d9-4b4b-492a-929f-66f6e828c877"/>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Fecha y Hora de Impresion: ]]></text>
@@ -545,6 +546,20 @@ Ministro/Secretario de Estado de
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_REASIGNADOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="30" y="682" width="278" height="17" uuid="d870ec3b-7d58-456c-b6af-8c6b45e27c7d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Usuario que genera el reporte: ]]></text>
+			</staticText>
+			<textField pattern="dd-MMMMM-yyyy hh:mm aaa" isBlankWhenNull="false">
+				<reportElement positionType="Float" x="308" y="682" width="165" height="17" uuid="350d846e-b2a7-468c-9152-844a28335fec"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CURRENT_USER_NAME}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -3,6 +3,8 @@ package org.dpi.web.reporting.parameters;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.janux.bus.security.Account;
+
 import biz.janux.calendar.DateRange;
 
 
@@ -26,9 +28,9 @@ public abstract class AbstractReportParameters
 	
 	private Set<Long> creditsPeriodIds = new HashSet<Long>();
 		
-
+	Account generatedByUser;
 	
-	public abstract String getTemplateFileName();
+    public abstract String getTemplateFileName();
 
     
 	public OutputFormat getOutputFormat()
@@ -74,5 +76,15 @@ public abstract class AbstractReportParameters
 	public void addDepartment(Long departmentId) {
 		this.departmentIds.add(departmentId);
 	}
+	
+	public Account getGeneratedByUser() {
+	    return generatedByUser;
+	}
+
+
+    public void setGeneratedByUser(Account generatedByUser) {
+	    this.generatedByUser = generatedByUser;
+    }
+
 
 }

@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpi.creditsEntry.CreditsEntry;
+import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryType;
@@ -86,6 +87,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
 		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
 		creditsEntryQueryFilter.setHasCredits(true);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
 		
 		List<CreditsEntry> creditsEntryIngresosDepartment = creditsEntryService.find(creditsEntryQueryFilter);
 
@@ -126,6 +128,8 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		params.put("CANTIDAD_CREDITOS_UTILIZADOS",creditosPorIngresosOAscensosSolicitados);
 		params.put("CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO",creditosDisponibles);
 
+		params.put("CURRENT_USER_NAME",employeeAdditionsPromotionsReportParameters.getGeneratedByUser().getName());
+		
 			
 		return params;
 		
