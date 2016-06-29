@@ -78,6 +78,12 @@ even if Tomcat is running under a 64-bit JVM.
 
 ## ChangeLog
 
+2016 - June
+
+ - Using angular-ui-grid 3.1.1 to enhance retained credits visualization
+ - Upgraded Bootstrap to version 3.3.6
+ - Calculating retained creadits with an iterative algorithm instead of recursively
+
 2016 - March
 
  - Search employess in all departments
