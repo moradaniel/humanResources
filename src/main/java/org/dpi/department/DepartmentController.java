@@ -290,7 +290,7 @@ public class DepartmentController {
 			
 			List<CreditsPeriod> creditsPeriods = creditsPeriodService.find(creditsPeriodQueryFilter);
 			CreditsPeriod creditsPeriod = creditsPeriods.get(0);
-			creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriod.getId());
+			creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriod.getId());
 			
 			List<CreditsEntry> creditsEntryOfDepartment = creditsEntryService.find(creditsEntryQueryFilter);
 			
@@ -357,7 +357,7 @@ public class DepartmentController {
 
 		if (department != null){
 			CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
-			creditsEntryQueryFilter.setId(creditsEntryId);
+			creditsEntryQueryFilter.addCreditsEntryIds(creditsEntryId);
 			EmploymentQueryFilter empleoFilter = new EmploymentQueryFilter();
 			empleoFilter.setDepartmentId(department.getId());
 			creditsEntryQueryFilter.setEmploymentQueryFilter(empleoFilter);

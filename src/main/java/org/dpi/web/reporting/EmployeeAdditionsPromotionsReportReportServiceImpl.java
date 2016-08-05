@@ -65,7 +65,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		creditsEntryQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
-		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+		creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
 
 		List<CreditsEntry> creditsEntryDepartment = creditsEntryService.find(creditsEntryQueryFilter);
 
@@ -85,7 +85,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 		creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		creditsEntryQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
 		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
-		creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+		creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
 		creditsEntryQueryFilter.setHasCredits(true);
 		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
 		

@@ -243,20 +243,27 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
             }
 
 
-            if(creditsEntryQueryFilter.getId()!=null){
+            if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsEntryIds())){
 
-                wheres.add(" entry.id = :entryId");
+                wheres.add(" entry.id IN (:creditsEntryIds) ");
 
-                paramNames.add("entryId");
-                values.add(creditsEntryQueryFilter.getId());
+                paramNames.add("creditsEntryIds");
+                values.add(creditsEntryQueryFilter.getCreditsEntryIds());
             }
 
-            if(creditsEntryQueryFilter.getIdCreditsPeriod()!=null){
+            if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsPeriodIds())){
 
-                wheres.add(" creditsPeriod.id = :creditsPeriodId");
+                wheres.add(" creditsPeriod.id IN (:creditsPeriodIds) ");
 
-                paramNames.add("creditsPeriodId");
-                values.add(creditsEntryQueryFilter.getIdCreditsPeriod());
+                paramNames.add("creditsPeriodIds");
+                values.add(creditsEntryQueryFilter.getCreditsPeriodIds());
+            }
+            
+            if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getPersonIds())){
+                wheres.add("  person.id IN ( :personIds )  ");
+                paramNames.add("personIds");
+                values.add(creditsEntryQueryFilter.getPersonIds());
+
             }
 
             if(creditsEntryQueryFilter.hasCredits!=null && creditsEntryQueryFilter.hasCredits.booleanValue()==true){

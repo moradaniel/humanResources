@@ -130,7 +130,7 @@ public class CreditsEntryController {
           
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		
-		creditsEntryQueryFilter.setId(id);
+		creditsEntryQueryFilter.addCreditsEntryIds(id);
 		
 		
 		List<CreditsEntry> movimientos = creditsEntryService.find(creditsEntryQueryFilter);
@@ -157,7 +157,7 @@ public class CreditsEntryController {
 
 		//retrieve the creditsEntry from database
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
-		creditsEntryQueryFilter.setId(creditsEntryForm.getCreditsEntryId());
+		creditsEntryQueryFilter.addCreditsEntryIds(creditsEntryForm.getCreditsEntryId());
 				
 		List<CreditsEntry> movimientos = creditsEntryService.find(creditsEntryQueryFilter);
 		CreditsEntry creditsEntry = movimientos.get(0);
@@ -179,7 +179,7 @@ public class CreditsEntryController {
         for(CreditsEntry submittedMovimiento :movimientos){
         	if(submittedMovimiento!=null){
         		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
-        		creditsEntryQueryFilter.setId(submittedMovimiento.getId());
+        		creditsEntryQueryFilter.addCreditsEntryIds(submittedMovimiento.getId());
         		List<CreditsEntry> listCreditsEntry = creditsEntryService.find(creditsEntryQueryFilter);
         		CreditsEntry creditsEntry = listCreditsEntry.get(0);
         		if(creditsEntry.getGrantedStatus()!=submittedMovimiento.getGrantedStatus()){

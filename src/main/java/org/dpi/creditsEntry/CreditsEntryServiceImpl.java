@@ -408,7 +408,7 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
 		
 		creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
-		creditsEntryQueryFilter.setIdCreditsPeriod(idCreditsPeriod);
+		creditsEntryQueryFilter.addCreditsPeriodIds(idCreditsPeriod);
 		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
 		
 		

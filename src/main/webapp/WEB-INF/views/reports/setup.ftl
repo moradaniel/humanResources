@@ -129,8 +129,8 @@
 </div> <!-- END Row -->
 
 
-
-          <div class="row"> <!-- BEGIN row div -->
+           <#-- BEGIN row div >
+          <div class="row"> 
           
                <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                             <div class="panel panel-info">
@@ -156,7 +156,7 @@
           </div> <!-- END Row -->      
             
         
-         <div class="row"> <!-- BEGIN row div -->
+         <#-- div class="row"> <!-- BEGIN row div >
           <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                 <div class="panel panel-info">
                         <div class="panel-heading">
@@ -181,7 +181,7 @@
     
     </div> <!-- END Row -->
     
-    </div><!-- END  div class="container-fluid" -->
+    </div><!-- END  div class="container-fluid">
 
 <script type="text/javascript">
         

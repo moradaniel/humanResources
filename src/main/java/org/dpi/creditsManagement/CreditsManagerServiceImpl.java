@@ -258,7 +258,7 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
         EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
         creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
         employmentQueryFilter.setDepartmentId(departmentId);
-        creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+        creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
         creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.CargaInicialAgenteExistente);
         creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
         return 	getCreditsEntriesSum(creditsEntryQueryFilter);
@@ -304,7 +304,7 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
         EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();
         creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
         employmentQueryFilter.setDepartmentId(departmentId);
-        creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+        creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
         creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.BajaAgente);
         creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
         return 	getCreditsEntriesSum(creditsEntryQueryFilter);
@@ -430,7 +430,8 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
                 .append(" from CreditsEntryImpl entry ")
                 .append(" INNER JOIN entry.employment employment " )
                 .append(" INNER JOIN employment.subDepartment subDepartment " )
-                .append(" INNER JOIN subDepartment.department department ");
+                .append(" INNER JOIN subDepartment.department department ")
+                .append(" INNER JOIN entry.creditsPeriod creditsPeriod ");
 
                 String where = " WHERE 1=1 "+buildWhereClause(creditsEntryQueryFilter);
 
@@ -480,8 +481,8 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
             }
 
 
-            if(creditsEntryQueryFilter.getIdCreditsPeriod()!=null && creditsEntryQueryFilter.getIdCreditsPeriod()>0) {
-                sb.append(" AND entry.creditsPeriod.id = :creditsPeriod ");
+            if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsPeriodIds())){
+                sb.append(" AND creditsPeriod.id IN (:creditsPeriodIds) ");
             }
 
 
@@ -512,8 +513,8 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
             }
 
 
-            if(creditsEntryQueryFilter.getIdCreditsPeriod()!=null && creditsEntryQueryFilter.getIdCreditsPeriod()>0) {
-                query.setLong("creditsPeriod", creditsEntryQueryFilter.getIdCreditsPeriod());
+            if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getCreditsPeriodIds())){
+                query.setParameterList("creditsPeriodIds", creditsEntryQueryFilter.getCreditsPeriodIds());
             }
 
 
@@ -610,7 +611,7 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
         CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
         creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
-        creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+        creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
 
         creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
         creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
@@ -627,7 +628,7 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
 
         CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
         creditsEntryQueryFilter.setEmploymentQueryFilter(employmentQueryFilter);
-        creditsEntryQueryFilter.setIdCreditsPeriod(creditsPeriodId);
+        creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
         creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
         creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.IngresoAgente);
         creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
