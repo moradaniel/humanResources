@@ -46,6 +46,10 @@
 </script>
 
 
+<div class="container-fluid">
+  <div class="row"> <!-- BEGIN row div -->
+  
+ <!-- BEGIN Report setup -->
  <div id="reportSetup" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                     <div class="panel panel-info">
                         <div class="panel-heading">
@@ -104,7 +108,7 @@
                                 <div class="form-group">
                                     <!-- Button -->                                        
                                     <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp <@spring.message "msg.run"/></button>
+                                        <button class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
                                     </div>
                                 </div>
                                 
@@ -113,13 +117,71 @@
                                 
                             </form>
                             
-                         </div>
-                    </div>
+                         </div> <!-- END  div class="panel-body"  -->
+                    </div> <!-- div class="panel panel-info" -->
 
                
                
                 
-         </div> 
+         </div>  <!-- div id="reportSetup" -->
+
+  </div><!-- END Report setup -->
+</div> <!-- END Row -->
+
+
+
+          <div class="row"> <!-- BEGIN row div -->
+          
+               <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                            <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            Resumen de Creditos
+                                        </div>
+                                    </div>  
+                                    <div class="panel-body" >
+            
+                                    <div ng-controller="ChildCtrl as child">
+                                    
+                                            <form name="myForm"
+                                                sf-schema="child.schema" 
+                                                sf-form="child.form" 
+                                                sf-model="child.selectedReportOptions"
+                                                ng-submit="child.sendPost()" >
+                                            </form>
+                                        
+                                    </div>
+                              </div>
+                 </div>
+          </div> <!-- END Row -->      
+            
+        
+         <div class="row"> <!-- BEGIN row div -->
+          <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                Resumen de Creditos 2
+                            </div>
+                        </div>  
+                        <div class="panel-body" >
+                        
+                        <div ng-controller="Child2Ctrl as child">
+                        
+                                <form name="myForm"
+                                    sf-schema="child.schema" 
+                                    sf-form="child.form" 
+                                    sf-model="child.selectedReportOptions"
+                                    ng-submit="child.sendPost()" >
+                                </form>
+                            
+                        </div>
+                  </div>
+            </div>
+    
+    </div> <!-- END Row -->
+    
+    </div><!-- END  div class="container-fluid" -->
 
 <script type="text/javascript">
         
@@ -132,36 +194,3 @@
         });
 
     </script>
-    
-
-    <#-- div class="panel panel-default">
-      <div class="panel-heading">Resumen de Creditos</div>
-          <div class="panel-body">
-                <div ng-controller="ChildCtrl as child">
-                
-                        <form name="myForm"
-                            sf-schema="child.schema" 
-                            sf-form="child.form" 
-                            sf-model="child.selectedReportOptions"
-                            ng-submit="child.sendPost()" >
-                        </form>
-                    
-                </div>
-          </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">Resumen de Creditos 2</div>
-          <div class="panel-body">
-                <div ng-controller="Child2Ctrl as child">
-                
-                        <form name="myForm"
-                            sf-schema="child.schema" 
-                            sf-form="child.form" 
-                            sf-model="child.selectedReportOptions"
-                            ng-submit="child.sendPost()" >
-                        </form>
-                    
-                </div>
-          </div>
-    </div -->
