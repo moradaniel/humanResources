@@ -94,14 +94,15 @@
                                         <div class="col-md-9">
                                             
                                                 <select name="selectedPeriodName"  class="form-control">
-                                                    <option value="2015" selected>2015</option>
+                                                    <option value="2016" selected>2016</option>
+                                                    <option value="2015">2015</option>
                                                     <option value="2014">2014</option>
                                                 </select>
                             
                             
                                         </div>
                                     </div>
-                                
+
                                 </#if>
 
 
@@ -181,7 +182,7 @@
     
     </div> <!-- END Row -->
     
-    </div><!-- END  div class="container-fluid">
+    </div><!-- END  div class="container-fluid" -->
 
 <script type="text/javascript">
         
