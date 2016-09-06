@@ -33,7 +33,7 @@ public interface CreditsEntry extends Persistent,Serializable{
 	String getNotes();
 
 	public CreditsPeriod getCreditsPeriod();
-	public void setCreditsPeriod(CreditsPeriod grantedStatus);
+	public void setCreditsPeriod(CreditsPeriod creditsPeriod);
 
 	public GrantedStatus getGrantedStatus();
 	public void setGrantedStatus(GrantedStatus grantedStatus);

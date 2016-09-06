@@ -2,8 +2,10 @@ package org.dpi.employment;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -13,6 +15,7 @@ import org.dpi.category.CategoryService;
 import org.dpi.creditsEntry.CreditsEntry;
 import org.dpi.creditsEntry.CreditsEntry.GrantedStatus;
 import org.dpi.creditsEntry.CreditsEntryImpl;
+import org.dpi.creditsEntry.CreditsEntryQueryFilter;
 import org.dpi.creditsEntry.CreditsEntryService;
 import org.dpi.creditsEntry.CreditsEntryType;
 import org.dpi.creditsManagement.CreditsManagerService;
@@ -332,6 +335,31 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 			personsIds = creditsEntryService.havePendingEntries(posiblesAgentesIds, departmentId, currentCreditsPeriod.getId());
 		}
 		
+		
+		//get promotions in the last two periods for the persons
+		Map<Long, List<CreditsEntry>> lastPersonPromotionsMap = new HashMap<Long, List<CreditsEntry>>();
+				
+		CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+		creditsEntryQueryFilter.setPersonIds(posiblesAgentesIds);
+		
+		creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
+		creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Otorgado);
+		
+		//last 2 periods	
+		creditsEntryQueryFilter.addCreditsPeriodName(String.valueOf(Integer.parseInt(currentCreditsPeriod.getName())-1));
+		creditsEntryQueryFilter.addCreditsPeriodName(String.valueOf(Integer.parseInt(currentCreditsPeriod.getName())-2));
+		
+		List<CreditsEntry> lastPromotionsCreditsEntries = creditsEntryService.find(creditsEntryQueryFilter);
+		
+		for(CreditsEntry lastPromotionCreditsEntry : lastPromotionsCreditsEntries) {
+		    Long personId = lastPromotionCreditsEntry.getEmployment().getPerson().getId();
+		    if(lastPersonPromotionsMap.get(personId)==null) {
+		        lastPersonPromotionsMap.put(personId, new ArrayList<CreditsEntry>());
+		    }
+		    lastPersonPromotionsMap.get(personId).add(lastPromotionCreditsEntry);
+		}
+		
+		
 		List<EmploymentVO> employmentsVO = new ArrayList<EmploymentVO>();
 		for(Employment employment:employments){
 			EmploymentVO employmentVO = new EmploymentVO();
@@ -345,8 +373,21 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
 				employmentVO.addNote("Baja pendiente de otorgar.");
 			}
 			
+			boolean promotedInLast2Periods = lastPersonPromotionsMap.get(employment.getPerson().getId())!=null;
+			if(promotedInLast2Periods) {
+			    List<CreditsEntry> lastPromotions = lastPersonPromotionsMap.get(employment.getPerson().getId());
+			    for(CreditsEntry lastPromotion :lastPromotions) {
+			        employmentVO.addNote("Promovido en: "+lastPromotion.getCreditsPeriod().getName());    
+			    }
+			    
+			}
+			
 			//a person can not be promoted if has pending promotions
-			employmentVO.setCanBePromoted(employment.getStatus()==EmploymentStatus.ACTIVO && canAccountPromotePerson(currentUser) && !personsIds.contains(employment.getPerson().getId()));
+	         //a person can not be promoted if was already promoted in the las two periods
+			employmentVO.setCanBePromoted(  !promotedInLast2Periods &&
+			                                employment.getStatus()==EmploymentStatus.ACTIVO && 
+			                                canAccountPromotePerson(currentUser) && 
+			                                !personsIds.contains(employment.getPerson().getId()));
 			
 			//a person can not be deactivated if has pending promotions
 			//a person can not be deactivated if has pending deactivation entry in REQUESTED status in current period

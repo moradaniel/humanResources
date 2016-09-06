@@ -141,7 +141,10 @@ public class EmploymentServiceImpl implements EmploymentService
 		for(Category category: allCategories){
 			Integer categoryCode = Integer.parseInt(category.getCode());
 			if(categoryCode >= minimumCategoryCodeInt && categoryCode <= maximumCategoryCodeInt){
-				if(categoryCode > currentEmploymentCategoryCodeInt ){
+				if(categoryCode > currentEmploymentCategoryCodeInt &&
+  			      //not possible to promote more than 2 categories
+				    categoryCode <=  currentEmploymentCategoryCodeInt + 2  )
+				{
 					availableCategories.add(category);
 				}
 			}
