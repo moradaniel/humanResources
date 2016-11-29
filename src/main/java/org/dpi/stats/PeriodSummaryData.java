@@ -20,10 +20,11 @@ public class PeriodSummaryData {
     	private long totalCreditosReparticionAjustes_Debito_Periodo;
         private long totalCreditosReparticionAjustes_Credito_Periodo;
         private long totalCreditosReparticion_ReasignadosDeRetencion_Periodo ;
-        
+        private long totalCreditosReparticion_Reubicacion_Periodo;
 
     	
-		public long getCreditosDisponiblesSegunOtorgadoPeriodo() {
+
+        public long getCreditosDisponiblesSegunOtorgadoPeriodo() {
 			return creditosDisponiblesSegunOtorgadoPeriodo;
 		}
 		public void setCreditosDisponiblesSegunOtorgadoPeriodo(
@@ -130,6 +131,15 @@ public class PeriodSummaryData {
 
         public void setTotalCreditosReparticion_ReasignadosDeRetencion_Periodo(Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo) {
             this.totalCreditosReparticion_ReasignadosDeRetencion_Periodo = totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
+        }
+        
+        
+        public long getTotalCreditosReparticion_Reubicacion_Periodo() {
+            return totalCreditosReparticion_Reubicacion_Periodo;
+        }
+        public void setTotalCreditosReparticion_Reubicacion_Periodo(
+                long totalCreditosReparticion_Reubicacion_Periodo) {
+            this.totalCreditosReparticion_Reubicacion_Periodo = totalCreditosReparticion_Reubicacion_Periodo;
         }
 		
 	}

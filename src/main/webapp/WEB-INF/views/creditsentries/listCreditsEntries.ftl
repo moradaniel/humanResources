@@ -105,7 +105,7 @@
 </div>
 <div ng-show="totalPages > 1" class="align-center">
             
-  <pagination ng-model="filterCriteria.pageNumber" 
+  <uib-pagination ng-model="filterCriteria.pageNumber" 
   			  ng-change="selectPage()" 
   			  total-items="creditsEntriesCount" 
   			  num-pages="totalPages" 
@@ -115,7 +115,7 @@
   			  rotate="false" 
   			  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
   			  
-  </pagination>
+  </uib-pagination>
 </div>
 
 

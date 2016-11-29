@@ -46,8 +46,8 @@ public class ReportServiceImpl implements ReportService
 	// hardcoded list of available reports
 	private static final JasperReportDescriptor descriptors[] =
 	{
-		new JasperReportDescriptor(ManagementReports.Employee_Additions_Promotions_Report.name(),"Employee Additions Promotions Report","Employee_Additions_Promotions_Report")
-		//,new JasperReportDescriptor(ManagementReports.Credits_Entries_Report.name(),"Credits Entries Report","Credits_Entries_Report")
+		new JasperReportDescriptor(org.dpi.web.reporting2.ReportService.Reports.EmployeeAdditionsPromotionsReport.name(),"Employee Additions Promotions Report","Employee_Additions_Promotions_Report")
+		,new JasperReportDescriptor(org.dpi.web.reporting2.ReportService.Reports.CreditsEntriesReport.name(),"Credits Entries Report","Credits_Entries_Report")
 
 	};
 	
@@ -113,7 +113,7 @@ public class ReportServiceImpl implements ReportService
 		canGenerateReportResult.setHasPermissions( account.hasPermissions(reportCode, "READ") );
 		
 	
-		if(reportCode.equals(ManagementReports.Employee_Additions_Promotions_Report.name())) {
+		if(reportCode.equals(org.dpi.web.reporting2.ReportService.Reports.EmployeeAdditionsPromotionsReport.name())) {
 			if(creditsPeriodService.getCurrentCreditsPeriod().getStatus()!=Status.Active){
 				canGenerateReportResult.addReasonCode(ReasonCodes.closedCreditsPeriod.name());
 			}else {

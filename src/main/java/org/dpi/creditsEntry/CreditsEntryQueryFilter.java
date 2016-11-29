@@ -33,6 +33,7 @@ public class CreditsEntryQueryFilter extends AbstractQueryFilter implements Seri
     List<Long> creditsPeriodIds = new ArrayList<Long>();
     
     List<String> creditsPeriodNames = new ArrayList<String>();
+    
 
     List<Long> personIds = new ArrayList<Long>();
     
@@ -43,6 +44,7 @@ public class CreditsEntryQueryFilter extends AbstractQueryFilter implements Seri
 
     Boolean hasCredits = null;
 
+    List<String> notInDepartmentCodes = new ArrayList<String>();
 
     public CreditsEntryQueryFilter(){
 
@@ -142,6 +144,15 @@ public class CreditsEntryQueryFilter extends AbstractQueryFilter implements Seri
     public void addCreditsPeriodName(String creditsPeriodName) {
         this.creditsPeriodNames.add(creditsPeriodName);
     }
+    
+    public List<String> getNotInDepartmentCodes() {
+        return notInDepartmentCodes;
+    }
+    
+    public void addNotInDepartmentCode(String ... departmentCodes) {
+        this.notInDepartmentCodes.addAll(Arrays.asList(departmentCodes));
+    }
+    
 
     @Override
     public void reset() {
@@ -154,5 +165,7 @@ public class CreditsEntryQueryFilter extends AbstractQueryFilter implements Seri
 	        acId = null;
 	        amId = null;*/
     }
+
+
 
 }

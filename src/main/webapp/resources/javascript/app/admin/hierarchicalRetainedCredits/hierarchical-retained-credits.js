@@ -22,6 +22,30 @@
 		     			    {name: 'address.city'},
 		     			    {name: 'age again', field:'age'}*/
 		     			  ];
+		
+		$scope.gridOptions_2016 = {};
+		
+		$scope.gridOptions_2016.columnDefs = columnsDefs;
+		  
+		$scope.hierchicalRetainedCreditsCriteria_2016 = {
+			departmentId:""+currentSelectedDepartment.id,
+			creditsPeriodName: "2016"
+		};
+			
+			$scope.fetchHierchicalRetainedCredits_2016 = function () {
+				return api.hierchicalRetainedCredits.search($scope.hierchicalRetainedCreditsCriteria_2016).then(function (response) {
+					$scope.gridOptions_2016.data = response.data;
+
+				}, function () {
+					$scope.gridOptions_2016.data = [];
+
+				});
+			};
+
+		$scope.fetchHierchicalRetainedCredits_2016();
+			
+		//-------------------------------------------------------------------------------------------------------------------	
+			
 		  
 		$scope.gridOptions_2015 = {};
 			
@@ -45,6 +69,7 @@
 			$scope.fetchHierchicalRetainedCredits_2015();
 			
 		  
+		//-------------------------------------------------------------------------------------------------------------------
 		  	
 			$scope.gridOptions_2014 = {
 			  };

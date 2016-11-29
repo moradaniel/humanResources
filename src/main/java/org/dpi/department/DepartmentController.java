@@ -34,10 +34,8 @@ import org.dpi.employment.EmploymentCreditsEntriesServiceImpl;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
 import org.dpi.person.PersonService;
-import org.dpi.security.AccountSettings;
 import org.dpi.security.UserAccessService;
 import org.dpi.security.UserSettingsFactory;
-import org.dpi.security.UserSettingsFactoryImpl;
 import org.dpi.stats.HistoricPeriodSummaryData;
 import org.dpi.stats.PeriodSummaryData;
 import org.dpi.util.tree.GenericTreeNode;
@@ -46,7 +44,6 @@ import org.dpi.web.reporting.ReportService;
 import org.dpi.web.reporting.ReportServiceImpl.ManagementReports;
 import org.janux.bus.persistence.EntityNotFoundException;
 import org.janux.bus.security.Account;
-import org.janux.bus.security.AccountImpl;
 import org.janux.bus.security.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +57,6 @@ import org.springframework.samples.travel.AjaxUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -99,7 +95,7 @@ public class DepartmentController {
 	 * The key by which we store in the Session the list of Departments that the
 	 * Principal is authorized to view: "myDepartments"
 	 */
-	private static final String KEY_DEPARTMENT_LIST = "myDepartments";
+	//private static final String KEY_DEPARTMENT_LIST = "myDepartments";
 
 	/** name of a generic view used to display messages: 'MessagePage' */
 	public static final String VIEW_MESSAGE = "MessagePage";
@@ -392,7 +388,7 @@ public class DepartmentController {
 	 * @param request
 	 * @param accessService
 	 */
-	public static void refreshRequestDepartmentList(HttpServletRequest request,UserAccessService accessService)
+	/*public static void refreshRequestDepartmentList(HttpServletRequest request,UserAccessService accessService)
 	{
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String accountName = ((Account) principal).getName();
@@ -400,8 +396,8 @@ public class DepartmentController {
 		
 		
 
-		request.setAttribute(DepartmentController.KEY_DEPARTMENT_LIST,departments);
-	}
+		//request.setAttribute(DepartmentController.KEY_DEPARTMENT_LIST,departments);
+	}*/
 
 	/** 
 	 * Loads the department in the Request, and checks that the current account has the proper
@@ -414,14 +410,14 @@ public class DepartmentController {
 		HttpSession session = request.getSession(createSessionIfNeeded);
 		Long departmentId = (Long) session.getAttribute(DepartmentController.KEY_CURRENT_DEPARTMENT_ID);
 
-		AccountSettings settings = UserSettingsFactoryImpl.getSettingsForPrincipal();
+		//AccountSettings settings = UserSettingsFactoryImpl.getSettingsForPrincipal();
 
 		checkAccess = checkAccess || (departmentId == null); // first time in
 
 		if(departmentId == null){
-			if(StringUtils.hasText(settings.getLastDepartment())){
+			/*if(StringUtils.hasText(settings.getLastDepartment())){
 				departmentId = Long.parseLong(settings.getLastDepartment());	
-			}
+			}*/
 		}
 
 		Department department = null;
@@ -451,13 +447,14 @@ public class DepartmentController {
 				if (!hasAccess)
 				{
 					department = null;
-					settings.setLastDepartment(null);
+					//settings.setLastDepartment(null);
 					log.warn("Account: '" + account.getName() + "' attempting to access page without authorization");
 				}
 			}
 		}
 
-		request.setAttribute(DepartmentController.KEY_DEPARTMENT,department);
+		updateRequestCurrentDepartment(request, department);
+		//request.setAttribute(DepartmentController.KEY_DEPARTMENT,department);
 	}
 
 
@@ -502,29 +499,48 @@ public class DepartmentController {
 			if (department != null)
 			{
 
-				Account januxUserDetailsAccount = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				//Account januxUserDetailsAccount = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-				Account account = accountService.loadAccountByName(januxUserDetailsAccount.getName());
+				//Account account = accountService.loadAccountByName(januxUserDetailsAccount.getName());
 
-				AccountSettings accountSettings = (AccountSettings)settingsFactory.getSettingsForAccount(account);
+				//AccountSettings accountSettings = (AccountSettings)settingsFactory.getSettingsForAccount(account);
 
-				accountSettings.setLastDepartment(String.valueOf(departmentId));
+				//accountSettings.setLastDepartment(String.valueOf(departmentId));
 
-				accountService.saveOrUpdateAccount((AccountImpl)account);
-				request.getSession().setAttribute(KEY_CURRENT_DEPARTMENT_ID, department.getId());
-				request.setAttribute(KEY_DEPARTMENT, department);
+				//accountService.saveOrUpdateAccount((AccountImpl)account);
+			    
+
 				if (log.isDebugEnabled()) {log.debug("Completed doing doSelectDepartment with ok status");}
 			}
+			
 			else {
 				ok = false;
 			}
 		}
+		
+		updateRequestCurrentDepartment(request, department);
 
 		return ok;
 	}
 	
 
-	PeriodSummaryData buildCurrentPeriodSummaryData(Department department){
+	static private void updateRequestCurrentDepartment(HttpServletRequest request, Department department) {
+	    
+	    Long departmentId = null;
+	    Department currentDepartment = null;
+	    
+	    if(department!=null && department.getId()!=null) {
+	        currentDepartment = department;
+	        departmentId = department.getId();
+	    }
+        request.getSession().setAttribute(KEY_CURRENT_DEPARTMENT_ID, departmentId);
+        request.setAttribute(KEY_DEPARTMENT, currentDepartment);
+
+        
+    }
+
+
+    PeriodSummaryData buildCurrentPeriodSummaryData(Department department){
 		
 		//--------------------- current year
 		
@@ -585,6 +601,10 @@ public class DepartmentController {
         currentPeriodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion_Periodo(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
 
         
+        Long totalCreditosReparticion_ReubicacionReparticion_Periodo = this.creditsManagerService.getCreditosReparticion_ReubicacionDeReparticion_Periodo(currentCreditsPeriod.getId(), department.getId());
+        currentPeriodSummaryData.setTotalCreditosReparticion_Reubicacion_Periodo(totalCreditosReparticion_ReubicacionReparticion_Periodo);
+
+        
 		return currentPeriodSummaryData;
 					
 	}
@@ -635,6 +655,10 @@ public class DepartmentController {
 	        historicPeriodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
 	            
 	        
+	        Long totalCreditosReparticion_ReubicacionReparticion_Periodo = this.creditsManagerService.getCreditosReparticion_ReubicacionDeReparticion_Periodo(previousCreditsPeriod.getId(), department.getId());
+               
+	        historicPeriodSummaryData.setTotalCreditosReparticion_Reubicacion_Periodo(totalCreditosReparticion_ReubicacionReparticion_Periodo);
+	            
 	        
 			Long saldoCreditosAlFinalPeriodo = creditosAcreditadosPorCargaInicial
 			                                   +creditosDisponiblesInicioPeriodo
@@ -643,7 +667,8 @@ public class DepartmentController {
 			                                   -creditosConsumidosPorIngresosOAscensosOtorgados
 			                                   -totalCreditosReparticionAjustes_Debito_Periodo
 			                                   +totalCreditosReparticionAjustes_Credito_Periodo
-			                                   +totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
+			                                   +totalCreditosReparticion_ReasignadosDeRetencion_Periodo
+			                                   +totalCreditosReparticion_ReubicacionReparticion_Periodo;
 			
 			historicPeriodSummaryData.setSaldoCreditosAlFinalPeriodo(saldoCreditosAlFinalPeriodo);
 			

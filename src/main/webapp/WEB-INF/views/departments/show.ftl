@@ -72,6 +72,7 @@
                         <th>Ajuste Debito ${currentPeriodSummaryData.year}</th>
                         <th>Ajuste Credito ${currentPeriodSummaryData.year}</th>
                         <th>Reasignacion de Retencion ${currentPeriodSummaryData.year}</th>
+                        <th>Creditos Reubicacion ${currentPeriodSummaryData.year}</th>
                         
                         <th>Accion</th>
                     </tr>
@@ -80,6 +81,7 @@
                         <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Debito?default("0")}</td>
                         <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Credito?default("0")}</td>
                         <td>${currentPeriodSummaryData.totalCreditosReparticion_ReasignadosDeRetencion_Periodo?default("0")}</td>
+                        <td>${currentPeriodSummaryData.totalCreditosReparticion_Reubicacion_Periodo?default("0")}</td>
                     </tr>
 
                 </table>
@@ -123,6 +125,7 @@
                             <th>Ajuste Debito ${historicPeriodSummaryData.year}</th>
                             <th>Ajuste Credito ${historicPeriodSummaryData.year}</th>
                             <th>Reasignacion de Retencion ${historicPeriodSummaryData.year}</th>
+                            <th>Creditos Reubicacion ${historicPeriodSummaryData.year}</th>
                             <th>Accion</th>
                         </tr>
                         
@@ -130,6 +133,7 @@
                             <td>${historicPeriodSummaryData.totalCreditosReparticionAjustes_Debito?default("0")}</td>
                             <td>${historicPeriodSummaryData.totalCreditosReparticionAjustes_Credito?default("0")}</td>
                             <td>${historicPeriodSummaryData.totalCreditosReparticion_ReasignadosDeRetencion?default("0")}</td>
+                            <td>${historicPeriodSummaryData.totalCreditosReparticion_Reubicacion_Periodo?default("0")}</td>
                         </tr>
     
                     </table>

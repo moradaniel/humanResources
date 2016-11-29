@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
+import org.dpi.creditsEntry.CreditsEntryServiceImpl;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.occupationalGroup.OccupationalGroup;
@@ -14,10 +15,12 @@ import org.dpi.occupationalGroup.OccupationalGroupService;
 import org.dpi.person.PersonService;
 import org.dpi.subDepartment.SubDepartmentService;
 import org.dpi.util.PageList;
+import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 
@@ -124,6 +127,11 @@ public class EmploymentServiceImpl implements EmploymentService
 	
 	
 	public List<Category> getAvailableCategoriesForPromotion(Employment employment){
+	    
+	    Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    
+	    
+	        
 		List <Category> availableCategories = new ArrayList<Category>();
 		List <Category> allCategories = this.categoryService.findAll();
 
@@ -138,16 +146,18 @@ public class EmploymentServiceImpl implements EmploymentService
 		
 		int currentEmploymentCategoryCodeInt = Integer.parseInt(employment.getCategory().getCode());
 		
-		for(Category category: allCategories){
-			Integer categoryCode = Integer.parseInt(category.getCode());
-			if(categoryCode >= minimumCategoryCodeInt && categoryCode <= maximumCategoryCodeInt){
-				if(categoryCode > currentEmploymentCategoryCodeInt &&
-  			      //not possible to promote more than 2 categories
-				    categoryCode <=  currentEmploymentCategoryCodeInt + 2  )
-				{
-					availableCategories.add(category);
-				}
-			}
+		for(Category possibleCategory: allCategories){
+		    Integer possibleCategoryCode = Integer.parseInt(possibleCategory.getCode());
+		    if(possibleCategoryCode >= minimumCategoryCodeInt && possibleCategoryCode <= maximumCategoryCodeInt){
+		        if(possibleCategoryCode > currentEmploymentCategoryCodeInt) {
+		            if(CreditsEntryServiceImpl.canPromoteToUnlimitedCategory(currentUser) ||
+		                    //not possible to promote more than 2 categories
+		                    possibleCategoryCode <=  currentEmploymentCategoryCodeInt + 2  )
+		            {
+		                availableCategories.add(possibleCategory);
+		            }
+		        }
+		    }
 		}
 
 		return availableCategories;

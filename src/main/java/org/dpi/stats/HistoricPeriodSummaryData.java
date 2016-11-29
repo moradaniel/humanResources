@@ -12,9 +12,10 @@ public class HistoricPeriodSummaryData {
 	long totalCreditosReparticionAjustes_Debito;
     long totalCreditosReparticionAjustes_Credito;
 	long totalCreditosReparticion_ReasignadosDeRetencion_Periodo;
+	long totalCreditosReparticion_Reubicacion_Periodo;
 	
 	
-	public String getYear() {
+    public String getYear() {
 		return year;
 	}
 	public void setYear(String year) {
@@ -86,5 +87,12 @@ public class HistoricPeriodSummaryData {
         return creditosRetenidosPorBajas;
     }
 
+    public long getTotalCreditosReparticion_Reubicacion_Periodo() {
+        return totalCreditosReparticion_Reubicacion_Periodo;
+    }
+    public void setTotalCreditosReparticion_Reubicacion_Periodo(
+            long totalCreditosReparticion_Reubicacion_Periodo) {
+        this.totalCreditosReparticion_Reubicacion_Periodo = totalCreditosReparticion_Reubicacion_Periodo;
+    }
 
 }

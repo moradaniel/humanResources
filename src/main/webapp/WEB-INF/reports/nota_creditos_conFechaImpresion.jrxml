@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2016-06-29T10:55:14 -->
+<!-- 2016-11-29T08:38:55 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notaCreditos" pageWidth="595" pageHeight="842" columnWidth="533" leftMargin="42" rightMargin="20" topMargin="42" bottomMargin="42" uuid="50df32a8-aea8-43d6-a16c-0663c35d840a">
 	<style name="table">
 		<box>
@@ -90,6 +90,7 @@
 	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_ASCENSO" class="java.lang.Integer"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
+	<parameter name="CANTIDAD_CREDITOS_TRANSFERIDOS_POR_REUBICACION" class="java.lang.Long"/>
 	<parameter name="CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO" class="java.lang.Long"/>
 	<parameter name="CANTIDAD_CREDITOS_POR_BAJAS" class="java.lang.Long"/>
 	<parameter name="CANTIDAD_CREDITOS_RETENIDOS" class="java.lang.Long"/>
@@ -101,21 +102,21 @@
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField pattern="dd-MMMMM-yyyy hh:mm aaa" isBlankWhenNull="false">
-				<reportElement positionType="Float" x="308" y="665" width="165" height="17" uuid="b4ef8f1b-7356-4b42-8862-68d1c20fa73c"/>
+				<reportElement positionType="Float" x="307" y="680" width="165" height="17" uuid="b4ef8f1b-7356-4b42-8862-68d1c20fa73c"/>
 				<textElement textAlignment="Right">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="614" width="308" height="20" uuid="bbef807c-6869-43f2-8fa1-d17e134557de"/>
+				<reportElement positionType="Float" x="-1" y="629" width="308" height="20" uuid="bbef807c-6869-43f2-8fa1-d17e134557de"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Créditos utilizados: ]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="Float" x="0" y="635" width="427" height="1" uuid="4f4969c9-4fc9-4a8b-884e-7877fd3e075d"/>
+				<reportElement positionType="Float" x="-1" y="650" width="427" height="1" uuid="4f4969c9-4fc9-4a8b-884e-7877fd3e075d"/>
 			</line>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="495" width="325" height="20" uuid="7117889b-11ec-4b6f-86f2-70709651465d"/>
@@ -125,49 +126,49 @@
 				<text><![CDATA[RESUMEN DE LA DISPONIBILIDAD Y USO DEL CREDITO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="553" width="310" height="20" uuid="14972646-7178-4fc8-8dbb-174854deca8a"/>
+				<reportElement positionType="Float" x="-1" y="568" width="310" height="20" uuid="14972646-7178-4fc8-8dbb-174854deca8a"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Créditos por Bajas: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="574" width="308" height="20" uuid="cfd6979c-6206-46e1-8347-6e715368c455"/>
+				<reportElement positionType="Float" x="-1" y="589" width="308" height="20" uuid="cfd6979c-6206-46e1-8347-6e715368c455"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Créditos Retenidos: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="Float" x="311" y="554" width="118" height="19" uuid="5767e562-7e11-425a-9831-b1043ec100d8"/>
+				<reportElement positionType="Float" x="310" y="569" width="118" height="19" uuid="5767e562-7e11-425a-9831-b1043ec100d8"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_POR_BAJAS}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="30" y="665" width="278" height="17" uuid="842b06d9-4b4b-492a-929f-66f6e828c877"/>
+				<reportElement positionType="Float" x="29" y="680" width="278" height="17" uuid="842b06d9-4b4b-492a-929f-66f6e828c877"/>
 				<textElement textAlignment="Right">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Fecha y Hora de Impresion: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="Float" x="310" y="535" width="118" height="19" uuid="b9a4aec8-05c0-4bcb-9d66-394ed4a442e4"/>
+				<reportElement positionType="Float" x="309" y="550" width="118" height="19" uuid="b9a4aec8-05c0-4bcb-9d66-394ed4a442e4"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_INICIO_PROCESO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="311" y="615" width="118" height="19" uuid="576bd67f-d4b6-4190-b363-7d39ca23bfdc"/>
+				<reportElement positionType="Float" x="310" y="630" width="118" height="19" uuid="576bd67f-d4b6-4190-b363-7d39ca23bfdc"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_UTILIZADOS}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="1" y="634" width="310" height="20" uuid="0a8b6f33-8bb4-4a90-a2b5-dfe0610f6aad"/>
+				<reportElement positionType="Float" x="0" y="649" width="310" height="20" uuid="0a8b6f33-8bb4-4a90-a2b5-dfe0610f6aad"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
@@ -181,14 +182,14 @@
 				<textFieldExpression><![CDATA["Reparticion: "+ $P{DEPARTMENT_NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="311" y="635" width="118" height="19" uuid="6cfe87b3-2886-4753-ab9e-4d8c75281d08"/>
+				<reportElement positionType="Float" x="310" y="650" width="118" height="19" uuid="6cfe87b3-2886-4753-ab9e-4d8c75281d08"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_DISPONIBLES_AL_FINAL_DEL_PERIODO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="310" y="575" width="118" height="19" uuid="3a23583e-a345-4b6a-8efc-f294af23e236"/>
+				<reportElement positionType="Float" x="309" y="590" width="118" height="19" uuid="3a23583e-a345-4b6a-8efc-f294af23e236"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
@@ -527,39 +528,53 @@ Ministro/Secretario de Estado de
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="534" width="311" height="20" uuid="18bafb68-4f4e-49de-855c-eb9e34dd91e4"/>
+				<reportElement positionType="Float" x="-1" y="549" width="311" height="20" uuid="18bafb68-4f4e-49de-855c-eb9e34dd91e4"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Créditos disponibles al inicio del proceso:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="0" y="593" width="308" height="20" uuid="22a61cf7-b821-4711-84f6-3af72b4a5227"/>
+				<reportElement positionType="Float" x="-1" y="608" width="308" height="20" uuid="22a61cf7-b821-4711-84f6-3af72b4a5227"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Créditos Reasignados: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="Float" x="310" y="594" width="118" height="19" uuid="e696b4d6-abc4-4cd4-b626-a509519c521e"/>
+				<reportElement positionType="Float" x="309" y="609" width="118" height="19" uuid="e696b4d6-abc4-4cd4-b626-a509519c521e"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_REASIGNADOS}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="30" y="682" width="278" height="17" uuid="d870ec3b-7d58-456c-b6af-8c6b45e27c7d"/>
+				<reportElement positionType="Float" x="29" y="697" width="278" height="17" uuid="d870ec3b-7d58-456c-b6af-8c6b45e27c7d"/>
 				<textElement textAlignment="Right">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Usuario que genera el reporte: ]]></text>
 			</staticText>
 			<textField pattern="dd-MMMMM-yyyy hh:mm aaa" isBlankWhenNull="false">
-				<reportElement positionType="Float" x="308" y="682" width="165" height="17" uuid="350d846e-b2a7-468c-9152-844a28335fec"/>
+				<reportElement positionType="Float" x="307" y="697" width="165" height="17" uuid="350d846e-b2a7-468c-9152-844a28335fec"/>
 				<textElement textAlignment="Right">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CURRENT_USER_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="529" width="311" height="20" uuid="9c649456-79ac-45d2-9aff-0ab6ba5c99e9"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Créditos transferidos por reubicación:]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="310" y="530" width="118" height="19" uuid="99191b4e-6f09-4a65-84a8-0c25d1b7662f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CANTIDAD_CREDITOS_TRANSFERIDOS_POR_REUBICACION}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

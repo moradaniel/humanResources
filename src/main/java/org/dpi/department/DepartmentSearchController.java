@@ -125,9 +125,9 @@ public class DepartmentSearchController {
         Collections.sort(subDepartments, new Comparator<SubDepartment>() {
             @Override
             public int compare(SubDepartment o1, SubDepartment o2) {
-                    int i = Integer.valueOf(o1.getCodigoCentro()).compareTo(Integer.valueOf(o2.getCodigoCentro()));
+                    int i = o1.getCodigoCentro().compareTo(o2.getCodigoCentro());
                     if (i == 0) {
-                        i = Integer.valueOf(o1.getCodigoSector()).compareTo(Integer.valueOf(o2.getCodigoSector()));
+                        i = o1.getCodigoSector().compareTo(o2.getCodigoSector());
                     }
                     return i;
                 }

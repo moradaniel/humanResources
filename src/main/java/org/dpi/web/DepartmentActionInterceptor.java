@@ -64,7 +64,7 @@ public class DepartmentActionInterceptor extends HandlerInterceptorAdapter
 			boolean checkDepartmentAccess = true;
 
 			DepartmentController.refreshRequestDepartment(request, departmentService, accessService, checkDepartmentAccess);
-			DepartmentController.refreshRequestDepartmentList(request, accessService);
+			//DepartmentController.refreshRequestDepartmentList(request, accessService);
 
 			return true;
 		}

@@ -10,6 +10,13 @@
 		thus freeing the DAO code from having to implement hibernate session
 		management and programmatic transaction declarations
 	-->
+	
+	
+	 <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:i18n/messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
 
 	<!--
 	 ****************************************************************************
@@ -478,5 +485,51 @@
         </property>
     </bean>
     
+    
+    <bean id="CreditsEntriesReportService"
+            name="creditsEntriesReportService" 
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager"><ref bean="transactionManager"/></property> 
+        <property name="target">
+            <bean class="org.dpi.web.reporting2.CreditsEntriesReportServiceImpl">
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="actualizar*">PROPAGATION_REQUIRED</prop>
+                <prop key="change*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+        </property>
+    </bean>
+    
+    
+    
+        <bean id="EmployeeAdditionsPromotionsReportService"
+            name="EmployeeAdditionsPromotionsReportService" 
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager"><ref bean="transactionManager"/></property> 
+        <property name="target">
+            <bean class="org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportServiceImpl">
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="actualizar*">PROPAGATION_REQUIRED</prop>
+                <prop key="change*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+        </property>
+    </bean>
 	
 </beans>

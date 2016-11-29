@@ -274,6 +274,14 @@ public class CreditsEntryDaoHibImpl extends BaseDAOHibernate implements CreditsE
                 values.add(0);
             }
 
+            if(!CollectionUtils.isEmpty(creditsEntryQueryFilter.getNotInDepartmentCodes())){
+                wheres.add("  department.code NOT IN ( :notInDepartmentCodes )  ");
+                paramNames.add("notInDepartmentCodes");
+                values.add(creditsEntryQueryFilter.getNotInDepartmentCodes());
+
+            }
+            
+
             if(creditsEntryQueryFilter.getEmploymentQueryFilter()!=null) {
                 EmploymentQueryFilter employmentQueryFilter = creditsEntryQueryFilter.getEmploymentQueryFilter();
 

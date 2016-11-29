@@ -212,6 +212,14 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 		}
 		return false;
 	}
+	
+	public static boolean canPromoteToUnlimitedCategory(Account account) {
+
+	    if(account.hasPermissions("Manage_Promotions", "UNLIMITED_CATEGORIES")){
+	        return true;
+	    }
+	    return false;
+	}
 
 
 	public boolean canCreditsEntryBeDeleted(CreditsEntry creditsEntry){
@@ -291,13 +299,17 @@ public class CreditsEntryServiceImpl implements CreditsEntryService
 	public void changeGrantedStatus(CreditsEntry entry, GrantedStatus newStatus){
 		
 
-		Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(currentUser!=null){
+        Account currentUser = null;
+        
+        if(SecurityContextHolder.getContext()!=null && SecurityContextHolder.getContext().getAuthentication()!=null) {
+            currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(currentUser!=null){
 			log.info("user:"+currentUser.getName()+" attempting to change granted status of entry:"+ entry.getId()+
 					" Type:"+entry.getCreditsEntryType().name()+
 					" Person name:"+ entry.getEmployment().getPerson().getApellidoNombre()+
 					" from status: "+entry.getGrantedStatus().name() + " to "+newStatus.name());	
-		}
+            }
+        }
 		
 		if(entry.getCreditsEntryType()==CreditsEntryType.AscensoAgente){
 		

@@ -46,7 +46,7 @@ public class EmployeeAdditionsPromotionsReportReportServiceImpl	implements Emplo
 	public Map<String, Object> getReportData(final EmployeeAdditionsPromotionsReportParameters employeeAdditionsPromotionsReportParameters) {
 		
 
-		long creditsPeriodId = employeeAdditionsPromotionsReportParameters.getCreditsPeriodIds().iterator().next();
+		long creditsPeriodId = employeeAdditionsPromotionsReportParameters.getCreditPeriodIds().iterator().next();
 		
 				
 		long departmentId = employeeAdditionsPromotionsReportParameters.getDepartmentIds().iterator().next();

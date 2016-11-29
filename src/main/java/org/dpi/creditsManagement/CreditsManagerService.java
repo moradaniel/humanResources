@@ -45,6 +45,8 @@ public interface CreditsManagerService {
     public Long getCreditosReparticionAjustesCreditoPeriodo(Long creditsPeriodId, Long departmentId);
     
     public Long getCreditosReparticion_ReasignadosDeRetencion_Periodo(Long creditsPeriodId, Long departmentId);
+    
+    public Long getCreditosReparticion_ReubicacionDeReparticion_Periodo(Long creditsPeriodId, Long departmentId);
 	
 	
 

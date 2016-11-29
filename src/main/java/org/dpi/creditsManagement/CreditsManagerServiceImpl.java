@@ -402,13 +402,16 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
                 
         Long totalCreditosReasignadosDeRetencion_PeriodoActual = this.getCreditosReparticion_ReasignadosDeRetencion_Periodo(creditsPeriodId,departmentId);
         
+        Long totalCreditosPorTrasladoDeReparticion_PeriodoActual = this.getCreditosReparticion_ReubicacionDeReparticion_Periodo(creditsPeriodId,departmentId);
+        
 
         Long currentPeriodTotalAvailableCredits = creditosDisponiblesInicioPeriodo 
                                                  +creditosAcreditadosPorBajaDurantePeriodoActual 
                                                  -retainedCreditsPeriodoActual
                                                  -totalCreditosReparticionAjustes_Debito_PeriodoActual
                                                  +totalCreditosReparticionAjustes_Credito_PeriodoActual
-                                                 +totalCreditosReasignadosDeRetencion_PeriodoActual;
+                                                 +totalCreditosReasignadosDeRetencion_PeriodoActual
+                                                 +totalCreditosPorTrasladoDeReparticion_PeriodoActual;
         
         return currentPeriodTotalAvailableCredits;
 
@@ -663,13 +666,16 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
                 
         Long totalCreditosReasignadosDeRetencion_PeriodoAnterior = this.getCreditosReparticion_ReasignadosDeRetencion_Periodo(previousPeriod.getId(),departmentId);
         
+        Long totalCreditos_ReubicacionDeReparticion_PeriodoAnterior = this.getCreditosReparticion_ReubicacionDeReparticion_Periodo(previousPeriod.getId(),departmentId);
+        
         long creditosDisponiblesAlInicioPeriodoActual = totalPorCargaInicialPeriodoAnterior
                 +totalPorBajasPeriodoAnterior
                 -totalCreditosDisponiblesSegunOtorgadoPeriodoAnterior
                 -retainedCreditsPeriodoAnterior
                 -totalCreditosReparticionAjustes_Debito_PeriodoAnterior
                 +totalCreditosReparticionAjustes_Credito_PeriodoAnterior
-                +totalCreditosReasignadosDeRetencion_PeriodoAnterior;
+                +totalCreditosReasignadosDeRetencion_PeriodoAnterior
+                +totalCreditos_ReubicacionDeReparticion_PeriodoAnterior;
         
        
 
@@ -692,6 +698,19 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
         return getTotalDepartmentCreditEntries(departmentCreditsEntryQueryFilter);
     }
 
+    @Override
+    public Long getCreditosReparticion_ReubicacionDeReparticion_Periodo(Long creditsPeriodId, Long departmentId) {
+        
+        DepartmentCreditsEntryQueryFilter departmentCreditsEntryQueryFilter = new DepartmentCreditsEntryQueryFilter();
+        departmentCreditsEntryQueryFilter.setCreditsPeriodId(creditsPeriodId);
+        departmentCreditsEntryQueryFilter.setDepartmentId(departmentId);
+        
+        departmentCreditsEntryQueryFilter.addDepartmentCreditsEntryType(DepartmentCreditsEntryType.Relocation);
+        departmentCreditsEntryQueryFilter.addCreditsEntryTransactionType(CreditsEntryTransactionType.Credit);
+        return getTotalDepartmentCreditEntries(departmentCreditsEntryQueryFilter);
+    }
+    
+    
 
     @Override
     public Long getCreditosReparticionAjustesDebitoPeriodo(Long creditsPeriodId, Long departmentId) {

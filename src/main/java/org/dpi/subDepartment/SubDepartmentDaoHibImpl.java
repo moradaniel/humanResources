@@ -125,22 +125,26 @@ public class SubDepartmentDaoHibImpl extends BaseDAOHibernate implements SubDepa
 		if(filter !=null){
 			if(StringUtils.hasText(filter.getCodigoCentro())){
 				
-				query_where.append(" AND upper(subDepartments.codigoCentro) like '%").append(filter.getCodigoCentro().toUpperCase()).append("%' ");
+				//query_where.append(" AND upper(subDepartments.codigoCentro) like '%").append(filter.getCodigoCentro().toUpperCase()).append("%' ");
+			    query_where.append(" AND upper(subDepartments.codigoCentro) = '").append(filter.getCodigoCentro().toUpperCase()).append("' ");
 			}
 			
 			if(StringUtils.hasText(filter.getNombreCentro())){
 				
-				query_where.append(" AND upper(subDepartments.nombreCentro) like '%").append(filter.getNombreCentro().toUpperCase()).append("%' ");
+				//query_where.append(" AND upper(subDepartments.nombreCentro) like '%").append(filter.getNombreCentro().toUpperCase()).append("%' ");
+			    query_where.append(" AND upper(subDepartments.nombreCentro) = '").append(filter.getNombreCentro().toUpperCase()).append("' ");
 			}
 			
 			if(StringUtils.hasText(filter.getCodigoSector())){
 				
-				query_where.append(" AND upper(subDepartments.codigoSector) like '%").append(filter.getCodigoSector().toUpperCase()).append("%' ");
+				//query_where.append(" AND upper(subDepartments.codigoSector) like '%").append(filter.getCodigoSector().toUpperCase()).append("%' ");
+	             query_where.append(" AND upper(subDepartments.codigoSector) = '").append(filter.getCodigoSector().toUpperCase()).append("' ");
 			}
 			
 			if(StringUtils.hasText(filter.getNombreSector())){
 				
-				query_where.append(" AND upper(subDepartments.nombreSector) like '%").append(filter.getNombreSector().toUpperCase()).append("%' ");
+				//query_where.append(" AND upper(subDepartments.nombreSector) like '%").append(filter.getNombreSector().toUpperCase()).append("%' ");
+			    query_where.append(" AND upper(subDepartments.nombreSector) =  '").append(filter.getNombreSector().toUpperCase()).append("' ");
 			}
 
 			

@@ -526,10 +526,14 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
             destinationSubdepartmentName =  destinationSubdepartment.toString();
         }
         
-        Account currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(currentUser!=null){
-            log.info("================ user:"+currentUser.getName()+" attempting to transfer person:"+personToBeTransfered.toString()+
-                       " from subDepartment:"+sourceSubdepartment.toString()+" to subDepartment:"+destinationSubdepartmentName ); 
+        Account currentUser = null;
+        
+        if(SecurityContextHolder.getContext()!=null && SecurityContextHolder.getContext().getAuthentication()!=null) {
+            currentUser = (Account)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(currentUser!=null){
+                log.info("================ user:"+currentUser.getName()+" attempting to transfer person:"+personToBeTransfered.toString()+
+                           " from subDepartment:"+sourceSubdepartment.toString()+" to subDepartment:"+destinationSubdepartmentName ); 
+            }
         }
 
         EmploymentQueryFilter employmentQueryFilter = new EmploymentQueryFilter();

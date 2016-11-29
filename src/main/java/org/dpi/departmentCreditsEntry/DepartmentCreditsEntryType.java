@@ -4,6 +4,6 @@ public enum DepartmentCreditsEntryType {
 
 	ReassignedFromRetention,
 	Retained,
-	Adjustment //Adjustment entry
-
+	Adjustment, //Adjustment entry
+	Relocation
 }

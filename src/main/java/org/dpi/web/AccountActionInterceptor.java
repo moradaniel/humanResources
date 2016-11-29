@@ -150,8 +150,7 @@ public class AccountActionInterceptor extends HandlerInterceptorAdapter
 
 			
 			String urlRequested = getURL(request);
-			if(urlRequested.indexOf("findAvailableDepartmentsForAccount") < 0 
-			        ){
+			if(urlRequested.indexOf("findAvailableDepartmentsForAccount") < 0 ){
     			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails();
                 

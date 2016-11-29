@@ -5,6 +5,8 @@ public class EmployeeAdditionsPromotionsReportParameters extends AbstractReportP
 
 	private String templateFileName = "nota_creditos_conFechaImpresion.jrxml";
 
+	Long departmentId;
+	
 	public EmployeeAdditionsPromotionsReportParameters()
 	{
 	}
@@ -13,5 +15,8 @@ public class EmployeeAdditionsPromotionsReportParameters extends AbstractReportP
 	public String getTemplateFileName() {
 		return templateFileName;
 	}
+
+
+
 
 }

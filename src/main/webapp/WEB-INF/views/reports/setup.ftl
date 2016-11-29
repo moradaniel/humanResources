@@ -3,13 +3,28 @@
 <#import "/WEB-INF/views/reports/ReportMacros.ftl" as rm />
 
 <#function showSinglePeriodSelector reportCode=''>
-
-        <#if ('Employee_Additions_Promotions_Report' == reportCode?default(""))>
-                <#return true>                
+                 
+        <#if ('EmployeeAdditionsPromotionsReport' == reportCode?default("") ||
+                'CreditsEntriesReport' == reportCode?default("")  )>
+                <#return true>
          </#if>     
 
          <#return false>
+         
 </#function>
+
+
+<#function showFormatSelector reportCode=''>
+                 
+        <#if ( reportCode?has_content )>
+               <#return true>
+         </#if>     
+
+         <#return false>
+         
+</#function>
+
+
 
 
 <script type="text/javascript">
@@ -33,7 +48,7 @@
 		else {
 			document.setupReportForm.target="_blank";
 			//if (validate(document.setupReportForm.startDate,document.setupReportForm.stopDate,document.setupReportForm.hotelCodes,document.setupReportForm.reportCode.options[document.setupReportForm.reportCode.options.selectedIndex]) == true) {
-				if((document.setupReportForm.reportCode.value=='Employee_Additions_Promotions_Report') 
+				if((document.setupReportForm.reportCode.value=='EmployeeAdditionsPromotionsReport') 
 					&& document.setupReportForm.outputFormat.value=='XLS'){
 					document.setupReportForm.action= 'ReportRunExcel';
 				}
@@ -58,7 +73,7 @@
                         <div class="panel-body" >
                         
                             <form id="setupReportForm" name="setupReportForm" 
-                                action="${requestContext.contextPath}/reports/runReport" 
+                                action="${requestContext.contextPath}/reports/runReport2" 
                                 method="post"
                                 target="_blank"
                                 class="form-horizontal" role="form"
@@ -106,10 +121,33 @@
                                 </#if>
 
 
+                               <#if showFormatSelector(reportCode)>
+
+                                    <div class="form-group">
+                                        <label for="selectedOutputFormat" class="col-md-3 control-label">Formato</label>
+                                        <div class="col-md-9">
+                                            
+                                                <select name="selectedOutputFormat"  class="form-control">
+                                                        <#if ('EmployeeAdditionsPromotionsReport' == reportCode?default("") )>
+                                                                <option value="PDF" selected>pdf</option>
+                                                         </#if>     
+                                                         
+                                                         <#if ('CreditsEntriesReport' == reportCode?default("")  )>
+                                                                <option value="XLS" selected>xls</option>
+                                                         </#if>  
+                                                </select>
+                            
+                            
+                                        </div>
+                                    </div>
+                                    
+                                </#if>
+
+
                                 <div class="form-group">
                                     <!-- Button -->                                        
                                     <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
+                                        <button class="btn btn-primary" onclick="process('runReport2');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
                                     </div>
                                 </div>
                                 

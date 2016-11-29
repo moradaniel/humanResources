@@ -1,5 +1,6 @@
 package org.dpi.web.reporting.parameters;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public abstract class AbstractReportParameters
     
 	private Set<Long> departmentIds = new HashSet<Long>();
 	
-	private Set<Long> creditsPeriodIds = new HashSet<Long>();
+	private Set<Long> creditPeriodIds = new HashSet<Long>();
 		
 	Account generatedByUser;
 	
@@ -48,14 +49,13 @@ public abstract class AbstractReportParameters
 		this.dateRange = dateRange;
 	}
 	
-	public Set<Long> getCreditsPeriodIds() {
-		return creditsPeriodIds;
+	public Set<Long> getCreditPeriodIds() {
+		return creditPeriodIds;
 	}
 
 
-
-	public void setCreditsPeriodIds(Set<Long> creditsPeriodIds) {
-		this.creditsPeriodIds = creditsPeriodIds;
+	public void setCredisPeriodIds(Set<Long> creditPeriodIds) {
+		this.creditPeriodIds = creditPeriodIds;
 	}
 
 
@@ -69,13 +69,15 @@ public abstract class AbstractReportParameters
 		this.departmentIds = departmentIds;
 	}
 	
-	public void addCreditsPeriod(Long creditsPeriodId) {
-		this.creditsPeriodIds.add(creditsPeriodId);
-	}
+	public void addDepartmentIds(Long departmentIds) {
+	        this.departmentIds.add(departmentIds);
+	    }
 
-	public void addDepartment(Long departmentId) {
-		this.departmentIds.add(departmentId);
-	}
+    public void addCreditPeriodIds(Long ... creditPeriodIds) {
+        this.creditPeriodIds.addAll(Arrays.asList(creditPeriodIds));
+    }
+
+
 	
 	public Account getGeneratedByUser() {
 	    return generatedByUser;
