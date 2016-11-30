@@ -397,35 +397,7 @@
 			</props>
 		</property>
 	</bean>
-	
-	<bean id="downloadService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager"><ref bean="transactionManager"/></property> 
-		<property name="target">
-			<bean class="org.dpi.web.reporting.DownloadService">
 
-			</bean>
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="download*">PROPAGATION_SUPPORTS, readOnly</prop>
-				<prop key="*">PROPAGATION_SUPPORTS</prop>
-			</props>
-		</property>
-	</bean>
-	
-	<bean id="exporterService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager"><ref bean="transactionManager"/></property> 
-		<property name="target">
-			<bean class="org.dpi.web.reporting.jasper.ExporterService">
-			</bean>
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="export*">PROPAGATION_SUPPORTS, readOnly</prop>
-				<prop key="*">PROPAGATION_SUPPORTS</prop>
-			</props>
-		</property>
-	</bean>
 	
 
 	
@@ -491,7 +463,7 @@
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager"><ref bean="transactionManager"/></property> 
         <property name="target">
-            <bean class="org.dpi.web.reporting2.CreditsEntriesReportServiceImpl">
+            <bean class="org.dpi.web.reporting.CreditsEntriesReportServiceImpl">
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -515,7 +487,7 @@
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager"><ref bean="transactionManager"/></property> 
         <property name="target">
-            <bean class="org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportServiceImpl">
+            <bean class="org.dpi.web.reporting.EmployeeAdditionsPromotionsReportServiceImpl">
             </bean>
         </property>
         <property name="transactionAttributes">

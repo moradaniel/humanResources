@@ -39,9 +39,9 @@ import org.dpi.security.UserSettingsFactory;
 import org.dpi.stats.HistoricPeriodSummaryData;
 import org.dpi.stats.PeriodSummaryData;
 import org.dpi.util.tree.GenericTreeNode;
+import org.dpi.web.configuration.ApplicationConfigurationService;
 import org.dpi.web.reporting.CanGenerateReportResult;
 import org.dpi.web.reporting.ReportService;
-import org.dpi.web.reporting.ReportServiceImpl.ManagementReports;
 import org.janux.bus.persistence.EntityNotFoundException;
 import org.janux.bus.security.Account;
 import org.janux.bus.security.AccountService;
@@ -130,11 +130,16 @@ public class DepartmentController {
 	@Resource(name = "accountSettingsFactory")
 	private UserSettingsFactory settingsFactory;	
 	
-	@Resource(name = "reportService")
-	private ReportService reportService;
+	//@Resource(name = "reportService")
+	//private ReportService reportService;
 	
 	@Resource(name = "userAccessService")
 	private UserAccessService userAccessService;
+	
+	
+	@Resource(name = "applicationConfigurationService")
+    private ApplicationConfigurationService applicationConfigurationService;
+	
 	
 	@Autowired
 	@Qualifier("customObjectMapper")
@@ -313,7 +318,9 @@ public class DepartmentController {
 			
 			//------------------ Should we show the report generation button? -----------------------------			
 			
-			CanGenerateReportResult canGenerateReportResult = reportService.canGenerateReport(ManagementReports.Employee_Additions_Promotions_Report.name(), currentUser, department.getId());
+			ReportService reportService =applicationConfigurationService.getReportService(ReportService.Reports.EmployeeAdditionsPromotionsReport);
+			
+			CanGenerateReportResult canGenerateReportResult = reportService.canGenerateReport(currentUser, department.getId());
 			
 			
 			boolean showReportGenerationButton = false;

@@ -1,8 +1,7 @@
-package org.dpi.web.reporting2;
+package org.dpi.web.reporting;
 
 public class ReportParametersFactory {
     
-    //use getShape method to get object of type shape 
     public static IReportParameters buildReportParameters(ReportParameters reportParameters){
        if(reportParameters == null){
           return null;
@@ -24,9 +23,7 @@ public class ReportParametersFactory {
            creditsEntriesReportParameters.addCreditPeriodNames(reportParameters.getSelectedPeriodName());
            return creditsEntriesReportParameters;
           
-       }/* else if(shapeType.equalsIgnoreCase("SQUARE")){
-          return new Square();
-       }*/
+       }
        
        return null;
     }

@@ -1,4 +1,4 @@
-package org.dpi.web.reporting2;
+package org.dpi.web.reporting;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -26,17 +26,13 @@ import org.dpi.department.DepartmentService;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
 import org.dpi.person.PersonService;
-import org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource;
-import org.dpi.web.reporting.CanGenerateReportResult;
 import org.dpi.web.reporting.CanGenerateReportResult.ReasonCodes;
-import org.dpi.web.reporting.PromotionCreditEntriesReportDataSource;
+import org.dpi.web.reporting.ReportOutputFormat.OutputFormat;
 import org.dpi.web.reporting.dto.GenericReportRecord;
-import org.dpi.web.reporting.jasper.ExporterService;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 
@@ -54,12 +50,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 
 
-public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportService<org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportParameters> implements ReportService<org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportParameters>
-{
+public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportService<EmployeeAdditionsPromotionsReportParameters> implements ReportService<EmployeeAdditionsPromotionsReportParameters> {
     Logger log = LoggerFactory.getLogger(this.getClass());
-
-    /*@Resource(name = "creditsEntryDao")
-	private CreditsEntryDao creditsEntryDao;*/
 
     @Resource(name = "creditsEntryService")
     private CreditsEntryService creditsEntryService;
@@ -79,56 +71,48 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
     @Resource(name = "departmentService")
     private DepartmentService departmentService;
 
-    
-
-
-    private ApplicationContext applicationContext;
-
     @Autowired
     ServletContext servletContext;
-
-    @Resource(name = "exporterService")
-    private ExporterService exporter;
 
     public EmployeeAdditionsPromotionsReportServiceImpl() {
 
     }
-    
-    
-    public CanGenerateReportResult canGenerateReport(String reportCode, Account account, Long departmentId) {
-        
-        
-        CanGenerateReportResult canGenerateReportResult = super.canGenerateReport(reportCode, account, departmentId);
-        
-    
-        /*if(reportCode.equals(org.dpi.web.reporting2.ReportService.Reports.EmployeeAdditionsPromotionsReport.name())) {*/
-            if(creditsPeriodService.getCurrentCreditsPeriod().getStatus()!=Status.Active){
-                canGenerateReportResult.addReasonCode(ReasonCodes.closedCreditsPeriod.name());
-            }else {
-                Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod().getId(),departmentId);
-                if(creditosDisponiblesSegunSolicitadoPeriodoActual < 0) {
-                    canGenerateReportResult.addReasonCode(ReasonCodes.negativeBalance.name());
-                }
-            }
-        /*}*/
-        
-        return canGenerateReportResult;
+
+    public Reports getReportCode() {
+        return ReportService.Reports.EmployeeAdditionsPromotionsReport;
     }
-    
 
     @Override
-    public ByteArrayOutputStream generate(org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportParameters parameters/*, OutputStream outputStream*/)
+    public CanGenerateReportResult canGenerateReport(Account account, Long departmentId) {
+
+        CanGenerateReportResult canGenerateReportResult = super.canGenerateReport(account, departmentId);
+
+        if(creditsPeriodService.getCurrentCreditsPeriod().getStatus()!=Status.Active){
+            canGenerateReportResult.addReasonCode(ReasonCodes.closedCreditsPeriod.name());
+        }else {
+            Long creditosDisponiblesSegunSolicitadoPeriodoActual = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriodService.getCurrentCreditsPeriod().getId(),departmentId);
+            if(creditosDisponiblesSegunSolicitadoPeriodoActual < 0) {
+                canGenerateReportResult.addReasonCode(ReasonCodes.negativeBalance.name());
+            }
+        }
+
+        return canGenerateReportResult;
+    }
+
+
+    @Override
+    public ByteArrayOutputStream generate(EmployeeAdditionsPromotionsReportParameters parameters)
             throws Exception {
 
         ByteArrayOutputStream byteArrayOutputStream = null;
-        
+
         //CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
         //creditsEntryQueryFilter.addCreditsPeriodNames((String[]) parameters.getCreditPeriodNames().toArray(new String[0]));
 
 
-       // List<CreditsEntry> creditsEntries = creditsEntryService.find(creditsEntryQueryFilter);
+        // List<CreditsEntry> creditsEntries = creditsEntryService.find(creditsEntryQueryFilter);
 
-        if (org.dpi.web.reporting2.AbstractReportParameters.OutputFormat.PDF.equals(parameters.getOutputFormat())) {
+        if (OutputFormat.PDF.equals(parameters.getOutputFormat())) {
             byteArrayOutputStream = getPdfDocument(parameters/*, outputStream*/);
         } /*else
         if (OutputFormat.xls.equals(parameters.getOutputFormat())) {
@@ -140,11 +124,9 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
 
 
 
-    private ByteArrayOutputStream getPdfDocument(org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportParameters reportParams/*,
-            OutputStream outputStream*/) {
-        
+    private ByteArrayOutputStream getPdfDocument(EmployeeAdditionsPromotionsReportParameters reportParams) {
+
         String TEMPLATE_FOLDER = "/WEB-INF/reports/";
-        //String templateFileName = "nota_creditos_conFechaImpresion.jrxml";
 
         try {
 
@@ -160,16 +142,10 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
 
             InputStream reportStream = servletContext.getResourceAsStream(TEMPLATE_FOLDER+reportParams.getTemplateFileName()) ;
 
-            //InputStream reportStream = this.getClass().getClassLoader().getResourceAsStream(TEMPLATE_FOLDER+reportParams.getTemplateFileName());
-
 
             Map<String, Object> recordsMap = null;
 
-            //if (reportParams instanceof EmployeeAdditionsPromotionsReportParameters)
-            //{
-                recordsMap =    getReportData(reportParams);
-
-            //}
+            recordsMap =    getReportData(reportParams);
 
             for (Map.Entry<String, Object> entry : recordsMap.entrySet()) {
                 reportParamMap.put(entry.getKey(), entry.getValue());
@@ -191,15 +167,11 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
             // 6. Create an output byte stream where data will be written
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            // 7. Export report
-            //exporter.export(reportParams.getOutputFormat(), jp, response, baos);
-
             exportPdf(jp, baos);
 
 
             return baos;
-            // 8. Write to reponse stream
-            //write(outputStream, baos);
+
 
         } catch (JRException jre) {
             log.error("Unable to process download");
@@ -214,17 +186,13 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
             ByteArrayOutputStream baos) {
 
         try {
-            log.debug(String.valueOf(baos.size()));
+            //log.debug(String.valueOf(baos.size()));
 
-            // Retrieve output stream
-            //  ServletOutputStream outputStream = response.getOutputStream();
             // Write to output stream
             baos.writeTo(outputStream);
             // Flush the stream
             outputStream.flush();
 
-            // Remove download token
-            //tokenService.remove(token);
 
         } catch (Exception e) {
             log.error("Unable to write report to the output stream");
@@ -235,19 +203,17 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
 
 
 
-    public Map<String, Object> getReportData(final org.dpi.web.reporting2.EmployeeAdditionsPromotionsReportParameters employeeAdditionsPromotionsReportParameters) {
+    public Map<String, Object> getReportData(final EmployeeAdditionsPromotionsReportParameters employeeAdditionsPromotionsReportParameters) {
 
         CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
         creditsPeriodQueryFilter.setName(employeeAdditionsPromotionsReportParameters.getCreditPeriodNames().iterator().next());
-        
-        
+
+
         long creditsPeriodId = creditsPeriodService.find(creditsPeriodQueryFilter).get(0).getId();
 
 
         long departmentId = employeeAdditionsPromotionsReportParameters.getDepartmentId();
 
-        // Call DownloadService to do the actual report processing
-        //downloadService.downloadPdf(response);
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         params.put("DEPARTMENT_NAME",  departmentService.findById(departmentId).getName());
@@ -303,7 +269,7 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
 
 
         Long creditosReubicacionDeReparticion =this.creditsManagerService.getCreditosReparticion_ReubicacionDeReparticion_Periodo(creditsPeriodId,departmentId);
-                
+
         Long creditosDisponiblesAlInicioDelPeriodo =this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(creditsPeriodId,departmentId);
 
         Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(creditsPeriodId,departmentId);
@@ -370,8 +336,8 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
 
         return records;
     }
-    
-    
+
+
     public void exportPdf(JasperPrint jasperPrint, ByteArrayOutputStream baos) {
         // Create a JRPdfExporter instance
         JRPdfExporter exporter = new JRPdfExporter();
@@ -386,7 +352,7 @@ public class EmployeeAdditionsPromotionsReportServiceImpl extends BaseReportServ
         } catch (JRException e) {
             throw new RuntimeException(e);
         }
-        
+
     }
 
 }

@@ -1,4 +1,4 @@
-package org.dpi.web.reporting2;
+package org.dpi.web.reporting;
 
 import java.io.OutputStream;
 

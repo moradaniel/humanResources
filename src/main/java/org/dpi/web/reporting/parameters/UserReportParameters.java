@@ -1,7 +1,6 @@
 package org.dpi.web.reporting.parameters;
 
-import org.dpi.web.reporting.parameters.AbstractReportParameters.OutputFormat;
-
+import org.dpi.web.reporting.ReportOutputFormat.OutputFormat;
 
 public class UserReportParameters
 {

@@ -1,5 +1,6 @@
-package org.dpi.web.reporting2;
+package org.dpi.web.reporting;
 
+import org.dpi.web.reporting.parameters.AbstractReportParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,8 +9,6 @@ import org.slf4j.LoggerFactory;
 public class CreditsEntriesReportParameters  extends AbstractReportParameters implements IReportParameters
 {
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
-
     
 	
 	public CreditsEntriesReportParameters() {
