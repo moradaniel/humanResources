@@ -78,8 +78,8 @@
                     </tr>
                     
                     <tr>
-                        <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Debito?default("0")}</td>
-                        <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Credito?default("0")}</td>
+                        <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Debito_Periodo?default("0")}</td>
+                        <td>${currentPeriodSummaryData.totalCreditosReparticionAjustes_Credito_Periodo?default("0")}</td>
                         <td>${currentPeriodSummaryData.totalCreditosReparticion_ReasignadosDeRetencion_Periodo?default("0")}</td>
                         <td>${currentPeriodSummaryData.totalCreditosReparticion_Reubicacion_Periodo?default("0")}</td>
                     </tr>
