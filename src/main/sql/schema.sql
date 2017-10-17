@@ -4,13 +4,16 @@
  * c:\instantclient_11_2\tnsping XE_EROS
  * 
  * 
+ * Oracle Listener
+ * lsnrctl start
+ * lsnrctl status
  * 
  * http://www.oracle-base.com/articles/10g/Auditing_10gR2.php
  * 
  * 
  * initialization file init.ora
  * 
- * sqlplus SYS/password@XE_EROS as sysdba
+ * sqlplus SYS/password@XE as sysdba
  * 
  * SQL> show parameter audit;
  * 
@@ -53,9 +56,9 @@ SQL>
  * 
  * Ubuntu
  * 
- * alter database datafile '/usr/lib/oracle/xe/oradata/XE/SYSTEM.DBF' resize 4G;
- * alter database datafile '/usr/lib/oracle/xe/oradata/XE/UNDO.DBF' resize 1024M;
- * alter database datafile '/usr/lib/oracle/xe/oradata/XE/SYSTEM.DBF'  autoextend on;
+ * alter database datafile '/u01/app/oracle/oradata/XE/system.dbf' resize 4G;
+ * alter database datafile '/u01/app/oracle/oradata/XE/undotbs1.dbf' resize 1024M;
+ * alter database datafile '/u01/app/oracle/oradata/XE/system.dbf'  autoextend on;
  * 
  * 
  * 
@@ -63,6 +66,8 @@ SQL>
  * 
  * SQL> ALTER SYSTEM SET audit_trail=none SCOPE=SPFILE;
  * 
+ * 
+ * In addition, the actions performed by administrators are recorded in the syslog audit trail.
  * */
 
 START TRANSACTION;

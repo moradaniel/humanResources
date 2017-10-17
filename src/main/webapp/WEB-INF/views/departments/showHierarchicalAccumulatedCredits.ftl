@@ -49,6 +49,11 @@
 			
 			<#-- ui-grid -->
 
+            <h2>Creditos retenidos 2017</h2>
+            <div ng-controller="HierarchicalRetainedCreditsGridCtrl">
+              <div ui-grid="gridOptions_2017" class="myGrid"></div>
+            </div>
+            
             <h2>Creditos retenidos 2016</h2>
             <div ng-controller="HierarchicalRetainedCreditsGridCtrl">
               <div ui-grid="gridOptions_2016" class="myGrid"></div>

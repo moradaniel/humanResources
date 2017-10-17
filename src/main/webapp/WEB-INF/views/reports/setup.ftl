@@ -73,7 +73,7 @@
                         <div class="panel-body" >
                         
                             <form id="setupReportForm" name="setupReportForm" 
-                                action="${requestContext.contextPath}/reports/runReport2" 
+                                action="${requestContext.contextPath}/reports/runReport" 
                                 method="post"
                                 target="_blank"
                                 class="form-horizontal" role="form"
@@ -109,7 +109,8 @@
                                         <div class="col-md-9">
                                             
                                                 <select name="selectedPeriodName"  class="form-control">
-                                                    <option value="2016" selected>2016</option>
+                                                    <option value="2017" selected>2017</option>
+                                                    <option value="2016">2016</option>
                                                     <option value="2015">2015</option>
                                                     <option value="2014">2014</option>
                                                 </select>
@@ -147,7 +148,7 @@
                                 <div class="form-group">
                                     <!-- Button -->                                        
                                     <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-primary" onclick="process('runReport2');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
+                                        <button class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
                                     </div>
                                 </div>
                                 

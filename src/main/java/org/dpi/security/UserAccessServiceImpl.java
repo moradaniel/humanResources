@@ -148,7 +148,9 @@ public class UserAccessServiceImpl implements UserAccessService
 
         for(Role role : account.getRoles())
         {
-            if(role.getName().equals("DEPARTMENT_RESPONSIBLE") || role.getName().equals("HR_MANAGER") ){
+            if(role.getName().equals("DEPARTMENT_RESPONSIBLE") ||
+               role.getName().equals("TEMP_READONLY_DEPARTMENT_RESPONSIBLE") ||
+               role.getName().equals("HR_MANAGER") ){
                 sdepartmentQuery = " select h.id, h.name, h.code " +
                         " from DEPARTMENT_ACCOUNT ha " +
                         " inner join DEPARTMENT h on h.id = ha.DEPARTMENTID " +
