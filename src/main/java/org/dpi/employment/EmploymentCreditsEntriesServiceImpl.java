@@ -26,6 +26,7 @@ import org.dpi.person.PersonImpl;
 import org.dpi.person.PersonService;
 import org.dpi.subDepartment.SubDepartment;
 import org.dpi.subDepartment.SubDepartmentService;
+import org.dpi.util.PageList;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -543,8 +544,16 @@ public class EmploymentCreditsEntriesServiceImpl implements EmploymentCreditsEnt
         employmentQueryFilter.setCuil(personToBeTransfered.getCuil());
         
         //get current employment
-        Employment currentEmployment = employmentService.findEmployments(employmentQueryFilter).get(0);
+        Employment currentEmployment = null;
        
+        PageList<Employment> possibleEmployments = employmentService.findEmployments(employmentQueryFilter);
+        
+        if(!CollectionUtils.isEmpty(possibleEmployments)) {
+            currentEmployment = possibleEmployments.get(0);
+        }else {
+            throw new RuntimeException("The employment does not exists: "+employmentQueryFilter.toString());
+        }
+        
         //check if employment is active
         
         if(!currentEmployment.getStatus().equals(EmploymentStatus.ACTIVO)) {

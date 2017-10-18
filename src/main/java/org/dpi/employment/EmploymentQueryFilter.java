@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.util.query.AbstractQueryFilter;
 
 
@@ -150,4 +151,12 @@ public class EmploymentQueryFilter extends AbstractQueryFilter implements Serial
 		amId = null;*/
 	}
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).
+                append("centro", codigoCentro).
+                append("sector", codigoSector).
+                append("cuil", cuil).
+                toString();
+    }
 }
