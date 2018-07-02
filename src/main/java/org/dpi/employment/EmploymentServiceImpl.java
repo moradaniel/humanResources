@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 
 import org.dpi.category.Category;
 import org.dpi.category.CategoryService;
-import org.dpi.creditsEntry.CreditsEntryServiceImpl;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.occupationalGroup.OccupationalGroup;
@@ -150,7 +149,7 @@ public class EmploymentServiceImpl implements EmploymentService
 		    Integer possibleCategoryCode = Integer.parseInt(possibleCategory.getCode());
 		    if(possibleCategoryCode >= minimumCategoryCodeInt && possibleCategoryCode <= maximumCategoryCodeInt){
 		        if(possibleCategoryCode > currentEmploymentCategoryCodeInt) {
-		            if(CreditsEntryServiceImpl.canPromoteToUnlimitedCategory(currentUser) ||
+		            if(/*CreditsEntryServiceImpl.canPromoteToUnlimitedCategory(currentUser)*/ true ||
 		                    //not possible to promote more than 2 categories
 		                    possibleCategoryCode <=  currentEmploymentCategoryCodeInt + 2  )
 		            {
