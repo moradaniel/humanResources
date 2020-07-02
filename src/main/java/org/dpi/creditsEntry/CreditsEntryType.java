@@ -6,5 +6,6 @@ public enum CreditsEntryType {
 	IngresoAgente,
 	BajaAgente,
 	AscensoAgente
+	//,BajaAgentePendiente
 
 }

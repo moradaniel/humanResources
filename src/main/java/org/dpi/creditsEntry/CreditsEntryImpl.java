@@ -160,14 +160,19 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
             
             //Not changeable if: 1) older than 1 year 
             if( this.getCreditsPeriod().isOlderThanOtherPeriodInYears(creditsPeriodService.getCurrentCreditsPeriod(),1)
-                //or 2) the credits entry is a BajaAgente
-                //if we delete a past BajaAgente the balance for the next period can become negative
+
                  ||
-                 (this.getCreditsEntryType()== CreditsEntryType.BajaAgente)
-                 ||
-                 //or 3) the period is closed then check if the employment has subsequent entries
+                 //or 2) the period is closed then check if the employment has subsequent entries
                  // subsequent entries have to be undone before changing the status
                  (this.hasSubsequentEntries(creditsEntryService,creditsPeriodService)) 
+
+                 //or 3) the credits entry is a BajaAgente
+                 //if we delete a past BajaAgente the balance for the next period can become negative
+                 // unless it is in solicitado state
+                  ||
+                  (this.getCreditsEntryType()== CreditsEntryType.BajaAgente &&
+                   GrantedStatus.Otorgado == this.getGrantedStatus())
+                 
                  ) {
                 return false;
             }
