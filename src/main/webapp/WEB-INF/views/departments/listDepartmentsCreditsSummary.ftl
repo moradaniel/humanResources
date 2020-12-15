@@ -53,7 +53,8 @@
                 
                 <table class="table table-bordered">
                     <tr>
-                        <#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->        
+                        <#-- th class="table-header-check"><a id="toggle-all" ></a> </th -->
+                        <th>Ministerio/Secretaria de Estado</th>        
                         <th>Codigo</th>
                         <th>Reparticion</th>
                         <th>Saldo Disponible al Inicio del Periodo</th>
@@ -69,6 +70,7 @@
                     <#list currentPeriodDepartmentsSummaryData as currentPeriodSummaryData>
                     
                         <tr>
+                            <td>${currentPeriodSummaryData.ministerioDeReparticion.name?default("")}</td>
                             <td>${currentPeriodSummaryData.department.code?default("")}</td>
                             <td>${currentPeriodSummaryData.department.name?default("")}</td>
                             <td>${currentPeriodSummaryData.creditosDisponiblesInicioPeriodo?default("0")}</td>

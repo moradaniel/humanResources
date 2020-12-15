@@ -139,6 +139,12 @@
                                                          <#if ('CreditsEntriesReport' == reportCode?default("")  )>
                                                                 <option value="XLS" selected>xls</option>
                                                          </#if>  
+                                                         
+                                                         <#if ('ResumenDeSaldosDeCreditosDeReparticionesReport' == reportCode?default("")  )>
+                                                                <option value="XLS" selected>xls</option>
+                                                         </#if> 
+                                                         
+                                                         
                                                 </select>
                             
                             

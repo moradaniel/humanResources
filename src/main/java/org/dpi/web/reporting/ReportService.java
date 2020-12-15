@@ -8,7 +8,9 @@ public interface ReportService<T extends IReportParameters> {
     
     public enum Reports{
         EmployeeAdditionsPromotionsReport,
-        CreditsEntriesReport
+        CreditsEntriesReport,
+        ResumenDeSaldosDeCreditosDeReparticionesReport
+        
     }
     
     public CanGenerateReportResult canGenerateReport(Account account, Long departmentId);

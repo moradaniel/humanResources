@@ -194,11 +194,13 @@ public class UserAccessServiceImpl implements UserAccessService
                 List<DepartmentSearchInfo> departmentSearchInfos = new ArrayList<DepartmentSearchInfo>();
 
                 departmentSearchInfos = departmentService.findAllDepartments();
-                for(DepartmentSearchInfo departmentSearchInfo: departmentSearchInfos)
-                {
+                for(DepartmentSearchInfo departmentSearchInfo: departmentSearchInfos){
                     DepartmentAdminInfo info = new DepartmentAdminInfo(departmentSearchInfo.getDepartmentId(),departmentSearchInfo.getDepartmentName(),departmentSearchInfo.getDepartmentCode());
 
-                    departmentList.add(info);
+                    //TODO: Hay que eliminar la reparticion de testing de la base de datos. La filtramos por ahora
+                    if(!info.getCode().equals("9999999999")) {
+                        departmentList.add(info);
+                    }
                 }
             }
 

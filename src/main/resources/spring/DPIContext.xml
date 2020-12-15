@@ -62,7 +62,24 @@
 			</props>
 		</property>
 	</bean>
-	
+
+
+	<bean id="departmentReportService"
+		class="org.dpi.department.DepartmentReportServiceImpl">
+
+		<property name="userAccessService">
+			<ref bean="userAccessService" />
+		</property>
+		<property name="creditsPeriodService">
+			<ref bean="creditsPeriodService" />
+		</property>
+		<property name="creditsManagerService">
+			<ref bean="creditsManagerService" />
+		</property>
+		<property name="departmentService">
+			<ref bean="departmentService" />
+		</property>
+	</bean>
 	
 	<bean id="creditsManagerService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager"><ref bean="transactionManager"/></property> 
@@ -463,7 +480,7 @@
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager"><ref bean="transactionManager"/></property> 
         <property name="target">
-            <bean class="org.dpi.web.reporting.CreditsEntriesReportServiceImpl">
+            <bean class="org.dpi.web.reporting.creditsEntriesReport.CreditsEntriesReportServiceImpl">
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -482,7 +499,7 @@
     
     
     
-        <bean id="EmployeeAdditionsPromotionsReportService"
+    <bean id="EmployeeAdditionsPromotionsReportService"
             name="EmployeeAdditionsPromotionsReportService" 
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager"><ref bean="transactionManager"/></property> 
@@ -503,5 +520,29 @@
             </props>
         </property>
     </bean>
+    
+    <bean id="ResumenDeSaldosDeCreditosDeReparticionesReportService"
+            name="ResumenDeSaldosDeCreditosDeReparticionesReportService" 
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager"><ref bean="transactionManager"/></property> 
+        <property name="target">
+            <bean class="org.dpi.web.reporting.resumenDeSaldosDeCreditosDeReparticionesReport.ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl">
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="assureValid*">PROPAGATION_SUPPORTS, readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED, readOnly</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="actualizar*">PROPAGATION_REQUIRED</prop>
+                <prop key="change*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+        </property>
+    </bean>
+    
+    
 	
 </beans>

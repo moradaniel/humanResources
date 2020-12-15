@@ -1,4 +1,4 @@
-package org.dpi.web.reporting;
+package org.dpi.web.reporting.resumenDeSaldosDeCreditosDeReparticionesReport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,14 +12,12 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
-import org.dpi.creditsEntry.CreditsEntry;
-import org.dpi.creditsEntry.CreditsEntryQueryFilter;
-import org.dpi.creditsEntry.CreditsEntryService;
-import org.dpi.creditsManagement.CreditsManagerService;
-import org.dpi.creditsPeriod.CreditsPeriodService;
-import org.dpi.employment.EmploymentService;
-import org.dpi.person.PersonService;
+import org.dpi.department.DepartmentReportService;
+import org.dpi.stats.PeriodSummaryData;
+import org.dpi.web.reporting.BaseReportService;
+import org.dpi.web.reporting.CanGenerateReportResult;
 import org.dpi.web.reporting.ReportOutputFormat.OutputFormat;
+import org.dpi.web.reporting.ReportService;
 import org.janux.bus.security.Account;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
@@ -39,36 +37,23 @@ import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
 
 
-public class CreditsEntriesReportServiceImpl extends BaseReportService<CreditsEntriesReportParameters> implements ReportService<CreditsEntriesReportParameters>{
+public class ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl extends BaseReportService<ResumenDeSaldosDeCreditosDeReparticionesReportParameters> implements ReportService<ResumenDeSaldosDeCreditosDeReparticionesReportParameters>{
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
 
-    @Resource(name = "creditsEntryService")
-    private CreditsEntryService creditsEntryService;
-
-    @Resource(name = "employmentService")
-    private EmploymentService employmentService;
-
-    @Resource(name = "personService")
-    private PersonService personService;
-
-    @Resource(name = "creditsManagerService")
-    private CreditsManagerService creditsManagerService;
-
-    @Resource(name = "creditsPeriodService")
-    private CreditsPeriodService creditsPeriodService;
-
+    @Resource(name = "departmentReportService")
+    private DepartmentReportService departmentReportService;
 
     @Autowired
     ServletContext servletContext;
 
-    public CreditsEntriesReportServiceImpl() {
+    public ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl() {
 
     }
 
     public Reports getReportCode() {
-        return ReportService.Reports.CreditsEntriesReport;
+        return ReportService.Reports.ResumenDeSaldosDeCreditosDeReparticionesReport;
     }
 
     @Override
@@ -84,11 +69,11 @@ public class CreditsEntriesReportServiceImpl extends BaseReportService<CreditsEn
 
 
     @Override
-    public ByteArrayOutputStream generate(CreditsEntriesReportParameters parameters)
+    public ByteArrayOutputStream generate(ResumenDeSaldosDeCreditosDeReparticionesReportParameters parameters)
             throws Exception {
 
         ByteArrayOutputStream byteArrayOutputStream = null;
-
+/*
         CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
         creditsEntryQueryFilter.addCreditsPeriodNames((String[]) parameters.getCreditPeriodNames().toArray(new String[0]));
 
@@ -97,27 +82,37 @@ public class CreditsEntriesReportServiceImpl extends BaseReportService<CreditsEn
 
 
         List<CreditsEntry> creditsEntries = creditsEntryService.find(creditsEntryQueryFilter);
+        
+        List<ResumenDeSaldosDeCreditosDeReparticionesReportRecord> creditsEntriesReportRecords = new ArrayList<>();
+        for(CreditsEntry creditsEntry : creditsEntries) {
+            Department ministerioDeReparticion = departmentService.getMinisterioOSecretariaDeEstado(creditsEntry.getEmployment().getSubDepartment().getDepartment());
+            ResumenDeSaldosDeCreditosDeReparticionesReportRecord creditsEntriesReportRecord = new ResumenDeSaldosDeCreditosDeReparticionesReportRecord(creditsEntry, ministerioDeReparticion);
+            
+            creditsEntriesReportRecords.add(creditsEntriesReportRecord);
+        }*/
+        
+        List<PeriodSummaryData> resumenDeSaldosReparticionesRecords = departmentReportService.getCurrentPeriodDepartmentsSummaryData();
 
         if (OutputFormat.PDF.equals(parameters.getOutputFormat())) {
             getPdfDocument(parameters, null);
         } else
             if (OutputFormat.XLS.equals(parameters.getOutputFormat())) {
-                byteArrayOutputStream = getExcelDocument(parameters,creditsEntries/*, outputStream*/);
+                byteArrayOutputStream = getExcelDocument(parameters,resumenDeSaldosReparticionesRecords/*, outputStream*/);
             }
 
         return byteArrayOutputStream;
     }
 
-    private ByteArrayOutputStream getExcelDocument(CreditsEntriesReportParameters parameters,
-            List<CreditsEntry> creditsEntries) throws Exception{
-        log.info("Running CreditsSummaryReportService");
+    private ByteArrayOutputStream getExcelDocument(ResumenDeSaldosDeCreditosDeReparticionesReportParameters parameters,
+            List<PeriodSummaryData> resumenDeSaldosReparticionesRecords) throws Exception{
+        log.info("Running ResumenDeSaldosDeCreditosDeReparticionesReport");
 
         String TEMPLATE_FOLDER = "/WEB-INF/reports/";
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try(InputStream templateReportStream = servletContext.getResourceAsStream(TEMPLATE_FOLDER+parameters.getTemplateFileName())) {
             Context context = new Context();
-            context.putVar("creditsEntries", creditsEntries);
+            context.putVar("resumenDeSaldosReparticionesRecords", resumenDeSaldosReparticionesRecords);
             JxlsHelper.getInstance().processTemplate(templateReportStream, baos, context);
         }
 
@@ -125,7 +120,7 @@ public class CreditsEntriesReportServiceImpl extends BaseReportService<CreditsEn
 
     }
 
-    private void getPdfDocument(CreditsEntriesReportParameters parameters, OutputStream outputStream) {
+    private void getPdfDocument(ResumenDeSaldosDeCreditosDeReparticionesReportParameters parameters, OutputStream outputStream) {
 
         String TEMPLATE_FOLDER = "/WEB-INF/reports/";
         String templateFileName = "ODTProjectWithVelocity.odt";

@@ -5,6 +5,8 @@ import org.dpi.department.Department;
 public class PeriodSummaryData {
 
         Department department;
+        Department ministerioDeReparticion;
+
         private String year;
 		private long creditosDisponiblesInicioPeriodo;
     	private long creditosAcreditadosPorBajaDurantePeriodo;
@@ -140,6 +142,12 @@ public class PeriodSummaryData {
         public void setTotalCreditosReparticion_Reubicacion_Periodo(
                 long totalCreditosReparticion_Reubicacion_Periodo) {
             this.totalCreditosReparticion_Reubicacion_Periodo = totalCreditosReparticion_Reubicacion_Periodo;
+        }
+        public Department getMinisterioDeReparticion() {
+            return ministerioDeReparticion;
+        }
+        public void setMinisterioDeReparticion(Department ministerioDeReparticion) {
+            this.ministerioDeReparticion = ministerioDeReparticion;
         }
 		
 	}

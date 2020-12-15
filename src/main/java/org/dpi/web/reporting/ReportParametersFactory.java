@@ -1,5 +1,8 @@
 package org.dpi.web.reporting;
 
+import org.dpi.web.reporting.creditsEntriesReport.CreditsEntriesReportParameters;
+import org.dpi.web.reporting.resumenDeSaldosDeCreditosDeReparticionesReport.ResumenDeSaldosDeCreditosDeReparticionesReportParameters;
+
 public class ReportParametersFactory {
     
     public static IReportParameters buildReportParameters(ReportParameters reportParameters){
@@ -23,7 +26,17 @@ public class ReportParametersFactory {
            creditsEntriesReportParameters.addCreditPeriodNames(reportParameters.getSelectedPeriodName());
            return creditsEntriesReportParameters;
           
+       } else if(reportParameters.getReportCode().equalsIgnoreCase(ReportService.Reports.ResumenDeSaldosDeCreditosDeReparticionesReport.name())){
+           
+           
+           ResumenDeSaldosDeCreditosDeReparticionesReportParameters resumenDeSaldosDeCreditosDeReparticionesReportParameters = new ResumenDeSaldosDeCreditosDeReparticionesReportParameters();
+           resumenDeSaldosDeCreditosDeReparticionesReportParameters.setOutputFormat(reportParameters.getSelectedOutputFormat());
+           resumenDeSaldosDeCreditosDeReparticionesReportParameters.setGeneratedByUser(reportParameters.getGeneratedByUser());
+           resumenDeSaldosDeCreditosDeReparticionesReportParameters.addCreditPeriodNames(reportParameters.getSelectedPeriodName());
+           return resumenDeSaldosDeCreditosDeReparticionesReportParameters;
+          
        }
+       
        
        return null;
     }

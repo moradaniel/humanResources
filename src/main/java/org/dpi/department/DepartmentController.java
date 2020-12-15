@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 import javax.annotation.Resource;
@@ -130,8 +129,8 @@ public class DepartmentController {
 	@Resource(name = "accountSettingsFactory")
 	private UserSettingsFactory settingsFactory;	
 	
-	//@Resource(name = "reportService")
-	//private ReportService reportService;
+	@Resource(name = "departmentReportService")
+	private DepartmentReportService departmentReportService;
 	
 	@Resource(name = "userAccessService")
 	private UserAccessService userAccessService;
@@ -189,7 +188,7 @@ public class DepartmentController {
 			}
 			
 			//build current year
-			PeriodSummaryData currentPeriodSummaryData = buildCurrentPeriodSummaryData(department);
+			PeriodSummaryData currentPeriodSummaryData = departmentReportService.buildCurrentPeriodSummaryData(department);
 					
 			model.addAttribute("currentPeriodSummaryData", currentPeriodSummaryData);
 			
@@ -547,74 +546,7 @@ public class DepartmentController {
     }
 
 
-    PeriodSummaryData buildCurrentPeriodSummaryData(Department department){
-		
-		//--------------------- current year
-		
-		CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
-		
-		PeriodSummaryData currentPeriodSummaryData = new PeriodSummaryData();
-		
-		currentPeriodSummaryData.setDepartment(department);
-		
-		currentPeriodSummaryData.setYear(currentCreditsPeriod.getName());
-		
-		
-		Long creditosDisponiblesInicioPeriodo = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(),department.getId());
-		currentPeriodSummaryData.setCreditosDisponiblesInicioPeriodo(creditosDisponiblesInicioPeriodo);
 
-	
-		Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(), department.getId());
-
-		currentPeriodSummaryData.setCreditosAcreditadosPorBajaDurantePeriodo(creditosAcreditadosPorBajaDurantePeriodoActual);
-		
-		
-		Long currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), department.getId());
-
-		currentPeriodSummaryData.setRetainedCredits(currentPeriodRetainedCredits);
-		
-		
-		Long currentPeriodTotalAvailableCredits = this.creditsManagerService.getTotalCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(), department.getId());
-		
-
-        currentPeriodSummaryData.setTotalAvailableCredits(currentPeriodTotalAvailableCredits);
-		
-		
-		
-		Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), department.getId());
-		
-		currentPeriodSummaryData.setCreditosConsumidosPorIngresosOAscensosSolicitadosPeriodo(creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo);
-		
-
-		Long creditosPorIngresosOAscensosOtorgadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getId(), department.getId());
-		
-		currentPeriodSummaryData.setCreditosPorIngresosOAscensosOtorgadosPeriodo(creditosPorIngresosOAscensosOtorgadosPeriodo);
-
-				
-
-		Long creditosDisponiblesSegunSolicitadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod.getId(),department.getId());
-		currentPeriodSummaryData.setCreditosDisponiblesSegunSolicitadoPeriodo(creditosDisponiblesSegunSolicitadoPeriodo);
-		
-		Long creditosDisponiblesSegunOtorgadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod.getId(),department.getId());
-		currentPeriodSummaryData.setCreditosDisponiblesSegunOtorgadoPeriodo(creditosDisponiblesSegunOtorgadoPeriodo);
-		
-        Long totalCreditosReparticionAjustes_Debito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesDebitoPeriodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticionAjustes_Debito_Periodo(totalCreditosReparticionAjustes_Debito_Periodo);
-        
-        Long totalCreditosReparticionAjustes_Credito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesCreditoPeriodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticionAjustes_Credito_Periodo(totalCreditosReparticionAjustes_Credito_Periodo);
-
-        Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo = this.creditsManagerService.getCreditosReparticion_ReasignadosDeRetencion_Periodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion_Periodo(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
-
-        
-        Long totalCreditosReparticion_ReubicacionReparticion_Periodo = this.creditsManagerService.getCreditosReparticion_ReubicacionDeReparticion_Periodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticion_Reubicacion_Periodo(totalCreditosReparticion_ReubicacionReparticion_Periodo);
-
-        
-		return currentPeriodSummaryData;
-					
-	}
 	
 	List<HistoricPeriodSummaryData> buildHistoricPeriodsSummaryData(Department department){
 		
@@ -856,47 +788,11 @@ public class DepartmentController {
        @RequestMapping(value = "/departments/listDepartmentsCreditsSummary", method = RequestMethod.GET)
        public String listDepartmentsCreditsSummary(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-           Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-           String accountName = ((Account) principal).getName();
-           Set<DepartmentAdminInfo> departmentsInfoSet = userAccessService.getDepartmentListForAccount(accountName, null);
-           List<DepartmentAdminInfo> departmentsInfoList = new ArrayList<DepartmentAdminInfo>(departmentsInfoSet);
-
-           //List<GenericTreeNode<DepartmentResults<String>>> childrenArrayList = node.getChildren();
            
-           Collections.sort(departmentsInfoList, new Comparator<DepartmentAdminInfo>()
-               {
-                   public int compare( DepartmentAdminInfo one, DepartmentAdminInfo another){
-                       return one.getCode().compareTo(another.getCode());
-                   }
+           List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = departmentReportService.getCurrentPeriodDepartmentsSummaryData();
                    
-               }
-           );
-                   
+           model.addAttribute("currentPeriodDepartmentsSummaryData", currentPeriodDepartmentsSummaryData);
            
-           List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = new ArrayList<PeriodSummaryData>();
-           for( DepartmentAdminInfo departmentInfo : departmentsInfoList){
-
-               Department department = departmentService.findById(departmentInfo.getId());
-               
-               /*
-               
-               if (department instanceof Department) 
-               {
-                   model.addAttribute(KEY_DEPARTMENT_LIST, department.getId());
-               }*/
-               
-               //build current year
-               
-               log.debug("Generating listDepartmentsCreditsSummary, building buildCurrentPeriodSummaryData for department {}",department.getCode()+department.getName());
-               PeriodSummaryData currentPeriodSummaryData = buildCurrentPeriodSummaryData(department);
-               
-               currentPeriodDepartmentsSummaryData.add(currentPeriodSummaryData);
-               
-               model.addAttribute("currentPeriodDepartmentsSummaryData", currentPeriodDepartmentsSummaryData);
-               
-
-
-           }
            
            /*
            // get the current department in the session
