@@ -158,8 +158,8 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
             
             //if the creditsPeriod is closed
             
-            //Not changeable if: 1) older than 1 year 
-            if( this.getCreditsPeriod().isOlderThanOtherPeriodInYears(creditsPeriodService.getCurrentCreditsPeriod(),1)
+            //Not changeable if: 1) older than 2 years 
+            if( this.getCreditsPeriod().isOlderThanOtherPeriodInYears(creditsPeriodService.getCurrentCreditsPeriod(),2)
 
                  ||
                  //or 2) the period is closed then check if the employment has subsequent entries
