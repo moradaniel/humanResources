@@ -349,6 +349,7 @@ public class EmploymentController {
 		List<SubDepartment> subDepartmentsOfDepartment = subDepartmentService.findSubDepartments(department);
 
 		model.addAttribute("subDepartmentsOfDepartment", subDepartmentsOfDepartment);
+		model.addAttribute("availableCategoriesForNewEmployment", employmentService.getAvailableCategoriesForNewEmployment());
 
 		return "employments/proposeNewEmploymentForm";
 	}

@@ -8,12 +8,13 @@
 	
 		<tr>
 			<td>
+			
 				<select id="proposedCategoryCode" name="proposedCategoryCode" >
-					<#-- assign keys = dropDownListMap?keys -->
-					<option value="">- Elija Categoria -</option>
-					<option value="12">12</option>
-					<option value="20">20</option>
-				</select>
+                    <option value="">- Elija Categoria -</option>
+                    <#list availableCategoriesForNewEmployment as category>
+                        <option value="${category.code}">${category.code?default("")}</option>
+                    </#list>
+                </select>
 			
 			</td>
 		</tr>

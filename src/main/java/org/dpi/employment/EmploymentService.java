@@ -31,6 +31,8 @@ public interface EmploymentService extends ApplicationContextAware
 	public EmploymentDao getEmploymentDao();
 
 	public List<Category> getAvailableCategoriesForPromotion(Employment currentEmployment);
+	
+	public List<Category> getAvailableCategoriesForNewEmployment();
 
 
 }

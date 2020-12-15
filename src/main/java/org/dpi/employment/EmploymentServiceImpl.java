@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.dpi.category.Category;
+import org.dpi.category.CategoryImpl;
 import org.dpi.category.CategoryService;
 import org.dpi.creditsManagement.CreditsManagerService;
 import org.dpi.creditsPeriod.CreditsPeriodService;
@@ -163,6 +164,16 @@ public class EmploymentServiceImpl implements EmploymentService
 
 	}
 
+	public List<Category> getAvailableCategoriesForNewEmployment(){
+	    List <Category> availableCategories = new ArrayList<Category>();
+	    
+	    for(int i=12;i<=24;i++) {
+	        Category category = new CategoryImpl();
+	        category.setCode(""+i);
+	        availableCategories.add(category);
+	    }
+	    return availableCategories;
+    }
 
 	
 	public PersonService getPersonService() {
