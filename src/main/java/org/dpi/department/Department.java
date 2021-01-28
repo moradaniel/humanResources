@@ -3,6 +3,7 @@ package org.dpi.department;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.Persistent;
 import org.dpi.subDepartment.SubDepartment;
 
@@ -23,4 +24,12 @@ public interface Department extends Persistent, Serializable{
     public Set<Department> getChildren();
 
     public void setChildren(Set<Department> children);
+    
+    public CreditsPeriod getValidFromPeriod();
+
+    public void setValidFromPeriod(CreditsPeriod validFromPeriod);
+
+    public CreditsPeriod getValidToPeriod();
+
+    public void setValidToPeriod(CreditsPeriod validToPeriod);
 }

@@ -14,6 +14,20 @@
     <property name="code" column="CODE" type="string"/>
     <property name="name" column="NAME" type="string"/> 
     
+    <many-to-one 
+            name="validFromPeriod"
+            class="org.dpi.creditsPeriod.CreditsPeriodImpl"
+            column="VALID_FROM_PERIOD" 
+            foreign-key="FK_DEPARTMENTVALIDFROMPERIOD"
+            not-null="false"/>
+
+    <many-to-one 
+            name="validToPeriod"
+            class="org.dpi.creditsPeriod.CreditsPeriodImpl"
+            column="VALID_TO_PERIOD" 
+            foreign-key="FK_DEPARTMENTVALIDTOPERIOD"
+            not-null="false"/>
+    
     <!-- this association is bidirectional
     	subDepartment side is marked as inverse="true" so the owner of the relation is Department-->
     <set name="subDepartments" cascade="save-update" lazy="true" inverse="true">

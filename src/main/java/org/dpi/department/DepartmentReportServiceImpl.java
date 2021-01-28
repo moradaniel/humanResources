@@ -59,11 +59,17 @@ public class DepartmentReportServiceImpl implements DepartmentReportService {
             }
         );
     
-     //   int i = 0;
+       // int i = 0;
             List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = new ArrayList<PeriodSummaryData>();
             for( DepartmentAdminInfo departmentInfo : departmentsInfoList){
         
+               
+                //TODO cambiar esto. Se debe buscar las reparticiones que no esten desactivadas.
+                //No buscar una por una si esta desactivada. Usar un quiery filter de department
                 Department department = departmentService.findById(departmentInfo.getId());
+                if(department.getValidToPeriod()!=null){
+                    continue;
+                }
                 
                 /*
                 
@@ -78,9 +84,10 @@ public class DepartmentReportServiceImpl implements DepartmentReportService {
                 PeriodSummaryData currentPeriodSummaryData = buildCurrentPeriodSummaryData(department);
                 
                 currentPeriodDepartmentsSummaryData.add(currentPeriodSummaryData);
-/*
+
+                /*
                 i++;
-                if(i==3) {
+                if(i==13) {
                     break;
                 }*/
             }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.subDepartment.SubDepartment;
 
@@ -22,14 +23,19 @@ public class DepartmentImpl extends PersistentAbstract implements Department {
 	
 	private Department parent;
 	private Set<Department> children = new HashSet<Department>();
+	
+	private CreditsPeriod validFromPeriod;
+	private CreditsPeriod validToPeriod;
 
-	public DepartmentImpl(){
+    public DepartmentImpl(){
 	}
 	
+    @Override
 	public String getCode(){
 		return this.code;
 	}
 	
+    @Override
 	public void setCode(String code){
 		this.code = code;
 	}
@@ -58,20 +64,44 @@ public class DepartmentImpl extends PersistentAbstract implements Department {
 		this.subDepartments.add(subDepartment);
 	}
 
+    @Override
     public Department getParent() {
         return parent;
     }
 
+    @Override
     public void setParent(Department parent) {
         this.parent = parent;
     }
 
+    @Override
     public Set<Department> getChildren() {
         return children;
     }
 
+    @Override
     public void setChildren(Set<Department> children) {
         this.children = children;
+    }
+    
+    @Override
+    public CreditsPeriod getValidFromPeriod() {
+        return validFromPeriod;
+    }
+
+    @Override
+    public void setValidFromPeriod(CreditsPeriod validFromPeriod) {
+        this.validFromPeriod = validFromPeriod;
+    }
+
+    @Override
+    public CreditsPeriod getValidToPeriod() {
+        return validToPeriod;
+    }
+
+    @Override
+    public void setValidToPeriod(CreditsPeriod validToPeriod) {
+        this.validToPeriod = validToPeriod;
     }
 
     @Override
