@@ -9,13 +9,13 @@ public interface ReportService<T extends IReportParameters> {
     public enum Reports{
         EmployeeAdditionsPromotionsReport,
         CreditsEntriesReport,
-        ResumenDeSaldosDeCreditosDeReparticionesReport
+        ResumenDeSaldosDeCreditosDeReparticionesReport,
+        SolicitudCreditosReparticionReport
         
     }
     
     public CanGenerateReportResult canGenerateReport(Account account, Long departmentId);
     
-    public ByteArrayOutputStream generate(T parameters)
-            throws Exception;
+    public ByteArrayOutputStream generate(T parameters) throws Exception;
 
 }

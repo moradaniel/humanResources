@@ -13,6 +13,8 @@ public class ReportUtils {
         new ReportDescriptor(ReportService.Reports.EmployeeAdditionsPromotionsReport.name(),"Employee Additions Promotions Report","Employee_Additions_Promotions_Report")
         ,new ReportDescriptor(ReportService.Reports.CreditsEntriesReport.name(),"Credits Entries Report","Credits_Entries_Report")
         ,new ReportDescriptor(ReportService.Reports.ResumenDeSaldosDeCreditosDeReparticionesReport.name(),"Reporte Resumen Saldos de Creditos de Reparticiones","Resumen_Saldos_Creditos_Reparticiones_Report")
+        ,new ReportDescriptor(ReportService.Reports.SolicitudCreditosReparticionReport.name(),"Reporte Solicitud de Creditos para Reparticion","Solicitud_Creditos_Reparticion_Report")
+        
 
     };
     
