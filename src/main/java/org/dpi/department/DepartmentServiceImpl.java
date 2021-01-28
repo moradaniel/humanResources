@@ -123,13 +123,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     
     @Override
     public Department getMinisterioOSecretariaDeEstado(Department childDepartment) {
+        
+        //TODO implementar una cache para guardar esto que se actualice cada 1 hora
         Department ministerioOSecretariaDeEstadoDeLaReparticionDepartment =  reparticion_ministerioOSecretariaDeEstadoMap.get(childDepartment.getId());
         if(ministerioOSecretariaDeEstadoDeLaReparticionDepartment==null) {
             ministerioOSecretariaDeEstadoDeLaReparticionDepartment = findMinisterioOSecretariaDeEstado(childDepartment);
             reparticion_ministerioOSecretariaDeEstadoMap.put(childDepartment.getId(),ministerioOSecretariaDeEstadoDeLaReparticionDepartment);
         }
-        //return departmentDao.findById(3l);
         return ministerioOSecretariaDeEstadoDeLaReparticionDepartment;
+        
+        //por ahora buscamos pero hay que hacer cache
+       // return findMinisterioOSecretariaDeEstado(childDepartment);
     }
 
     public Department findMinisterioOSecretariaDeEstado(Department childDepartment){
