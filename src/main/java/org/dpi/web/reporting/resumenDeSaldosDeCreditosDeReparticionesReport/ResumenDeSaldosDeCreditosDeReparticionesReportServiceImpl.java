@@ -77,8 +77,6 @@ public class ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl extends B
         CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
         creditsEntryQueryFilter.addCreditsPeriodNames((String[]) parameters.getCreditPeriodNames().toArray(new String[0]));
 
-        //dont report test department
-        creditsEntryQueryFilter.addNotInDepartmentCode("9999999999");
 
 
         List<CreditsEntry> creditsEntries = creditsEntryService.find(creditsEntryQueryFilter);
