@@ -196,13 +196,13 @@ public class CreditsManagerServiceImpl extends BaseDAOHibernate implements Credi
         creditosPorAscenso.get("20").put("24", 762);
 
         creditosPorAscenso.put("21", new HashMap<String,Integer>());
-        creditosPorAscenso.get("21").put("22", 163);//
+        creditosPorAscenso.get("21").put("22", 162);//
         creditosPorAscenso.get("21").put("23", 368);
         creditosPorAscenso.get("21").put("24", 634);
 
         creditosPorAscenso.put("22", new HashMap<String,Integer>());
         creditosPorAscenso.get("22").put("23", 206);
-        creditosPorAscenso.get("22").put("24", 471);//
+        creditosPorAscenso.get("22").put("24", 472);//
 
         creditosPorAscenso.put("23", new HashMap<String,Integer>());
         creditosPorAscenso.get("23").put("24", 266);
