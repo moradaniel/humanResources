@@ -160,7 +160,7 @@ public class ReportController{
     @RequestMapping(value = "/runReport", method = RequestMethod.POST)
     public void runReport(HttpServletRequest request 
             , HttpServletResponse response
-            , ReportParameters reportParameters
+            , ReportParameters userReportParameters
             ) throws ServletException, IOException,
     ClassNotFoundException, SQLException {
 
@@ -174,7 +174,7 @@ public class ReportController{
             // get the current reparticion in the session
             final Department department = DepartmentController.getCurrentDepartment(request);
 
-            ReportService reportService = applicationConfigurationService.getReportService(ReportService.Reports.valueOf(reportParameters.getReportCode()));
+            ReportService reportService = applicationConfigurationService.getReportService(ReportService.Reports.valueOf(userReportParameters.getReportCode()));
             CanGenerateReportResult canGenerateReportResult = reportService.canGenerateReport(currenUser, department.getId());
 
             if(canGenerateReportResult.canGenerateReport()==false) {
@@ -182,22 +182,22 @@ public class ReportController{
                 return;
             }
 
-            String reportFileName = messageSource.getMessage("msg."+reportParameters.getReportCode(),null, new Locale("es", "AR"));
+            String reportFileName = messageSource.getMessage("msg."+userReportParameters.getReportCode(),null, new Locale("es", "AR"));
             //remove white spaces
             reportFileName = reportFileName.replaceAll("\\s+","_");
 
-            if(reportParameters.getSelectedOutputFormat()==OutputFormat.XLS) {
+            if(userReportParameters.getSelectedOutputFormat()==OutputFormat.XLS) {
                 response.setHeader("Content-disposition", "attachment; filename="+reportFileName+".xls");    
             }else
-                if(reportParameters.getSelectedOutputFormat()==OutputFormat.PDF) {
+                if(userReportParameters.getSelectedOutputFormat()==OutputFormat.PDF) {
                     response.setHeader("Content-disposition", "attachment; filename="+reportFileName+".pdf");    
                 }
 
-            reportParameters.setGeneratedByUser(currenUser);
-            reportParameters.addDepartmentIds(department.getId());
+            userReportParameters.setGeneratedByUser(currenUser);
+            userReportParameters.addDepartmentIds(department.getId());
 
 
-            ByteArrayOutputStream generatedReportAsByteArrayOutputStream = reportService.generate(ReportParametersFactory.buildReportParameters(reportParameters)/*, response.getOutputStream()*/);
+            ByteArrayOutputStream generatedReportAsByteArrayOutputStream = reportService.generate(ReportParametersFactory.buildReportParameters(userReportParameters)/*, response.getOutputStream()*/);
 
             response.setContentLength(generatedReportAsByteArrayOutputStream.size());
             generatedReportAsByteArrayOutputStream.writeTo(response.getOutputStream());
