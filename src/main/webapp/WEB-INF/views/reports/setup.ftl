@@ -1,3 +1,6 @@
+
+
+
 <#import "/WEB-INF/views/spring.ftl" as spring />
 
 <#import "/WEB-INF/views/reports/ReportMacros.ftl" as rm />
@@ -29,6 +32,14 @@
 
 <script type="text/javascript">
 
+    function soloNumeros(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+        }
+        return true;
+    }
+            
 	function process(action){
      	//account_hotels.onSubmit();
 
@@ -48,10 +59,13 @@
 		else {
 			document.setupReportForm.target="_blank";
 			//if (validate(document.setupReportForm.startDate,document.setupReportForm.stopDate,document.setupReportForm.hotelCodes,document.setupReportForm.reportCode.options[document.setupReportForm.reportCode.options.selectedIndex]) == true) {
-				if((document.setupReportForm.reportCode.value=='EmployeeAdditionsPromotionsReport') 
-					&& document.setupReportForm.outputFormat.value=='XLS'){
+				/*if((document.setupReportForm.reportCode.value=='EmployeeAdditionsPromotionsReport') 
+					&& document.setupReportForm.selectedOutputFormat.value=='XLS'){
 					document.setupReportForm.action= 'ReportRunExcel';
-				}
+				}*/
+				
+
+				
 				document.setupReportForm.submit();
 			//}else {
 			//	return false;
@@ -144,6 +158,10 @@
                                                                 <option value="XLS" selected>xls</option>
                                                          </#if> 
                                                          
+                                                         <#if ('SolicitudCreditosReparticionReport' == reportCode?default("") )>
+                                                                <option value="XLS" selected>xls</option>
+                                                         </#if>   
+                                                         
                                                          
                                                 </select>
                             
@@ -157,7 +175,7 @@
                                 <div class="form-group">
                                     <!-- Button -->                                        
                                     <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
+                                        <button type="button" class="btn btn-primary" onclick="process('runReport');"><i class="icon-hand-right"></i> &nbsp; <@spring.message "msg.run"/></button>
                                     </div>
                                 </div>
                                 
