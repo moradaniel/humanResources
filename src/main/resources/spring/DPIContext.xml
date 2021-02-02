@@ -504,7 +504,7 @@
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager"><ref bean="transactionManager"/></property> 
         <property name="target">
-            <bean class="org.dpi.web.reporting.EmployeeAdditionsPromotionsReportServiceImpl">
+            <bean class="org.dpi.web.reporting.employeeAdditionsPromotionsReport.EmployeeAdditionsPromotionsReportServiceImpl">
             </bean>
         </property>
         <property name="transactionAttributes">

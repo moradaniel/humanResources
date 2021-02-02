@@ -1,5 +1,6 @@
-package org.dpi.web.reporting;
+package org.dpi.web.reporting.employeeAdditionsPromotionsReport;
 
+import org.dpi.web.reporting.IReportParameters;
 import org.dpi.web.reporting.ReportOutputFormat.OutputFormat;
 import org.dpi.web.reporting.parameters.AbstractReportParameters;
 import org.slf4j.Logger;

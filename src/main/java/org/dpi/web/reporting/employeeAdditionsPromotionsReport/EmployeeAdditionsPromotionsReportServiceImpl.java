@@ -1,4 +1,4 @@
-package org.dpi.web.reporting;
+package org.dpi.web.reporting.employeeAdditionsPromotionsReport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -26,8 +26,14 @@ import org.dpi.department.DepartmentService;
 import org.dpi.employment.EmploymentQueryFilter;
 import org.dpi.employment.EmploymentService;
 import org.dpi.person.PersonService;
+import org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource;
+import org.dpi.web.reporting.BaseReportService;
+import org.dpi.web.reporting.CanGenerateReportResult;
+import org.dpi.web.reporting.ReportService;
+import org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource.ReportFieldID;
 import org.dpi.web.reporting.CanGenerateReportResult.ReasonCodes;
 import org.dpi.web.reporting.ReportOutputFormat.OutputFormat;
+import org.dpi.web.reporting.ReportService.Reports;
 import org.dpi.web.reporting.dto.GenericReportRecord;
 import org.janux.bus.security.Account;
 import org.slf4j.Logger;

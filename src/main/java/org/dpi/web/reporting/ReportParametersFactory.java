@@ -1,6 +1,7 @@
 package org.dpi.web.reporting;
 
 import org.dpi.web.reporting.creditsEntriesReport.CreditsEntriesReportParameters;
+import org.dpi.web.reporting.employeeAdditionsPromotionsReport.EmployeeAdditionsPromotionsReportParameters;
 import org.dpi.web.reporting.resumenDeSaldosDeCreditosDeReparticionesReport.ResumenDeSaldosDeCreditosDeReparticionesReportParameters;
 import org.dpi.web.reporting.solicitudCreditosReparticionReport.SolicitudCreditosReparticionReportParameters;
 
