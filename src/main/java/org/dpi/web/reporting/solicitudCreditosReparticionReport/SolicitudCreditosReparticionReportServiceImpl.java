@@ -83,28 +83,28 @@ public class SolicitudCreditosReparticionReportServiceImpl extends BaseReportSer
             throws Exception {
 
         ByteArrayOutputStream byteArrayOutputStream = null;
-/*
-        CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
-        creditsEntryQueryFilter.addCreditsPeriodNames((String[]) parameters.getCreditPeriodNames().toArray(new String[0]));
 
-
-
-        List<CreditsEntry> creditsEntries = creditsEntryService.find(creditsEntryQueryFilter);
-        
-        List<ResumenDeSaldosDeCreditosDeReparticionesReportRecord> creditsEntriesReportRecords = new ArrayList<>();
-        for(CreditsEntry creditsEntry : creditsEntries) {
-            Department ministerioDeReparticion = departmentService.getMinisterioOSecretariaDeEstado(creditsEntry.getEmployment().getSubDepartment().getDepartment());
-            ResumenDeSaldosDeCreditosDeReparticionesReportRecord creditsEntriesReportRecord = new ResumenDeSaldosDeCreditosDeReparticionesReportRecord(creditsEntry, ministerioDeReparticion);
-            
-            creditsEntriesReportRecords.add(creditsEntriesReportRecord);
-        }*/
-        
-        //List<PeriodSummaryData> resumenDeSaldosReparticionesRecords = departmentReportService.getCurrentPeriodDepartmentsSummaryData();
-        
         Department currentDepartment = departmentService.findById(parameters.getDepartmentId());
         Department ministerioOSecretariaDeEstadoDepartment = departmentService.getMinisterioOSecretariaDeEstado(currentDepartment);
         
         List<IngresoRecord> movimientosIngresoRecords = getMovimientosIngreso(parameters);
+        List<AscensoRecord> movimientosAscensoRecords = getMovimientosAscenso(parameters);
+        
+        int movimientosIngresoRecordsSize = movimientosIngresoRecords.size();
+        int movimientosAscensoRecordsSize = movimientosAscensoRecords.size();
+        
+        if(movimientosIngresoRecordsSize<movimientosAscensoRecordsSize) {
+            //rellenar con movimientos vacios para que tenga la misma cantidad de filas q los ascensos
+            for(int i=0;i<movimientosAscensoRecordsSize-movimientosIngresoRecordsSize;i++){
+                movimientosIngresoRecords.add(new IngresoRecord("",0,0,0));
+            }
+        }else if(movimientosIngresoRecordsSize>movimientosAscensoRecordsSize){
+            //rellenar con movimientos vacios para que tenga la misma cantidad de filas q los ingresos
+            for(int i=0;i<movimientosAscensoRecordsSize-movimientosIngresoRecordsSize;i++){
+                movimientosAscensoRecords.add(new AscensoRecord("","",0,0,0));
+            }
+                
+        }
         
         PeriodSummaryData periodSummaryData = departmentReportService.buildCurrentPeriodSummaryData(currentDepartment);
         
@@ -113,6 +113,7 @@ public class SolicitudCreditosReparticionReportServiceImpl extends BaseReportSer
         reportData.put("ministerioOSecretariaDeEstadoDepartment", ministerioOSecretariaDeEstadoDepartment);
         reportData.put("department", currentDepartment);
         reportData.put("movimientosIngresoRecords", movimientosIngresoRecords);
+        reportData.put("movimientosAscensoRecords", movimientosAscensoRecords);
         reportData.put("periodSummaryData", periodSummaryData);
         
         
@@ -193,5 +194,50 @@ public class SolicitudCreditosReparticionReportServiceImpl extends BaseReportSer
     }
 
 
+    private List<AscensoRecord> getMovimientosAscenso(SolicitudCreditosReparticionReportParameters parameters) {
+        CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+        creditsPeriodQueryFilter.setName(parameters.getCreditPeriodNames().iterator().next());
+
+        long creditsPeriodId = creditsPeriodService.find(creditsPeriodQueryFilter).get(0).getId();
+
+
+        long departmentId = parameters.getDepartmentId();
+        //get movimientos de ascenso
+        EmploymentQueryFilter empleoQueryFilter = new EmploymentQueryFilter();
+        empleoQueryFilter.setDepartmentId(parameters.getDepartmentId());
+
+        CreditsEntryQueryFilter creditsEntryQueryFilter = new CreditsEntryQueryFilter();
+        creditsEntryQueryFilter.setEmploymentQueryFilter(empleoQueryFilter);
+        creditsEntryQueryFilter.addCreditsEntryType(CreditsEntryType.AscensoAgente);
+        creditsEntryQueryFilter.addGrantedStatus(GrantedStatus.Solicitado);
+        creditsEntryQueryFilter.addCreditsPeriodIds(creditsPeriodId);
+    
+        List<CreditsEntry> creditsEntryDepartment = creditsEntryService.find(creditsEntryQueryFilter);
+    
+        Map<String, AscensoRecord> movimientosMap = new HashMap<>();
+        for(CreditsEntry creditsEntry:creditsEntryDepartment){
+            String currentCategory = creditsEntry.getEmployment().getPreviousEmployment().getCategory().getCode();
+            String proposedCategory = creditsEntry.getEmployment().getCategory().getCode();
+            
+            String key = currentCategory+"_"+proposedCategory;
+            
+            AscensoRecord ascensoRecord = movimientosMap.get(key);
+            if(ascensoRecord==null){
+                ascensoRecord = new AscensoRecord(currentCategory, proposedCategory, 0, creditsEntry.getNumberOfCredits(), 0);
+                movimientosMap.put(key, ascensoRecord);
+            }
+            ascensoRecord.setCantidad(ascensoRecord.getCantidad()+1);
+            ascensoRecord.setTotalCreditosIngresosEnCategoria(ascensoRecord.getTotalCreditosIngresosEnCategoria()+creditsEntry.getNumberOfCredits());
+           
+        }
+
+        List<AscensoRecord> ascensos = movimientosMap.values()
+                                      .stream()
+                                      .sorted(Comparator.comparing(AscensoRecord::getCategoriaActual)
+                                      .thenComparing(Comparator.comparing(AscensoRecord::getCategoriaPropuesta)))
+                                      .collect(Collectors.toList());
+        return ascensos;
+
+    }
 
 }
