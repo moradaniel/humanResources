@@ -86,8 +86,8 @@
 	</subDataset>
 	<parameter name="DEPARTMENT_NAME" class="java.lang.String"/>
 	<parameter name="CURRENT_USER_NAME" class="java.lang.String"/>
-	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
-	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
+	<parameter name="MOVIMIENTOS_ASCENSO" class="org.dpi.web.reporting.employeeAdditionsPromotionsReport.PromotionCreditEntriesReportDataSource" isForPrompting="false"/>
+	<parameter name="MOVIMIENTOS_INGRESO" class="org.dpi.web.reporting.employeeAdditionsPromotionsReport.AdditionsCreditEntriesReportDataSource" isForPrompting="false"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_ASCENSO" class="java.lang.Integer"/>
 	<parameter name="CANTIDAD_MOVIMIENTOS_INGRESO" class="java.lang.Integer"/>
 	<parameter name="CANTIDAD_CREDITOS_TRANSFERIDOS_POR_REUBICACION" class="java.lang.Long"/>

@@ -1,4 +1,4 @@
-package org.dpi.web.reporting;
+package org.dpi.web.reporting.employeeAdditionsPromotionsReport;
 
 import java.util.Iterator;
 import java.util.List;
