@@ -2,9 +2,11 @@ package org.dpi.creditsEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
 import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.domain.PersistentAbstract;
 import org.dpi.employment.Employment;
@@ -135,6 +137,13 @@ public class CreditsEntryImpl  extends PersistentAbstract implements CreditsEntr
         //find creditsentries in the future with previousEmployment equals to this creditsentry employment
         // futureCreditsEntry.employment.previousEmployment == this.employment
 	    employmentQueryFilter.setPreviousEmploymentId(this.getEmployment().getId());
+
+        List<String> creditsPeriodNames = new ArrayList<String>();
+        CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+        creditsPeriodQueryFilter.setStartDate(this.getCreditsPeriod().getEndDate());
+        creditsPeriodNames.addAll(creditsPeriodService.find(creditsPeriodQueryFilter).stream().map(p->p.getName()).collect(Collectors.toList()));
+	    
+        creditsEntryQueryFilter.addCreditsPeriodNames(creditsPeriodNames.toArray(new String[0]));
 	    subsequentCreditsEntries.addAll(creditsEntryService.find(creditsEntryQueryFilter));
 	    	    
 	    return subsequentCreditsEntries;
