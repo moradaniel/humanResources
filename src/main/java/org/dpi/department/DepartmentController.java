@@ -188,7 +188,7 @@ public class DepartmentController {
 			}
 			
 			//build current year
-			PeriodSummaryData currentPeriodSummaryData = departmentReportService.buildCurrentPeriodSummaryData(department);
+			PeriodSummaryData currentPeriodSummaryData = departmentReportService.buildPeriodSummaryData(department, creditsPeriodService.getCurrentCreditsPeriod());
 					
 			model.addAttribute("currentPeriodSummaryData", currentPeriodSummaryData);
 			
@@ -789,7 +789,7 @@ public class DepartmentController {
        public String listDepartmentsCreditsSummary(HttpServletRequest request, HttpServletResponse response, Model model) {
 
            
-           List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = departmentReportService.getCurrentPeriodDepartmentsSummaryData();
+           List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = departmentReportService.getPeriodDepartmentsSummaryData(creditsPeriodService.getCurrentCreditsPeriod());
                    
            model.addAttribute("currentPeriodDepartmentsSummaryData", currentPeriodDepartmentsSummaryData);
            

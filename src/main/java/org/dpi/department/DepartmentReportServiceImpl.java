@@ -41,7 +41,7 @@ public class DepartmentReportServiceImpl implements DepartmentReportService {
 	}
 
         
-    public List<PeriodSummaryData> getCurrentPeriodDepartmentsSummaryData(){
+    public List<PeriodSummaryData> getPeriodDepartmentsSummaryData(CreditsPeriod creditsPeriod){
         
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String accountName = ((Account) principal).getName();
@@ -59,8 +59,8 @@ public class DepartmentReportServiceImpl implements DepartmentReportService {
             }
         );
     
-       // int i = 0;
-            List<PeriodSummaryData> currentPeriodDepartmentsSummaryData = new ArrayList<PeriodSummaryData>();
+       //int i = 0;
+            List<PeriodSummaryData> periodDepartmentsSummaryData = new ArrayList<PeriodSummaryData>();
             for( DepartmentAdminInfo departmentInfo : departmentsInfoList){
         
                
@@ -81,9 +81,9 @@ public class DepartmentReportServiceImpl implements DepartmentReportService {
                 //build current year
                 
                 log.debug("Generating listDepartmentsCreditsSummary, building buildCurrentPeriodSummaryData for department {}",department.getCode()+department.getName());
-                PeriodSummaryData currentPeriodSummaryData = buildCurrentPeriodSummaryData(department);
+                PeriodSummaryData periodSummaryData = buildPeriodSummaryData(department, creditsPeriod);
                 
-                currentPeriodDepartmentsSummaryData.add(currentPeriodSummaryData);
+                periodDepartmentsSummaryData.add(periodSummaryData);
 
                 /*
                 i++;
@@ -91,79 +91,79 @@ public class DepartmentReportServiceImpl implements DepartmentReportService {
                     break;
                 }*/
             }
-            return currentPeriodDepartmentsSummaryData;
+            return periodDepartmentsSummaryData;
     }
     
     
     
     
-    public PeriodSummaryData buildCurrentPeriodSummaryData(Department department){
+    public PeriodSummaryData buildPeriodSummaryData(Department department, CreditsPeriod creditsPeriod){
         
         //--------------------- current year
         
-        CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
+        //CreditsPeriod currentCreditsPeriod = creditsPeriodService.getCurrentCreditsPeriod();
         
-        PeriodSummaryData currentPeriodSummaryData = new PeriodSummaryData();
+        PeriodSummaryData periodSummaryData = new PeriodSummaryData();
         
-        currentPeriodSummaryData.setDepartment(department);
-        currentPeriodSummaryData.setMinisterioDeReparticion(departmentService.getMinisterioOSecretariaDeEstado(department));
+        periodSummaryData.setDepartment(department);
+        periodSummaryData.setMinisterioDeReparticion(departmentService.getMinisterioOSecretariaDeEstado(department));
         
-        currentPeriodSummaryData.setYear(currentCreditsPeriod.getName());
+        periodSummaryData.setYear(creditsPeriod.getName());
         
         
-        Long creditosDisponiblesInicioPeriodo = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(),department.getId());
-        currentPeriodSummaryData.setCreditosDisponiblesInicioPeriodo(creditosDisponiblesInicioPeriodo);
+        Long creditosDisponiblesInicioPeriodo = this.creditsManagerService.getCreditosDisponiblesAlInicioPeriodo(creditsPeriod.getId(),department.getId());
+        periodSummaryData.setCreditosDisponiblesInicioPeriodo(creditosDisponiblesInicioPeriodo);
 
     
-        Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(currentCreditsPeriod.getId(), department.getId());
+        Long creditosAcreditadosPorBajaDurantePeriodoActual = this.creditsManagerService.getCreditosPorBajasDeReparticion(creditsPeriod.getId(), department.getId());
 
-        currentPeriodSummaryData.setCreditosAcreditadosPorBajaDurantePeriodo(creditosAcreditadosPorBajaDurantePeriodoActual);
+        periodSummaryData.setCreditosAcreditadosPorBajaDurantePeriodo(creditosAcreditadosPorBajaDurantePeriodoActual);
         
         
-        Long currentPeriodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(currentCreditsPeriod.getId(), department.getId());
+        Long periodRetainedCredits = this.creditsManagerService.getRetainedCreditsByDepartment(creditsPeriod.getId(), department.getId());
 
-        currentPeriodSummaryData.setRetainedCredits(currentPeriodRetainedCredits);
+        periodSummaryData.setRetainedCredits(periodRetainedCredits);
         
         
-        Long currentPeriodTotalAvailableCredits = this.creditsManagerService.getTotalCreditosDisponiblesAlInicioPeriodo(currentCreditsPeriod.getId(), department.getId());
-        
-
-        currentPeriodSummaryData.setTotalAvailableCredits(currentPeriodTotalAvailableCredits);
-        
-        
-        
-        Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(currentCreditsPeriod.getId(), department.getId());
-        
-        currentPeriodSummaryData.setCreditosConsumidosPorIngresosOAscensosSolicitadosPeriodo(creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo);
+        Long currentPeriodTotalAvailableCredits = this.creditsManagerService.getTotalCreditosDisponiblesAlInicioPeriodo(creditsPeriod.getId(), department.getId());
         
 
-        Long creditosPorIngresosOAscensosOtorgadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(currentCreditsPeriod.getId(), department.getId());
+        periodSummaryData.setTotalAvailableCredits(currentPeriodTotalAvailableCredits);
         
-        currentPeriodSummaryData.setCreditosPorIngresosOAscensosOtorgadosPeriodo(creditosPorIngresosOAscensosOtorgadosPeriodo);
+        
+        
+        Long creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosSolicitados(creditsPeriod.getId(), department.getId());
+        
+        periodSummaryData.setCreditosConsumidosPorIngresosOAscensosSolicitadosPeriodo(creditosConsumidosPorIngresosOAscensosSolicitadosPeriodo);
+        
+
+        Long creditosPorIngresosOAscensosOtorgadosPeriodo = this.creditsManagerService.getCreditosPorIngresosOAscensosOtorgados(creditsPeriod.getId(), department.getId());
+        
+        periodSummaryData.setCreditosPorIngresosOAscensosOtorgadosPeriodo(creditosPorIngresosOAscensosOtorgadosPeriodo);
 
                 
 
-        Long creditosDisponiblesSegunSolicitadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(currentCreditsPeriod.getId(),department.getId());
-        currentPeriodSummaryData.setCreditosDisponiblesSegunSolicitadoPeriodo(creditosDisponiblesSegunSolicitadoPeriodo);
+        Long creditosDisponiblesSegunSolicitadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunSolicitado(creditsPeriod.getId(),department.getId());
+        periodSummaryData.setCreditosDisponiblesSegunSolicitadoPeriodo(creditosDisponiblesSegunSolicitadoPeriodo);
         
-        Long creditosDisponiblesSegunOtorgadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(currentCreditsPeriod.getId(),department.getId());
-        currentPeriodSummaryData.setCreditosDisponiblesSegunOtorgadoPeriodo(creditosDisponiblesSegunOtorgadoPeriodo);
+        Long creditosDisponiblesSegunOtorgadoPeriodo = this.creditsManagerService.getCreditosDisponiblesSegunOtorgado(creditsPeriod.getId(),department.getId());
+        periodSummaryData.setCreditosDisponiblesSegunOtorgadoPeriodo(creditosDisponiblesSegunOtorgadoPeriodo);
         
-        Long totalCreditosReparticionAjustes_Debito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesDebitoPeriodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticionAjustes_Debito_Periodo(totalCreditosReparticionAjustes_Debito_Periodo);
+        Long totalCreditosReparticionAjustes_Debito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesDebitoPeriodo(creditsPeriod.getId(), department.getId());
+        periodSummaryData.setTotalCreditosReparticionAjustes_Debito_Periodo(totalCreditosReparticionAjustes_Debito_Periodo);
         
-        Long totalCreditosReparticionAjustes_Credito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesCreditoPeriodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticionAjustes_Credito_Periodo(totalCreditosReparticionAjustes_Credito_Periodo);
+        Long totalCreditosReparticionAjustes_Credito_Periodo = this.creditsManagerService.getCreditosReparticionAjustesCreditoPeriodo(creditsPeriod.getId(), department.getId());
+        periodSummaryData.setTotalCreditosReparticionAjustes_Credito_Periodo(totalCreditosReparticionAjustes_Credito_Periodo);
 
-        Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo = this.creditsManagerService.getCreditosReparticion_ReasignadosDeRetencion_Periodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion_Periodo(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
-
-        
-        Long totalCreditosReparticion_ReubicacionReparticion_Periodo = this.creditsManagerService.getCreditosReparticion_ReubicacionDeReparticion_Periodo(currentCreditsPeriod.getId(), department.getId());
-        currentPeriodSummaryData.setTotalCreditosReparticion_Reubicacion_Periodo(totalCreditosReparticion_ReubicacionReparticion_Periodo);
+        Long totalCreditosReparticion_ReasignadosDeRetencion_Periodo = this.creditsManagerService.getCreditosReparticion_ReasignadosDeRetencion_Periodo(creditsPeriod.getId(), department.getId());
+        periodSummaryData.setTotalCreditosReparticion_ReasignadosDeRetencion_Periodo(totalCreditosReparticion_ReasignadosDeRetencion_Periodo);
 
         
-        return currentPeriodSummaryData;
+        Long totalCreditosReparticion_ReubicacionReparticion_Periodo = this.creditsManagerService.getCreditosReparticion_ReubicacionDeReparticion_Periodo(creditsPeriod.getId(), department.getId());
+        periodSummaryData.setTotalCreditosReparticion_Reubicacion_Periodo(totalCreditosReparticion_ReubicacionReparticion_Periodo);
+
+        
+        return periodSummaryData;
                     
     }
 

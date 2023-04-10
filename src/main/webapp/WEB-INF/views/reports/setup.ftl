@@ -8,7 +8,8 @@
 <#function showSinglePeriodSelector reportCode=''>
                  
         <#if ('EmployeeAdditionsPromotionsReport' == reportCode?default("") ||
-                'CreditsEntriesReport' == reportCode?default("")  )>
+                'CreditsEntriesReport' == reportCode?default("") ||
+                'ResumenDeSaldosDeCreditosDeReparticionesReport' == reportCode?default("")  )>
                 <#return true>
          </#if>     
 

@@ -106,7 +106,7 @@ public class SolicitudCreditosReparticionReportServiceImpl extends BaseReportSer
                 
         }
         
-        PeriodSummaryData periodSummaryData = departmentReportService.buildCurrentPeriodSummaryData(currentDepartment);
+        PeriodSummaryData periodSummaryData = departmentReportService.buildPeriodSummaryData(currentDepartment, creditsPeriodService.getCurrentCreditsPeriod());
         
         
         Map<String, Object> reportData= new HashMap<String, Object>();

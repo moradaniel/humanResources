@@ -2,6 +2,7 @@ package org.dpi.department;
 
 import java.util.List;
 
+import org.dpi.creditsPeriod.CreditsPeriod;
 import org.dpi.stats.PeriodSummaryData;
 import org.springframework.context.ApplicationContextAware;
 
@@ -14,7 +15,7 @@ import org.springframework.context.ApplicationContextAware;
 public interface DepartmentReportService extends ApplicationContextAware
 {
 	
-    public List<PeriodSummaryData> getCurrentPeriodDepartmentsSummaryData();
+    public List<PeriodSummaryData> getPeriodDepartmentsSummaryData(CreditsPeriod creditsPeriod);
     
-    public PeriodSummaryData buildCurrentPeriodSummaryData(Department department);
+    public PeriodSummaryData buildPeriodSummaryData(Department department, CreditsPeriod creditsPeriod);
 }

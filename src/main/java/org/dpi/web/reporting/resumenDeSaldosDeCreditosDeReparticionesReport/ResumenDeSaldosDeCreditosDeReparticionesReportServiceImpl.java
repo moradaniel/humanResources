@@ -12,6 +12,9 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
+import org.dpi.creditsPeriod.CreditsPeriod;
+import org.dpi.creditsPeriod.CreditsPeriodQueryFilter;
+import org.dpi.creditsPeriod.CreditsPeriodService;
 import org.dpi.department.DepartmentReportService;
 import org.dpi.stats.PeriodSummaryData;
 import org.dpi.web.reporting.BaseReportService;
@@ -44,6 +47,9 @@ public class ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl extends B
 
     @Resource(name = "departmentReportService")
     private DepartmentReportService departmentReportService;
+    
+    @Resource(name = "creditsPeriodService")
+    private CreditsPeriodService creditsPeriodService;
 
     @Autowired
     ServletContext servletContext;
@@ -89,7 +95,11 @@ public class ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl extends B
             creditsEntriesReportRecords.add(creditsEntriesReportRecord);
         }*/
         
-        List<PeriodSummaryData> resumenDeSaldosReparticionesRecords = departmentReportService.getCurrentPeriodDepartmentsSummaryData();
+        CreditsPeriodQueryFilter creditsPeriodQueryFilter = new CreditsPeriodQueryFilter();
+        creditsPeriodQueryFilter.setName(parameters.getCreditPeriodNames().get(0));
+        CreditsPeriod creditsPeriod = creditsPeriodService.find(creditsPeriodQueryFilter).get(0);
+        
+        List<PeriodSummaryData> resumenDeSaldosReparticionesRecords = departmentReportService.getPeriodDepartmentsSummaryData(creditsPeriod);
 
         if (OutputFormat.PDF.equals(parameters.getOutputFormat())) {
             getPdfDocument(parameters, null);
@@ -111,6 +121,7 @@ public class ResumenDeSaldosDeCreditosDeReparticionesReportServiceImpl extends B
         try(InputStream templateReportStream = servletContext.getResourceAsStream(TEMPLATE_FOLDER+parameters.getTemplateFileName())) {
             Context context = new Context();
             context.putVar("resumenDeSaldosReparticionesRecords", resumenDeSaldosReparticionesRecords);
+            context.putVar("year", parameters.getCreditPeriodNames().get(0));
             JxlsHelper.getInstance().processTemplate(templateReportStream, baos, context);
         }
 
