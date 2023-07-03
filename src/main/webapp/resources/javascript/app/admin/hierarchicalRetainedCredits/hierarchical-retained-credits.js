@@ -23,6 +23,30 @@
 		     			    {name: 'age again', field:'age'}*/
 		     			  ];
 		     			  
+		$scope.gridOptions_2023 = {};
+        
+        $scope.gridOptions_2023.columnDefs = columnsDefs;
+          
+        $scope.hierchicalRetainedCreditsCriteria_2023 = {
+            departmentId:""+currentSelectedDepartment.id,
+            creditsPeriodName: "2023"
+        };
+            
+            $scope.fetchHierchicalRetainedCredits_2023 = function () {
+                return api.hierchicalRetainedCredits.search($scope.hierchicalRetainedCreditsCriteria_2023).then(function (response) {
+                    $scope.gridOptions_2023.data = response.data;
+
+                }, function () {
+                    $scope.gridOptions_2023.data = [];
+
+                });
+            };
+
+        $scope.fetchHierchicalRetainedCredits_2023();
+        
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+
+		     			  
 		$scope.gridOptions_2022 = {};
         
         $scope.gridOptions_2022.columnDefs = columnsDefs;
