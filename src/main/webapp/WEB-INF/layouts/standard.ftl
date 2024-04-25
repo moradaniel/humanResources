@@ -60,14 +60,14 @@
 	<!-- start logo -->
 	<div id="logo">
 
-		<a href=""><img src="${requestContext.contextPath}/resources/images/logo_gobierno_SJ_2.png" width="100" height="80" alt="" /></a>
+		<a href=""><img src="${requestContext.contextPath}/resources/images/logo_gobierno_SJ_3.png" width="80" height="80" alt="" /></a>
 	</div>
 	<!-- end logo -->
 	
-	<div id="logo2">
+	<!-- div id="logo2">
 
 		<a href=""><img src="${requestContext.contextPath}/resources/images/headerTituloSistemaCreditos.png" width="250" height="80" alt="" /></a>
-	</div>
+	</div -->
 	
 			<#if account?exists>
 				<div style="float:right; width:65%;">
