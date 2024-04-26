@@ -60,7 +60,7 @@
 	<!-- start logo -->
 	<div id="logo">
 
-		<a href=""><img src="${requestContext.contextPath}/resources/images/logo_gobierno_SJ_3.png" width="80" height="80" alt="" /></a>
+		<a href=""><img src="${requestContext.contextPath}/resources/images/logo_gobierno_SJ_3.png" width="200" height="80" alt="" /></a>
 	</div>
 	<!-- end logo -->
 	
