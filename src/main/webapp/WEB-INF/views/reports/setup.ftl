@@ -124,7 +124,8 @@
                                         <div class="col-md-9">
                                             
                                                 <select name="selectedPeriodName"  class="form-control">
-                                                    <option value="2023" selected>2023</option>
+                                                    <option value="2024" selected>2024</option>
+                                                    <option value="2023">2022</option>
                                                     <option value="2022">2022</option>
                                                     <option value="2021">2021</option>
                                                     <option value="2020">2020</option>
